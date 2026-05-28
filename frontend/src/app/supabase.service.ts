@@ -24,17 +24,28 @@ export class SupabaseService {
       };
     }
 
-    const status = error.status || error.code;
+    const status = error.status;
+    const errorCode = error.code; // Supabase a veces envía un código específico (ej: 'user_already_exists')
+    const errorMessage = (error.message || '').toLowerCase();
+
     let code = 'auth/error';
     let message = error.message || 'Error de conexión con el servidor.';
 
-    // Mapeo básico de errores comunes de Supabase
+    // 1. Intentar mapear por el código de error explícito (si existe y es confiable)
+    if (errorCode === 'user_already_exists') {
+      return { code: 'auth/user-already-exists', message: 'El correo electrónico ya se encuentra registrado.', originalError: error };
+    }
+    if (errorCode === 'invalid_credentials') {
+      return { code: 'auth/invalid-credentials', message: 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.', originalError: error };
+    }
+
+    // 2. Fallback: Mapeo por Status HTTP + Regex/Contenido (más flexible que un string exacto)
     switch (status) {
       case 400:
-        if (error.message?.includes('User already registered')) {
+        if (/already registered|already in use|ya existe/i.test(errorMessage)) {
           code = 'auth/user-already-exists';
           message = 'El correo electrónico ya se encuentra registrado.';
-        } else if (error.message?.includes('Invalid login credentials')) {
+        } else if (/invalid.*credentials|invalid login/i.test(errorMessage)) {
           code = 'auth/invalid-credentials';
           message = 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.';
         } else {
@@ -46,9 +57,13 @@ export class SupabaseService {
         code = 'auth/invalid-data';
         message = 'Los datos proporcionados no son válidos.';
         break;
-      case 'over_query_limit':
+      case 'over_query_limit': // Error específico de rate limit
         code = 'auth/too-many-requests';
         message = 'Se ha excedido el límite de solicitudes. Intente más tarde.';
+        break;
+      case 429: // Standard HTTP rate limit
+        code = 'auth/too-many-requests';
+        message = 'Demasiados intentos. Por favor, espera un momento.';
         break;
     }
 
