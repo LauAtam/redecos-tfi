@@ -1,0 +1,76 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Iniciar Sesión</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    
+    <!-- Imagen del Mockup (Misma estética que registro) -->
+    <div class="image-container">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuClpJ6EDOIbviyWnhjVCsJQmwF1jbtZWy4bqW_FXKrsJ1BNhkRxVFgO_41OpNUIdbWe0GVRzMyo97xzXy5od1f18uqIR71hrx-qdekDJCNlfeuKUV4JXo2FJnr4brWLel64e0UEn2N9tMP6VSa1mD3VXiN_XRzDkXWLrvhJ_27XDLjcTuKKp06dKGtTtQLnzlJX8XTYHZBeMmiJmW4fdIsYSwLb1EAXLK4OPcsPvoku7FVNU_CEfSNx9T66bJE60FYdI3DoP2OnDq4Y" alt="Vegetables" class="header-image">
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      
+      <!-- Correo -->
+      <div class="input-group">
+        <label>Correo electrónico</label>
+        <div class="custom-input" [class.invalid]="f['email'].touched && f['email'].invalid">
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input 
+            formControlName="email" 
+            placeholder="ejemplo@correo.com"
+            type="email">
+          </ion-input>
+        </div>
+        <ion-text color="danger" *ngIf="f['email'].touched && f['email'].invalid"> 
+          <small *ngIf="f['email'].errors?.['required']">El correo es obligatorio.</small>
+          <small *ngIf="f['email'].errors?.['email']">Ingresá un correo válido.</small>
+        </ion-text>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="input-group">
+        <label>Contraseña</label>
+        <div class="custom-input" [class.invalid]="f['password'].touched && f['password'].invalid">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-input 
+            formControlName="password" 
+            placeholder="Tu contraseña"
+            [type]="showPassword ? 'text' : 'password'">
+          </ion-input>
+          <ion-button fill="clear" (click)="togglePassword()" class="toggle-btn">  
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </div>
+        <ion-text color="danger" *ngIf="f['password'].touched && f['password'].invalid">
+          <small *ngIf="f['password'].errors?.['required']">La contraseña es obligatoria.</small>
+        </ion-text>
+      </div>
+
+      <!-- Mensaje de Error General -->
+      <ion-text color="danger" *ngIf="errorMessage" class="ion-text-center">       
+        <p>{{ errorMessage }}</p>
+      </ion-text>
+
+      <!-- Botón Ingresar -->
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        class="submit-button"
+        [disabled]="isLoading">
+        <span *ngIf="!isLoading">Ingresar</span>
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+      </ion-button>
+
+    </form>
+
+    <!-- Footer Link -->
+    <div class="footer-link ion-text-center">
+      <p>¿No tenés cuenta? <a routerLink="/register">Registrate acá</a></p>
+    </div>
+
+  </div>
+</ion-content>

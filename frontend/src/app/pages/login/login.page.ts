@@ -1,35 +1,107 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { 
+  FormBuilder, 
+  FormGroup, 
+  ReactiveFormsModule, 
+  Validators 
+} from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { 
   IonContent, 
   IonHeader, 
   IonTitle, 
   IonToolbar, 
+  IonButtons, 
+  IonBackButton,
+  IonInput,
   IonButton,
-  IonText
+  IonIcon,
+  IonText,
+  IonSpinner
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { 
+  mailOutline, 
+  lockClosedOutline, 
+  eyeOutline, 
+  eyeOffOutline
+} from 'ionicons/icons';
+import { SupabaseService } from '../../supabase.service';
 
 @Component({
   selector: 'app-login',
-  template: `
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>Login</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding ion-text-center">
-      <ion-text>
-        <h1>Próximamente</h1>
-        <p>La vista de login está en desarrollo.</p>
-      </ion-text>
-      <ion-button expand="block" routerLink="/register">
-        Ir a Registro
-      </ion-button>
-    </ion-content>
-  `,
-  styles: [],
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonText]
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterModule,
+    IonContent, 
+    IonHeader, 
+    IonTitle, 
+    IonToolbar, 
+    IonButtons, 
+    IonBackButton,
+    IonInput,
+    IonButton,
+    IonIcon,
+    IonText,
+    IonSpinner
+  ]
 })
-export class LoginPage {}
+export class LoginPage implements OnInit {
+  loginForm: FormGroup;
+  showPassword = false;
+  isLoading = false;
+  errorMessage: string | null = null;
+
+  constructor(
+    private fb: FormBuilder,
+    private supabaseService: SupabaseService,
+    private router: Router
+  ) {
+    addIcons({ 
+      mailOutline, 
+      lockClosedOutline, 
+      eyeOutline, 
+      eyeOffOutline
+    });
+
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
+  }
+
+  ngOnInit() {}
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  async onLogin() {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    const { email, password } = this.loginForm.value;
+    
+    const { user, error } = await this.supabaseService.login(email, password);
+
+    this.isLoading = false;
+
+    if (error) {
+      this.errorMessage = error.message;
+    } else {
+      this.router.navigate(['/home']);
+    }
+  }
+
+  get f() { return this.loginForm.controls; }
+}
