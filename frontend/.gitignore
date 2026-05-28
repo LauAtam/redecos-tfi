@@ -68,5 +68,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment variables
+.env.local
+
 # Local AI runtime state
 .atl/

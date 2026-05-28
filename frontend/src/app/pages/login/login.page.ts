@@ -1,67 +1,35 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
-import {
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { 
+  IonContent, 
+  IonHeader, 
+  IonTitle, 
+  IonToolbar, 
   IonButton,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonText,
-  IonTitle,
-  IonToolbar,
+  IonText
 } from '@ionic/angular/standalone';
-
-import { SupabaseService } from '../../supabase.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Login</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding ion-text-center">
+      <ion-text>
+        <h1>Próximamente</h1>
+        <p>La vista de login está en desarrollo.</p>
+      </ion-text>
+      <ion-button expand="block" routerLink="/register">
+        Ir a Registro
+      </ion-button>
+    </ion-content>
+  `,
+  styles: [],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonButton,
-    IonContent,
-    IonHeader,
-    IonInput,
-    IonItem,
-    IonLabel,
-    RouterLink,
-    IonText,
-    IonTitle,
-    IonToolbar,
-  ],
+  imports: [CommonModule, RouterModule, IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonText]
 })
-export class LoginPage {
-  email = '';
-  password = '';
-  errorMessage = '';
-  isLoading = false;
-
-  constructor(private supabaseService: SupabaseService, private router: Router) {}
-
-  async onLogin() {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Ingresa tu correo y contraseña.';
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-
-    const { error } = await this.supabaseService.login(this.email, this.password);
-
-    this.isLoading = false;
-
-    if (error) {
-      this.errorMessage = 'Credenciales inválidas. Intenta nuevamente.';
-    } else {
-      this.router.navigate(['/home']);
-    }
-  }
-}
+export class LoginPage {}

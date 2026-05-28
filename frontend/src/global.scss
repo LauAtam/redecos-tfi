@@ -34,7 +34,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
 
 html,
 body {
@@ -43,11 +43,8 @@ body {
 
 body {
 	margin: 0;
-	background:
-		radial-gradient(circle at top, rgba(21, 128, 61, 0.16), transparent 38%),
-		linear-gradient(180deg, #0f172a 0%, #111827 100%);
-	/* Keep normal document flow; centering handled by `ion-app` styles */
-	padding: 24px;
+	background: #f8f9fa;
+	padding: 0;
 }
 
 @media (max-width: 480px) {
