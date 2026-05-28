@@ -133,4 +133,37 @@ export class SupabaseService {
   async getSession() {
     return this.supabase.auth.getSession();
   }
+
+  async verifyOtp(email: string, token: string): Promise<AuthResponse> {
+    try {
+      const { data, error } = await this.supabase.auth.verifyOtp({
+        email,
+        token,
+        type: 'signup'
+      });
+
+      if (error) {
+        return { user: null, error: this.mapError(error) };
+      }
+
+      const profile: Profile = {
+        id: data.user?.id || '',
+        email: data.user?.email || '',
+        first_name: data.user?.user_metadata?.['first_name'] || '',
+        last_name: data.user?.user_metadata?.['last_name'] || '',
+        role: data.user?.user_metadata?.['role'] || ''
+      };
+
+      return { user: profile, error: null };
+    } catch (err) {
+      return { 
+        user: null, 
+        error: { 
+          code: 'auth/unexpected', 
+          message: 'Error al verificar el código.', 
+          originalError: err 
+        } 
+      };
+    }
+  }
 }

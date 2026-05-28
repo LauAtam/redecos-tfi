@@ -57,10 +57,13 @@ import { SupabaseService } from '../../supabase.service';
 })
 export class RegisterPage implements OnInit {
   registerForm: FormGroup;
+  otpForm: FormGroup;
+  step: 'form' | 'verification' = 'form';
   showPassword = false;
   showConfirmPassword = false;
   isLoading = false;
   errorMessage: string | null = null;
+  registeredEmail: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -86,6 +89,10 @@ export class RegisterPage implements OnInit {
       },
       { validators: this.passwordMatchValidator },
     );
+
+    this.otpForm = this.fb.group({
+      token: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
+    });
   }
 
   ngOnInit() {}
@@ -124,6 +131,7 @@ export class RegisterPage implements OnInit {
     this.errorMessage = null;
 
     const { firstName, lastName, email, password } = this.registerForm.value;
+    this.registeredEmail = email;
 
     const { user, error } = await this.supabaseService.register(
       email,
@@ -137,12 +145,34 @@ export class RegisterPage implements OnInit {
     if (error) {
       this.errorMessage = error.message;
     } else {
-      // Registro exitoso, redirigir al home o mostrar mensaje de verificación
+      // Cambio al paso de verificación
+      this.step = 'verification';
+    }
+  }
+
+  async onVerifyOtp() {
+    if (this.otpForm.invalid) return;
+
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    const { token } = this.otpForm.value;
+    const { user, error } = await this.supabaseService.verifyOtp(this.registeredEmail, token);
+
+    this.isLoading = false;
+
+    if (error) {
+      this.errorMessage = error.message;
+    } else {
       this.router.navigate(['/home']);
     }
   }
 
   get f() {
     return this.registerForm.controls;
+  }
+
+  get otpF() {
+    return this.otpForm.controls;
   }
 }
