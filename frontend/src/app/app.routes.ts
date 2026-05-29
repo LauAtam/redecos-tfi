@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { GuestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -15,11 +16,13 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage),
+    canActivate: [GuestGuard]
   },
   {
     path: 'register',
-    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
+    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage),
+    canActivate: [GuestGuard]
   },
   {
     path: 'restricted',
