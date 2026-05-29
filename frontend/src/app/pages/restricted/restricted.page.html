@@ -1,0 +1,72 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="dark"></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="brand-title">Redecos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="dark">
+        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding ion-text-center">
+  <div class="restricted-container">
+    
+    <!-- Icono de Bloqueo -->
+    <div class="lock-icon-wrapper">
+      <div class="icon-circle">
+        <ion-icon name="lock-closed" class="lock-icon"></ion-icon>
+        <div class="user-badge">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje -->
+    <div class="message-section">
+      <h1 class="title">Acceso Restringido</h1>
+      <p class="subtitle">
+        No tienes los permisos necesarios para ver esta página. 
+        Esta sección es exclusiva para Administradores y Nodos.
+      </p>
+    </div>
+
+    <!-- Botón Volver -->
+    <ion-button expand="block" routerLink="/home" class="catalog-button">
+      <ion-icon slot="start" name="storefront-outline"></ion-icon>
+      Volver al Catálogo
+    </ion-button>
+
+    <!-- Ayuda -->
+    <div class="help-link">
+      <ion-button fill="clear" color="medium" size="small">
+        <ion-icon slot="start" name="help-circle-outline"></ion-icon>
+        ¿Necesitas ayuda con tu cuenta?
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>
+
+<!-- Simulación de Tabs (según mockup) -->
+<ion-footer class="ion-no-border">
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="catalog" routerLink="/home">
+      <ion-icon name="storefront-outline"></ion-icon>
+      <ion-label>Catalog</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="groups">
+      <ion-icon name="people-outline"></ion-icon>
+      <ion-label>Groups</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="profile">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
   },
+  {
+    path: 'restricted',
+    loadComponent: () => import('./pages/restricted/restricted.page').then( m => m.RestrictedPage)
+  },
 ];
