@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
+import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   {
@@ -9,6 +11,7 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
@@ -21,5 +24,17 @@ export const routes: Routes = [
   {
     path: 'restricted',
     loadComponent: () => import('./pages/restricted/restricted.page').then( m => m.RestrictedPage)
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./home/home.page').then((m) => m.HomePage), 
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRoles: ['ADMIN'] }
+  },
+  {
+    path: 'nodo',
+    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRoles: ['NODO', 'ADMIN'] }
   },
 ];

@@ -1,31 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  FormBuilder, 
-  FormGroup, 
-  ReactiveFormsModule, 
-  Validators 
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
   IonBackButton,
   IonInput,
   IonButton,
   IonIcon,
   IonText,
-  IonSpinner
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { 
-  mailOutline, 
-  lockClosedOutline, 
-  eyeOutline, 
-  eyeOffOutline
+import {
+  mailOutline,
+  lockClosedOutline,
+  eyeOutline,
+  eyeOffOutline,
 } from 'ionicons/icons';
 import { SupabaseService } from '../../supabase.service';
 
@@ -35,21 +35,21 @@ import { SupabaseService } from '../../supabase.service';
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
     RouterModule,
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButtons, 
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
     IonBackButton,
     IonInput,
     IonButton,
     IonIcon,
     IonText,
-    IonSpinner
-  ]
+    IonSpinner,
+  ],
 })
 export class LoginPage implements OnInit {
   loginForm: FormGroup;
@@ -60,18 +60,18 @@ export class LoginPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
-    private router: Router
+    private router: Router,
   ) {
-    addIcons({ 
-      mailOutline, 
-      lockClosedOutline, 
-      eyeOutline, 
-      eyeOffOutline
+    addIcons({
+      mailOutline,
+      lockClosedOutline,
+      eyeOutline,
+      eyeOffOutline,
     });
 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
     });
   }
 
@@ -91,17 +91,31 @@ export class LoginPage implements OnInit {
     this.errorMessage = null;
 
     const { email, password } = this.loginForm.value;
-    
+
     const { user, error } = await this.supabaseService.login(email, password);
 
     this.isLoading = false;
 
     if (error) {
       this.errorMessage = error.message;
-    } else {
-      this.router.navigate(['/home']);
+    } else if (user) {
+      // Redirección basada en rol
+      switch (user.role) {
+        case 'ADMIN':
+          this.router.navigate(['/admin']);
+          break;
+        case 'NODO':
+          this.router.navigate(['/nodo']);
+          break;
+        case 'CLIENTE':
+        default:
+          this.router.navigate(['/home']);
+          break;
+      }
     }
   }
 
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 }

@@ -79,7 +79,7 @@ export class SupabaseService {
           data: {
             first_name: firstName,
             last_name: lastName,
-            role: 'client' // Rol por defecto
+            role: 'CLIENTE' // Consistente con DB
           },
         },
       });
@@ -93,7 +93,7 @@ export class SupabaseService {
         email: data.user?.email || '',
         first_name: data.user?.user_metadata?.['first_name'] || firstName,
         last_name: data.user?.user_metadata?.['last_name'] || lastName,
-        role: data.user?.user_metadata?.['role'] || 'client'
+        role: data.user?.user_metadata?.['role'] || 'CLIENTE'
       };
 
       return { user: profile, error: null };
@@ -120,15 +120,22 @@ export class SupabaseService {
         return { user: null, error: this.mapError(error) };
       }
 
-      const profile: Profile = {
-        id: data.user?.id || '',
-        email: data.user?.email || '',
-        first_name: data.user?.user_metadata?.['first_name'] || '',
-        last_name: data.user?.user_metadata?.['last_name'] || '',
-        role: data.user?.user_metadata?.['role'] || ''
-      };
+      // Una vez logueado, intentamos traer el perfil completo desde la tabla profiles
+      const { user, error: profileError } = await this.getUserProfile(data.user.id);
+      
+      if (profileError) {
+        // Si hay error de perfil, al menos devolvemos la info básica del user de auth
+        const basicProfile: Profile = {
+          id: data.user?.id || '',
+          email: data.user?.email || '',
+          first_name: data.user?.user_metadata?.['first_name'] || '',
+          last_name: data.user?.user_metadata?.['last_name'] || '',
+          role: data.user?.user_metadata?.['role'] || ''
+        };
+        return { user: basicProfile, error: null };
+      }
 
-      return { user: profile, error: null };
+      return { user, error: null };
     } catch (err) {
       return { 
         user: null, 
@@ -136,6 +143,31 @@ export class SupabaseService {
           code: 'auth/unexpected', 
           message: 'Ocurrió un error inesperado al intentar iniciar sesión.',
           originalError: err
+        } 
+      };
+    }
+  }
+
+  async getUserProfile(userId: string): Promise<AuthResponse> {
+    try {
+      const { data, error } = await this.supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        return { user: null, error: this.mapError(error) };
+      }
+
+      return { user: data as Profile, error: null };
+    } catch (err) {
+      return { 
+        user: null, 
+        error: { 
+          code: 'auth/unexpected', 
+          message: 'Error al obtener el perfil de usuario.', 
+          originalError: err 
         } 
       };
     }
