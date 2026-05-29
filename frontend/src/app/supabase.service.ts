@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
 import { AuthResponse, Profile, AppError } from './core/models/auth.models';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +10,39 @@ import { AuthResponse, Profile, AppError } from './core/models/auth.models';
 export class SupabaseService {
   private supabase: SupabaseClient;
 
+  // CACHE: BehaviorSubject guarda el estado actual del perfil
+  private currentUserSubject = new BehaviorSubject<Profile | null>(null);
+
+  // Exponemos el estado como Observable para que los componentes se suscriban
+  public currentUser$ = this.currentUserSubject.asObservable();
+
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey,
     );
+
+    // Intentamos inicializar el usuario si ya hay una sesión activa en el navegador
+    this.initializeUser();
+  }
+
+  private async initializeUser() {
+    const { data } = await this.supabase.auth.getSession();
+    if (data.session) {
+      await this.refreshUserProfile(data.session.user.id);
+    }
+  }
+
+  private async refreshUserProfile(userId: string) {
+    const { user } = await this.getUserProfile(userId);
+    if (user) {
+      this.currentUserSubject.next(user);
+    }
+  }
+
+  // Getter síncrono por conveniencia (para los Guards)
+  public get currentUserValue(): Profile | null {
+    return this.currentUserSubject.value;
   }
 
   private mapError(error: any): AppError {
@@ -149,9 +178,11 @@ export class SupabaseService {
           last_name: data.user?.user_metadata?.['last_name'] || '',
           role: data.user?.user_metadata?.['role'] || '',
         };
+        this.currentUserSubject.next(basicProfile); // ACTUALIZAMOS CACHE
         return { user: basicProfile, error: null };
       }
 
+      this.currentUserSubject.next(user); // ACTUALIZAMOS CACHE
       return { user, error: null };
     } catch (err) {
       return {
@@ -192,6 +223,7 @@ export class SupabaseService {
 
   async logout(): Promise<void> {
     await this.supabase.auth.signOut();
+    this.currentUserSubject.next(null); // LIMPIAMOS CACHE
   }
 
   async getSession() {
@@ -210,15 +242,11 @@ export class SupabaseService {
         return { user: null, error: this.mapError(error) };
       }
 
-      const profile: Profile = {
-        id: data.user?.id || '',
-        email: data.user?.email || '',
-        first_name: data.user?.user_metadata?.['first_name'] || '',
-        last_name: data.user?.user_metadata?.['last_name'] || '',
-        role: data.user?.user_metadata?.['role'] || '',
-      };
+      // Traemos el perfil tras verificar OTP
+      const { user } = await this.getUserProfile(data.user?.id || '');
+      this.currentUserSubject.next(user); // ACTUALIZAMOS CACHE
 
-      return { user: profile, error: null };
+      return { user, error: null };
     } catch (err) {
       return {
         user: null,

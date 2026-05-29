@@ -16,6 +16,13 @@ export class RoleGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     const expectedRoles = route.data['expectedRoles'] as string[];
 
+    // 1. Intentamos leer del CACHE primero (es instantáneo)
+    const cachedUser = this.supabaseService.currentUserValue;
+    if (cachedUser) {
+      return of(this.checkRole(cachedUser.role, expectedRoles));
+    }
+
+    // 2. Si no hay cache, verificamos sesión y pedimos perfil
     return from(this.supabaseService.getSession()).pipe(
       switchMap(session => {
         if (!session.data.session) {
@@ -24,16 +31,17 @@ export class RoleGuard implements CanActivate {
 
         return from(this.supabaseService.getUserProfile(session.data.session.user.id)).pipe(
           map(profileResp => {
-            const userRole = profileResp.user?.role;
-            
-            if (userRole && expectedRoles.includes(userRole)) {
-              return true;
-            } else {
-              return this.router.parseUrl('/restricted');
-            }
+            return this.checkRole(profileResp.user?.role, expectedRoles);
           })
         );
       })
     );
+  }
+
+  private checkRole(userRole: string | undefined, expectedRoles: string[]): boolean | UrlTree {
+    if (userRole && expectedRoles.includes(userRole)) {
+      return true;
+    }
+    return this.router.parseUrl('/restricted');
   }
 }
