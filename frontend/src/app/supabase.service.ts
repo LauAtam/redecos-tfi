@@ -33,10 +33,19 @@ export class SupabaseService {
 
     // 1. Intentar mapear por el código de error explícito (si existe y es confiable)
     if (errorCode === 'user_already_exists') {
-      return { code: 'auth/user-already-exists', message: 'El correo electrónico ya se encuentra registrado.', originalError: error };
+      return {
+        code: 'auth/user-already-exists',
+        message: 'El correo electrónico ya se encuentra registrado.',
+        originalError: error,
+      };
     }
     if (errorCode === 'invalid_credentials') {
-      return { code: 'auth/invalid-credentials', message: 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.', originalError: error };
+      return {
+        code: 'auth/invalid-credentials',
+        message:
+          'Credenciales inválidas. Por favor, verifica tu correo y contraseña.',
+        originalError: error,
+      };
     }
 
     // 2. Fallback: Mapeo por Status HTTP + Regex/Contenido (más flexible que un string exacto)
@@ -47,7 +56,8 @@ export class SupabaseService {
           message = 'El correo electrónico ya se encuentra registrado.';
         } else if (/invalid.*credentials|invalid login/i.test(errorMessage)) {
           code = 'auth/invalid-credentials';
-          message = 'Credenciales inválidas. Por favor, verifica tu correo y contraseña.';
+          message =
+            'Credenciales inválidas. Por favor, verifica tu correo y contraseña.';
         } else {
           code = 'auth/bad-request';
           message = 'La solicitud es inválida. Revisa los datos ingresados.';
@@ -70,7 +80,12 @@ export class SupabaseService {
     return { code, message, originalError: error };
   }
 
-  async register(email: string, password: string, firstName: string, lastName: string): Promise<AuthResponse> {
+  async register(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<AuthResponse> {
     try {
       const { data, error } = await this.supabase.auth.signUp({
         email,
@@ -79,7 +94,7 @@ export class SupabaseService {
           data: {
             first_name: firstName,
             last_name: lastName,
-            role: 'CLIENTE' // Consistente con DB
+            role: 'CLIENTE', // Consistente con DB
           },
         },
       });
@@ -93,18 +108,18 @@ export class SupabaseService {
         email: data.user?.email || '',
         first_name: data.user?.user_metadata?.['first_name'] || firstName,
         last_name: data.user?.user_metadata?.['last_name'] || lastName,
-        role: data.user?.user_metadata?.['role'] || 'CLIENTE'
+        role: data.user?.user_metadata?.['role'] || 'CLIENTE',
       };
 
       return { user: profile, error: null };
     } catch (err) {
-      return { 
-        user: null, 
-        error: { 
-          code: 'auth/unexpected', 
+      return {
+        user: null,
+        error: {
+          code: 'auth/unexpected',
           message: 'Ocurrió un error inesperado durante el registro.',
-          originalError: err 
-        } 
+          originalError: err,
+        },
       };
     }
   }
@@ -121,8 +136,10 @@ export class SupabaseService {
       }
 
       // Una vez logueado, intentamos traer el perfil completo desde la tabla profiles
-      const { user, error: profileError } = await this.getUserProfile(data.user.id);
-      
+      const { user, error: profileError } = await this.getUserProfile(
+        data.user.id,
+      );
+
       if (profileError) {
         // Si hay error de perfil, al menos devolvemos la info básica del user de auth
         const basicProfile: Profile = {
@@ -130,20 +147,20 @@ export class SupabaseService {
           email: data.user?.email || '',
           first_name: data.user?.user_metadata?.['first_name'] || '',
           last_name: data.user?.user_metadata?.['last_name'] || '',
-          role: data.user?.user_metadata?.['role'] || ''
+          role: data.user?.user_metadata?.['role'] || '',
         };
         return { user: basicProfile, error: null };
       }
 
       return { user, error: null };
     } catch (err) {
-      return { 
-        user: null, 
-        error: { 
-          code: 'auth/unexpected', 
+      return {
+        user: null,
+        error: {
+          code: 'auth/unexpected',
           message: 'Ocurrió un error inesperado al intentar iniciar sesión.',
-          originalError: err
-        } 
+          originalError: err,
+        },
       };
     }
   }
@@ -162,13 +179,13 @@ export class SupabaseService {
 
       return { user: data as Profile, error: null };
     } catch (err) {
-      return { 
-        user: null, 
-        error: { 
-          code: 'auth/unexpected', 
-          message: 'Error al obtener el perfil de usuario.', 
-          originalError: err 
-        } 
+      return {
+        user: null,
+        error: {
+          code: 'auth/unexpected',
+          message: 'Error al obtener el perfil de usuario.',
+          originalError: err,
+        },
       };
     }
   }
@@ -186,7 +203,7 @@ export class SupabaseService {
       const { data, error } = await this.supabase.auth.verifyOtp({
         email,
         token,
-        type: 'signup'
+        type: 'signup',
       });
 
       if (error) {
@@ -198,18 +215,18 @@ export class SupabaseService {
         email: data.user?.email || '',
         first_name: data.user?.user_metadata?.['first_name'] || '',
         last_name: data.user?.user_metadata?.['last_name'] || '',
-        role: data.user?.user_metadata?.['role'] || ''
+        role: data.user?.user_metadata?.['role'] || '',
       };
 
       return { user: profile, error: null };
     } catch (err) {
-      return { 
-        user: null, 
-        error: { 
-          code: 'auth/unexpected', 
-          message: 'Error al verificar el código.', 
-          originalError: err 
-        } 
+      return {
+        user: null,
+        error: {
+          code: 'auth/unexpected',
+          message: 'Error al verificar el código.',
+          originalError: err,
+        },
       };
     }
   }
