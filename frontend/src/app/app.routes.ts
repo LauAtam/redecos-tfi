@@ -30,7 +30,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage), 
+    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [AuthGuard, RoleGuard],
     data: { expectedRoles: ['ADMIN'] }
   },
