@@ -43,7 +43,6 @@ import {
     IonMenuButton,
     IonButton,
     IonIcon,
-    IonText,
     IonFooter,
     IonTabBar,
     IonTabButton,

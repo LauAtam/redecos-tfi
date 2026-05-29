@@ -1,0 +1,109 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gestión de Productos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="admin-container">
+    
+    <!-- Formulario de Carga -->
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-title>Cargar Nuevo Producto</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <form [formGroup]="productoForm" (ngSubmit)="onCreateProducto()">
+          
+          <div class="input-group">
+            <label>Nombre del Producto</label>
+            <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
+              <ion-icon name="cube-outline"></ion-icon>
+              <ion-input formControlName="name" placeholder="Ej: Bolson de Verduras"></ion-input>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>Descripción (Opcional)</label>
+            <div class="custom-input textarea" [class.invalid]="f['description'].touched && f['description'].invalid">
+              <ion-icon name="reader-outline"></ion-icon>
+              <ion-textarea formControlName="description" placeholder="Detalles del producto..."></ion-textarea>
+            </div>
+          </div>
+
+          <div class="row-inputs">
+            <div class="input-group flex-1">
+              <label>Precio Unitario</label>
+              <div class="custom-input" [class.invalid]="f['price'].touched && f['price'].invalid">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                <ion-input type="number" formControlName="price" placeholder="0.00"></ion-input>
+              </div>
+            </div>
+
+            <div class="input-group flex-1">
+              <label>Unidades por Bulto</label>
+              <div class="custom-input" [class.invalid]="f['bulk_size'].touched && f['bulk_size'].invalid">
+                <ion-icon name="layers-outline"></ion-icon>
+                <ion-input type="number" formControlName="bulk_size" placeholder="10"></ion-input>
+              </div>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>URL de Imagen (Opcional)</label>
+            <div class="custom-input" [class.invalid]="f['image_url'].touched && f['image_url'].invalid">
+              <ion-icon name="image-outline"></ion-icon>
+              <ion-input formControlName="image_url" placeholder="https://..."></ion-input>
+            </div>
+          </div>
+
+          <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
+            <ion-icon slot="start" name="add-outline" *ngIf="!isSaving"></ion-icon>
+            <span *ngIf="!isSaving">Agregar al Catálogo</span>
+            <ion-spinner name="crescent" *ngIf="isSaving"></ion-spinner>
+          </ion-button>
+
+          <ion-text color="danger" *ngIf="errorMessage" class="ion-text-center">
+            <p>{{ errorMessage }}</p>
+          </ion-text>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Catálogo Actual -->
+    <div class="list-section">
+      <h3>Catálogo de Productos</h3>
+      
+      <div class="loading-state" *ngIf="isLoading">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && productos.length === 0">
+        <p>El catálogo está vacío.</p>
+      </div>
+
+      <ion-card *ngFor="let prod of productos" class="list-card">
+        <ion-item lines="none">
+          <ion-thumbnail slot="start" *ngIf="prod.image_url">
+            <img [src]="prod.image_url" alt="Product" />
+          </ion-thumbnail>
+          <ion-icon name="cube-outline" slot="start" color="primary" *ngIf="!prod.image_url"></ion-icon>
+          <ion-label>
+            <h2>{{ prod.name }}</h2>
+            <p>{{ prod.description || 'Sin descripción' }}</p>
+            <div class="badge-group">
+              <ion-text color="success"><strong>${{ prod.price }}</strong></ion-text>
+              <span class="divider">|</span>
+              <small>Bulto: {{ prod.bulk_size }} un.</small>
+            </div>
+          </ion-label>
+        </ion-item>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

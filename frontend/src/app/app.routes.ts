@@ -12,25 +12,44 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage),
-    canActivate: [GuestGuard]
+    loadComponent: () =>
+      import('./pages/login/login.page').then((m) => m.LoginPage),
+    canActivate: [GuestGuard],
   },
   {
     path: 'register',
-    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage),
-    canActivate: [GuestGuard]
+    loadComponent: () =>
+      import('./pages/register/register.page').then((m) => m.RegisterPage),
+    canActivate: [GuestGuard],
   },
   {
     path: 'restricted',
-    loadComponent: () => import('./pages/restricted/restricted.page').then( m => m.RestrictedPage)
+    loadComponent: () =>
+      import('./pages/restricted/restricted.page').then(
+        (m) => m.RestrictedPage,
+      ),
   },
   {
     path: 'admin',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    children: [
+      {
+        path: 'nodos',
+        loadComponent: () => import('./pages/admin/nodos/nodos.page').then(m => m.NodosPage)
+      },
+      {
+        path: 'productos',
+        loadComponent: () => import('./pages/admin/productos/productos.page').then(m => m.ProductosPage)
+      },
+      {
+        path: '',
+        redirectTo: 'nodos',
+        pathMatch: 'full'
+      }
+    ],
     canActivate: [AuthGuard, RoleGuard],
     data: { expectedRoles: ['ADMIN'] }
   },
@@ -40,4 +59,4 @@ export const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { expectedRoles: ['NODO', 'ADMIN'] }
   },
-];
+  ];

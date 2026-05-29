@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { AuthResponse, Profile, AppError } from './core/models/auth.models';
+import { AuthResponse, Profile, AppError, Nodo, Producto } from './core/models/auth.models';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Injectable({
@@ -256,6 +256,68 @@ export class SupabaseService {
           originalError: err,
         },
       };
+    }
+  }
+
+  // --- MÉTODOS PARA NODOS ---
+
+  async getNodos(): Promise<{ data: Nodo[] | null, error: AppError | null }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('nodos')
+        .select('*')
+        .order('name');
+
+      if (error) return { data: null, error: this.mapError(error) };
+      return { data: data as Nodo[], error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'db/unexpected', message: 'Error al obtener nodos.', originalError: err } };
+    }
+  }
+
+  async createNodo(nodo: Nodo): Promise<{ data: Nodo | null, error: AppError | null }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('nodos')
+        .insert(nodo)
+        .select()
+        .single();
+
+      if (error) return { data: null, error: this.mapError(error) };
+      return { data: data as Nodo, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'db/unexpected', message: 'Error al crear el nodo.', originalError: err } };
+    }
+  }
+
+  // --- MÉTODOS PARA PRODUCTOS ---
+
+  async getProductos(): Promise<{ data: Producto[] | null, error: AppError | null }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('productos')
+        .select('*')
+        .order('name');
+
+      if (error) return { data: null, error: this.mapError(error) };
+      return { data: data as Producto[], error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'db/unexpected', message: 'Error al obtener productos.', originalError: err } };
+    }
+  }
+
+  async createProducto(producto: Producto): Promise<{ data: Producto | null, error: AppError | null }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('productos')
+        .insert(producto)
+        .select()
+        .single();
+
+      if (error) return { data: null, error: this.mapError(error) };
+      return { data: data as Producto, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'db/unexpected', message: 'Error al crear el producto.', originalError: err } };
     }
   }
 }

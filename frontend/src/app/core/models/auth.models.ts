@@ -17,3 +17,21 @@ export interface AuthResponse {
   user: Profile | null;
   error?: AppError | null;
 }
+
+export interface Nodo {
+  id?: string;
+  name: string;
+  address: string;
+  manager_name: string;
+  created_at?: string;
+}
+
+export interface Producto {
+  id?: string;
+  name: string;
+  description?: string;
+  price: number;
+  bulk_size: number;
+  image_url?: string;
+  created_at?: string;
+}
