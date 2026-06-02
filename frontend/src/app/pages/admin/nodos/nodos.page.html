@@ -9,53 +9,97 @@
 
 <ion-content class="ion-padding">
   <div class="admin-container">
-    
     <!-- Formulario de Alta -->
     <ion-card class="form-card">
       <ion-card-header>
         <ion-card-title>Nuevo Nodo de Retiro</ion-card-title>
       </ion-card-header>
-      
+
       <ion-card-content>
         <form [formGroup]="nodoForm" (ngSubmit)="onCreateNodo()">
-          
           <div class="input-group">
             <label>Nombre del Nodo</label>
-            <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
+            <div
+              class="custom-input"
+              [class.invalid]="f['name'].touched && f['name'].invalid"
+            >
               <ion-icon name="business-outline"></ion-icon>
-              <ion-input formControlName="name" placeholder="Ej: Nodo Centro"></ion-input>
+              <ion-input
+                formControlName="name"
+                placeholder="Ej: Nodo Centro"
+              ></ion-input>
             </div>
-            <ion-text color="danger" *ngIf="f['name'].touched && f['name'].invalid">
-              <small *ngIf="f['name'].errors?.['required']">El nombre es obligatorio.</small>
-              <small *ngIf="f['name'].errors?.['minlength']">Mínimo 3 caracteres.</small>
+            <ion-text
+              color="danger"
+              *ngIf="f['name'].touched && f['name'].invalid"
+            >
+              <small *ngIf="f['name'].errors?.['required']"
+                >El nombre es obligatorio.</small
+              >
+              <small *ngIf="f['name'].errors?.['minlength']"
+                >Mínimo 3 caracteres.</small
+              >
             </ion-text>
           </div>
 
           <div class="input-group">
             <label>Dirección Física</label>
-            <div class="custom-input" [class.invalid]="f['address'].touched && f['address'].invalid">
+            <div
+              class="custom-input"
+              [class.invalid]="f['address'].touched && f['address'].invalid"
+            >
               <ion-icon name="location-outline"></ion-icon>
-              <ion-input formControlName="address" placeholder="Ej: Av. Principal 123"></ion-input>
+              <ion-input
+                formControlName="address"
+                placeholder="Ej: Av. Principal 123"
+              ></ion-input>
             </div>
-            <ion-text color="danger" *ngIf="f['address'].touched && f['address'].invalid">
-              <small *ngIf="f['address'].errors?.['required']">La dirección es obligatoria.</small>
-              <small *ngIf="f['address'].errors?.['minlength']">Mínimo 5 caracteres.</small>
+            <ion-text
+              color="danger"
+              *ngIf="f['address'].touched && f['address'].invalid"
+            >
+              <small *ngIf="f['address'].errors?.['required']"
+                >La dirección es obligatoria.</small
+              >
+              <small *ngIf="f['address'].errors?.['minlength']"
+                >Mínimo 5 caracteres.</small
+              >
             </ion-text>
           </div>
 
           <div class="input-group">
             <label>Responsable del Nodo</label>
-            <div class="custom-input" [class.invalid]="f['manager_name'].touched && f['manager_name'].invalid">
+            <div
+              class="custom-input"
+              [class.invalid]="f['manager_name'].touched && f['manager_name'].invalid"
+            >
               <ion-icon name="person-outline"></ion-icon>
-              <ion-input formControlName="manager_name" placeholder="Nombre del encargado"></ion-input>
+              <ion-input
+                formControlName="manager_name"
+                placeholder="Nombre del encargado"
+              ></ion-input>
             </div>
-            <ion-text color="danger" *ngIf="f['manager_name'].touched && f['manager_name'].invalid">
-              <small *ngIf="f['manager_name'].errors?.['required']">El responsable es obligatorio.</small>
+            <ion-text
+              color="danger"
+              *ngIf="f['manager_name'].touched && f['manager_name'].invalid"
+            >
+              <small *ngIf="f['manager_name'].errors?.['required']"
+                >El responsable es obligatorio.</small
+              >
             </ion-text>
           </div>
 
-          <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
-            <ion-icon slot="start" name="add-outline" *ngIf="!isSaving"></ion-icon>
+          <ion-button
+            expand="block"
+            type="submit"
+            class="submit-button"
+            [disabled]="isSaving"
+          >
+            <ion-icon
+              slot="start"
+              name="add-outline"
+              *ngIf="!isSaving"
+            ></ion-icon>
             <span *ngIf="!isSaving">Crear Nodo</span>
             <ion-spinner name="crescent" *ngIf="isSaving"></ion-spinner>
           </ion-button>
@@ -70,7 +114,7 @@
     <!-- Lista de Nodos -->
     <div class="list-section">
       <h3>Nodos Registrados</h3>
-      
+
       <div class="loading-state" *ngIf="isLoading">
         <ion-spinner name="crescent"></ion-spinner>
       </div>
@@ -81,7 +125,11 @@
 
       <ion-card *ngFor="let nodo of nodos" class="list-card">
         <ion-item lines="none">
-          <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
+          <ion-icon
+            name="business-outline"
+            slot="start"
+            color="primary"
+          ></ion-icon>
           <ion-label>
             <h2>{{ nodo.name }}</h2>
             <p>{{ nodo.address }}</p>
@@ -90,6 +138,5 @@
         </ion-item>
       </ion-card>
     </div>
-
   </div>
 </ion-content>

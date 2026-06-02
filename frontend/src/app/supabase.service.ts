@@ -259,34 +259,58 @@ export class SupabaseService {
     }
   }
 
+  // Helper method for API headers
+  private getHeaders(sessionToken?: string): HeadersInit {
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+    if (sessionToken) {
+      headers['Authorization'] = `Bearer ${sessionToken}`;
+    }
+    return headers;
+  }
+
   // --- MÉTODOS PARA NODOS ---
 
   async getNodos(): Promise<{ data: Nodo[] | null, error: AppError | null }> {
     try {
-      const { data, error } = await this.supabase
-        .from('nodos')
-        .select('*')
-        .order('name');
+      const response = await fetch(`${environment.apiUrl}/nodes`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
 
-      if (error) return { data: null, error: this.mapError(error) };
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener nodos.' } };
+      }
+
+      const data = await response.json();
       return { data: data as Nodo[], error: null };
     } catch (err) {
-      return { data: null, error: { code: 'db/unexpected', message: 'Error al obtener nodos.', originalError: err } };
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener nodos.', originalError: err } };
     }
   }
 
   async createNodo(nodo: Nodo): Promise<{ data: Nodo | null, error: AppError | null }> {
     try {
-      const { data, error } = await this.supabase
-        .from('nodos')
-        .insert(nodo)
-        .select()
-        .single();
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
 
-      if (error) return { data: null, error: this.mapError(error) };
+      const response = await fetch(`${environment.apiUrl}/nodes`, {
+        method: 'POST',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(nodo),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al crear el nodo.' } };
+      }
+
+      const data = await response.json();
       return { data: data as Nodo, error: null };
     } catch (err) {
-      return { data: null, error: { code: 'db/unexpected', message: 'Error al crear el nodo.', originalError: err } };
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al crear el nodo.', originalError: err } };
     }
   }
 
@@ -294,30 +318,44 @@ export class SupabaseService {
 
   async getProductos(): Promise<{ data: Producto[] | null, error: AppError | null }> {
     try {
-      const { data, error } = await this.supabase
-        .from('productos')
-        .select('*')
-        .order('name');
+      const response = await fetch(`${environment.apiUrl}/products`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
 
-      if (error) return { data: null, error: this.mapError(error) };
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener productos.' } };
+      }
+
+      const data = await response.json();
       return { data: data as Producto[], error: null };
     } catch (err) {
-      return { data: null, error: { code: 'db/unexpected', message: 'Error al obtener productos.', originalError: err } };
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener productos.', originalError: err } };
     }
   }
 
   async createProducto(producto: Producto): Promise<{ data: Producto | null, error: AppError | null }> {
     try {
-      const { data, error } = await this.supabase
-        .from('productos')
-        .insert(producto)
-        .select()
-        .single();
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
 
-      if (error) return { data: null, error: this.mapError(error) };
+      const response = await fetch(`${environment.apiUrl}/products`, {
+        method: 'POST',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(producto),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al crear el producto.' } };
+      }
+
+      const data = await response.json();
       return { data: data as Producto, error: null };
     } catch (err) {
-      return { data: null, error: { code: 'db/unexpected', message: 'Error al crear el producto.', originalError: err } };
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al crear el producto.', originalError: err } };
     }
   }
 }
+
