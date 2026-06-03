@@ -16,13 +16,26 @@ export class SupabaseService {
   // Exponemos el estado como Observable para que los componentes se suscriban
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  private mapUserToProfile(user: any): Profile {
+  public getRoleFromToken(token: string): string {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decoded = JSON.parse(atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/')));
+      return decoded.app_metadata?.role || decoded.user_metadata?.role || 'CLIENTE';
+    } catch (e) {
+      return 'CLIENTE';
+    }
+  }
+
+  private mapUserToProfile(user: any, token?: string): Profile {
+    const rawRole = token
+      ? this.getRoleFromToken(token)
+      : (user.app_metadata?.['role'] || user.user_metadata?.['role'] || 'CLIENTE');
     return {
       id: user.id || '',
       email: user.email || '',
       first_name: user.user_metadata?.['first_name'] || '',
       last_name: user.user_metadata?.['last_name'] || '',
-      role: user.app_metadata?.['role'] || user.user_metadata?.['role'] || 'CLIENTE',
+      role: String(rawRole).toUpperCase(),
     };
   }
 
@@ -35,7 +48,7 @@ export class SupabaseService {
     // Escuchamos los cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        this.currentUserSubject.next(this.mapUserToProfile(session.user));
+        this.currentUserSubject.next(this.mapUserToProfile(session.user, session.access_token));
       } else {
         this.currentUserSubject.next(null);
       }
@@ -166,7 +179,7 @@ export class SupabaseService {
         return { user: null, error: this.mapError(error) };
       }
 
-      const profile = this.mapUserToProfile(data.user);
+      const profile = this.mapUserToProfile(data.user, data.session?.access_token);
       this.currentUserSubject.next(profile); // ACTUALIZAMOS CACHE
       return { user: profile, error: null };
     } catch (err) {
@@ -228,7 +241,7 @@ export class SupabaseService {
       }
 
       if (data.user) {
-        const profile = this.mapUserToProfile(data.user);
+        const profile = this.mapUserToProfile(data.user, data.session?.access_token);
         this.currentUserSubject.next(profile); // ACTUALIZAMOS CACHE
         return { user: profile, error: null };
       }
