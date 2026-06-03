@@ -59,3 +59,29 @@ body {
 		box-shadow: none !important;
 	}
 }
+
+/* Estilos Custom Premium para Toasts */
+.custom-toast {
+  --border-radius: 16px;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  font-weight: 600;
+  
+  &.toast-success {
+    --background: #006b4d;
+    --color: #ffffff;
+    --button-color: #ffffff;
+  }
+  
+  &.toast-error {
+    --background: #eb445a;
+    --color: #ffffff;
+    --button-color: #ffffff;
+  }
+  
+  &.toast-warning {
+    --background: #e0a800;
+    --color: #ffffff;
+    --button-color: #ffffff;
+  }
+}
+

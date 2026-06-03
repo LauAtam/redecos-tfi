@@ -34,6 +34,7 @@ import {
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { Nodo } from '../../../core/models/auth.models';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-nodos',
@@ -72,6 +73,7 @@ export class NodosPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
+    private toastService: ToastService,
   ) {
     addIcons({
       businessOutline,
@@ -119,8 +121,10 @@ export class NodosPage implements OnInit {
 
     if (error) {
       this.errorMessage = error.message;
+      this.toastService.showError(error.message);
     } else {
       this.nodos.unshift(data!);
+      this.toastService.showSuccess(`Nodo "${data!.name}" creado correctamente.`);
       this.nodoForm.reset();
     }
   }

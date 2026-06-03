@@ -39,6 +39,7 @@ import {
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { Producto } from '../../../core/models/auth.models';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-productos',
@@ -78,7 +79,8 @@ export class ProductosPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private supabaseService: SupabaseService
+    private supabaseService: SupabaseService,
+    private toastService: ToastService
   ) {
     addIcons({ 
       cubeOutline, 
@@ -130,8 +132,10 @@ export class ProductosPage implements OnInit {
 
     if (error) {
       this.errorMessage = error.message;
+      this.toastService.showError(error.message);
     } else {
       this.productos.unshift(data!);
+      this.toastService.showSuccess(`Producto "${data!.name}" cargado correctamente.`);
       this.productoForm.reset();
     }
   }
