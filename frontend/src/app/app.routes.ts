@@ -37,6 +37,10 @@ export const routes: Routes = [
     path: 'admin',
     children: [
       {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/admin/dashboard/dashboard.page').then(m => m.DashboardPage)
+      },
+      {
         path: 'nodos',
         loadComponent: () => import('./pages/admin/nodos/nodos.page').then(m => m.NodosPage)
       },
@@ -46,7 +50,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'nodos',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
       }
     ],

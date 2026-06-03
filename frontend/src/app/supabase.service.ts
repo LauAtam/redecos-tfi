@@ -16,28 +16,30 @@ export class SupabaseService {
   // Exponemos el estado como Observable para que los componentes se suscriban
   public currentUser$ = this.currentUserSubject.asObservable();
 
+  private mapUserToProfile(user: any): Profile {
+    return {
+      id: user.id || '',
+      email: user.email || '',
+      first_name: user.user_metadata?.['first_name'] || '',
+      last_name: user.user_metadata?.['last_name'] || '',
+      role: user.app_metadata?.['role'] || user.user_metadata?.['role'] || 'CLIENTE',
+    };
+  }
+
   constructor() {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey,
     );
 
-    // Intentamos inicializar el usuario si ya hay una sesión activa en el navegador
-    this.initializeUser();
-  }
-
-  private async initializeUser() {
-    const { data } = await this.supabase.auth.getSession();
-    if (data.session) {
-      await this.refreshUserProfile(data.session.user.id);
-    }
-  }
-
-  private async refreshUserProfile(userId: string) {
-    const { user } = await this.getUserProfile(userId);
-    if (user) {
-      this.currentUserSubject.next(user);
-    }
+    // Escuchamos los cambios en el estado de autenticación
+    this.supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        this.currentUserSubject.next(this.mapUserToProfile(session.user));
+      } else {
+        this.currentUserSubject.next(null);
+      }
+    });
   }
 
   // Getter síncrono por conveniencia (para los Guards)
@@ -164,26 +166,9 @@ export class SupabaseService {
         return { user: null, error: this.mapError(error) };
       }
 
-      // Una vez logueado, intentamos traer el perfil completo desde la tabla profiles
-      const { user, error: profileError } = await this.getUserProfile(
-        data.user.id,
-      );
-
-      if (profileError) {
-        // Si hay error de perfil, al menos devolvemos la info básica del user de auth
-        const basicProfile: Profile = {
-          id: data.user?.id || '',
-          email: data.user?.email || '',
-          first_name: data.user?.user_metadata?.['first_name'] || '',
-          last_name: data.user?.user_metadata?.['last_name'] || '',
-          role: data.user?.user_metadata?.['role'] || '',
-        };
-        this.currentUserSubject.next(basicProfile); // ACTUALIZAMOS CACHE
-        return { user: basicProfile, error: null };
-      }
-
-      this.currentUserSubject.next(user); // ACTUALIZAMOS CACHE
-      return { user, error: null };
+      const profile = this.mapUserToProfile(data.user);
+      this.currentUserSubject.next(profile); // ACTUALIZAMOS CACHE
+      return { user: profile, error: null };
     } catch (err) {
       return {
         user: null,
@@ -242,11 +227,13 @@ export class SupabaseService {
         return { user: null, error: this.mapError(error) };
       }
 
-      // Traemos el perfil tras verificar OTP
-      const { user } = await this.getUserProfile(data.user?.id || '');
-      this.currentUserSubject.next(user); // ACTUALIZAMOS CACHE
+      if (data.user) {
+        const profile = this.mapUserToProfile(data.user);
+        this.currentUserSubject.next(profile); // ACTUALIZAMOS CACHE
+        return { user: profile, error: null };
+      }
 
-      return { user, error: null };
+      return { user: null, error: { code: 'auth/unexpected', message: 'No se pudo obtener el usuario.' } };
     } catch (err) {
       return {
         user: null,

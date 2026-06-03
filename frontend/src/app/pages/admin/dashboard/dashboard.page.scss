@@ -1,0 +1,42 @@
+.welcome-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  
+  h2 {
+    font-weight: 600;
+  }
+}
+
+.dashboard-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.icon-container {
+  display: inline-flex;
+  padding: 12px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  
+  ion-icon {
+    font-size: 2rem;
+    color: var(--ion-color-contrast);
+  }
+  
+  &.nodos-color {
+    background-color: var(--ion-color-secondary);
+  }
+  
+  &.productos-color {
+    background-color: var(--ion-color-tertiary);
+  }
+}

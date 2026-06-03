@@ -26,20 +26,15 @@ export class RoleGuard implements CanActivate {
       return of(this.checkRole(cachedUser.role, expectedRoles));
     }
 
-    // 2. Si no hay cache, verificamos sesión y pedimos perfil
+    // 2. Si no hay cache, verificamos sesión y extraemos el rol del JWT
     return from(this.supabaseService.getSession()).pipe(
-      switchMap((session) => {
-        if (!session.data.session) {
+      switchMap(({ data: { session } }) => {
+        if (!session) {
           return of(this.router.parseUrl('/login'));
         }
 
-        return from(
-          this.supabaseService.getUserProfile(session.data.session.user.id),
-        ).pipe(
-          map((profileResp) => {
-            return this.checkRole(profileResp.user?.role, expectedRoles);
-          }),
-        );
+        const role = session.user.app_metadata?.['role'] || session.user.user_metadata?.['role'] || 'CLIENTE';
+        return of(this.checkRole(role, expectedRoles));
       }),
     );
   }

@@ -98,11 +98,9 @@ export class LoginPage implements OnInit {
       // Redirección basada en rol
       switch (user.role) {
         case 'ADMIN':
-          this.router.navigate(['/admin']);
+          this.router.navigate(['/admin/dashboard']);
           break;
         case 'NODO':
-          this.router.navigate(['/nodo']);
-          break;
         case 'CLIENTE':
         default:
           this.router.navigate(['/home']);
