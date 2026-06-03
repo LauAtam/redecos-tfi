@@ -1,49 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar color="primary">
+<ion-header class="ion-no-border">
+  <ion-toolbar>
     <ion-title>Panel de Administración</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" aria-label="Cerrar sesión">
-        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      <ion-button (click)="logout()" class="logout-button" aria-label="Cerrar sesión">
+        <ion-icon name="log-out-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div class="welcome-container ion-text-center ion-margin-bottom">
-    <h2>¡Bienvenido, Administrador!</h2>
-    <p class="ion-text-muted" *ngIf="adminEmail">{{ adminEmail }}</p>
+<ion-content class="ion-padding">
+  <div class="admin-dashboard-container">
+    
+    <!-- Banner de Bienvenida -->
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h2>¡Hola, Administrador! 👋</h2>
+        <p class="email-sub" *ngIf="adminEmail">{{ adminEmail }}</p>
+      </div>
+      <p class="banner-desc">Gestioná los nodos de retiro y el catálogo de productos de la red de economía social.</p>
+    </div>
+
+    <!-- Contenedor de Tarjetas de Navegación -->
+    <div class="cards-grid">
+      <ion-card class="menu-card" routerLink="/admin/nodos" button="true">
+        <div class="card-layout">
+          <div class="icon-wrapper nodes-theme">
+            <ion-icon name="business-outline"></ion-icon>
+          </div>
+          <div class="card-info">
+            <h3>Gestión de Nodos</h3>
+            <p>Administrá los nodos de distribución, ver detalles y crear nuevos puntos de la red.</p>
+          </div>
+          <div class="arrow-indicator">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+      </ion-card>
+
+      <ion-card class="menu-card" routerLink="/admin/productos" button="true">
+        <div class="card-layout">
+          <div class="icon-wrapper products-theme">
+            <ion-icon name="cube-outline"></ion-icon>
+          </div>
+          <div class="card-info">
+            <h3>Gestión de Productos</h3>
+            <p>Visualizá el catálogo completo, creá nuevos productos y administrá existencias en el sistema.</p>
+          </div>
+          <div class="arrow-indicator">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </div>
+        </div>
+      </ion-card>
+    </div>
+
   </div>
-
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-md="6">
-        <ion-card class="dashboard-card" routerLink="/admin/nodos" button="true">
-          <ion-card-header>
-            <div class="icon-container nodos-color">
-              <ion-icon name="business-outline"></ion-icon>
-            </div>
-            <ion-card-title>Gestión de Nodos</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            Administrar los nodos de distribución, ver detalles y crear nuevos puntos de la red.
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="12" size-md="6">
-        <ion-card class="dashboard-card" routerLink="/admin/productos" button="true">
-          <ion-card-header>
-            <div class="icon-container productos-color">
-              <ion-icon name="cube-outline"></ion-icon>
-            </div>
-            <ion-card-title>Gestión de Productos</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            Visualizar el catálogo, crear nuevos productos y administrar existencias en el sistema.
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 </ion-content>
