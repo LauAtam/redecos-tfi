@@ -7,65 +7,7 @@ ion-content {
   margin: 0 auto;
 }
 
-.form-card {
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  margin-bottom: 32px;
-  background: #ffffff;
 
-  ion-card-header {
-    padding-bottom: 0;
-    
-    ion-card-title {
-      color: #002d4b;
-      font-weight: 700;
-      font-size: 1.3rem;
-    }
-  }
-}
-
-.input-group {
-  margin-bottom: 16px;
-
-  label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #666;
-    margin-bottom: 6px;
-  }
-
-  .custom-input {
-    display: flex;
-    align-items: center;
-    background: #fdfdfe;
-    border: 1.5px solid #ececec;
-    border-radius: 12px;
-    padding: 0 12px;
-    height: 48px;
-    transition: all 0.2s ease-in-out;
-
-    ion-icon {
-      font-size: 1.2rem;
-      color: #999;
-      margin-right: 10px;
-    }
-
-    ion-input {
-      --padding-start: 0;
-      font-size: 0.95rem;
-      --color: #333;
-    }
-
-    &.invalid {
-      border-color: var(--ion-color-danger);
-    }
-
-    &:focus-within {
-      border-color: #006b4d;
-    }
-  }
-}
 
 .submit-button {
   --background: #006b4d;

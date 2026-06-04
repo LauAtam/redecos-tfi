@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
-  FormBuilder, 
-  FormGroup, 
-  ReactiveFormsModule, 
-  Validators 
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
   IonBackButton,
   IonList,
   IonItem,
@@ -26,19 +26,21 @@ import {
   IonCardContent,
   IonTextarea,
   IonThumbnail,
-  IonLabel
+  IonLabel,
+  IonModal,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { 
-  cubeOutline, 
-  pricetagOutline, 
+import {
+  cubeOutline,
+  pricetagOutline,
   readerOutline,
   layersOutline,
   imageOutline,
   addOutline,
   pencilOutline,
   trashOutline,
-  arrowBackOutline
+  arrowBackOutline,
+  closeOutline,
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { Producto } from '../../../core/models/auth.models';
@@ -51,15 +53,14 @@ import { AlertController } from '@ionic/angular/standalone';
   styleUrls: ['./productos.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButtons, 
+    CommonModule,
+    ReactiveFormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
     IonBackButton,
-    IonItem,
     IonInput,
     IonButton,
     IonIcon,
@@ -71,8 +72,8 @@ import { AlertController } from '@ionic/angular/standalone';
     IonCardContent,
     IonTextarea,
     IonThumbnail,
-    IonLabel
-  ]
+    IonModal,
+  ],
 })
 export class ProductosPage implements OnInit {
   productoForm: FormGroup;
@@ -81,6 +82,8 @@ export class ProductosPage implements OnInit {
   showForm = false;
   isEditing = false;
   editingProductId: string | null = null;
+  selectedProduct: Producto | null = null;
+  isDetailModalOpen = false;
   errorMessage: string | null = null;
   productos: Producto[] = [];
 
@@ -88,18 +91,19 @@ export class ProductosPage implements OnInit {
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
     private toastService: ToastService,
-    private alertController: AlertController
+    private alertController: AlertController,
   ) {
-    addIcons({ 
-      cubeOutline, 
-      pricetagOutline, 
+    addIcons({
+      cubeOutline,
+      pricetagOutline,
       readerOutline,
       layersOutline,
       imageOutline,
       addOutline,
       pencilOutline,
       trashOutline,
-      arrowBackOutline
+      arrowBackOutline,
+      closeOutline,
     });
 
     this.productoForm = this.fb.group({
@@ -107,7 +111,7 @@ export class ProductosPage implements OnInit {
       description: ['', [Validators.maxLength(200)]],
       price: [null, [Validators.required, Validators.min(0.01)]],
       bulk_size: [null, [Validators.required, Validators.min(1)]],
-      image_url: ['', [Validators.pattern(/https?:\/\/.+/)]]
+      image_url: ['', [Validators.pattern(/https?:\/\/.+/)]],
     });
   }
 
@@ -119,7 +123,7 @@ export class ProductosPage implements OnInit {
     this.isLoading = true;
     const { data, error } = await this.supabaseService.getProductos();
     this.isLoading = false;
-    
+
     if (error) {
       this.errorMessage = error.message;
     } else {
@@ -145,7 +149,7 @@ export class ProductosPage implements OnInit {
       description: prod.description || '',
       price: prod.price,
       bulk_size: prod.bulk_size,
-      image_url: prod.image_url || ''
+      image_url: prod.image_url || '',
     });
     this.showForm = true;
   }
@@ -157,25 +161,28 @@ export class ProductosPage implements OnInit {
       buttons: [
         {
           text: 'Cancelar',
-          role: 'cancel'
+          role: 'cancel',
         },
         {
           text: 'Eliminar',
           role: 'destructive',
           handler: async () => {
             this.isLoading = true;
-            const { success, error } = await this.supabaseService.deleteProducto(prod.id!);
+            const { success, error } =
+              await this.supabaseService.deleteProducto(prod.id!);
             this.isLoading = false;
 
             if (error) {
               this.toastService.showError(error.message);
             } else {
-              this.productos = this.productos.filter(p => p.id !== prod.id);
-              this.toastService.showSuccess(`Producto "${prod.name}" eliminado correctamente.`);
+              this.productos = this.productos.filter((p) => p.id !== prod.id);
+              this.toastService.showSuccess(
+                `Producto "${prod.name}" eliminado correctamente.`,
+              );
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
 
     await alert.present();
@@ -199,7 +206,8 @@ export class ProductosPage implements OnInit {
     this.errorMessage = null;
 
     const newProducto: Producto = this.productoForm.value;
-    const { data, error } = await this.supabaseService.createProducto(newProducto);
+    const { data, error } =
+      await this.supabaseService.createProducto(newProducto);
 
     this.isSaving = false;
 
@@ -210,7 +218,9 @@ export class ProductosPage implements OnInit {
       if (data) {
         this.productos.unshift(data);
       }
-      this.toastService.showSuccess(`Producto "${newProducto.name}" cargado correctamente.`);
+      this.toastService.showSuccess(
+        `Producto "${newProducto.name}" cargado correctamente.`,
+      );
       this.toggleForm(false);
     }
   }
@@ -220,7 +230,10 @@ export class ProductosPage implements OnInit {
     this.errorMessage = null;
 
     const updatedData: Partial<Producto> = this.productoForm.value;
-    const { data, error } = await this.supabaseService.updateProducto(this.editingProductId!, updatedData);
+    const { data, error } = await this.supabaseService.updateProducto(
+      this.editingProductId!,
+      updatedData,
+    );
 
     this.isSaving = false;
 
@@ -230,15 +243,32 @@ export class ProductosPage implements OnInit {
     } else {
       if (data) {
         // Reemplazar en la lista local
-        const index = this.productos.findIndex(p => p.id === this.editingProductId);
+        const index = this.productos.findIndex(
+          (p) => p.id === this.editingProductId,
+        );
         if (index !== -1) {
           this.productos[index] = data;
         }
       }
-      this.toastService.showSuccess(`Producto "${updatedData.name}" actualizado correctamente.`);
+      this.toastService.showSuccess(
+        `Producto "${updatedData.name}" actualizado correctamente.`,
+      );
       this.toggleForm(false);
     }
   }
 
-  get f() { return this.productoForm.controls; }
+  showProductDetail(prod: Producto) {
+    this.selectedProduct = prod;
+    this.isDetailModalOpen = true;
+    console.log(prod);
+  }
+
+  closeProductDetail() {
+    this.isDetailModalOpen = false;
+    this.selectedProduct = null;
+  }
+
+  get f() {
+    return this.productoForm.controls;
+  }
 }
