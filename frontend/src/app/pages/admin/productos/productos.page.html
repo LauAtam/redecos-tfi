@@ -1,11 +1,14 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- Si el formulario está abierto, el botón volver cierra el formulario. Si no, vuelve al dashboard. -->
-      <ion-button *ngIf="showForm" (click)="toggleForm(false)">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-button>
-      <ion-back-button *ngIf="!showForm" defaultHref="/admin/dashboard" text=""></ion-back-button>
+      @if (showForm) {
+        <ion-button (click)="toggleForm(false)">
+          <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      }
+      @if (!showForm) {
+        <ion-back-button defaultHref="/admin/dashboard" text=""></ion-back-button>
+      }
     </ion-buttons>
     <ion-title>{{ showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Gestión de Productos' }}</ion-title>
   </ion-toolbar>
@@ -15,156 +18,197 @@
   <div class="admin-container">
 
     <!-- VISTA 1: LISTADO DE PRODUCTOS (Se muestra por defecto) -->
-    <div class="list-section" *ngIf="!showForm">
+    @if (!showForm) {
+      <div class="list-section">
 
-      <!-- Encabezado de la lista con botón de alta -->
-      <div class="list-header-actions">
-        <h3>Catálogo de Productos</h3>
-        <ion-button class="new-product-btn" (click)="toggleForm(true)" size="default">
-          <ion-icon slot="start" name="add-outline"></ion-icon>
-          Nuevo Producto
-        </ion-button>
-      </div>
-
-      <div class="loading-state ion-text-center" *ngIf="isLoading">
-        <ion-spinner name="crescent"></ion-spinner>
-      </div>
-
-      <div class="empty-state ion-text-center" *ngIf="!isLoading && productos.length === 0">
-        <div class="empty-icon-wrapper">
-          <ion-icon name="cube-outline"></ion-icon>
+        <!-- Encabezado de la lista con botón de alta -->
+        <div class="list-header-actions">
+          <h3>Catálogo de Productos</h3>
+          <ion-button class="new-product-btn" (click)="toggleForm(true)" size="default">
+            <ion-icon slot="start" name="add-outline"></ion-icon>
+            Nuevo Producto
+          </ion-button>
         </div>
-        <p>El catálogo está vacío. ¡Cargá tu primer producto!</p>
-      </div>
 
-      <!-- Tarjetas de Productos con Acciones y Vista Previa -->
-      <div class="products-grid" *ngIf="!isLoading && productos.length > 0">
-        <ion-card *ngFor="let prod of productos" class="product-item-card" button="true"
-          (click)="showProductDetail(prod)">
-          <div class="product-card-body">
-            <ion-thumbnail class="product-thumbnail" *ngIf="prod.image_url">
-              <img [src]="prod.image_url" alt="Product Image" />
-            </ion-thumbnail>
-            <div class="product-icon-fallback" *ngIf="!prod.image_url">
+        @if (isLoading) {
+          <div class="loading-state ion-text-center">
+            <ion-spinner name="crescent"></ion-spinner>
+          </div>
+        }
+
+        @if (!isLoading && productos.length === 0) {
+          <div class="empty-state ion-text-center">
+            <div class="empty-icon-wrapper">
               <ion-icon name="cube-outline"></ion-icon>
             </div>
-
-            <div class="product-details">
-              <h2>{{ prod.name }}</h2>
-              <p class="description">{{ prod.description || 'Sin descripción' }}</p>
-              <div class="price-bulk-row">
-                <span class="price-tag">${{ prod.price }}</span>
-                <span class="divider">•</span>
-                <span class="bulk-tag">Bulto: {{ prod.bulk_size }} un.</span>
-              </div>
-            </div>
-
-            <!-- Acciones del Administrador (con stopPropagation para no abrir el detalle por error) -->
-            <div class="admin-actions">
-              <ion-button fill="clear" color="primary" (click)="onEditProduct(prod); $event.stopPropagation()"
-                aria-label="Editar producto">
-                <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
-              </ion-button>
-              <ion-button fill="clear" color="danger" (click)="onDeleteProduct(prod); $event.stopPropagation()"
-                aria-label="Eliminar producto">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-              </ion-button>
-            </div>
+            <p>El catálogo está vacío. ¡Cargá tu primer producto!</p>
           </div>
-        </ion-card>
+        }
+
+        <!-- Tarjetas de Productos con Acciones y Vista Previa -->
+        @if (!isLoading && productos.length > 0) {
+          <div class="products-grid">
+            @for (prod of productos; track prod.id) {
+              <ion-card class="product-item-card" button="true" (click)="showProductDetail(prod)">
+                <div class="product-card-body">
+                  @if (prod.image_url) {
+                    <ion-thumbnail class="product-thumbnail">
+                      <img [src]="prod.image_url" alt="Product Image" />
+                    </ion-thumbnail>
+                  }
+                  @if (!prod.image_url) {
+                    <div class="product-icon-fallback">
+                      <ion-icon name="cube-outline"></ion-icon>
+                    </div>
+                  }
+
+                  <div class="product-details">
+                    <h2>{{ prod.name }}</h2>
+                    <p class="description">{{ prod.description || 'Sin descripción' }}</p>
+                    <div class="price-bulk-row">
+                      <span class="price-tag">${{ prod.price }}</span>
+                      <span class="divider">•</span>
+                      <span class="bulk-tag">Bulto: {{ prod.bulk_size }} un.</span>
+                    </div>
+                  </div>
+
+                  <!-- Acciones del Administrador -->
+                  <div class="admin-actions">
+                    <ion-button fill="clear" color="primary" (click)="onEditProduct(prod); $event.stopPropagation()" aria-label="Editar producto">
+                      <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button fill="clear" color="danger" (click)="onDeleteProduct(prod); $event.stopPropagation()" aria-label="Eliminar producto">
+                      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+              </ion-card>
+            }
+          </div>
+        }
       </div>
-    </div>
+    }
 
     <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN -->
-    <ion-card class="form-card" *ngIf="showForm">
-      <ion-card-header>
-        <ion-card-title>{{ isEditing ? 'Modificar Datos del Producto' : 'Cargar Nuevo Producto al Catálogo'
-          }}</ion-card-title>
-      </ion-card-header>
+    @if (showForm) {
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>{{ isEditing ? 'Modificar Datos del Producto' : 'Cargar Nuevo Producto al Catálogo' }}</ion-card-title>
+        </ion-card-header>
 
-      <ion-card-content>
-        <form [formGroup]="productoForm" (ngSubmit)="onSubmit()">
+        <ion-card-content>
+          <form [formGroup]="productoForm" (ngSubmit)="onSubmit()">
 
-          <div class="input-group">
-            <label>Nombre del Producto</label>
-            <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
-              <ion-icon name="cube-outline"></ion-icon>
-              <ion-input formControlName="name" placeholder="Ej: Bolsón de Verduras"></ion-input>
-            </div>
-            <ion-text color="danger" *ngIf="f['name'].touched && f['name'].invalid">
-              <small *ngIf="f['name'].errors?.['required']">El nombre es obligatorio.</small>
-              <small *ngIf="f['name'].errors?.['minlength']">Mínimo 3 caracteres.</small>
-            </ion-text>
-          </div>
-
-          <div class="input-group">
-            <label>Descripción (Opcional)</label>
-            <div class="custom-input textarea" [class.invalid]="f['description'].touched && f['description'].invalid">
-              <ion-icon name="reader-outline"></ion-icon>
-              <ion-textarea formControlName="description"
-                placeholder="Detalles, peso o contenido del bolsón..."></ion-textarea>
-            </div>
-            <ion-text color="danger" *ngIf="f['description'].touched && f['description'].invalid">
-              <small *ngIf="f['description'].errors?.['maxlength']">Máximo 200 caracteres.</small>
-            </ion-text>
-          </div>
-
-          <div class="row-inputs">
-            <div class="input-group flex-1">
-              <label>Precio Unitario</label>
-              <div class="custom-input" [class.invalid]="f['price'].touched && f['price'].invalid">
-                <ion-icon name="pricetag-outline"></ion-icon>
-                <ion-input type="number" formControlName="price" placeholder="0.00"></ion-input>
+            <div class="input-group">
+              <label>Nombre del Producto</label>
+              <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
+                <ion-icon name="cube-outline"></ion-icon>
+                <ion-input formControlName="name" placeholder="Ej: Bolsón de Verduras"></ion-input>
               </div>
-              <ion-text color="danger" *ngIf="f['price'].touched && f['price'].invalid">
-                <small *ngIf="f['price'].errors?.['required']">El precio es obligatorio.</small>
-                <small *ngIf="f['price'].errors?.['min']">Debe ser mayor a 0.</small>
-              </ion-text>
+              @if (f['name'].touched && f['name'].invalid) {
+                <ion-text color="danger">
+                  @if (f['name'].errors?.['required']) {
+                    <small>El nombre es obligatorio.</small>
+                  }
+                  @if (f['name'].errors?.['minlength']) {
+                    <small>Mínimo 3 caracteres.</small>
+                  }
+                </ion-text>
+              }
             </div>
 
-            <div class="input-group flex-1">
-              <label>Unidades por Bulto</label>
-              <div class="custom-input" [class.invalid]="f['bulk_size'].touched && f['bulk_size'].invalid">
-                <ion-icon name="layers-outline"></ion-icon>
-                <ion-input type="number" formControlName="bulk_size" placeholder="10"></ion-input>
+            <div class="input-group">
+              <label>Descripción (Opcional)</label>
+              <div class="custom-input textarea" [class.invalid]="f['description'].touched && f['description'].invalid">
+                <ion-icon name="reader-outline"></ion-icon>
+                <ion-textarea formControlName="description" placeholder="Detalles, peso o contenido del bolsón..."></ion-textarea>
               </div>
-              <ion-text color="danger" *ngIf="f['bulk_size'].touched && f['bulk_size'].invalid">
-                <small *ngIf="f['bulk_size'].errors?.['required']">El bulto es obligatorio.</small>
-                <small *ngIf="f['bulk_size'].errors?.['min']">Mínimo 1 unidad.</small>
-              </ion-text>
+              @if (f['description'].touched && f['description'].invalid) {
+                <ion-text color="danger">
+                  @if (f['description'].errors?.['maxlength']) {
+                    <small>Máximo 200 caracteres.</small>
+                  }
+                </ion-text>
+              }
             </div>
-          </div>
 
-          <div class="input-group">
-            <label>URL de Imagen (Opcional)</label>
-            <div class="custom-input" [class.invalid]="f['image_url'].touched && f['image_url'].invalid">
-              <ion-icon name="image-outline"></ion-icon>
-              <ion-input formControlName="image_url" placeholder="https://ejemplo.com/imagen.jpg"></ion-input>
+            <div class="row-inputs">
+              <div class="input-group flex-1">
+                <label>Precio Unitario</label>
+                <div class="custom-input" [class.invalid]="f['price'].touched && f['price'].invalid">
+                  <ion-icon name="pricetag-outline"></ion-icon>
+                  <ion-input type="number" formControlName="price" placeholder="0.00"></ion-input>
+                </div>
+                @if (f['price'].touched && f['price'].invalid) {
+                  <ion-text color="danger">
+                    @if (f['price'].errors?.['required']) {
+                      <small>El precio es obligatorio.</small>
+                    }
+                    @if (f['price'].errors?.['min']) {
+                      <small>Debe ser mayor a 0.</small>
+                    }
+                  </ion-text>
+                }
+              </div>
+
+              <div class="input-group flex-1">
+                <label>Unidades por Bulto</label>
+                <div class="custom-input" [class.invalid]="f['bulk_size'].touched && f['bulk_size'].invalid">
+                  <ion-icon name="layers-outline"></ion-icon>
+                  <ion-input type="number" formControlName="bulk_size" placeholder="10"></ion-input>
+                </div>
+                @if (f['bulk_size'].touched && f['bulk_size'].invalid) {
+                  <ion-text color="danger">
+                    @if (f['bulk_size'].errors?.['required']) {
+                      <small>El bulto es obligatorio.</small>
+                    }
+                    @if (f['bulk_size'].errors?.['min']) {
+                      <small>Mínimo 1 unidad.</small>
+                    }
+                  </ion-text>
+                }
+              </div>
             </div>
-            <ion-text color="danger" *ngIf="f['image_url'].touched && f['image_url'].invalid">
-              <small *ngIf="f['image_url'].errors?.['pattern']">Ingresá una URL de imagen válida.</small>
-            </ion-text>
-          </div>
 
-          <div class="form-actions-row">
-            <ion-button type="button" fill="clear" color="medium" (click)="toggleForm(false)" class="cancel-btn"
-              [disabled]="isSaving">
-              Cancelar
-            </ion-button>
-            <ion-button type="submit" class="submit-button" [disabled]="isSaving">
-              <ion-icon slot="start" name="add-outline" *ngIf="!isSaving && !isEditing"></ion-icon>
-              <ion-icon slot="start" name="checkmark-outline" *ngIf="!isSaving && isEditing"></ion-icon>
-              <span *ngIf="!isSaving">{{ isEditing ? 'Guardar Cambios' : 'Agregar al Catálogo' }}</span>
-              <ion-spinner name="crescent" *ngIf="isSaving"></ion-spinner>
-            </ion-button>
-          </div>
+            <div class="input-group">
+              <label>URL de Imagen (Opcional)</label>
+              <div class="custom-input" [class.invalid]="f['image_url'].touched && f['image_url'].invalid">
+                <ion-icon name="image-outline"></ion-icon>
+                <ion-input formControlName="image_url" placeholder="https://ejemplo.com/imagen.jpg"></ion-input>
+              </div>
+              @if (f['image_url'].touched && f['image_url'].invalid) {
+                <ion-text color="danger">
+                  @if (f['image_url'].errors?.['pattern']) {
+                    <small>Ingresá una URL de imagen válida.</small>
+                  }
+                </ion-text>
+              }
+            </div>
 
-          <ion-text color="danger" *ngIf="errorMessage" class="ion-text-center">
-            <p>{{ errorMessage }}</p>
-          </ion-text>
-        </form>
-      </ion-card-content>
-    </ion-card>
+            <div class="form-actions-row">
+              <ion-button type="button" fill="clear" color="medium" (click)="toggleForm(false)" class="cancel-btn" [disabled]="isSaving">
+                Cancelar
+              </ion-button>
+              <ion-button type="submit" class="submit-button" [disabled]="isSaving">
+                @if (!isSaving && !isEditing) {
+                  <ion-icon slot="start" name="add-outline"></ion-icon>
+                }
+                @if (!isSaving && isEditing) {
+                  <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                }
+                @if (!isSaving) {
+                  <span>{{ isEditing ? 'Guardar Cambios' : 'Agregar al Catálogo' }}</span>
+                }
+                @if (isSaving) {
+                  <ion-spinner name="crescent"></ion-spinner>
+                }
+              </ion-button>
+            </div>
+
+          </form>
+        </ion-card-content>
+      </ion-card>
+    }
 
   </div>
 
@@ -182,36 +226,43 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-content class="ion-padding detail-modal-content">
-        <div class="modal-detail-container" *ngIf="selectedProduct">
+      <ion-content class="ion-padding">
+        @if (selectedProduct) {
+          <div class="modal-detail-container">
 
-          <!-- Imagen principal o fallback -->
-          <div class="detail-image-wrapper">
-            <img [src]="selectedProduct.image_url" alt="Imagen del producto" class="detail-image"
-              *ngIf="selectedProduct.image_url" />
-            <div class="detail-image-fallback" *ngIf="!selectedProduct.image_url">
-              <ion-icon name="cube-outline"></ion-icon>
+            <!-- Imagen a tamaño completo o fallback -->
+            <div class="detail-image-wrapper">
+              @if (selectedProduct.image_url) {
+                <img [src]="selectedProduct.image_url" alt="Imagen del producto" class="detail-image" />
+              }
+              @if (!selectedProduct.image_url) {
+                <div class="detail-image-fallback">
+                  <ion-icon name="cube-outline"></ion-icon>
+                </div>
+              }
             </div>
-          </div>
 
-          <!-- Ficha de Datos -->
-          <div class="detail-info-card">
-            <div class="detail-copy-block">
+            <!-- Ficha de Datos -->
+            <div class="detail-info-card">
               <h2 class="detail-title">{{ selectedProduct.name }}</h2>
 
               <div class="detail-meta-row">
                 <span class="detail-price">${{ selectedProduct.price }}</span>
+                <span class="detail-divider">•</span>
                 <span class="detail-bulk">Bulto: {{ selectedProduct.bulk_size }} unidades</span>
+              </div>
+
+              <div class="detail-description-section">
+                <h3>Descripción</h3>
+                <p>{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el momento.' }}</p>
               </div>
             </div>
 
-            <div class="detail-description-section">
-              <h3>Descripción</h3>
-              <p>{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el
-                momento.' }}</p>
-            </div>
+            <ion-button expand="block" (click)="closeProductDetail()" class="close-modal-btn">
+              Cerrar Vista Previa
+            </ion-button>
           </div>
-        </div>
+        }
       </ion-content>
     </ng-template>
   </ion-modal>
