@@ -41,14 +41,20 @@ describe('NodesService', () => {
   describe('findAll', () => {
     it('should return an array of nodes', async () => {
       const result = [{ id: '1', name: 'Node 1' }];
-      mockSupabaseClient.select.mockResolvedValueOnce({ data: result, error: null });
+      mockSupabaseClient.select.mockResolvedValueOnce({
+        data: result,
+        error: null,
+      });
 
       expect(await service.findAll()).toBe(result);
       expect(mockSupabaseClient.from).toHaveBeenCalledWith('nodos');
     });
 
     it('should throw error if supabase returns error', async () => {
-      mockSupabaseClient.select.mockResolvedValueOnce({ data: null, error: new Error('DB Error') });
+      mockSupabaseClient.select.mockResolvedValueOnce({
+        data: null,
+        error: new Error('DB Error'),
+      });
 
       await expect(service.findAll()).rejects.toThrow('DB Error');
     });
@@ -57,14 +63,20 @@ describe('NodesService', () => {
   describe('findOne', () => {
     it('should return a single node', async () => {
       const result = { id: '1', name: 'Node 1' };
-      mockSupabaseClient.single.mockResolvedValueOnce({ data: result, error: null });
+      mockSupabaseClient.single.mockResolvedValueOnce({
+        data: result,
+        error: null,
+      });
 
       expect(await service.findOne('1')).toBe(result);
       expect(mockSupabaseClient.eq).toHaveBeenCalledWith('id', '1');
     });
 
     it('should throw NotFoundException if node not found', async () => {
-      mockSupabaseClient.single.mockResolvedValueOnce({ data: null, error: new Error('Not Found') });
+      mockSupabaseClient.single.mockResolvedValueOnce({
+        data: null,
+        error: new Error('Not Found'),
+      });
 
       await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
     });
@@ -74,7 +86,10 @@ describe('NodesService', () => {
     it('should create a new node', async () => {
       const dto = { name: 'New Node', address: 'Addr', manager_name: 'Mgr' };
       const result = { id: '1', ...dto };
-      mockSupabaseClient.single.mockResolvedValueOnce({ data: result, error: null });
+      mockSupabaseClient.single.mockResolvedValueOnce({
+        data: result,
+        error: null,
+      });
 
       expect(await service.create(dto)).toBe(result);
       expect(mockSupabaseClient.insert).toHaveBeenCalledWith(dto);
