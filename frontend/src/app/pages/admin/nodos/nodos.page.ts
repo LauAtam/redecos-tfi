@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
   FormGroup,
@@ -42,7 +42,6 @@ import { ToastService } from '../../../core/services/toast.service';
   styleUrls: ['./nodos.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     IonContent, 
     IonHeader, 

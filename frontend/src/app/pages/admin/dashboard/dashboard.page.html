@@ -16,7 +16,9 @@
     <div class="welcome-banner">
       <div class="welcome-text">
         <h2>¡Hola, Administrador! 👋</h2>
-        <p class="email-sub" *ngIf="adminEmail">{{ adminEmail }}</p>
+        @if (adminEmail) {
+          <p class="email-sub">{{ adminEmail }}</p>
+        }
       </div>
       <p class="banner-desc">Gestioná los nodos de retiro y el catálogo de productos de la Red de compras soberanas.</p>
     </div>

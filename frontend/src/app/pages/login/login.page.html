@@ -25,10 +25,16 @@
             type="email">
           </ion-input>
         </div>
-        <ion-text color="danger" *ngIf="f['email'].touched && f['email'].invalid"> 
-          <small *ngIf="f['email'].errors?.['required']">El correo es obligatorio.</small>
-          <small *ngIf="f['email'].errors?.['email']">Ingresá un correo válido.</small>
-        </ion-text>
+        @if (f['email'].touched && f['email'].invalid) {
+          <ion-text color="danger"> 
+            @if (f['email'].errors?.['required']) {
+              <small>El correo es obligatorio.</small>
+            }
+            @if (f['email'].errors?.['email']) {
+              <small>Ingresá un correo válido.</small>
+            }
+          </ion-text>
+        }
       </div>
 
       <!-- Contraseña -->
@@ -45,15 +51,21 @@
             <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
           </ion-button>
         </div>
-        <ion-text color="danger" *ngIf="f['password'].touched && f['password'].invalid">
-          <small *ngIf="f['password'].errors?.['required']">La contraseña es obligatoria.</small>
-        </ion-text>
+        @if (f['password'].touched && f['password'].invalid) {
+          <ion-text color="danger">
+            @if (f['password'].errors?.['required']) {
+              <small>La contraseña es obligatoria.</small>
+            }
+          </ion-text>
+        }
       </div>
 
       <!-- Mensaje de Error General -->
-      <ion-text color="danger" *ngIf="errorMessage" class="ion-text-center">       
-        <p>{{ errorMessage }}</p>
-      </ion-text>
+      @if (errorMessage) {
+        <ion-text color="danger" class="ion-text-center">       
+          <p>{{ errorMessage }}</p>
+        </ion-text>
+      }
 
       <!-- Botón Ingresar -->
       <ion-button 
@@ -61,8 +73,12 @@
         type="submit" 
         class="submit-button"
         [disabled]="isLoading">
-        <span *ngIf="!isLoading">Ingresar</span>
-        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        @if (!isLoading) {
+          <span>Ingresar</span>
+        }
+        @if (isLoading) {
+          <ion-spinner name="crescent"></ion-spinner>
+        }
       </ion-button>
 
     </form>

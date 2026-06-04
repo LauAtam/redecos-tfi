@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterModule } from '@angular/router';
 import {
   IonContent,
@@ -27,7 +27,6 @@ import { SupabaseService } from '../../../supabase.service';
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     IonContent,
     IonHeader,

@@ -16,164 +16,215 @@
     </div>
 
     <!-- PASO 1: Formulario de Registro -->
-    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" *ngIf="step === 'form'">
+    @if (step === 'form') {
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
-      <!-- Nombre -->
-      <div class="input-group">
-        <label>Nombre</label>
-        <div class="custom-input" [class.invalid]="f['firstName'].touched && f['firstName'].invalid">
-          <ion-icon name="person-outline"></ion-icon>
-          <ion-input
-            formControlName="firstName"
-            placeholder="Ingresá tu nombre"
-            type="text">
-          </ion-input>
-        </div>
-        <ion-text color="danger" *ngIf="f['firstName'].touched && f['firstName'].invalid">
-          <small *ngIf="f['firstName'].errors?.['required']">El nombre es obligatorio.</small>
-          <small *ngIf="f['firstName'].errors?.['minlength']">Mínimo 2 caracteres.</small>
-        </ion-text>
-      </div>
-
-      <!-- Apellido -->
-      <div class="input-group">
-        <label>Apellido</label>
-        <div class="custom-input" [class.invalid]="f['lastName'].touched && f['lastName'].invalid">
-          <ion-icon name="id-card-outline"></ion-icon>
-          <ion-input
-            formControlName="lastName"
-            placeholder="Ingresá tu apellido"
-            type="text">
-          </ion-input>
-        </div>
-        <ion-text color="danger" *ngIf="f['lastName'].touched && f['lastName'].invalid">
-          <small *ngIf="f['lastName'].errors?.['required']">El apellido es obligatorio.</small>
-          <small *ngIf="f['lastName'].errors?.['minlength']">Mínimo 2 caracteres.</small>
-        </ion-text>
-      </div>
-
-      <!-- Correo -->
-      <div class="input-group">
-        <label>Correo electrónico</label>
-        <div class="custom-input" [class.invalid]="f['email'].touched && f['email'].invalid">
-          <ion-icon name="mail-outline"></ion-icon>
-          <ion-input
-            formControlName="email"
-            placeholder="ejemplo@correo.com"
-            type="email">
-          </ion-input>
-        </div>
-        <ion-text color="danger" *ngIf="f['email'].touched && f['email'].invalid">
-          <small *ngIf="f['email'].errors?.['required']">El correo es obligatorio.</small>
-          <small *ngIf="f['email'].errors?.['email']">Ingresá un correo válido.</small>
-        </ion-text>
-      </div>
-
-      <!-- Contraseña -->
-      <div class="input-group">
-        <label>Contraseña</label>
-        <div class="custom-input" [class.invalid]="f['password'].touched && f['password'].invalid">
-          <ion-icon name="lock-closed-outline"></ion-icon>
-          <ion-input
-            formControlName="password"
-            placeholder="Mínimo 8 caracteres"
-            [type]="showPassword ? 'text' : 'password'">
-          </ion-input>
-          <ion-button fill="clear" (click)="togglePassword()" class="toggle-btn">
-            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
-          </ion-button>
-        </div>
-        <ion-text color="danger" *ngIf="f['password'].touched && f['password'].invalid">
-          <small *ngIf="f['password'].errors?.['required']">La contraseña es obligatoria.</small>
-          <small *ngIf="f['password'].errors?.['minlength']">Mínimo 8 caracteres.</small>
-        </ion-text>
-      </div>
-
-      <!-- Confirmar Contraseña -->
-      <div class="input-group">
-        <label>Repetir Contraseña</label>
-        <div class="custom-input" [class.invalid]="f['confirmPassword'].touched && f['confirmPassword'].invalid">
-          <ion-icon name="lock-closed-outline"></ion-icon>
-          <ion-input
-            formControlName="confirmPassword"
-            placeholder="Confirmá tu contraseña"
-            [type]="showConfirmPassword ? 'text' : 'password'">
-          </ion-input>
-          <ion-button fill="clear" (click)="toggleConfirmPassword()" class="toggle-btn">
-            <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
-          </ion-button>
-        </div>
-        <ion-text color="danger" *ngIf="f['confirmPassword'].touched && f['confirmPassword'].invalid">
-          <small *ngIf="f['confirmPassword'].errors?.['required']">Confirmar la contraseña es obligatorio.</small>
-          <small *ngIf="f['confirmPassword'].errors?.['passwordMismatch']">Las contraseñas no coinciden.</small>
-        </ion-text>
-      </div>
-
-      <!-- Mensaje de Error General -->
-      <ion-text color="danger" *ngIf="errorMessage" class="ion-text-center">
-        <p>{{ errorMessage }}</p>
-      </ion-text>
-
-      <!-- Botón Registrarme -->
-      <ion-button
-        expand="block"
-        type="submit"
-        class="submit-button"
-        [disabled]="isLoading">
-        <span *ngIf="!isLoading">Registrarme</span>
-        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
-      </ion-button>
-
-      <!-- Footer Link -->
-      <div class="footer-link ion-text-center">
-        <p>¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a></p>
-      </div>
-    </form>
-
-    <!-- PASO 2: Verificación OTP -->
-    <div class="verification-container" *ngIf="step === 'verification'">
-      <div class="ion-text-center">
-        <h2>¡Casi listo!</h2>
-        <p>Te enviamos un código de verificación a: <br><strong>{{ registeredEmail }}</strong></p>
-      </div>
-
-      <form [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
+        <!-- Nombre -->
         <div class="input-group">
-          <label>Código de verificación (OTP)</label>
-          <div class="custom-input" [class.invalid]="otpF['token'].touched && otpF['token'].invalid">
-            <ion-icon name="lock-closed-outline"></ion-icon>
+          <label>Nombre</label>
+          <div class="custom-input" [class.invalid]="f['firstName'].touched && f['firstName'].invalid">
+            <ion-icon name="person-outline"></ion-icon>
             <ion-input
-              formControlName="token"
-              placeholder="000000"
-              type="text"
-              inputmode="numeric">
+              formControlName="firstName"
+              placeholder="Ingresá tu nombre"
+              type="text">
             </ion-input>
           </div>
-          <ion-text color="danger" *ngIf="otpF['token'].touched && otpF['token'].invalid">
-            <small *ngIf="otpF['token'].errors?.['required']">El código es obligatorio.</small>
-            <small *ngIf="otpF['token'].errors?.['minlength'] || otpF['token'].errors?.['maxlength']">Debe ser de 6 dígitos.</small>
-          </ion-text>
+          @if (f['firstName'].touched && f['firstName'].invalid) {
+            <ion-text color="danger">
+              @if (f['firstName'].errors?.['required']) {
+                <small>El nombre es obligatorio.</small>
+              }
+              @if (f['firstName'].errors?.['minlength']) {
+                <small>Mínimo 2 caracteres.</small>
+              }
+            </ion-text>
+          }
         </div>
 
-        <ion-text color="danger" *ngIf="errorMessage" class="ion-text-center">
-          <p>{{ errorMessage }}</p>
-        </ion-text>
+        <!-- Apellido -->
+        <div class="input-group">
+          <label>Apellido</label>
+          <div class="custom-input" [class.invalid]="f['lastName'].touched && f['lastName'].invalid">
+            <ion-icon name="id-card-outline"></ion-icon>
+            <ion-input
+              formControlName="lastName"
+              placeholder="Ingresá tu apellido"
+              type="text">
+            </ion-input>
+          </div>
+          @if (f['lastName'].touched && f['lastName'].invalid) {
+            <ion-text color="danger">
+              @if (f['lastName'].errors?.['required']) {
+                <small>El apellido es obligatorio.</small>
+              }
+              @if (f['lastName'].errors?.['minlength']) {
+                <small>Mínimo 2 caracteres.</small>
+              }
+            </ion-text>
+          }
+        </div>
 
+        <!-- Correo -->
+        <div class="input-group">
+          <label>Correo electrónico</label>
+          <div class="custom-input" [class.invalid]="f['email'].touched && f['email'].invalid">
+            <ion-icon name="mail-outline"></ion-icon>
+            <ion-input
+              formControlName="email"
+              placeholder="ejemplo@correo.com"
+              type="email">
+            </ion-input>
+          </div>
+          @if (f['email'].touched && f['email'].invalid) {
+            <ion-text color="danger">
+              @if (f['email'].errors?.['required']) {
+                <small>El correo es obligatorio.</small>
+              }
+              @if (f['email'].errors?.['email']) {
+                <small>Ingresá un correo válido.</small>
+              }
+            </ion-text>
+          }
+        </div>
+
+        <!-- Contraseña -->
+        <div class="input-group">
+          <label>Contraseña</label>
+          <div class="custom-input" [class.invalid]="f['password'].touched && f['password'].invalid">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <ion-input
+              formControlName="password"
+              placeholder="Mínimo 8 caracteres"
+              [type]="showPassword ? 'text' : 'password'">
+            </ion-input>
+            <ion-button fill="clear" (click)="togglePassword()" class="toggle-btn">
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </div>
+          @if (f['password'].touched && f['password'].invalid) {
+            <ion-text color="danger">
+              @if (f['password'].errors?.['required']) {
+                <small>La contraseña es obligatoria.</small>
+              }
+              @if (f['password'].errors?.['minlength']) {
+                <small>Mínimo 8 caracteres.</small>
+              }
+            </ion-text>
+          }
+        </div>
+
+        <!-- Confirmar Contraseña -->
+        <div class="input-group">
+          <label>Repetir Contraseña</label>
+          <div class="custom-input" [class.invalid]="f['confirmPassword'].touched && f['confirmPassword'].invalid">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <ion-input
+              formControlName="confirmPassword"
+              placeholder="Confirmá tu contraseña"
+              [type]="showConfirmPassword ? 'text' : 'password'">
+            </ion-input>
+            <ion-button fill="clear" (click)="toggleConfirmPassword()" class="toggle-btn">
+              <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </div>
+          @if (f['confirmPassword'].touched && f['confirmPassword'].invalid) {
+            <ion-text color="danger">
+              @if (f['confirmPassword'].errors?.['required']) {
+                <small>Confirmar la contraseña es obligatorio.</small>
+              }
+              @if (f['confirmPassword'].errors?.['passwordMismatch']) {
+                <small>Las contraseñas no coinciden.</small>
+              }
+            </ion-text>
+          }
+        </div>
+
+        <!-- Mensaje de Error General -->
+        @if (errorMessage) {
+          <ion-text color="danger" class="ion-text-center">
+            <p>{{ errorMessage }}</p>
+          </ion-text>
+        }
+
+        <!-- Botón Registrarme -->
         <ion-button
           expand="block"
           type="submit"
           class="submit-button"
           [disabled]="isLoading">
-          <span *ngIf="!isLoading">Verificar y Entrar</span>
-          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          @if (!isLoading) {
+            <span>Registrarme</span>
+          }
+          @if (isLoading) {
+            <ion-spinner name="crescent"></ion-spinner>
+          }
         </ion-button>
 
+        <!-- Footer Link -->
         <div class="footer-link ion-text-center">
-          <p><a (click)="step = 'form'">Volver al formulario</a></p>
+          <p>¿Ya tenés cuenta? <a routerLink="/login">Iniciá sesión</a></p>
         </div>
       </form>
-    </div>
+    }
+
+    <!-- PASO 2: Verificación OTP -->
+    @if (step === 'verification') {
+      <div class="verification-container">
+        <div class="ion-text-center">
+          <h2>¡Casi listo!</h2>
+          <p>Te enviamos un código de verificación a: <br><strong>{{ registeredEmail }}</strong></p>
+        </div>
+
+        <form [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
+          <div class="input-group">
+            <label>Código de verificación (OTP)</label>
+            <div class="custom-input" [class.invalid]="otpF['token'].touched && otpF['token'].invalid">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+              <ion-input
+                formControlName="token"
+                placeholder="000000"
+                type="text"
+                inputmode="numeric">
+              </ion-input>
+            </div>
+            @if (otpF['token'].touched && otpF['token'].invalid) {
+              <ion-text color="danger">
+                @if (otpF['token'].errors?.['required']) {
+                  <small>El código es obligatorio.</small>
+                }
+                @if (otpF['token'].errors?.['minlength'] || otpF['token'].errors?.['maxlength']) {
+                  <small>Debe ser de 6 dígitos.</small>
+                }
+              </ion-text>
+            }
+          </div>
+
+          @if (errorMessage) {
+            <ion-text color="danger" class="ion-text-center">
+              <p>{{ errorMessage }}</p>
+            </ion-text>
+          }
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="submit-button"
+            [disabled]="isLoading">
+            @if (!isLoading) {
+              <span>Verificar y Entrar</span>
+            }
+            @if (isLoading) {
+              <ion-spinner name="crescent"></ion-spinner>
+            }
+          </ion-button>
+
+          <div class="footer-link ion-text-center">
+            <p><a (click)="step = 'form'">Volver al formulario</a></p>
+          </div>
+        </form>
+      </div>
+    }
 
   </div>
 </ion-content>
-
