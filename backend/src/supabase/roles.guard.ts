@@ -71,6 +71,13 @@ export class RolesGuard implements CanActivate {
         payload = jwt.verify(token, decodedSecret, { algorithms: ['HS256'] });
       }
 
+      // Validación manual de expiración del token (Defensa en Profundidad)
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (payload.exp && payload.exp <= currentTime) {
+        console.warn(`[RolesGuard] Intento de acceso con token vencido. Exp: ${payload.exp}, Actual: ${currentTime}`);
+        throw new UnauthorizedException('Token has expired');
+      }
+
       const userRole = payload.app_metadata?.role;
 
       if (!userRole || !requiredRoles.includes(userRole)) {

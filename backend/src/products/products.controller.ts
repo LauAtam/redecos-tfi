@@ -13,7 +13,12 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { RolesGuard } from '../supabase/roles.guard';
 import { Roles } from '../supabase/roles.decorator';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('products')
 @Controller('products')
@@ -40,7 +45,10 @@ export class ProductsController {
   @UseGuards(RolesGuard)
   @Roles('ADMIN')
   @ApiOperation({ summary: 'Create a new product (Admin only)' })
-  @ApiResponse({ status: 201, description: 'The product has been successfully created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The product has been successfully created.',
+  })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }

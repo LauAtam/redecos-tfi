@@ -16,11 +16,18 @@ export class AuthGuard implements CanActivate {
   canActivate(): Observable<boolean | UrlTree> {
     return from(this.supabaseService.getSession()).pipe(
       map(session => {
-        if (session.data.session) {
-          return true;
-        } else {
-          return this.router.parseUrl('/login');
+        const sessionData = session.data.session;
+        if (sessionData) {
+          const currentTime = Math.floor(Date.now() / 1000);
+          // Si el token aún es válido, permitimos el acceso
+          if (sessionData.expires_at && sessionData.expires_at > currentTime) {
+            return true;
+          }
         }
+        
+        // Si no hay sesión o el token expiró, limpiamos el estado local y redirigimos
+        this.supabaseService.logout();
+        return this.router.parseUrl('/login');
       })
     );
   }

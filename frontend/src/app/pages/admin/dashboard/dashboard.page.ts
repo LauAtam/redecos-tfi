@@ -15,7 +15,7 @@ import {
   IonCardContent,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { logOutOutline, businessOutline, cubeOutline } from 'ionicons/icons';
@@ -37,20 +37,14 @@ import { SupabaseService } from '../../../supabase.service';
     IonButton,
     IonIcon,
     IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonGrid,
-    IonRow,
-    IonCol
-  ]
+  ],
 })
 export class DashboardPage implements OnInit {
   adminEmail: string = '';
 
   constructor(
     private supabaseService: SupabaseService,
-    private router: Router
+    private router: Router,
   ) {
     addIcons({ logOutOutline, businessOutline, cubeOutline });
   }

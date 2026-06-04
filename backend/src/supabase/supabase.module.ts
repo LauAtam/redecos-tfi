@@ -7,10 +7,12 @@ import { ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => {
+      useFactory: (configService: ConfigService) => {
         const secret = configService.get<string>('SUPABASE_JWT_SECRET');
         if (!secret) {
-          throw new Error('SUPABASE_JWT_SECRET is missing in environment configuration');
+          throw new Error(
+            'SUPABASE_JWT_SECRET is missing in environment configuration',
+          );
         }
         return {
           secret: Buffer.from(secret, 'base64'),
@@ -23,5 +25,3 @@ import { ConfigService } from '@nestjs/config';
   exports: [SupabaseService, JwtModule],
 })
 export class SupabaseModule {}
-
-

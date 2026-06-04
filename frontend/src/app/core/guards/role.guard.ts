@@ -33,6 +33,12 @@ export class RoleGuard implements CanActivate {
           return of(this.router.parseUrl('/login'));
         }
 
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (session.expires_at && session.expires_at <= currentTime) {
+          this.supabaseService.logout();
+          return of(this.router.parseUrl('/login'));
+        }
+
         const role = this.supabaseService.getRoleFromToken(session.access_token).toUpperCase();
         console.log("Rol extraído de JWT decodificado en Guard:", role);
         return of(this.checkRole(role, expectedRoles));
