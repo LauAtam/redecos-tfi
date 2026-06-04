@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
-import { RoleGuard } from './core/guards/role.guard';
-import { GuestGuard } from './core/guards/guest.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -12,19 +12,19 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'login',
     loadComponent: () =>
       import('./pages/login/login.page').then((m) => m.LoginPage),
-    canActivate: [GuestGuard],
+    canActivate: [guestGuard],
   },
   {
     path: 'register',
     loadComponent: () =>
       import('./pages/register/register.page').then((m) => m.RegisterPage),
-    canActivate: [GuestGuard],
+    canActivate: [guestGuard],
   },
   {
     path: 'restricted',
@@ -54,13 +54,13 @@ export const routes: Routes = [
         pathMatch: 'full'
       }
     ],
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { expectedRoles: ['ADMIN'] }
   },
   {
     path: 'nodo',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    canActivate: [AuthGuard, RoleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { expectedRoles: ['NODO', 'ADMIN'] }
   },
-  ];
+];

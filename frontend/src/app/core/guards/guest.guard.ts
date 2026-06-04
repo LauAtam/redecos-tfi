@@ -1,28 +1,24 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { SupabaseService } from '../../supabase.service';
-import { Observable, from, map } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, map, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class GuestGuard implements CanActivate {
-  
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {}
+export const guestGuard: CanActivateFn = (route, state) => {
+  const supabaseService = inject(SupabaseService);
+  const router = inject(Router);
 
-  canActivate(): Observable<boolean | UrlTree> {
-    return from(this.supabaseService.getSession()).pipe(
-      map(session => {
-        if (!session.data.session) {
-          return true;
-        } else {
-          // Si ya está logueado, lo mandamos al home (el home redirigirá por rol si fuera necesario)
-          return this.router.parseUrl('/home');
-        }
-      })
-    );
+  // 1. Validamos sincrónicamente desde memoria si ya está inicializado el estado de Supabase
+  if (supabaseService.authInitialized()) {
+    return !supabaseService.currentUser() ? true : router.parseUrl('/home');
   }
-}
+
+  // 2. Si todavía no se inicializó, esperamos la primera emisión de onAuthStateChange
+  return toObservable(supabaseService.authInitialized).pipe(
+    filter((initialized) => initialized),
+    take(1),
+    map(() => {
+      return !supabaseService.currentUser() ? true : router.parseUrl('/home');
+    })
+  );
+};

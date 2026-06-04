@@ -1,34 +1,24 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { SupabaseService } from '../../supabase.service';
-import { Observable, from, map } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, map, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate {
-  
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {}
+export const authGuard: CanActivateFn = (route, state) => {
+  const supabaseService = inject(SupabaseService);
+  const router = inject(Router);
 
-  canActivate(): Observable<boolean | UrlTree> {
-    return from(this.supabaseService.getSession()).pipe(
-      map(session => {
-        const sessionData = session.data.session;
-        if (sessionData) {
-          const currentTime = Math.floor(Date.now() / 1000);
-          // Si el token aún es válido, permitimos el acceso
-          if (sessionData.expires_at && sessionData.expires_at > currentTime) {
-            return true;
-          }
-        }
-        
-        // Si no hay sesión o el token expiró, limpiamos el estado local y redirigimos
-        this.supabaseService.logout();
-        return this.router.parseUrl('/login');
-      })
-    );
+  // 1. Si la sesión ya se inicializó, validamos sincrónicamente desde memoria
+  if (supabaseService.authInitialized()) {
+    return supabaseService.currentUser() ? true : router.parseUrl('/login');
   }
-}
+
+  // 2. Si es la carga inicial asíncrona, esperamos la resolución de onAuthStateChange
+  return toObservable(supabaseService.authInitialized).pipe(
+    filter((initialized) => initialized),
+    take(1),
+    map(() => {
+      return supabaseService.currentUser() ? true : router.parseUrl('/login');
+    }),
+  );
+};

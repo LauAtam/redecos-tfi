@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
 import { AuthResponse, Profile, AppError, Nodo, Producto } from './core/models/auth.models';
@@ -10,11 +10,14 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 export class SupabaseService {
   private supabase: SupabaseClient;
 
-  // CACHE: BehaviorSubject guarda el estado actual del perfil
+  // CACHE: BehaviorSubject y Signals guardan el estado actual del perfil
   private currentUserSubject = new BehaviorSubject<Profile | null>(null);
-
-  // Exponemos el estado como Observable para que los componentes se suscriban
   public currentUser$ = this.currentUserSubject.asObservable();
+
+  private currentUserSignal = signal<Profile | null>(null);
+  public currentUser = this.currentUserSignal.asReadonly();
+  public userRole = computed(() => this.currentUser()?.role || null);
+  public authInitialized = signal<boolean>(false);
 
   public getRoleFromToken(token: string): string {
     try {
@@ -43,15 +46,26 @@ export class SupabaseService {
     this.supabase = createClient(
       environment.supabaseUrl,
       environment.supabaseKey,
+      {
+        auth: {
+          lock: async (name, acquireTimeout, fn) => {
+            return await fn();
+          }
+        }
+      }
     );
 
     // Escuchamos los cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        this.currentUserSubject.next(this.mapUserToProfile(session.user, session.access_token));
+        const profile = this.mapUserToProfile(session.user, session.access_token);
+        this.currentUserSubject.next(profile);
+        this.currentUserSignal.set(profile);
       } else {
         this.currentUserSubject.next(null);
+        this.currentUserSignal.set(null);
       }
+      this.authInitialized.set(true);
     });
   }
 
@@ -181,6 +195,7 @@ export class SupabaseService {
 
       const profile = this.mapUserToProfile(data.user, data.session?.access_token);
       this.currentUserSubject.next(profile); // ACTUALIZAMOS CACHE
+      this.currentUserSignal.set(profile);
       return { user: profile, error: null };
     } catch (err) {
       return {
@@ -222,6 +237,7 @@ export class SupabaseService {
   async logout(): Promise<void> {
     await this.supabase.auth.signOut();
     this.currentUserSubject.next(null); // LIMPIAMOS CACHE
+    this.currentUserSignal.set(null);
   }
 
   async getSession() {
@@ -243,6 +259,7 @@ export class SupabaseService {
       if (data.user) {
         const profile = this.mapUserToProfile(data.user, data.session?.access_token);
         this.currentUserSubject.next(profile); // ACTUALIZAMOS CACHE
+        this.currentUserSignal.set(profile);
         return { user: profile, error: null };
       }
 

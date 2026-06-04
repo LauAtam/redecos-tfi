@@ -1,58 +1,33 @@
-import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  ActivatedRouteSnapshot,
-  Router,
-  UrlTree,
-} from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { SupabaseService } from '../../supabase.service';
-import { Observable, from, map, switchMap, of } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { filter, map, take } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RoleGuard implements CanActivate {
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router,
-  ) {}
+export const roleGuard: CanActivateFn = (route, state) => {
+  const supabaseService = inject(SupabaseService);
+  const router = inject(Router);
+  const expectedRoles = route.data?.['expectedRoles'] as string[];
 
-  canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
-    const expectedRoles = route.data['expectedRoles'] as string[];
-
-    // 1. Intentamos leer del CACHE primero (es instantáneo)
-    const cachedUser = this.supabaseService.currentUserValue;
-    if (cachedUser) {
-      return of(this.checkRole(cachedUser.role, expectedRoles));
-    }
-
-    // 2. Si no hay cache, verificamos sesión y extraemos el rol del JWT
-    return from(this.supabaseService.getSession()).pipe(
-      switchMap(({ data: { session } }) => {
-        if (!session) {
-          return of(this.router.parseUrl('/login'));
-        }
-
-        const currentTime = Math.floor(Date.now() / 1000);
-        if (session.expires_at && session.expires_at <= currentTime) {
-          this.supabaseService.logout();
-          return of(this.router.parseUrl('/login'));
-        }
-
-        const role = this.supabaseService.getRoleFromToken(session.access_token).toUpperCase();
-        console.log("Rol extraído de JWT decodificado en Guard:", role);
-        return of(this.checkRole(role, expectedRoles));
-      }),
-    );
-  }
-
-  private checkRole(
-    userRole: string | undefined,
-    expectedRoles: string[],
-  ): boolean | UrlTree {
-    if (userRole && expectedRoles.includes(userRole)) {
+  // 1. Validamos sincrónicamente desde memoria si ya está inicializado el estado de Supabase
+  if (supabaseService.authInitialized()) {
+    const role = supabaseService.userRole();
+    if (role && expectedRoles.includes(role)) {
       return true;
     }
-    return this.router.parseUrl('/restricted');
+    return router.parseUrl('/restricted');
   }
-}
+
+  // 2. Si todavía no se inicializó, esperamos la primera emisión de onAuthStateChange
+  return toObservable(supabaseService.authInitialized).pipe(
+    filter((initialized) => initialized),
+    take(1),
+    map(() => {
+      const role = supabaseService.userRole();
+      if (role && expectedRoles.includes(role)) {
+        return true;
+      }
+      return router.parseUrl('/restricted');
+    })
+  );
+};
