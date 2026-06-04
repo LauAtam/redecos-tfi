@@ -357,5 +357,49 @@ export class SupabaseService {
       return { data: null, error: { code: 'api/unexpected', message: 'Error de red al crear el producto.', originalError: err } };
     }
   }
+
+  async updateProducto(id: string, producto: Partial<Producto>): Promise<{ data: Producto | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/products/${id}`, {
+        method: 'PATCH',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(producto),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al editar el producto.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as Producto, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al editar el producto.', originalError: err } };
+    }
+  }
+
+  async deleteProducto(id: string): Promise<{ success: boolean, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/products/${id}`, {
+        method: 'DELETE',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { success: false, error: { code: 'api/error', message: errData.message || 'Error al eliminar el producto.' } };
+      }
+
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar el producto.', originalError: err } };
+    }
+  }
 }
 

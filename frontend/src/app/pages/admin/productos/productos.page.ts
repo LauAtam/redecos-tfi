@@ -35,11 +35,15 @@ import {
   readerOutline,
   layersOutline,
   imageOutline,
-  addOutline
+  addOutline,
+  pencilOutline,
+  trashOutline,
+  arrowBackOutline
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { Producto } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
+import { AlertController } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-productos',
@@ -74,13 +78,17 @@ export class ProductosPage implements OnInit {
   productoForm: FormGroup;
   isLoading = false;
   isSaving = false;
+  showForm = false;
+  isEditing = false;
+  editingProductId: string | null = null;
   errorMessage: string | null = null;
   productos: Producto[] = [];
 
   constructor(
     private fb: FormBuilder,
     private supabaseService: SupabaseService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private alertController: AlertController
   ) {
     addIcons({ 
       cubeOutline, 
@@ -88,7 +96,10 @@ export class ProductosPage implements OnInit {
       readerOutline,
       layersOutline,
       imageOutline,
-      addOutline
+      addOutline,
+      pencilOutline,
+      trashOutline,
+      arrowBackOutline
     });
 
     this.productoForm = this.fb.group({
@@ -116,12 +127,74 @@ export class ProductosPage implements OnInit {
     }
   }
 
-  async onCreateProducto() {
+  toggleForm(show: boolean) {
+    this.showForm = show;
+    if (!show) {
+      this.isEditing = false;
+      this.editingProductId = null;
+      this.errorMessage = null;
+      this.productoForm.reset();
+    }
+  }
+
+  onEditProduct(prod: Producto) {
+    this.isEditing = true;
+    this.editingProductId = prod.id || null;
+    this.productoForm.patchValue({
+      name: prod.name,
+      description: prod.description || '',
+      price: prod.price,
+      bulk_size: prod.bulk_size,
+      image_url: prod.image_url || ''
+    });
+    this.showForm = true;
+  }
+
+  async onDeleteProduct(prod: Producto) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar eliminación',
+      message: `¿Estás seguro de que querés eliminar el producto "${prod.name}" del catálogo? Esta acción no se puede deshacer.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: async () => {
+            this.isLoading = true;
+            const { success, error } = await this.supabaseService.deleteProducto(prod.id!);
+            this.isLoading = false;
+
+            if (error) {
+              this.toastService.showError(error.message);
+            } else {
+              this.productos = this.productos.filter(p => p.id !== prod.id);
+              this.toastService.showSuccess(`Producto "${prod.name}" eliminado correctamente.`);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async onSubmit() {
     if (this.productoForm.invalid) {
       this.productoForm.markAllAsTouched();
       return;
     }
 
+    if (this.isEditing && this.editingProductId) {
+      await this.onUpdateProduct();
+    } else {
+      await this.onCreateProducto();
+    }
+  }
+
+  async onCreateProducto() {
     this.isSaving = true;
     this.errorMessage = null;
 
@@ -134,9 +207,36 @@ export class ProductosPage implements OnInit {
       this.errorMessage = error.message;
       this.toastService.showError(error.message);
     } else {
-      this.productos.unshift(data!);
-      this.toastService.showSuccess(`Producto "${data!.name}" cargado correctamente.`);
-      this.productoForm.reset();
+      if (data) {
+        this.productos.unshift(data);
+      }
+      this.toastService.showSuccess(`Producto "${newProducto.name}" cargado correctamente.`);
+      this.toggleForm(false);
+    }
+  }
+
+  async onUpdateProduct() {
+    this.isSaving = true;
+    this.errorMessage = null;
+
+    const updatedData: Partial<Producto> = this.productoForm.value;
+    const { data, error } = await this.supabaseService.updateProducto(this.editingProductId!, updatedData);
+
+    this.isSaving = false;
+
+    if (error) {
+      this.errorMessage = error.message;
+      this.toastService.showError(error.message);
+    } else {
+      if (data) {
+        // Reemplazar en la lista local
+        const index = this.productos.findIndex(p => p.id === this.editingProductId);
+        if (index !== -1) {
+          this.productos[index] = data;
+        }
+      }
+      this.toastService.showSuccess(`Producto "${updatedData.name}" actualizado correctamente.`);
+      this.toggleForm(false);
     }
   }
 
