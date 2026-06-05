@@ -192,41 +192,10 @@
 
   </div>
 
-  <!-- Modal de Detalle del Nodo -->
-  <ion-modal [isOpen]="selectedNodo !== null" (didDismiss)="closeDetailModal()" (didPresent)="initModalMap()" class="product-detail-modal">
-    <ng-template>
-      @if (selectedNodo) {
-        <ion-header class="ion-no-border">
-          <ion-toolbar>
-            <ion-title>Detalles del Nodo</ion-title>
-            <ion-buttons slot="end">
-              <ion-button (click)="closeDetailModal()">
-                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content class="ion-padding detail-modal-content">
-          <div class="modal-detail-container">
-            <div class="detail-info-card">
-              <div class="detail-copy-block">
-                <h3 class="detail-title">{{ selectedNodo.name }}</h3>
-                <p><strong>Dirección:</strong> {{ selectedNodo.address }}</p>
-                <p><strong>Encargado:</strong> {{ selectedNodo.manager_name }}</p>
-                @if (selectedNodo.latitude && selectedNodo.longitude) {
-                  <p><strong>Coordenadas:</strong> {{ selectedNodo.latitude }}, {{ selectedNodo.longitude }}</p>
-                }
-              </div>
-              
-              <div class="detail-description-section">
-                <h3>Ubicación en Mapa</h3>
-                <div id="modalMap" class="modal-map-container"></div>
-              </div>
-            </div>
-            <ion-button expand="block" (click)="closeDetailModal()" class="close-modal-btn">Cerrar</ion-button>
-          </div>
-        </ion-content>
-      }
-    </ng-template>
-  </ion-modal>
+  <!-- Modal de Detalle del Nodo Refactorizado -->
+  <app-nodo-detail-modal 
+    [isOpen]="selectedNodo !== null" 
+    [nodo]="selectedNodo" 
+    (close)="closeDetailModal()">
+  </app-nodo-detail-modal>
 </ion-content>

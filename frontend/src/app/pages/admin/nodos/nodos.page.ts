@@ -22,8 +22,7 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardContent,
-  IonModal
+  IonCardContent
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -41,6 +40,7 @@ import * as L from 'leaflet';
 import { SupabaseService } from '../../../supabase.service';
 import { Nodo } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
+import { NodoDetailModalComponent } from './components/nodo-detail-modal/nodo-detail-modal.component';
 
 const customMarkerIcon = L.divIcon({
   html: `
@@ -79,7 +79,7 @@ const customMarkerIcon = L.divIcon({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonModal
+    NodoDetailModalComponent
   ],
 })
 export class NodosPage implements OnInit, OnDestroy {
@@ -97,8 +97,6 @@ export class NodosPage implements OnInit, OnDestroy {
 
   map?: L.Map;
   marker?: L.Marker;
-  modalMap?: L.Map;
-  modalMarker?: L.Marker;
 
   selectedNodo: Nodo | null = null;
   private addressSubscription?: Subscription;
@@ -168,11 +166,6 @@ export class NodosPage implements OnInit, OnDestroy {
     }
     if (this.reverseGeocodeSubscription) {
       this.reverseGeocodeSubscription.unsubscribe();
-    }
-    try {
-      this.cleanupModalMap();
-    } catch (e) {
-      console.error('Error during cleanupModalMap on destroy:', e);
     }
     try {
       this.cleanupMap();
@@ -384,58 +377,7 @@ export class NodosPage implements OnInit, OnDestroy {
   }
 
   closeDetailModal() {
-    this.cleanupModalMap();
     this.selectedNodo = null;
-  }
-
-  initModalMap() {
-    if (!this.selectedNodo) return;
-
-    const lat = this.selectedNodo.latitude ?? -31.4201;
-    const lng = this.selectedNodo.longitude ?? -64.1888;
-
-    this.cleanupModalMap();
-
-    const element = document.getElementById('modalMap');
-    if (element && (element as any)._leaflet_id) {
-      delete (element as any)._leaflet_id;
-    }
-
-    this.modalMap = L.map('modalMap').setView([lat, lng], 15);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.modalMap);
-
-    this.modalMarker = L.marker([lat, lng], {
-      icon: customMarkerIcon,
-      draggable: false
-    }).addTo(this.modalMap);
-
-    setTimeout(() => {
-      if (this.modalMap) {
-        this.modalMap.invalidateSize();
-      }
-    }, 200);
-  }
-
-  cleanupModalMap() {
-    if (this.modalMarker) {
-      try {
-        this.modalMarker.remove();
-      } catch (e) {
-        console.warn('Error removing modal map marker:', e);
-      }
-      this.modalMarker = undefined;
-    }
-    if (this.modalMap) {
-      try {
-        this.modalMap.remove();
-      } catch (e) {
-        console.warn('Error removing modal map:', e);
-      }
-      this.modalMap = undefined;
-    }
   }
 
   initListMap(element: HTMLElement) {

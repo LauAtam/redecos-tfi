@@ -1,0 +1,51 @@
+.modal-map-container {
+  height: 250px;
+  width: 100%;
+  border-radius: 12px;
+  margin-top: 10px;
+  border: 1px solid #cbd5e1;
+  z-index: 1;
+}
+
+.modal-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.detail-copy-block {
+  margin-bottom: 20px;
+  
+  h3.detail-title {
+    margin-top: 0;
+    color: #002d4b;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+  
+  p {
+    margin: 8px 0;
+    color: #475569;
+    font-size: 0.95rem;
+    
+    strong {
+      color: #002d4b;
+    }
+  }
+}
+
+.detail-description-section {
+  h3 {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+    color: #002d4b;
+    font-weight: 700;
+  }
+}
