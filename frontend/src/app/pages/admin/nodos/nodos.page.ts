@@ -1,9 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
+  ReactiveFormsModule
 } from '@angular/forms';
 import {
   IonContent, 
@@ -41,6 +38,7 @@ import { SupabaseService } from '../../../supabase.service';
 import { Nodo } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { NodoDetailModalComponent } from './components/nodo-detail-modal/nodo-detail-modal.component';
+import { NodoFormComponent } from './components/nodo-form/nodo-form.component';
 
 const customMarkerIcon = L.divIcon({
   html: `
@@ -79,11 +77,13 @@ const customMarkerIcon = L.divIcon({
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    NodoDetailModalComponent
+    NodoDetailModalComponent,
+    NodoFormComponent
   ],
 })
 export class NodosPage implements OnInit, OnDestroy {
-  nodoForm: FormGroup;
+  @ViewChild('nodoFormRef') nodoFormRef?: NodoFormComponent;
+
   isLoading = false;
   isSaving = false;
   showForm = false;
@@ -95,15 +95,7 @@ export class NodosPage implements OnInit, OnDestroy {
   userLatitude: number | null = null;
   userLongitude: number | null = null;
 
-  map?: L.Map;
-  marker?: L.Marker;
-
   selectedNodo: Nodo | null = null;
-  private addressSubscription?: Subscription;
-  private latSubscription?: Subscription;
-  private lngSubscription?: Subscription;
-  private reverseGeocodeSubject = new Subject<{ lat: number; lng: number }>();
-  private reverseGeocodeSubscription?: Subscription;
 
   @ViewChild('listMapContainerRef') set listMapContainerRef(content: ElementRef) {
     if (content) {
@@ -115,18 +107,7 @@ export class NodosPage implements OnInit, OnDestroy {
     }
   }
 
-  @ViewChild('mapContainerRef') set mapContainerRef(content: ElementRef) {
-    if (content) {
-      if (!this.map) {
-        this.initMap(content.nativeElement);
-      }
-    } else {
-      this.cleanupMap();
-    }
-  }
-
   constructor(
-    private fb: FormBuilder,
     private supabaseService: SupabaseService,
     private toastService: ToastService,
   ) {
@@ -139,39 +120,13 @@ export class NodosPage implements OnInit, OnDestroy {
       eyeOutline,
       arrowBackOutline
     });
-
-    this.nodoForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      address: ['', [Validators.required, Validators.minLength(5)]],
-      manager_name: ['', [Validators.required, Validators.minLength(3)]],
-      latitude: [null, [Validators.min(-90), Validators.max(90)]],
-      longitude: [null, [Validators.min(-180), Validators.max(180)]],
-    });
   }
 
   ngOnInit() {
     this.loadNodos();
-    this.setupFormSubscriptions();
   }
 
   ngOnDestroy() {
-    if (this.addressSubscription) {
-      this.addressSubscription.unsubscribe();
-    }
-    if (this.latSubscription) {
-      this.latSubscription.unsubscribe();
-    }
-    if (this.lngSubscription) {
-      this.lngSubscription.unsubscribe();
-    }
-    if (this.reverseGeocodeSubscription) {
-      this.reverseGeocodeSubscription.unsubscribe();
-    }
-    try {
-      this.cleanupMap();
-    } catch (e) {
-      console.error('Error during cleanupMap on destroy:', e);
-    }
     try {
       this.cleanupListMap();
     } catch (e) {
@@ -179,174 +134,10 @@ export class NodosPage implements OnInit, OnDestroy {
     }
   }
 
-  initMap(element: HTMLElement) {
-    if (element && (element as any)._leaflet_id) {
-      delete (element as any)._leaflet_id;
-    }
-
-    const defaultLat = this.nodoForm.get('latitude')?.value ?? -31.4201;
-    const defaultLng = this.nodoForm.get('longitude')?.value ?? -64.1888;
-
-    this.map = L.map(element).setView([defaultLat, defaultLng], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
-
-    this.marker = L.marker([defaultLat, defaultLng], {
-      icon: customMarkerIcon,
-      draggable: true
-    }).addTo(this.map);
-
-    this.map.on('click', (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng;
-      this.updateMarkerPosition(lat, lng, true);
-    });
-
-    this.marker.on('dragend', () => {
-      if (this.marker) {
-        const position = this.marker.getLatLng();
-        this.updateMarkerPosition(position.lat, position.lng, true);
-      }
-    });
-
-    setTimeout(() => {
-      if (this.map) {
-        this.map.invalidateSize();
-      }
-    }, 100);
-  }
-
-  cleanupMap() {
-    if (this.marker) {
-      try {
-        this.marker.remove();
-      } catch (e) {
-        console.warn('Error removing main map marker:', e);
-      }
-      this.marker = undefined;
-    }
-    if (this.map) {
-      try {
-        this.map.remove();
-      } catch (e) {
-        console.warn('Error removing main map:', e);
-      }
-      this.map = undefined;
-    }
-  }
-
-  setupFormSubscriptions() {
-    this.addressSubscription = this.nodoForm.get('address')?.valueChanges.pipe(
-      debounceTime(1000),
-      distinctUntilChanged()
-    ).subscribe(address => {
-      if (address) {
-        this.geocodeAddress(address);
-      }
-    });
-
-    this.latSubscription = this.nodoForm.get('latitude')?.valueChanges.pipe(
-      debounceTime(800),
-      distinctUntilChanged()
-    ).subscribe(val => {
-      if (val !== null && val !== undefined) {
-        const lat = Number(val);
-        const lng = Number(this.nodoForm.get('longitude')?.value);
-        if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
-          if (this.marker && this.map) {
-            this.marker.setLatLng([lat, lng]);
-            this.map.setView([lat, lng]);
-          }
-        }
-      }
-    });
-
-    this.lngSubscription = this.nodoForm.get('longitude')?.valueChanges.pipe(
-      debounceTime(800),
-      distinctUntilChanged()
-    ).subscribe(val => {
-      if (val !== null && val !== undefined) {
-        const lat = Number(this.nodoForm.get('latitude')?.value);
-        const lng = Number(val);
-        if (!isNaN(lat) && !isNaN(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
-          if (this.marker && this.map) {
-            this.marker.setLatLng([lat, lng]);
-            this.map.setView([lat, lng]);
-          }
-        }
-      }
-    });
-
-    this.reverseGeocodeSubscription = this.reverseGeocodeSubject.pipe(
-      debounceTime(1000)
-    ).subscribe(({ lat, lng }) => {
-      this.executeReverseGeocode(lat, lng);
-    });
-  }
-
-  updateMarkerPosition(lat: number, lng: number, triggerReverseGeocoding: boolean) {
-    const roundedLat = parseFloat(lat.toFixed(6));
-    const roundedLng = parseFloat(lng.toFixed(6));
-
-    if (this.marker) {
-      this.marker.setLatLng([roundedLat, roundedLng]);
-    }
-
-    this.nodoForm.patchValue({
-      latitude: roundedLat,
-      longitude: roundedLng
-    }, { emitEvent: false });
-
-    if (triggerReverseGeocoding) {
-      this.reverseGeocodeSubject.next({ lat: roundedLat, lng: roundedLng });
-    }
-  }
-
-  async geocodeAddress(address: string) {
-    if (!address || address.length < 5) return;
-    try {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'Redecos-TFI-Geocoding-Agent/1.0 (contact@redecos.com)'
-        }
-      });
-      const data = await response.json();
-      if (data && data.length > 0) {
-        const lat = parseFloat(data[0].lat);
-        const lon = parseFloat(data[0].lon);
-        this.updateMarkerPosition(lat, lon, false);
-      }
-    } catch (error) {
-      console.error('Error in geocoding:', error);
-    }
-  }
-
-  async executeReverseGeocode(lat: number, lng: number) {
-    try {
-      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-      const response = await fetch(url, {
-        headers: {
-          'User-Agent': 'Redecos-TFI-Geocoding-Agent/1.0 (contact@redecos.com)'
-        }
-      });
-      const data = await response.json();
-      if (data && data.display_name) {
-        this.nodoForm.patchValue({
-          address: data.display_name
-        }, { emitEvent: false });
-      }
-    } catch (error) {
-      console.error('Error in reverse geocoding:', error);
-    }
-  }
-
   toggleForm(show: boolean) {
     this.showForm = show;
     if (!show) {
       this.errorMessage = null;
-      this.nodoForm.reset();
     }
   }
 
@@ -356,18 +147,8 @@ export class NodosPage implements OnInit, OnDestroy {
     setTimeout(() => {
       const lat = nodo.latitude ?? -31.4201;
       const lng = nodo.longitude ?? -64.1888;
-
-      this.nodoForm.patchValue({
-        name: nodo.name,
-        address: nodo.address,
-        manager_name: nodo.manager_name,
-        latitude: nodo.latitude,
-        longitude: nodo.longitude
-      }, { emitEvent: false });
-
-      this.updateMarkerPosition(lat, lng, false);
-      if (this.map) {
-        this.map.setView([lat, lng], 15);
+      if (this.nodoFormRef) {
+        this.nodoFormRef.setCoordinatesAndNode(lat, lng, nodo);
       }
     }, 150);
   }
@@ -537,16 +318,10 @@ export class NodosPage implements OnInit, OnDestroy {
     }
   }
 
-  async onCreateNodo() {
-    if (this.nodoForm.invalid) {
-      this.nodoForm.markAllAsTouched();
-      return;
-    }
-
+  async onCreateNodo(newNodo: Nodo) {
     this.isSaving = true;
     this.errorMessage = null;
 
-    const newNodo: Nodo = this.nodoForm.value;
     const { data, error } = await this.supabaseService.createNodo(newNodo);
 
     this.isSaving = false;
@@ -559,9 +334,5 @@ export class NodosPage implements OnInit, OnDestroy {
       this.toastService.showSuccess(`Nodo "${data!.name}" creado correctamente.`);
       this.toggleForm(false);
     }
-  }
-
-  get f() {
-    return this.nodoForm.controls;
   }
 }

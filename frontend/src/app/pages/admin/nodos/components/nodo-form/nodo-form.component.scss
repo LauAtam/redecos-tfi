@@ -1,0 +1,24 @@
+.map-container {
+  height: 300px;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #cbd5e1;
+  z-index: 1;
+}
+
+.submit-button {
+  --background: #006b4d;
+  --color: white;
+  --border-radius: 12px;
+  margin-top: 24px;
+  height: 52px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.custom-leaflet-marker {
+  svg {
+    filter: drop-shadow(0px 3px 5px rgba(0, 0, 0, 0.25));
+  }
+}

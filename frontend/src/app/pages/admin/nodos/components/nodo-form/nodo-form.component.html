@@ -1,0 +1,112 @@
+<ion-card class="form-card">
+  <ion-card-header>
+    <ion-card-title>Nuevo Nodo de Retiro</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <form [formGroup]="nodoForm" (ngSubmit)="onSubmit()">
+      <!-- Contenedor del Mapa Principal con referencia ViewChild -->
+      <div #mapContainerRef id="map" class="map-container"></div>
+
+      <div class="input-group">
+        <label>Nombre del Nodo</label>
+        <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
+          <ion-icon name="business-outline"></ion-icon>
+          <ion-input formControlName="name" placeholder="Ej: Nodo Centro"></ion-input>
+        </div>
+        @if (f['name'].touched && f['name'].invalid) {
+          <ion-text color="danger">
+            @if (f['name'].errors?.['required']) {
+              <small>El nombre es obligatorio.</small>
+            }
+            @if (f['name'].errors?.['minlength']) {
+              <small>Mínimo 3 caracteres.</small>
+            }
+          </ion-text>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Dirección Física</label>
+        <div class="custom-input" [class.invalid]="f['address'].touched && f['address'].invalid">
+          <ion-icon name="location-outline"></ion-icon>
+          <ion-input formControlName="address" placeholder="Ej: Av. Principal 123"></ion-input>
+        </div>
+        @if (f['address'].touched && f['address'].invalid) {
+          <ion-text color="danger">
+            @if (f['address'].errors?.['required']) {
+              <small>La dirección es obligatoria.</small>
+            }
+            @if (f['address'].errors?.['minlength']) {
+              <small>Mínimo 5 caracteres.</small>
+            }
+          </ion-text>
+        }
+      </div>
+
+      <div class="input-group">
+        <label>Responsable del Nodo</label>
+        <div class="custom-input" [class.invalid]="f['manager_name'].touched && f['manager_name'].invalid">
+          <ion-icon name="person-outline"></ion-icon>
+          <ion-input formControlName="manager_name" placeholder="Nombre del encargado"></ion-input>
+        </div>
+        @if (f['manager_name'].touched && f['manager_name'].invalid) {
+          <ion-text color="danger">
+            @if (f['manager_name'].errors?.['required']) {
+              <small>El responsable es obligatorio.</small>
+            }
+          </ion-text>
+        }
+      </div>
+
+      <!-- Campos de Latitud y Longitud -->
+      <div class="row" style="display: flex; gap: 16px;">
+        <div class="input-group" style="flex: 1;">
+          <label>Latitud</label>
+          <div class="custom-input" [class.invalid]="f['latitude'].touched && f['latitude'].invalid">
+            <ion-icon name="location-outline"></ion-icon>
+            <ion-input type="number" formControlName="latitude" placeholder="Ej: -31.4201" step="0.000001"></ion-input>
+          </div>
+          @if (f['latitude'].touched && f['latitude'].invalid) {
+            <ion-text color="danger">
+              @if (f['latitude'].errors?.['min'] || f['latitude'].errors?.['max']) {
+                <small>Rango válido: -90 a 90</small>
+              }
+            </ion-text>
+          }
+        </div>
+
+        <div class="input-group" style="flex: 1;">
+          <label>Longitud</label>
+          <div class="custom-input" [class.invalid]="f['longitude'].touched && f['longitude'].invalid">
+            <ion-icon name="location-outline"></ion-icon>
+            <ion-input type="number" formControlName="longitude" placeholder="Ej: -64.1888" step="0.000001"></ion-input>
+          </div>
+          @if (f['longitude'].touched && f['longitude'].invalid) {
+            <ion-text color="danger">
+              @if (f['longitude'].errors?.['min'] || f['longitude'].errors?.['max']) {
+                <small>Rango válido: -180 a 180</small>
+              }
+            </ion-text>
+          }
+        </div>
+      </div>
+
+      <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
+        @if (!isSaving) {
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          <span>Crear Nodo</span>
+        }
+        @if (isSaving) {
+          <ion-spinner name="crescent"></ion-spinner>
+        }
+      </ion-button>
+
+      @if (errorMessage) {
+        <ion-text color="danger" class="ion-text-center">
+          <p>{{ errorMessage }}</p>
+        </ion-text>
+      }
+    </form>
+  </ion-card-content>
+</ion-card>
