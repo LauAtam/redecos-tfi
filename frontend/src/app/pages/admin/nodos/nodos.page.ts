@@ -163,6 +163,13 @@ export class NodosPage implements OnInit, OnDestroy {
 
     this.refreshListMapMarkers();
     this.requestUserLocation();
+
+    // Solución al bug clásico de renderizado de Leaflet en contenedores dinámicos
+    setTimeout(() => {
+      if (this.listMap) {
+        this.listMap.invalidateSize();
+      }
+    }, 200);
   }
 
   cleanupListMap() {
@@ -210,6 +217,9 @@ export class NodosPage implements OnInit, OnDestroy {
 
   updateListMapBounds() {
     if (!this.listMap) return;
+
+    // Forzamos el recálculo del tamaño del contenedor antes de ajustar los límites
+    this.listMap.invalidateSize();
 
     const coords: L.LatLng[] = [];
     this.nodos.forEach(n => {
