@@ -331,6 +331,29 @@ export class SupabaseService {
     }
   }
 
+  async updateNodo(id: string, nodo: Partial<Nodo>): Promise<{ data: Nodo | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/nodes/${id}`, {
+        method: 'PATCH',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(nodo),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al actualizar el nodo.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as Nodo, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al actualizar el nodo.', originalError: err } };
+    }
+  }
+
   // --- MÉTODOS PARA PRODUCTOS ---
 
   async getProductos(): Promise<{ data: Producto[] | null, error: AppError | null }> {

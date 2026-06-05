@@ -5,6 +5,9 @@
         <ion-toolbar>
           <ion-title>Detalles del Nodo</ion-title>
           <ion-buttons slot="end">
+            <ion-button (click)="onEdit()" title="Editar Nodo" style="margin-right: 8px;">
+              <ion-icon slot="icon-only" name="pencil-outline" color="primary"></ion-icon>
+            </ion-button>
             <ion-button (click)="closeModal()">
               <ion-icon slot="icon-only" name="close-outline"></ion-icon>
             </ion-button>
@@ -18,9 +21,6 @@
               <h3 class="detail-title">{{ nodo.name }}</h3>
               <p><strong>Dirección:</strong> {{ nodo.address }}</p>
               <p><strong>Encargado:</strong> {{ nodo.manager_name }}</p>
-              @if (nodo.latitude && nodo.longitude) {
-                <p><strong>Coordenadas:</strong> {{ nodo.latitude }}, {{ nodo.longitude }}</p>
-              }
             </div>
             
             <div class="detail-description-section">

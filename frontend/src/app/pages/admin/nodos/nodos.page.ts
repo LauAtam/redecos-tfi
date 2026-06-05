@@ -20,11 +20,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   businessOutline,
-  locationOutline,
-  personOutline,
   addOutline,
-  closeOutline,
-  eyeOutline,
   arrowBackOutline
 } from 'ionicons/icons';
 import { Subscription, Subject } from 'rxjs';
@@ -78,6 +74,8 @@ export class NodosPage implements OnInit, OnDestroy {
 
   isLoading = false;
   isSaving = false;
+  isEditing = false;
+  editingNodoId: string | null = null;
   showForm = false;
   errorMessage: string | null = null;
   nodos: Nodo[] = [];
@@ -105,11 +103,7 @@ export class NodosPage implements OnInit, OnDestroy {
   ) {
     addIcons({
       businessOutline,
-      locationOutline,
-      personOutline,
       addOutline,
-      closeOutline,
-      eyeOutline,
       arrowBackOutline
     });
   }
@@ -130,10 +124,15 @@ export class NodosPage implements OnInit, OnDestroy {
     this.showForm = show;
     if (!show) {
       this.errorMessage = null;
+      this.isEditing = false;
+      this.editingNodoId = null;
     }
   }
 
-  selectNodeForMap(nodo: Nodo) {
+  onEditNodo(nodo: Nodo) {
+    this.closeDetailModal();
+    this.isEditing = true;
+    this.editingNodoId = nodo.id || null;
     this.toggleForm(true);
 
     setTimeout(() => {
@@ -143,6 +142,14 @@ export class NodosPage implements OnInit, OnDestroy {
         this.nodoFormRef.setCoordinatesAndNode(lat, lng, nodo);
       }
     }, 150);
+  }
+
+  onSubmitForm(nodoData: Nodo) {
+    if (this.isEditing && this.editingNodoId) {
+      this.onUpdateNodo(this.editingNodoId, nodoData);
+    } else {
+      this.onCreateNodo(nodoData);
+    }
   }
 
   openDetailModal(nodo: Nodo) {
@@ -323,7 +330,32 @@ export class NodosPage implements OnInit, OnDestroy {
       this.toastService.showError(error.message);
     } else {
       this.nodos.unshift(data!);
+      this.sortNodosByProximity();
+      this.refreshListMapMarkers();
       this.toastService.showSuccess(`Nodo "${data!.name}" creado correctamente.`);
+      this.toggleForm(false);
+    }
+  }
+
+  async onUpdateNodo(id: string, nodoData: Nodo) {
+    this.isSaving = true;
+    this.errorMessage = null;
+
+    const { data, error } = await this.supabaseService.updateNodo(id, nodoData);
+
+    this.isSaving = false;
+
+    if (error) {
+      this.errorMessage = error.message;
+      this.toastService.showError(error.message);
+    } else {
+      const index = this.nodos.findIndex(n => n.id === id);
+      if (index !== -1) {
+        this.nodos[index] = data!;
+        this.sortNodosByProximity();
+        this.refreshListMapMarkers();
+      }
+      this.toastService.showSuccess(`Nodo "${data!.name}" actualizado correctamente.`);
       this.toggleForm(false);
     }
   }

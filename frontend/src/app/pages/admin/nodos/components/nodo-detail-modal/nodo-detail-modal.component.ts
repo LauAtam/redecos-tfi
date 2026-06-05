@@ -10,7 +10,7 @@ import {
   IonContent
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { closeOutline } from 'ionicons/icons';
+import { closeOutline, pencilOutline } from 'ionicons/icons';
 import * as L from 'leaflet';
 import { Nodo } from '../../../../../core/models/auth.models';
 
@@ -47,12 +47,19 @@ export class NodoDetailModalComponent implements OnDestroy {
   @Input() isOpen = false;
   @Input() nodo: Nodo | null = null;
   @Output() close = new EventEmitter<void>();
+  @Output() edit = new EventEmitter<Nodo>();
 
   modalMap?: L.Map;
   modalMarker?: L.Marker;
 
   constructor() {
-    addIcons({ closeOutline });
+    addIcons({ closeOutline, pencilOutline });
+  }
+
+  onEdit() {
+    if (this.nodo) {
+      this.edit.emit(this.nodo);
+    }
   }
 
   ngOnDestroy() {

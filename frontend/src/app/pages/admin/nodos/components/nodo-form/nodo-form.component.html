@@ -1,6 +1,6 @@
 <ion-card class="form-card">
   <ion-card-header>
-    <ion-card-title>Nuevo Nodo de Retiro</ion-card-title>
+    <ion-card-title>{{ isEditing ? 'Modificar Datos del Nodo' : 'Nuevo Nodo de Retiro' }}</ion-card-title>
   </ion-card-header>
 
   <ion-card-content>
@@ -59,43 +59,16 @@
         }
       </div>
 
-      <!-- Campos de Latitud y Longitud -->
-      <div class="row" style="display: flex; gap: 16px;">
-        <div class="input-group" style="flex: 1;">
-          <label>Latitud</label>
-          <div class="custom-input" [class.invalid]="f['latitude'].touched && f['latitude'].invalid">
-            <ion-icon name="location-outline"></ion-icon>
-            <ion-input type="number" formControlName="latitude" placeholder="Ej: -31.4201" step="0.000001"></ion-input>
-          </div>
-          @if (f['latitude'].touched && f['latitude'].invalid) {
-            <ion-text color="danger">
-              @if (f['latitude'].errors?.['min'] || f['latitude'].errors?.['max']) {
-                <small>Rango válido: -90 a 90</small>
-              }
-            </ion-text>
-          }
-        </div>
 
-        <div class="input-group" style="flex: 1;">
-          <label>Longitud</label>
-          <div class="custom-input" [class.invalid]="f['longitude'].touched && f['longitude'].invalid">
-            <ion-icon name="location-outline"></ion-icon>
-            <ion-input type="number" formControlName="longitude" placeholder="Ej: -64.1888" step="0.000001"></ion-input>
-          </div>
-          @if (f['longitude'].touched && f['longitude'].invalid) {
-            <ion-text color="danger">
-              @if (f['longitude'].errors?.['min'] || f['longitude'].errors?.['max']) {
-                <small>Rango válido: -180 a 180</small>
-              }
-            </ion-text>
-          }
-        </div>
-      </div>
 
       <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
         @if (!isSaving) {
-          <ion-icon slot="start" name="add-outline"></ion-icon>
-          <span>Crear Nodo</span>
+          @if (isEditing) {
+            <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+          } @else {
+            <ion-icon slot="start" name="add-outline"></ion-icon>
+          }
+          <span>{{ isEditing ? 'Guardar Cambios' : 'Crear Nodo' }}</span>
         }
         @if (isSaving) {
           <ion-spinner name="crescent"></ion-spinner>

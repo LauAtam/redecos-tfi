@@ -15,7 +15,8 @@ describe('NodosPage', () => {
   beforeEach(async () => {
     mockSupabaseService = {
       getNodos: jasmine.createSpy('getNodos').and.returnValue(Promise.resolve({ data: [], error: null })),
-      createNodo: jasmine.createSpy('createNodo').and.returnValue(Promise.resolve({ data: { id: '1', name: 'Test' }, error: null }))
+      createNodo: jasmine.createSpy('createNodo').and.returnValue(Promise.resolve({ data: { id: '1', name: 'Test' }, error: null })),
+      updateNodo: jasmine.createSpy('updateNodo').and.returnValue(Promise.resolve({ data: { id: '1', name: 'Updated Test' }, error: null }))
     };
 
     mockToastService = {
@@ -85,6 +86,38 @@ describe('NodosPage', () => {
 
     expect(component.nodos[0].name).toBe('Near Node');
     expect(component.nodos[1].name).toBe('Far Node');
+  });
+
+  it('should transition to edit mode when onEditNodo is called', fakeAsync(() => {
+    const testNodo = { id: '1', name: 'Test Node', address: 'Calle 123', manager_name: 'Juan', latitude: -31.42, longitude: -64.18 };
+    
+    component.onEditNodo(testNodo);
+    
+    expect(component.isEditing).toBeTrue();
+    expect(component.editingNodoId).toBe('1');
+    expect(component.showForm).toBeTrue();
+    expect(component.selectedNodo).toBeNull(); // Should close modal
+  }));
+
+  it('should call onCreateNodo when onSubmitForm is called and not editing', () => {
+    spyOn(component, 'onCreateNodo');
+    const testNodo = { name: 'New Node', address: 'Calle 123', manager_name: 'Juan' };
+    
+    component.isEditing = false;
+    component.onSubmitForm(testNodo);
+    
+    expect(component.onCreateNodo).toHaveBeenCalledWith(testNodo);
+  });
+
+  it('should call onUpdateNodo when onSubmitForm is called and isEditing is true', () => {
+    spyOn(component, 'onUpdateNodo');
+    const testNodo = { name: 'New Node', address: 'Calle 123', manager_name: 'Juan' };
+    
+    component.isEditing = true;
+    component.editingNodoId = '123';
+    component.onSubmitForm(testNodo);
+    
+    expect(component.onUpdateNodo).toHaveBeenCalledWith('123', testNodo);
   });
 
   it('should clean up listMap on destroy', () => {

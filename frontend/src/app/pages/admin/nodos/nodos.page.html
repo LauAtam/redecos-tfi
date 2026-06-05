@@ -10,7 +10,7 @@
         <ion-back-button defaultHref="/admin/dashboard" text=""></ion-back-button>
       }
     </ion-buttons>
-    <ion-title>{{ showForm ? 'Nuevo Nodo' : 'Gestión de Nodos' }}</ion-title>
+    <ion-title>{{ showForm ? (isEditing ? 'Editar Nodo' : 'Nuevo Nodo') : 'Gestión de Nodos' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -44,8 +44,8 @@
         }
 
         @for (nodo of nodos; track nodo.id) {
-          <ion-card class="list-card">
-            <ion-item lines="none">
+          <ion-card class="list-card" button="true" (click)="openDetailModal(nodo)">
+            <ion-item lines="none" style="--background: transparent;">
               <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
               <ion-label>
                 <h2>{{ nodo.name }}</h2>
@@ -60,27 +60,20 @@
                   </ion-text>
                 }
               </ion-label>
-              <div slot="end" class="action-buttons">
-                <ion-button fill="clear" (click)="selectNodeForMap(nodo)" title="Ver en el mapa principal">
-                  <ion-icon slot="icon-only" name="location-outline" color="secondary"></ion-icon>
-                </ion-button>
-                <ion-button fill="clear" (click)="openDetailModal(nodo)" title="Ver detalles">
-                  <ion-icon slot="icon-only" name="eye-outline" color="primary"></ion-icon>
-                </ion-button>
-              </div>
             </ion-item>
           </ion-card>
         }
       </div>
     }
 
-    <!-- VISTA 2: FORMULARIO DE ALTA REFACTORIZADO -->
+    <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN REFACTORIZADO -->
     @if (showForm) {
       <app-nodo-form
         #nodoFormRef
         [isSaving]="isSaving"
+        [isEditing]="isEditing"
         [errorMessage]="errorMessage"
-        (submitForm)="onCreateNodo($event)">
+        (submitForm)="onSubmitForm($event)">
       </app-nodo-form>
     }
 
@@ -90,6 +83,7 @@
   <app-nodo-detail-modal 
     [isOpen]="selectedNodo !== null" 
     [nodo]="selectedNodo" 
-    (close)="closeDetailModal()">
+    (close)="closeDetailModal()"
+    (edit)="onEditNodo($event)">
   </app-nodo-detail-modal>
 </ion-content>

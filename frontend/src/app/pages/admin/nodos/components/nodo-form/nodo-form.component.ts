@@ -21,7 +21,8 @@ import {
   locationOutline,
   personOutline,
   businessOutline,
-  addOutline
+  addOutline,
+  checkmarkOutline
 } from 'ionicons/icons';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -61,6 +62,7 @@ const customMarkerIcon = L.divIcon({
 })
 export class NodoFormComponent implements OnInit, OnDestroy {
   @Input() isSaving = false;
+  @Input() isEditing = false;
   @Input() errorMessage: string | null = null;
   @Output() submitForm = new EventEmitter<Nodo>();
 
@@ -89,7 +91,8 @@ export class NodoFormComponent implements OnInit, OnDestroy {
       locationOutline,
       personOutline,
       businessOutline,
-      addOutline
+      addOutline,
+      checkmarkOutline
     });
 
     this.nodoForm = this.fb.group({
