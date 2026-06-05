@@ -3,11 +3,13 @@
     @if (nodo) {
       <ion-header class="ion-no-border">
         <ion-toolbar>
-          <ion-title>Detalles del Nodo</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="onEdit()" title="Editar Nodo" style="margin-right: 8px;">
+          <ion-buttons slot="start">
+            <ion-button (click)="onEdit()" title="Editar Nodo">
               <ion-icon slot="icon-only" name="pencil-outline" color="primary"></ion-icon>
             </ion-button>
+          </ion-buttons>
+          <ion-title>Detalles del Nodo</ion-title>
+          <ion-buttons slot="end">
             <ion-button (click)="closeModal()">
               <ion-icon slot="icon-only" name="close-outline"></ion-icon>
             </ion-button>
