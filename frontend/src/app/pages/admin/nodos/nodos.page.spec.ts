@@ -34,9 +34,9 @@ describe('NodosPage', () => {
     fixture = TestBed.createComponent(NodosPage);
     component = fixture.componentInstance;
 
-    // Create a mock div for leaflet
+    // Create a mock div for leaflet listMap
     const mapDiv = document.createElement('div');
-    mapDiv.id = 'map';
+    mapDiv.id = 'list-map';
     mapDiv.style.height = '100px';
     document.body.appendChild(mapDiv);
 
@@ -44,7 +44,7 @@ describe('NodosPage', () => {
   });
 
   afterEach(() => {
-    const mapDiv = document.getElementById('map');
+    const mapDiv = document.getElementById('list-map');
     if (mapDiv) {
       document.body.removeChild(mapDiv);
     }
@@ -54,32 +54,45 @@ describe('NodosPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should validate form coordinates ranges', () => {
-    const latControl = component.nodoForm.get('latitude');
-    const lngControl = component.nodoForm.get('longitude');
+  it('should toggle form visibility and clear errors', () => {
+    component.errorMessage = 'Some error';
+    component.toggleForm(true);
+    expect(component.showForm).toBeTrue();
 
-    latControl?.setValue(100); // Invalid
-    expect(latControl?.valid).toBeFalse();
-
-    latControl?.setValue(-31.4201); // Valid
-    expect(latControl?.valid).toBeTrue();
-
-    lngControl?.setValue(-200); // Invalid
-    expect(lngControl?.valid).toBeFalse();
-
-    lngControl?.setValue(-64.1888); // Valid
-    expect(lngControl?.valid).toBeTrue();
+    component.toggleForm(false);
+    expect(component.showForm).toBeFalse();
+    expect(component.errorMessage).toBeNull();
   });
 
-  it('should clean up map on destroy', () => {
-    component.showForm = true;
-    fixture.detectChanges();
-    
-    expect(component.map).toBeDefined();
-    const mapInstance = component.map!;
+  it('should open and close details modal', () => {
+    const testNodo = { id: '1', name: 'Test Node', address: 'Calle 123', manager_name: 'Juan' };
+    component.openDetailModal(testNodo);
+    expect(component.selectedNodo).toBe(testNodo);
+
+    component.closeDetailModal();
+    expect(component.selectedNodo).toBeNull();
+  });
+
+  it('should sort nodes by proximity', () => {
+    component.userLatitude = -31.4201;
+    component.userLongitude = -64.1888;
+    component.nodos = [
+      { id: '1', name: 'Far Node', latitude: -31.5, longitude: -64.2 },
+      { id: '2', name: 'Near Node', latitude: -31.421, longitude: -64.189 }
+    ];
+
+    component.sortNodosByProximity();
+
+    expect(component.nodos[0].name).toBe('Near Node');
+    expect(component.nodos[1].name).toBe('Far Node');
+  });
+
+  it('should clean up listMap on destroy', () => {
+    expect(component.listMap).toBeDefined();
+    const mapInstance = component.listMap!;
     spyOn(mapInstance, 'remove').and.callThrough();
     component.ngOnDestroy();
     expect(mapInstance.remove).toHaveBeenCalled();
-    expect(component.map).toBeUndefined();
+    expect(component.listMap).toBeUndefined();
   });
 });

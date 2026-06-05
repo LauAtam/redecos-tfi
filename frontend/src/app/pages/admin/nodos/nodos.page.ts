@@ -11,15 +11,11 @@ import {
   IonBackButton,
   IonItem,
   IonLabel,
-  IonInput,
   IonButton,
   IonIcon,
   IonText,
   IonSpinner,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent
+  IonCard
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -68,15 +64,11 @@ const customMarkerIcon = L.divIcon({
     IonBackButton,
     IonItem,
     IonLabel,
-    IonInput,
     IonButton,
     IonIcon,
     IonText,
     IonSpinner,
     IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
     NodoDetailModalComponent,
     NodoFormComponent
   ],
