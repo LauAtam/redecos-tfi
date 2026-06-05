@@ -77,8 +77,8 @@ describe('NodosPage', () => {
     component.userLatitude = -31.4201;
     component.userLongitude = -64.1888;
     component.nodos = [
-      { id: '1', name: 'Far Node', latitude: -31.5, longitude: -64.2 },
-      { id: '2', name: 'Near Node', latitude: -31.421, longitude: -64.189 }
+      { id: '1', name: 'Far Node', address: 'Calle Lejana 123', manager_name: 'Carlos', latitude: -31.5, longitude: -64.2 },
+      { id: '2', name: 'Near Node', address: 'Calle Cercana 456', manager_name: 'Ana', latitude: -31.421, longitude: -64.189 }
     ];
 
     component.sortNodosByProximity();
