@@ -316,6 +316,7 @@ export class NodosPage implements OnInit, OnDestroy {
     } else {
       this.nodos = data || [];
       this.sortNodosByProximity();
+      this.refreshListMapMarkers();
     }
   }
 
