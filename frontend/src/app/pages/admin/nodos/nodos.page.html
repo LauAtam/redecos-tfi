@@ -1,120 +1,232 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/admin/dashboard" text=""></ion-back-button>
+      @if (showForm) {
+        <ion-button (click)="toggleForm(false)">
+          <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      }
+      @if (!showForm) {
+        <ion-back-button defaultHref="/admin/dashboard" text=""></ion-back-button>
+      }
     </ion-buttons>
-    <ion-title>Gestión de Nodos</ion-title>
+    <ion-title>{{ showForm ? 'Nuevo Nodo' : 'Gestión de Nodos' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div class="admin-container">
-    <!-- Formulario de Alta -->
-    <ion-card class="form-card">
-      <ion-card-header>
-        <ion-card-title>Nuevo Nodo de Retiro</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <form [formGroup]="nodoForm" (ngSubmit)="onCreateNodo()">
-          <div class="input-group">
-            <label>Nombre del Nodo</label>
-            <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
-              <ion-icon name="business-outline"></ion-icon>
-              <ion-input formControlName="name" placeholder="Ej: Nodo Centro"></ion-input>
-            </div>
-            @if (f['name'].touched && f['name'].invalid) {
-              <ion-text color="danger">
-                @if (f['name'].errors?.['required']) {
-                  <small>El nombre es obligatorio.</small>
-                }
-                @if (f['name'].errors?.['minlength']) {
-                  <small>Mínimo 3 caracteres.</small>
-                }
-              </ion-text>
-            }
-          </div>
-
-          <div class="input-group">
-            <label>Dirección Física</label>
-            <div class="custom-input" [class.invalid]="f['address'].touched && f['address'].invalid">
-              <ion-icon name="location-outline"></ion-icon>
-              <ion-input formControlName="address" placeholder="Ej: Av. Principal 123"></ion-input>
-            </div>
-            @if (f['address'].touched && f['address'].invalid) {
-              <ion-text color="danger">
-                @if (f['address'].errors?.['required']) {
-                  <small>La dirección es obligatoria.</small>
-                }
-                @if (f['address'].errors?.['minlength']) {
-                  <small>Mínimo 5 caracteres.</small>
-                }
-              </ion-text>
-            }
-          </div>
-
-          <div class="input-group">
-            <label>Responsable del Nodo</label>
-            <div class="custom-input" [class.invalid]="f['manager_name'].touched && f['manager_name'].invalid">
-              <ion-icon name="person-outline"></ion-icon>
-              <ion-input formControlName="manager_name" placeholder="Nombre del encargado"></ion-input>
-            </div>
-            @if (f['manager_name'].touched && f['manager_name'].invalid) {
-              <ion-text color="danger">
-                @if (f['manager_name'].errors?.['required']) {
-                  <small>El responsable es obligatorio.</small>
-                }
-              </ion-text>
-            }
-          </div>
-
-          <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
-            @if (!isSaving) {
-              <ion-icon slot="start" name="add-outline"></ion-icon>
-              <span>Crear Nodo</span>
-            }
-            @if (isSaving) {
-              <ion-spinner name="crescent"></ion-spinner>
-            }
+    
+    <!-- VISTA 1: LISTADO DE NODOS (Se muestra por defecto) -->
+    @if (!showForm) {
+      <div class="list-section">
+        <div class="list-header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="margin: 0; color: #002d4b; font-weight: 700;">Nodos Registrados</h3>
+          <ion-button class="new-product-btn" style="--background: #006b4d; --color: white; --border-radius: 12px; font-weight: 600; text-transform: none;" (click)="toggleForm(true)" size="default">
+            <ion-icon slot="start" name="add-outline"></ion-icon>
+            Nuevo Nodo
           </ion-button>
-
-          @if (errorMessage) {
-            <ion-text color="danger" class="ion-text-center">
-              <p>{{ errorMessage }}</p>
-            </ion-text>
-          }
-        </form>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- Lista de Nodos -->
-    <div class="list-section">
-      <h3>Nodos Registrados</h3>
-
-      @if (isLoading) {
-        <div class="loading-state">
-          <ion-spinner name="crescent"></ion-spinner>
         </div>
-      }
 
-      @if (!isLoading && nodos.length === 0) {
-        <div class="empty-state">
-          <p>No hay nodos registrados todavía.</p>
-        </div>
-      }
+        <!-- Mapa de Distribución de Nodos (Siempre visible arriba en el listado) -->
+        <div #listMapContainerRef id="list-map" class="map-container" style="height: 250px; margin-bottom: 20px;"></div>
 
-      @for (nodo of nodos; track nodo.id) {
-        <ion-card class="list-card">
-          <ion-item lines="none">
-            <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
-            <ion-label>
-              <h2>{{ nodo.name }}</h2>
-              <p>{{ nodo.address }}</p>
-              <small>Responsable: {{ nodo.manager_name }}</small>
-            </ion-label>
-          </ion-item>
-        </ion-card>
-      }
-    </div>
+        @if (isLoading) {
+          <div class="loading-state">
+            <ion-spinner name="crescent"></ion-spinner>
+          </div>
+        }
+
+        @if (!isLoading && nodos.length === 0) {
+          <div class="empty-state">
+            <p>No hay nodos registrados todavía.</p>
+          </div>
+        }
+
+        @for (nodo of nodos; track nodo.id) {
+          <ion-card class="list-card">
+            <ion-item lines="none">
+              <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
+              <ion-label>
+                <h2>{{ nodo.name }}</h2>
+                <p>{{ nodo.address }}</p>
+                <small>Responsable: {{ nodo.manager_name }}</small>
+                @if (userLatitude !== null && userLongitude !== null && nodo.latitude && nodo.longitude) {
+                  <br>
+                  <ion-text color="medium">
+                    <small style="font-weight: 700; color: #006b4d;">
+                      A {{ getDistanceFormatted(nodo.latitude, nodo.longitude) }} de distancia
+                    </small>
+                  </ion-text>
+                }
+              </ion-label>
+              <div slot="end" class="action-buttons">
+                <ion-button fill="clear" (click)="selectNodeForMap(nodo)" title="Ver en el mapa principal">
+                  <ion-icon slot="icon-only" name="location-outline" color="secondary"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" (click)="openDetailModal(nodo)" title="Ver detalles">
+                  <ion-icon slot="icon-only" name="eye-outline" color="primary"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-item>
+          </ion-card>
+        }
+      </div>
+    }
+
+    <!-- VISTA 2: FORMULARIO DE ALTA (Se muestra al clickear Agregar Nodo) -->
+    @if (showForm) {
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title>Nuevo Nodo de Retiro</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <form [formGroup]="nodoForm" (ngSubmit)="onCreateNodo()">
+            <!-- Contenedor del Mapa Principal con referencia ViewChild -->
+            <div #mapContainerRef id="map" class="map-container"></div>
+
+            <div class="input-group">
+              <label>Nombre del Nodo</label>
+              <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
+                <ion-icon name="business-outline"></ion-icon>
+                <ion-input formControlName="name" placeholder="Ej: Nodo Centro"></ion-input>
+              </div>
+              @if (f['name'].touched && f['name'].invalid) {
+                <ion-text color="danger">
+                  @if (f['name'].errors?.['required']) {
+                    <small>El nombre es obligatorio.</small>
+                  }
+                  @if (f['name'].errors?.['minlength']) {
+                    <small>Mínimo 3 caracteres.</small>
+                  }
+                </ion-text>
+              }
+            </div>
+
+            <div class="input-group">
+              <label>Dirección Física</label>
+              <div class="custom-input" [class.invalid]="f['address'].touched && f['address'].invalid">
+                <ion-icon name="location-outline"></ion-icon>
+                <ion-input formControlName="address" placeholder="Ej: Av. Principal 123"></ion-input>
+              </div>
+              @if (f['address'].touched && f['address'].invalid) {
+                <ion-text color="danger">
+                  @if (f['address'].errors?.['required']) {
+                    <small>La dirección es obligatoria.</small>
+                  }
+                  @if (f['address'].errors?.['minlength']) {
+                    <small>Mínimo 5 caracteres.</small>
+                  }
+                </ion-text>
+              }
+            </div>
+
+            <div class="input-group">
+              <label>Responsable del Nodo</label>
+              <div class="custom-input" [class.invalid]="f['manager_name'].touched && f['manager_name'].invalid">
+                <ion-icon name="person-outline"></ion-icon>
+                <ion-input formControlName="manager_name" placeholder="Nombre del encargado"></ion-input>
+              </div>
+              @if (f['manager_name'].touched && f['manager_name'].invalid) {
+                <ion-text color="danger">
+                  @if (f['manager_name'].errors?.['required']) {
+                    <small>El responsable es obligatorio.</small>
+                  }
+                </ion-text>
+              }
+            </div>
+
+            <!-- Campos de Latitud y Longitud -->
+            <div class="row" style="display: flex; gap: 16px;">
+              <div class="input-group" style="flex: 1;">
+                <label>Latitud</label>
+                <div class="custom-input" [class.invalid]="f['latitude'].touched && f['latitude'].invalid">
+                  <ion-icon name="location-outline"></ion-icon>
+                  <ion-input type="number" formControlName="latitude" placeholder="Ej: -31.4201" step="0.000001"></ion-input>
+                </div>
+                @if (f['latitude'].touched && f['latitude'].invalid) {
+                  <ion-text color="danger">
+                    @if (f['latitude'].errors?.['min'] || f['latitude'].errors?.['max']) {
+                      <small>Rango válido: -90 a 90</small>
+                    }
+                  </ion-text>
+                }
+              </div>
+
+              <div class="input-group" style="flex: 1;">
+                <label>Longitud</label>
+                <div class="custom-input" [class.invalid]="f['longitude'].touched && f['longitude'].invalid">
+                  <ion-icon name="location-outline"></ion-icon>
+                  <ion-input type="number" formControlName="longitude" placeholder="Ej: -64.1888" step="0.000001"></ion-input>
+                </div>
+                @if (f['longitude'].touched && f['longitude'].invalid) {
+                  <ion-text color="danger">
+                    @if (f['longitude'].errors?.['min'] || f['longitude'].errors?.['max']) {
+                      <small>Rango válido: -180 a 180</small>
+                    }
+                  </ion-text>
+                }
+              </div>
+            </div>
+
+            <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
+              @if (!isSaving) {
+                <ion-icon slot="start" name="add-outline"></ion-icon>
+                <span>Crear Nodo</span>
+              }
+              @if (isSaving) {
+                <ion-spinner name="crescent"></ion-spinner>
+              }
+            </ion-button>
+
+            @if (errorMessage) {
+              <ion-text color="danger" class="ion-text-center">
+                <p>{{ errorMessage }}</p>
+              </ion-text>
+            }
+          </form>
+        </ion-card-content>
+      </ion-card>
+    }
+
   </div>
+
+  <!-- Modal de Detalle del Nodo -->
+  <ion-modal [isOpen]="selectedNodo !== null" (didDismiss)="closeDetailModal()" (didPresent)="initModalMap()" class="product-detail-modal">
+    <ng-template>
+      @if (selectedNodo) {
+        <ion-header class="ion-no-border">
+          <ion-toolbar>
+            <ion-title>Detalles del Nodo</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="closeDetailModal()">
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding detail-modal-content">
+          <div class="modal-detail-container">
+            <div class="detail-info-card">
+              <div class="detail-copy-block">
+                <h3 class="detail-title">{{ selectedNodo.name }}</h3>
+                <p><strong>Dirección:</strong> {{ selectedNodo.address }}</p>
+                <p><strong>Encargado:</strong> {{ selectedNodo.manager_name }}</p>
+                @if (selectedNodo.latitude && selectedNodo.longitude) {
+                  <p><strong>Coordenadas:</strong> {{ selectedNodo.latitude }}, {{ selectedNodo.longitude }}</p>
+                }
+              </div>
+              
+              <div class="detail-description-section">
+                <h3>Ubicación en Mapa</h3>
+                <div id="modalMap" class="modal-map-container"></div>
+              </div>
+            </div>
+            <ion-button expand="block" (click)="closeDetailModal()" class="close-modal-btn">Cerrar</ion-button>
+          </div>
+        </ion-content>
+      }
+    </ng-template>
+  </ion-modal>
 </ion-content>
