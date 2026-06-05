@@ -1,13 +1,10 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      @if (showCustomBack) {
-        <ion-button (click)="onCustomBack()" aria-label="Volver atrás">
+      @if (showCustomBack || defaultHref) {
+        <ion-button (click)="onBackClick()" aria-label="Volver atrás">
           <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
         </ion-button>
-      }
-      @if (defaultHref && !showCustomBack) {
-        <ion-back-button [defaultHref]="defaultHref" text="" icon="arrow-back-outline" aria-label="Volver atrás"></ion-back-button>
       }
     </ion-buttons>
 

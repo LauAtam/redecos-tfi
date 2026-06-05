@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   IonHeader,
   IonToolbar,
   IonTitle,
   IonButtons,
   IonButton,
-  IonBackButton,
   IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -22,7 +22,6 @@ import { arrowBackOutline, logOutOutline } from 'ionicons/icons';
     IonTitle,
     IonButtons,
     IonButton,
-    IonBackButton,
     IonIcon
   ]
 })
@@ -35,15 +34,19 @@ export class HeaderComponent {
   @Output() customBack = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 
-  constructor() {
+  constructor(private router: Router) {
     addIcons({
       arrowBackOutline,
       logOutOutline
     });
   }
 
-  onCustomBack() {
-    this.customBack.emit();
+  onBackClick() {
+    if (this.showCustomBack) {
+      this.customBack.emit();
+    } else if (this.defaultHref) {
+      this.router.navigateByUrl(this.defaultHref);
+    }
   }
 
   onLogout() {
