@@ -23,6 +23,8 @@ export interface Nodo {
   name: string;
   address: string;
   manager_name: string;
+  latitude?: number;
+  longitude?: number;
   created_at?: string;
 }
 

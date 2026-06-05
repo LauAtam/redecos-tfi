@@ -31,7 +31,8 @@
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0"
+    "zone.js": "~0.15.0",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.0.0",
@@ -46,6 +47,7 @@
     "@capacitor/cli": "8.3.4",
     "@ionic/angular-toolkit": "^12.0.0",
     "@types/jasmine": "~5.1.0",
+    "@types/leaflet": "^1.9.12",
     "@types/node": "^25.9.1",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
