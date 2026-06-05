@@ -18,8 +18,9 @@ import {
   IonCol,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { logOutOutline, businessOutline, cubeOutline, chevronForwardOutline } from 'ionicons/icons';
+import { businessOutline, cubeOutline, chevronForwardOutline } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
+import { HeaderComponent } from '../../../core/components/header/header.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,13 +30,9 @@ import { SupabaseService } from '../../../supabase.service';
   imports: [
     RouterModule,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    IonButtons,
-    IonButton,
-    IonIcon,
     IonCard,
+    IonIcon,
+    HeaderComponent
   ],
 })
 export class DashboardPage implements OnInit {
@@ -45,7 +42,7 @@ export class DashboardPage implements OnInit {
     private supabaseService: SupabaseService,
     private router: Router,
   ) {
-    addIcons({ logOutOutline, businessOutline, cubeOutline, chevronForwardOutline });
+    addIcons({ businessOutline, cubeOutline, chevronForwardOutline });
   }
 
   ngOnInit() {

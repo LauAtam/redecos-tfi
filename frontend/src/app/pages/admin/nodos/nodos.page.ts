@@ -4,11 +4,6 @@ import {
 } from '@angular/forms';
 import {
   IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonBackButton,
   IonItem,
   IonLabel,
   IonButton,
@@ -20,8 +15,7 @@ import {
 import { addIcons } from 'ionicons';
 import {
   businessOutline,
-  addOutline,
-  arrowBackOutline
+  addOutline
 } from 'ionicons/icons';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -31,6 +25,7 @@ import { Nodo } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { NodoDetailModalComponent } from './components/nodo-detail-modal/nodo-detail-modal.component';
 import { NodoFormComponent } from './components/nodo-form/nodo-form.component';
+import { HeaderComponent } from '../../../core/components/header/header.component';
 
 const customMarkerIcon = L.divIcon({
   html: `
@@ -53,11 +48,6 @@ const customMarkerIcon = L.divIcon({
   imports: [
     ReactiveFormsModule,
     IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButtons, 
-    IonBackButton,
     IonItem,
     IonLabel,
     IonButton,
@@ -66,7 +56,8 @@ const customMarkerIcon = L.divIcon({
     IonSpinner,
     IonCard,
     NodoDetailModalComponent,
-    NodoFormComponent
+    NodoFormComponent,
+    HeaderComponent
   ],
 })
 export class NodosPage implements OnInit, OnDestroy {
@@ -103,8 +94,7 @@ export class NodosPage implements OnInit, OnDestroy {
   ) {
     addIcons({
       businessOutline,
-      addOutline,
-      arrowBackOutline
+      addOutline
     });
   }
 

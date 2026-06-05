@@ -1,13 +1,4 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title>Panel de Administración</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="logout()" class="logout-button" aria-label="Cerrar sesión">
-        <ion-icon name="log-out-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Panel de Administración" [showLogout]="true" (logout)="logout()"></app-header>
 
 <ion-content class="ion-padding">
   <div class="admin-dashboard-container">

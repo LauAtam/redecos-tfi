@@ -12,7 +12,6 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonBackButton,
   IonList,
   IonItem,
   IonInput,
@@ -26,7 +25,6 @@ import {
   IonCardContent,
   IonTextarea,
   IonThumbnail,
-  IonLabel,
   IonModal,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -39,13 +37,13 @@ import {
   addOutline,
   pencilOutline,
   trashOutline,
-  arrowBackOutline,
   closeOutline,
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { Producto } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { AlertController } from '@ionic/angular/standalone';
+import { HeaderComponent } from '../../../core/components/header/header.component';
 
 @Component({
   selector: 'app-productos',
@@ -59,7 +57,6 @@ import { AlertController } from '@ionic/angular/standalone';
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonBackButton,
     IonInput,
     IonButton,
     IonIcon,
@@ -72,6 +69,7 @@ import { AlertController } from '@ionic/angular/standalone';
     IonTextarea,
     IonThumbnail,
     IonModal,
+    HeaderComponent
   ],
 })
 export class ProductosPage implements OnInit {
@@ -101,7 +99,6 @@ export class ProductosPage implements OnInit {
       addOutline,
       pencilOutline,
       trashOutline,
-      arrowBackOutline,
       closeOutline,
     });
 

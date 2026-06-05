@@ -1,18 +1,9 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      @if (showForm) {
-      <ion-button (click)="toggleForm(false)">
-        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-      </ion-button>
-      }
-      @if (!showForm) {
-      <ion-back-button defaultHref="/admin/dashboard" text=""></ion-back-button>
-      }
-    </ion-buttons>
-    <ion-title>{{ showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Gestión de Productos' }}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header 
+  [title]="showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Gestión de Productos'" 
+  [defaultHref]="!showForm ? '/admin/dashboard' : null"
+  [showCustomBack]="showForm"
+  (customBack)="toggleForm(false)">
+</app-header>
 
 <ion-content class="ion-padding">
   <div class="admin-container">

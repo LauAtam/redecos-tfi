@@ -11,11 +11,6 @@ import {
 import { Router, RouterModule } from '@angular/router';
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonBackButton,
   IonInput,
   IonButton,
   IonIcon,
@@ -32,6 +27,7 @@ import {
   idCardOutline,
 } from 'ionicons/icons';
 import { SupabaseService } from '../../supabase.service';
+import { HeaderComponent } from '../../core/components/header/header.component';
 
 @Component({
   selector: 'app-register',
@@ -42,16 +38,12 @@ import { SupabaseService } from '../../supabase.service';
     ReactiveFormsModule,
     RouterModule,
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
-    IonButtons,
-    IonBackButton,
     IonInput,
     IonButton,
     IonIcon,
     IonText,
     IonSpinner,
+    HeaderComponent
   ],
 })
 export class RegisterPage implements OnInit {

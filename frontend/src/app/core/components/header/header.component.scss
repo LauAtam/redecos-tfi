@@ -1,0 +1,19 @@
+ion-header {
+  ion-toolbar {
+    --background: #ffffff;
+    --color: #002d4b;
+    --border-width: 0;
+    font-weight: 700;
+    
+    ion-title {
+      font-size: 1.2rem;
+      color: #002d4b;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+}
+
+.logout-button {
+  --color: #dc2626; /* Red for logout */
+}
