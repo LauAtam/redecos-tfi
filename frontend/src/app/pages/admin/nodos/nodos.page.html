@@ -5,13 +5,13 @@
   (customBack)="toggleForm(false)">
 </app-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" [scrollY]="showForm">
   <div class="admin-container">
     
     <!-- VISTA 1: LISTADO DE NODOS (Se muestra por defecto) -->
     @if (!showForm) {
       <div class="list-section">
-        <div class="list-header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div class="list-header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-shrink: 0;">
           <h3 style="margin: 0; color: #002d4b; font-weight: 700;">Nodos Registrados</h3>
           <ion-button class="new-product-btn" style="--background: #006b4d; --color: white; --border-radius: 12px;" (click)="toggleForm(true)" size="default">
             <ion-icon slot="icon-only" name="add-outline"></ion-icon>
@@ -19,40 +19,42 @@
         </div>
 
         <!-- Mapa de Distribución de Nodos (Siempre visible arriba en el listado) -->
-        <div #listMapContainerRef id="list-map" class="map-container" style="height: 250px; margin-bottom: 20px;"></div>
+        <div #listMapContainerRef id="list-map" class="map-container" style="height: 250px; margin-bottom: 20px; flex-shrink: 0;"></div>
 
-        @if (isLoading) {
-          <div class="loading-state">
-            <ion-spinner name="crescent"></ion-spinner>
-          </div>
-        }
+        <div class="scrollable-list">
+          @if (isLoading) {
+            <div class="loading-state">
+              <ion-spinner name="crescent"></ion-spinner>
+            </div>
+          }
 
-        @if (!isLoading && nodos.length === 0) {
-          <div class="empty-state">
-            <p>No hay nodos registrados todavía.</p>
-          </div>
-        }
+          @if (!isLoading && nodos.length === 0) {
+            <div class="empty-state">
+              <p>No hay nodos registrados todavía.</p>
+            </div>
+          }
 
-        @for (nodo of nodos; track nodo.id) {
-          <ion-card class="list-card" button="true" (click)="openDetailModal(nodo)">
-            <ion-item lines="none" style="--background: transparent;">
-              <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
-              <ion-label>
-                <h2>{{ nodo.name }}</h2>
-                <p>{{ nodo.address }}</p>
-                <small>Responsable: {{ nodo.manager_name }}</small>
-                @if (userLatitude !== null && userLongitude !== null && nodo.latitude && nodo.longitude) {
-                  <br>
-                  <ion-text color="medium">
-                    <small style="font-weight: 700; color: #006b4d;">
-                      A {{ getDistanceFormatted(nodo.latitude, nodo.longitude) }} de distancia
-                    </small>
-                  </ion-text>
-                }
-              </ion-label>
-            </ion-item>
-          </ion-card>
-        }
+          @for (nodo of nodos; track nodo.id) {
+            <ion-card class="list-card" button="true" (click)="openDetailModal(nodo)">
+              <ion-item lines="none" style="--background: transparent;">
+                <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
+                <ion-label>
+                  <h2>{{ nodo.name }}</h2>
+                  <p>{{ nodo.address }}</p>
+                  <small>Responsable: {{ nodo.manager_name }}</small>
+                  @if (userLatitude !== null && userLongitude !== null && nodo.latitude && nodo.longitude) {
+                    <br>
+                    <ion-text color="medium">
+                      <small style="font-weight: 700; color: #006b4d;">
+                        A {{ getDistanceFormatted(nodo.latitude, nodo.longitude) }} de distancia
+                      </small>
+                    </ion-text>
+                  }
+                </ion-label>
+              </ion-item>
+            </ion-card>
+          }
+        </div>
       </div>
     }
 

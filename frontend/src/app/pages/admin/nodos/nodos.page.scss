@@ -1,10 +1,21 @@
 ion-content {
   --background: #f8f9fa;
+
+  &::part(scroll) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 }
 
 .admin-container {
   max-width: 600px;
+  width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
 }
 
 .map-container {
@@ -48,12 +59,24 @@ ion-content {
 }
 
 .list-section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+
   h3 {
     color: #002d4b;
     font-weight: 700;
     margin-left: 8px;
     margin-bottom: 16px;
   }
+}
+
+.scrollable-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 16px;
 }
 
 .list-card {
