@@ -51,6 +51,11 @@
                     </ion-text>
                   }
                 </ion-label>
+                @if (nodo.latitude && nodo.longitude) {
+                  <ion-button slot="end" fill="clear" color="primary" (click)="focusOnNode(nodo, $event)" style="--padding-start: 8px; --padding-end: 8px;">
+                    <ion-icon name="locate-outline" slot="icon-only"></ion-icon>
+                  </ion-button>
+                }
               </ion-item>
             </ion-card>
           }

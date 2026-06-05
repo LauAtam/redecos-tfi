@@ -15,7 +15,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   businessOutline,
-  addOutline
+  addOutline,
+  locateOutline
 } from 'ionicons/icons';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -94,7 +95,8 @@ export class NodosPage implements OnInit, OnDestroy {
   ) {
     addIcons({
       businessOutline,
-      addOutline
+      addOutline,
+      locateOutline
     });
   }
 
@@ -347,6 +349,22 @@ export class NodosPage implements OnInit, OnDestroy {
       }
       this.toastService.showSuccess(`Nodo "${data!.name}" actualizado correctamente.`);
       this.toggleForm(false);
+    }
+  }
+
+  focusOnNode(nodo: Nodo, event: Event) {
+    event.stopPropagation();
+    if (this.listMap && nodo.latitude && nodo.longitude) {
+      this.listMap.setView([nodo.latitude, nodo.longitude], 16);
+      
+      const marker = this.listMarkers.find(m => {
+        const latLng = m.getLatLng();
+        return latLng.lat === nodo.latitude && latLng.lng === nodo.longitude;
+      });
+      
+      if (marker) {
+        marker.openPopup();
+      }
     }
   }
 }
