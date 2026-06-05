@@ -81,6 +81,7 @@
     [isOpen]="selectedNodo !== null" 
     [nodo]="selectedNodo" 
     (close)="closeDetailModal()"
-    (edit)="onEditNodo($event)">
+    (edit)="onEditNodo($event)"
+    (delete)="onDeleteNodo($event)">
   </app-nodo-detail-modal>
 </ion-content>

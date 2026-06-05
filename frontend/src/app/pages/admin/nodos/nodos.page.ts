@@ -12,6 +12,7 @@ import {
   IonSpinner,
   IonCard
 } from '@ionic/angular/standalone';
+import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   businessOutline,
@@ -92,6 +93,7 @@ export class NodosPage implements OnInit, OnDestroy {
   constructor(
     private supabaseService: SupabaseService,
     private toastService: ToastService,
+    private alertController: AlertController,
   ) {
     addIcons({
       businessOutline,
@@ -377,5 +379,37 @@ export class NodosPage implements OnInit, OnDestroy {
         marker.openPopup();
       }
     }
+  }
+
+  async onDeleteNodo(nodo: Nodo) {
+    if (!nodo.id) return;
+
+    const alert = await this.alertController.create({
+      header: 'Confirmar eliminación',
+      message: `¿Estás seguro de que querés eliminar el nodo "${nodo.name}"? Esta acción no se puede deshacer.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: async () => {
+            const { success, error } = await this.supabaseService.deleteNodo(nodo.id!);
+            if (error) {
+              this.toastService.showError(error.message);
+            } else if (success) {
+              this.nodos = this.nodos.filter(n => n.id !== nodo.id);
+              this.refreshListMapMarkers();
+              this.toastService.showSuccess(`Nodo "${nodo.name}" eliminado correctamente.`);
+              this.closeDetailModal();
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

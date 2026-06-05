@@ -354,6 +354,27 @@ export class SupabaseService {
     }
   }
 
+  async deleteNodo(id: string): Promise<{ success: boolean, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/nodes/${id}`, {
+        method: 'DELETE',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { success: false, error: { code: 'api/error', message: errData.message || 'Error al eliminar el nodo.' } };
+      }
+
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar el nodo.', originalError: err } };
+    }
+  }
+
   // --- MÉTODOS PARA PRODUCTOS ---
 
   async getProductos(): Promise<{ data: Producto[] | null, error: AppError | null }> {
