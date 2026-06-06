@@ -10,7 +10,9 @@ import {
   IonIcon,
   IonText,
   IonSpinner,
-  IonCard
+  IonCard,
+  IonFab,
+  IonFabButton
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -57,6 +59,8 @@ const customMarkerIcon = L.divIcon({
     IonText,
     IonSpinner,
     IonCard,
+    IonFab,
+    IonFabButton,
     NodoDetailModalComponent,
     NodoFormComponent,
     HeaderComponent

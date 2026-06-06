@@ -27,6 +27,8 @@ import {
   IonThumbnail,
   IonModal,
   ActionSheetController,
+  IonFab,
+  IonFabButton,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -71,6 +73,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonTextarea,
     IonThumbnail,
     IonModal,
+    IonFab,
+    IonFabButton,
     HeaderComponent
   ],
 })
@@ -298,6 +302,23 @@ export class ProductosPage implements OnInit {
       ]
     });
     await actionSheet.present();
+  }
+
+  formatProductName(name: string): string {
+    if (!name) return '';
+    const trimmed = name.trim();
+    if (trimmed === trimmed.toUpperCase()) {
+      return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+    }
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+  }
+
+  formatPrice(price: number | undefined): string {
+    if (price === undefined || price === null) return '$0,00';
+    return '$' + new Intl.NumberFormat('es-AR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(price);
   }
 
   get f() {

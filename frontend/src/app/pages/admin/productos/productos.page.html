@@ -7,17 +7,13 @@
 
 <ion-content class="ion-padding">
   <div class="admin-container">
-
-    <!-- VISTA 1: LISTADO DE PRODUCTOS (Se muestra por defecto) -->
+    <!-- VISTA 1: LISTADO DE PRODUCTOS (Se muestra por defecto) -->
     @if (!showForm) {
     <div class="list-section">
 
-      <!-- Encabezado de la lista con botón de alta -->
+      <!-- Encabezado de la lista -->
       <div class="list-header-actions">
         <h3>Catálogo de Productos</h3>
-        <ion-button class="new-product-btn" (click)="toggleForm(true)" size="default">
-          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-        </ion-button>
       </div>
 
       @if (isLoading) {
@@ -51,12 +47,12 @@
               <ion-icon name="cube-outline"></ion-icon>
             </div>
             }
-
+ 
             <div class="product-details">
-              <h2>{{ prod.name }}</h2>
+              <h2>{{ formatProductName(prod.name) }}</h2>
               <p class="description">{{ prod.description || 'Sin descripción' }}</p>
               <div class="price-bulk-row">
-                <span class="price-tag">${{ prod.price }}</span>
+                <span class="price-tag">{{ formatPrice(prod.price) }}</span>
                 <span class="divider">•</span>
                 <span class="bulk-tag">Bulto: {{ prod.bulk_size }} un.</span>
               </div>
@@ -66,6 +62,14 @@
         }
       </div>
       }
+
+      <!-- FAB flotante para agregar productos -->
+      <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="ion-margin-bottom ion-margin-end">
+        <ion-fab-button (click)="toggleForm(true)" style="--background: #006b4d; --color: white;">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
     </div>
     }
 
@@ -232,11 +236,11 @@
 
           <!-- Ficha de Datos -->
           <div class="detail-info-card">
-            <h2 class="detail-title">{{ selectedProduct.name }}</h2>
+            <h2 class="detail-title">{{ formatProductName(selectedProduct.name) }}</h2>
 
             <div class="contact-info-group">
               <span class="contact-label">Precio</span>
-              <span class="contact-value">${{ selectedProduct.price }}</span>
+              <span class="contact-value">{{ formatPrice(selectedProduct.price) }}</span>
             </div>
 
             <div class="contact-info-group">

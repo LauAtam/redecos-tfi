@@ -13,9 +13,6 @@
       <div class="list-section">
         <div class="list-header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-shrink: 0;">
           <h3 style="margin: 0; color: #002d4b; font-weight: 700;">Nodos Registrados</h3>
-          <ion-button class="new-product-btn" style="--background: #006b4d; --color: white; --border-radius: 12px;" (click)="toggleForm(true)" size="default">
-            <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-          </ion-button>
         </div>
 
         <!-- Mapa de Distribución de Nodos (Siempre visible arriba en el listado) -->
@@ -61,6 +58,13 @@
           }
         </div>
       </div>
+
+      <!-- FAB flotante para agregar nodos -->
+      <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="ion-margin-bottom ion-margin-end">
+        <ion-fab-button (click)="toggleForm(true)" style="--background: #006b4d; --color: white;">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     }
 
     <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN REFACTORIZADO -->
