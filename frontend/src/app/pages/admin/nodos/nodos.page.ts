@@ -158,10 +158,11 @@ export class NodosPage implements OnInit, OnDestroy {
     if (element && (element as any)._leaflet_id) {
       delete (element as any)._leaflet_id;
     }
-    this.listMap = L.map(element).setView([-31.4201, -64.1888], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.listMap);
+    this.listMap = L.map(element, {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([-31.4201, -64.1888], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.listMap);
 
     this.refreshListMapMarkers();
     this.requestUserLocation();

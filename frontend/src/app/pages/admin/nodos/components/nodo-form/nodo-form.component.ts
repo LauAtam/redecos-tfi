@@ -132,11 +132,13 @@ export class NodoFormComponent implements OnInit, OnDestroy {
     const defaultLat = this.nodoForm.get('latitude')?.value ?? -31.4201;
     const defaultLng = this.nodoForm.get('longitude')?.value ?? -64.1888;
 
-    this.map = L.map(element).setView([defaultLat, defaultLng], 13);
+    // Ocultamos controles nativos de zoom y créditos
+    this.map = L.map(element, {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([defaultLat, defaultLng], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.map);
 
     this.marker = L.marker([defaultLat, defaultLng], {
       icon: customMarkerIcon,
