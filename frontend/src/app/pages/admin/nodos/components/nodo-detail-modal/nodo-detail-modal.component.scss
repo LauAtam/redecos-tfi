@@ -1,10 +1,11 @@
 .modal-map-container {
-  height: 250px;
+  height: 220px;
   width: 100%;
   border-radius: 12px;
   margin-top: 10px;
   border: 1px solid #cbd5e1;
   z-index: 1;
+  overflow: hidden; /* Ensure leaflet tiles respect the border-radius */
 }
 
 .modal-detail-container {
@@ -22,30 +23,57 @@
 
 .detail-copy-block {
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   
   h3.detail-title {
-    margin-top: 0;
+    margin: 0 0 4px 0;
     color: #002d4b;
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+  }
+}
+
+.contact-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  
+  .contact-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8; /* Light gray for label */
   }
   
-  p {
-    margin: 8px 0;
-    color: #475569;
+  .contact-value {
     font-size: 0.95rem;
-    
-    strong {
-      color: #002d4b;
-    }
+    font-weight: 500;
+    color: #1e293b; /* Dark/black for value */
   }
 }
 
 .detail-description-section {
   h3 {
     margin: 0 0 10px;
-    font-size: 1.1rem;
-    color: #002d4b;
-    font-weight: 700;
+    font-size: 1rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
   }
+}
+
+.edit-details-btn {
+  --background: #006b4d;
+  --color: white;
+  --border-radius: 12px;
+  margin-top: 16px;
+  height: 48px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: none;
+  box-shadow: 0 4px 10px rgba(0, 107, 77, 0.15);
 }

@@ -7,10 +7,11 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
-  IonContent
+  IonContent,
+  ActionSheetController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { closeOutline, pencilOutline, trashOutline } from 'ionicons/icons';
+import { closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline } from 'ionicons/icons';
 import * as L from 'leaflet';
 import { Nodo } from '../../../../../core/models/auth.models';
 
@@ -53,8 +54,8 @@ export class NodoDetailModalComponent implements OnDestroy {
   modalMap?: L.Map;
   modalMarker?: L.Marker;
 
-  constructor() {
-    addIcons({ closeOutline, pencilOutline, trashOutline });
+  constructor(private actionSheetController: ActionSheetController) {
+    addIcons({ closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline });
   }
 
   onEdit() {
@@ -67,6 +68,27 @@ export class NodoDetailModalComponent implements OnDestroy {
     if (this.nodo) {
       this.delete.emit(this.nodo);
     }
+  }
+
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Opciones del Nodo',
+      buttons: [
+        {
+          text: 'Eliminar Nodo',
+          role: 'destructive',
+          icon: 'trash-outline',
+          handler: () => {
+            this.onDelete();
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   ngOnDestroy() {
@@ -95,11 +117,13 @@ export class NodoDetailModalComponent implements OnDestroy {
       delete (element as any)._leaflet_id;
     }
 
-    this.modalMap = L.map('modalMap').setView([lat, lng], 15);
+    // Ocultamos controles nativos de zoom y barra de créditos
+    this.modalMap = L.map('modalMap', {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([lat, lng], 15);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(this.modalMap);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(this.modalMap);
 
     this.modalMarker = L.marker([lat, lng], {
       icon: customMarkerIcon,

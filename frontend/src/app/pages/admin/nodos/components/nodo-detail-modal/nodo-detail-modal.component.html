@@ -4,11 +4,8 @@
       <ion-header class="ion-no-border">
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="onEdit()" title="Editar Nodo">
-              <ion-icon slot="icon-only" name="pencil-outline" color="primary"></ion-icon>
-            </ion-button>
-            <ion-button (click)="onDelete()" title="Eliminar Nodo">
-              <ion-icon slot="icon-only" name="trash-outline" color="danger"></ion-icon>
+            <ion-button (click)="presentActionSheet()" title="Opciones">
+              <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
           <ion-title>Detalles del Nodo</ion-title>
@@ -24,15 +21,27 @@
           <div class="detail-info-card">
             <div class="detail-copy-block">
               <h3 class="detail-title">{{ nodo.name }}</h3>
-              <p><strong>Dirección:</strong> {{ nodo.address }}</p>
-              <p><strong>Encargado:</strong> {{ nodo.manager_name }}</p>
+              
+              <div class="contact-info-group">
+                <span class="contact-label">Dirección</span>
+                <span class="contact-value">{{ nodo.address }}</span>
+              </div>
+              
+              <div class="contact-info-group">
+                <span class="contact-label">Encargado</span>
+                <span class="contact-value">{{ nodo.manager_name }}</span>
+              </div>
             </div>
             
             <div class="detail-description-section">
-              <h3>Ubicación en Mapa</h3>
+              <h3>Ubicación</h3>
               <div id="modalMap" class="modal-map-container"></div>
             </div>
           </div>
+          
+          <ion-button expand="block" class="edit-details-btn" (click)="onEdit()">
+            Editar Detalles
+          </ion-button>
         </div>
       </ion-content>
     }
