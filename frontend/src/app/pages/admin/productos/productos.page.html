@@ -61,18 +61,6 @@
                 <span class="bulk-tag">Bulto: {{ prod.bulk_size }} un.</span>
               </div>
             </div>
-
-            <!-- Acciones del Administrador -->
-            <div class="admin-actions">
-              <ion-button fill="clear" color="primary" (click)="onEditProduct(prod); $event.stopPropagation()"
-                aria-label="Editar producto">
-                <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
-              </ion-button>
-              <ion-button fill="clear" color="danger" (click)="onDeleteProduct(prod); $event.stopPropagation()"
-                aria-label="Eliminar producto">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-              </ion-button>
-            </div>
           </div>
         </ion-card>
         }
@@ -212,6 +200,11 @@
     <ng-template>
       <ion-header class="ion-no-border">
         <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="presentProductActionSheet()" title="Opciones">
+              <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
           <ion-title>Detalles del Producto</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="closeProductDetail()">
@@ -241,21 +234,24 @@
           <div class="detail-info-card">
             <h2 class="detail-title">{{ selectedProduct.name }}</h2>
 
-            <div class="detail-meta-row">
-              <span class="detail-price">${{ selectedProduct.price }}</span>
-              <span class="detail-divider">•</span>
-              <span class="detail-bulk">Bulto: {{ selectedProduct.bulk_size }} unidades</span>
+            <div class="contact-info-group">
+              <span class="contact-label">Precio</span>
+              <span class="contact-value">${{ selectedProduct.price }}</span>
             </div>
 
-            <div class="detail-description-section">
-              <h3>Descripción</h3>
-              <p>{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el
-                momento.' }}</p>
+            <div class="contact-info-group">
+              <span class="contact-label">Tamaño del Bulto</span>
+              <span class="contact-value">{{ selectedProduct.bulk_size }} unidades</span>
+            </div>
+
+            <div class="contact-info-group">
+              <span class="contact-label">Descripción</span>
+              <span class="contact-value">{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el momento.' }}</span>
             </div>
           </div>
 
-          <ion-button expand="block" (click)="closeProductDetail()" class="close-modal-btn">
-            Cerrar Vista Previa
+          <ion-button expand="block" class="edit-details-btn" (click)="editProductFromDetail()">
+            Editar Detalles
           </ion-button>
         </div>
         }

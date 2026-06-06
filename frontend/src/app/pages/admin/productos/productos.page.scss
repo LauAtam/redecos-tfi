@@ -27,10 +27,7 @@ ion-content { --background: #f8fafc; }
     .bulk-tag { font-size: 0.8rem; color: #64748b; font-weight: 500; }
   }
 }
-.admin-actions {
-  display: flex; flex-direction: column; gap: 4px;
-  ion-button { --padding-start: 8px; --padding-end: 8px; margin: 0; height: 36px; ion-icon { font-size: 1.25rem; } }
-}
+
 
 .row-inputs { display: flex; gap: 16px; margin-bottom: 20px; .input-group { margin-bottom: 0; flex: 1; } }
 .form-actions-row {

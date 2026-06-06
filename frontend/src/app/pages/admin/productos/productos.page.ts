@@ -26,6 +26,7 @@ import {
   IonTextarea,
   IonThumbnail,
   IonModal,
+  ActionSheetController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -38,6 +39,7 @@ import {
   pencilOutline,
   trashOutline,
   closeOutline,
+  ellipsisVerticalOutline,
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { Producto } from '../../../core/models/auth.models';
@@ -89,6 +91,7 @@ export class ProductosPage implements OnInit {
     private supabaseService: SupabaseService,
     private toastService: ToastService,
     private alertController: AlertController,
+    private actionSheetController: ActionSheetController,
   ) {
     addIcons({
       cubeOutline,
@@ -100,6 +103,7 @@ export class ProductosPage implements OnInit {
       pencilOutline,
       trashOutline,
       closeOutline,
+      ellipsisVerticalOutline,
     });
 
     this.productoForm = this.fb.group({
@@ -262,6 +266,38 @@ export class ProductosPage implements OnInit {
   closeProductDetail() {
     this.isDetailModalOpen = false;
     this.selectedProduct = null;
+  }
+
+  editProductFromDetail() {
+    if (this.selectedProduct) {
+      const prod = this.selectedProduct;
+      this.closeProductDetail();
+      this.onEditProduct(prod);
+    }
+  }
+
+  async presentProductActionSheet() {
+    if (!this.selectedProduct) return;
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Opciones del Producto',
+      buttons: [
+        {
+          text: 'Eliminar Producto',
+          role: 'destructive',
+          icon: 'trash-outline',
+          handler: () => {
+            const prod = this.selectedProduct!;
+            this.closeProductDetail();
+            this.onDeleteProduct(prod);
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        }
+      ]
+    });
+    await actionSheet.present();
   }
 
   get f() {

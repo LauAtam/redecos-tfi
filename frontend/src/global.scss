@@ -335,14 +335,38 @@ body {
   }
 }
 
-.close-modal-btn {
-  --background: #002d4b;
-  --color: #fff;
+/* --- Clases Compartidas para Modal de Detalles (Nodos y Productos) --- */
+.contact-info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  
+  .contact-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #94a3b8; /* Gris claro */
+  }
+  
+  .contact-value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1e293b; /* Negro oscuro */
+  }
+}
+
+.edit-details-btn {
+  --background: #006b4d;
+  --color: white;
   --border-radius: 12px;
+  margin-top: 16px;
   height: 48px;
   font-weight: 700;
+  font-size: 0.95rem;
   text-transform: none;
-  margin-top: 8px;
+  box-shadow: 0 4px 10px rgba(0, 107, 77, 0.15);
   margin-bottom: 16px;
 }
 
