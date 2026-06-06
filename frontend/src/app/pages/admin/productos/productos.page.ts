@@ -307,10 +307,7 @@ export class ProductosPage implements OnInit {
   formatProductName(name: string): string {
     if (!name) return '';
     const trimmed = name.trim();
-    if (trimmed === trimmed.toUpperCase()) {
-      return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
-    }
-    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+    return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
   }
 
   formatPrice(price: number | undefined): string {

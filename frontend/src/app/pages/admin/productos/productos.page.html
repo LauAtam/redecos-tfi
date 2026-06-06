@@ -1,13 +1,11 @@
-<app-header 
-  [title]="showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Gestión de Productos'" 
-  [defaultHref]="!showForm ? '/admin/dashboard' : null"
-  [showCustomBack]="showForm"
-  (customBack)="toggleForm(false)">
+<app-header [title]="showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Gestión de Productos'"
+  [defaultHref]="!showForm ? '/admin/dashboard' : null" [showCustomBack]="showForm" (customBack)="toggleForm(false)">
 </app-header>
 
 <ion-content class="ion-padding">
   <div class="admin-container">
-    <!-- VISTA 1: LISTADO DE PRODUCTOS (Se muestra por defecto) -->
+
+    <!-- VISTA 1: LISTADO DE PRODUCTOS (Se muestra por defecto) -->
     @if (!showForm) {
     <div class="list-section">
 
@@ -47,7 +45,7 @@
               <ion-icon name="cube-outline"></ion-icon>
             </div>
             }
- 
+
             <div class="product-details">
               <h2>{{ formatProductName(prod.name) }}</h2>
               <p class="description">{{ prod.description || 'Sin descripción' }}</p>
@@ -184,7 +182,7 @@
               <ion-icon slot="start" name="checkmark-outline"></ion-icon>
               }
               @if (!isSaving) {
-              <span>{{ isEditing ? 'Guardar Cambios' : 'Agregar al Catálogo' }}</span>
+              <span>{{ isEditing ? 'Guardar Cambios' : 'Agregar' }}</span>
               }
               @if (isSaving) {
               <ion-spinner name="crescent"></ion-spinner>
@@ -250,7 +248,8 @@
 
             <div class="contact-info-group">
               <span class="contact-label">Descripción</span>
-              <span class="contact-value">{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el momento.' }}</span>
+              <span class="contact-value">{{ selectedProduct.description || 'Este producto no cuenta con una descripción
+                detallada por el momento.' }}</span>
             </div>
           </div>
 
