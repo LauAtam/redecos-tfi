@@ -3,56 +3,56 @@
 </app-header>
 
 <ion-content class="ion-padding">
-  <div class="admin-container">
+  <div class="max-w-[600px] mx-auto py-4 px-2">
 
     <!-- VISTA 1: LISTADO DE PRODUCTOS (Se muestra por defecto) -->
     @if (!showForm) {
-    <div class="list-section">
+    <div class="flex flex-col h-full overflow-hidden">
 
       <!-- Encabezado de la lista -->
-      <div class="list-header-actions">
-        <h3>Catálogo de Productos</h3>
+      <div class="flex justify-between items-center mb-5 px-2">
+        <h3 class="m-0 text-[#002d4b] font-bold text-xl">Catálogo de Productos</h3>
       </div>
 
       @if (isLoading) {
-      <div class="loading-state ion-text-center">
+      <div class="py-12 ion-text-center">
         <ion-spinner name="crescent"></ion-spinner>
       </div>
       }
 
       @if (!isLoading && productos.length === 0) {
-      <div class="empty-state ion-text-center">
-        <div class="empty-icon-wrapper">
-          <ion-icon name="cube-outline"></ion-icon>
+      <div class="py-12 px-4 text-[#64748b] ion-text-center">
+        <div class="inline-flex items-center justify-center w-[72px] h-[72px] rounded-full bg-[#f1f5f9] text-[#94a3b8] mb-4">
+          <ion-icon name="cube-outline" class="text-[2.2rem]"></ion-icon>
         </div>
-        <p>El catálogo está vacío. ¡Cargá tu primer producto!</p>
+        <p class="m-0 text-[0.95rem] font-medium">El catálogo está vacío. ¡Cargá tu primer producto!</p>
       </div>
       }
 
       <!-- Tarjetas de Productos con Acciones y Vista Previa -->
       @if (!isLoading && productos.length > 0) {
-      <div class="products-grid">
+      <div class="grid grid-cols-1 gap-3">
         @for (prod of productos; track prod.id) {
-        <ion-card class="product-item-card" button="true" (click)="showProductDetail(prod)">
-          <div class="product-card-body">
+        <ion-card class="m-0 rounded-[16px] bg-white border-[1.5px] border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-200 hover:shadow-[0_6px_16px_rgba(0,0,0,0.05)] hover:border-[#cbd5e1]" button="true" (click)="showProductDetail(prod)">
+          <div class="flex items-center p-4 gap-4">
             @if (prod.image_url) {
-            <ion-thumbnail class="product-thumbnail">
-              <img [src]="prod.image_url" alt="Product Image" />
+            <ion-thumbnail class="w-16 h-16 m-0 [--border-radius:12px]">
+              <img [src]="prod.image_url" alt="Product Image" class="object-cover rounded-[12px] w-full h-full" />
             </ion-thumbnail>
             }
             @if (!prod.image_url) {
-            <div class="product-icon-fallback">
-              <ion-icon name="cube-outline"></ion-icon>
+            <div class="flex items-center justify-center w-16 h-16 rounded-[12px] bg-[#f1f5f9] text-[#002d4b]">
+              <ion-icon name="cube-outline" class="text-[1.8rem]"></ion-icon>
             </div>
             }
 
-            <div class="product-details">
-              <h2>{{ formatProductName(prod.name) }}</h2>
-              <p class="description">{{ prod.description || 'Sin descripción' }}</p>
-              <div class="price-bulk-row">
-                <span class="price-tag">{{ formatPrice(prod.price) }}</span>
-                <span class="divider">•</span>
-                <span class="bulk-tag">Bulto: {{ prod.bulk_size }} un.</span>
+            <div class="flex-1">
+              <h2 class="m-0 mb-1 text-[1.1rem] font-bold text-[#002d4b]">{{ formatProductName(prod.name) }}</h2>
+              <p class="m-0 mb-2 text-[0.85rem] text-[#334155] leading-snug line-clamp-2">{{ prod.description || 'Sin descripción' }}</p>
+              <div class="flex items-center gap-2">
+                <span class="text-[1.05rem] font-bold text-[#006b4d]">{{ formatPrice(prod.price) }}</span>
+                <span class="text-[#e2e8f0] text-[0.8rem]">•</span>
+                <span class="text-[0.8rem] text-[#334155] font-medium">Bulto: {{ prod.bulk_size }} un.</span>
               </div>
             </div>
           </div>
@@ -61,120 +61,121 @@
       </div>
       }
 
-      <!-- FAB flotante para agregar productos -->
-      <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="ion-margin-bottom ion-margin-end">
-        <ion-fab-button (click)="toggleForm(true)" style="--background: #006b4d; --color: white;">
-          <ion-icon name="add-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-
     </div>
     }
 
     <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN -->
     @if (showForm) {
-    <ion-card class="form-card">
-      <ion-card-header>
-        <ion-card-title>{{ isEditing ? 'Modificar Datos del Producto' : 'Cargar Nuevo Producto al Catálogo'
-          }}</ion-card-title>
-      </ion-card-header>
+        <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="w-full">
 
-      <ion-card-content>
-        <form [formGroup]="productoForm" (ngSubmit)="onSubmit()">
-
-          <div class="input-group">
-            <label>Nombre del Producto</label>
-            <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
-              <ion-icon name="cube-outline"></ion-icon>
-              <ion-input formControlName="name" placeholder="Ej: Bolsón de Verduras"></ion-input>
+          <div class="mb-5">
+            <label class="block text-[0.85rem] font-semibold text-[#475569] mb-1.5">Nombre del Producto</label>
+            <div class="flex items-center bg-white border-[1.5px] border-[#cbd5e1] rounded-[12px] px-3 h-12 transition-all duration-200 focus-within:border-[#006b4d] focus-within:shadow-[0_0_0_2px_rgba(0,107,77,0.15)]"
+              [class.border-[#eb445a]]="f['name'].touched && f['name'].invalid"
+              [class.focus-within:border-[#eb445a]]="f['name'].touched && f['name'].invalid"
+              [class.focus-within:shadow-[0_0_0_2px_rgba(235,68,90,0.15)]]="f['name'].touched && f['name'].invalid">
+              <ion-icon name="cube-outline" class="text-[1.2rem] text-[#64748b] mr-2.5"></ion-icon>
+              <ion-input formControlName="name" placeholder="Ej: Bolsón de Verduras" class="[--padding-start:0] text-[0.95rem] [--color:#0f172a] w-full"></ion-input>
             </div>
             @if (f['name'].touched && f['name'].invalid) {
             <ion-text color="danger">
               @if (f['name'].errors?.['required']) {
-              <small>El nombre es obligatorio.</small>
+              <small class="block mt-1 text-[0.8rem]">El nombre es obligatorio.</small>
               }
               @if (f['name'].errors?.['minlength']) {
-              <small>Mínimo 3 caracteres.</small>
+              <small class="block mt-1 text-[0.8rem]">Mínimo 3 caracteres.</small>
               }
             </ion-text>
             }
           </div>
 
-          <div class="input-group">
-            <label>Descripción (Opcional)</label>
-            <div class="custom-input textarea" [class.invalid]="f['description'].touched && f['description'].invalid">
-              <ion-icon name="reader-outline"></ion-icon>
+          <div class="mb-5">
+            <label class="block text-[0.85rem] font-semibold text-[#475569] mb-1.5">Descripción (Opcional)</label>
+            <div class="flex bg-white border-[1.5px] border-[#cbd5e1] rounded-[12px] px-3 py-2.5 min-h-[90px] items-start transition-all duration-200 focus-within:border-[#006b4d] focus-within:shadow-[0_0_0_2px_rgba(0,107,77,0.15)]"
+              [class.border-[#eb445a]]="f['description'].touched && f['description'].invalid"
+              [class.focus-within:border-[#eb445a]]="f['description'].touched && f['description'].invalid"
+              [class.focus-within:shadow-[0_0_0_2px_rgba(235,68,90,0.15)]]="f['description'].touched && f['description'].invalid">
+              <ion-icon name="reader-outline" class="text-[1.2rem] text-[#64748b] mr-2.5 mt-0.5"></ion-icon>
               <ion-textarea formControlName="description"
-                placeholder="Detalles, peso o contenido del bolsón..."></ion-textarea>
+                placeholder="Detalles, peso o contenido del bolsón..." class="[--padding-start:0] text-[0.95rem] [--color:#0f172a] w-full"></ion-textarea>
             </div>
             @if (f['description'].touched && f['description'].invalid) {
             <ion-text color="danger">
               @if (f['description'].errors?.['maxlength']) {
-              <small>Máximo 200 caracteres.</small>
+              <small class="block mt-1 text-[0.8rem]">Máximo 200 caracteres.</small>
               }
             </ion-text>
             }
           </div>
 
-          <div class="row-inputs">
-            <div class="input-group flex-1">
-              <label>Precio Unitario</label>
-              <div class="custom-input" [class.invalid]="f['price'].touched && f['price'].invalid">
-                <ion-icon name="pricetag-outline"></ion-icon>
-                <ion-input type="number" formControlName="price" placeholder="0.00"></ion-input>
+          <div class="flex gap-4 mb-5">
+            <div class="flex-1">
+              <label class="block text-[0.85rem] font-semibold text-[#475569] mb-1.5">Precio Unitario</label>
+              <div class="flex items-center bg-white border-[1.5px] border-[#cbd5e1] rounded-[12px] px-3 h-12 transition-all duration-200 focus-within:border-[#006b4d] focus-within:shadow-[0_0_0_2px_rgba(0,107,77,0.15)]"
+                [class.border-[#eb445a]]="f['price'].touched && f['price'].invalid"
+                [class.focus-within:border-[#eb445a]]="f['price'].touched && f['price'].invalid"
+                [class.focus-within:shadow-[0_0_0_2px_rgba(235,68,90,0.15)]]="f['price'].touched && f['price'].invalid">
+                <ion-icon name="pricetag-outline" class="text-[1.2rem] text-[#64748b] mr-2.5"></ion-icon>
+                <ion-input type="number" formControlName="price" placeholder="0.00" class="[--padding-start:0] text-[0.95rem] [--color:#0f172a] w-full"></ion-input>
               </div>
               @if (f['price'].touched && f['price'].invalid) {
               <ion-text color="danger">
                 @if (f['price'].errors?.['required']) {
-                <small>El precio es obligatorio.</small>
+                <small class="block mt-1 text-[0.8rem]">El precio es obligatorio.</small>
                 }
                 @if (f['price'].errors?.['min']) {
-                <small>Debe ser mayor a 0.</small>
+                <small class="block mt-1 text-[0.8rem]">Debe ser mayor a 0.</small>
                 }
               </ion-text>
               }
             </div>
 
-            <div class="input-group flex-1">
-              <label>Unidades por Bulto</label>
-              <div class="custom-input" [class.invalid]="f['bulk_size'].touched && f['bulk_size'].invalid">
-                <ion-icon name="layers-outline"></ion-icon>
-                <ion-input type="number" formControlName="bulk_size" placeholder="10"></ion-input>
+            <div class="flex-1">
+              <label class="block text-[0.85rem] font-semibold text-[#475569] mb-1.5">Unidades por Bulto</label>
+              <div class="flex items-center bg-white border-[1.5px] border-[#cbd5e1] rounded-[12px] px-3 h-12 transition-all duration-200 focus-within:border-[#006b4d] focus-within:shadow-[0_0_0_2px_rgba(0,107,77,0.15)]"
+                [class.border-[#eb445a]]="f['bulk_size'].touched && f['bulk_size'].invalid"
+                [class.focus-within:border-[#eb445a]]="f['bulk_size'].touched && f['bulk_size'].invalid"
+                [class.focus-within:shadow-[0_0_0_2px_rgba(235,68,90,0.15)]]="f['bulk_size'].touched && f['bulk_size'].invalid">
+                <ion-icon name="layers-outline" class="text-[1.2rem] text-[#64748b] mr-2.5"></ion-icon>
+                <ion-input type="number" formControlName="bulk_size" placeholder="10" class="[--padding-start:0] text-[0.95rem] [--color:#0f172a] w-full"></ion-input>
               </div>
               @if (f['bulk_size'].touched && f['bulk_size'].invalid) {
               <ion-text color="danger">
                 @if (f['bulk_size'].errors?.['required']) {
-                <small>El bulto es obligatorio.</small>
+                <small class="block mt-1 text-[0.8rem]">El bulto es obligatorio.</small>
                 }
                 @if (f['bulk_size'].errors?.['min']) {
-                <small>Mínimo 1 unidad.</small>
+                <small class="block mt-1 text-[0.8rem]">Mínimo 1 unidad.</small>
                 }
               </ion-text>
               }
             </div>
           </div>
 
-          <div class="input-group">
-            <label>URL de Imagen (Opcional)</label>
-            <div class="custom-input" [class.invalid]="f['image_url'].touched && f['image_url'].invalid">
-              <ion-icon name="image-outline"></ion-icon>
-              <ion-input formControlName="image_url" placeholder="https://ejemplo.com/imagen.jpg"></ion-input>
+          <div class="mb-5">
+            <label class="block text-[0.85rem] font-semibold text-[#475569] mb-1.5">URL de Imagen (Opcional)</label>
+            <div class="flex items-center bg-white border-[1.5px] border-[#cbd5e1] rounded-[12px] px-3 h-12 transition-all duration-200 focus-within:border-[#006b4d] focus-within:shadow-[0_0_0_2px_rgba(0,107,77,0.15)]"
+              [class.border-[#eb445a]]="f['image_url'].touched && f['image_url'].invalid"
+              [class.focus-within:border-[#eb445a]]="f['image_url'].touched && f['image_url'].invalid"
+              [class.focus-within:shadow-[0_0_0_2px_rgba(235,68,90,0.15)]]="f['image_url'].touched && f['image_url'].invalid">
+              <ion-icon name="image-outline" class="text-[1.2rem] text-[#64748b] mr-2.5"></ion-icon>
+              <ion-input formControlName="image_url" placeholder="https://ejemplo.com/imagen.jpg" class="[--padding-start:0] text-[0.95rem] [--color:#0f172a] w-full"></ion-input>
             </div>
             @if (f['image_url'].touched && f['image_url'].invalid) {
             <ion-text color="danger">
               @if (f['image_url'].errors?.['pattern']) {
-              <small>Ingresá una URL de imagen válida.</small>
+              <small class="block mt-1 text-[0.8rem]">Ingresá una URL de imagen válida.</small>
               }
             </ion-text>
             }
           </div>
 
-          <div class="form-actions-row">
-            <ion-button type="button" fill="clear" color="medium" (click)="toggleForm(false)" class="cancel-btn"
+          <div class="flex justify-end items-center gap-3 mt-7">
+            <ion-button type="button" fill="clear" color="medium" (click)="toggleForm(false)" class="[--color:#64748b] font-semibold normal-case"
               [disabled]="isSaving">
               Cancelar
             </ion-button>
-            <ion-button type="submit" class="submit-button" [disabled]="isSaving">
+            <ion-button type="submit" class="[--background:#006b4d] [--color:white] [--border-radius:12px] h-12 font-bold normal-case m-0" [disabled]="isSaving">
               @if (!isSaving && !isEditing) {
               <ion-icon slot="start" name="add-outline"></ion-icon>
               }
@@ -191,8 +192,6 @@
           </div>
 
         </form>
-      </ion-card-content>
-    </ion-card>
     }
 
   </div>
@@ -218,42 +217,41 @@
 
       <ion-content class="ion-padding">
         @if (selectedProduct) {
-        <div class="modal-detail-container">
+        <div class="max-w-[500px] mx-auto min-h-full py-3 px-2 flex flex-col gap-4 max-[480px]:py-2 max-[480px]:px-1 max-[480px]:gap-3.5">
 
           <!-- Imagen a tamaño completo o fallback -->
-          <div class="detail-image-wrapper">
+          <div class="w-full max-h-[180px] aspect-video rounded-[20px] overflow-hidden bg-gradient-to-b from-[#f8fafc] to-[#eef4f7] border border-[#e2e8f0] shadow-[inset_0_2px_8px_rgba(0,0,0,0.04)] flex items-center justify-center p-2 max-[480px]:max-h-[140px] max-[480px]:p-1.5">
             @if (selectedProduct.image_url) {
-            <img [src]="selectedProduct.image_url" alt="Imagen del producto" class="detail-image" />
+            <img [src]="selectedProduct.image_url" alt="Imagen del producto" class="w-full h-full max-h-[180px] object-contain max-[480px]:max-h-[140px]" />
             }
             @if (!selectedProduct.image_url) {
-            <div class="detail-image-fallback">
-              <ion-icon name="cube-outline"></ion-icon>
+            <div class="flex items-center justify-center w-full h-full text-[#94a3b8]">
+              <ion-icon name="cube-outline" class="text-[4rem]"></ion-icon>
             </div>
             }
           </div>
 
           <!-- Ficha de Datos -->
-          <div class="detail-info-card">
-            <h2 class="detail-title">{{ formatProductName(selectedProduct.name) }}</h2>
+          <div class="bg-white rounded-[18px] p-[18px] border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] flex flex-col gap-4 max-[480px]:p-4">
+            <h2 class="m-0 text-[1.35rem] font-extrabold text-[#002d4b] leading-snug tracking-[-0.01em] max-[480px]:text-[1.2rem]">{{ formatProductName(selectedProduct.name) }}</h2>
 
-            <div class="contact-info-group">
-              <span class="contact-label">Precio</span>
-              <span class="contact-value">{{ formatPrice(selectedProduct.price) }}</span>
+            <div class="flex flex-col gap-1 mb-3">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.price) }}</span>
             </div>
 
-            <div class="contact-info-group">
-              <span class="contact-label">Tamaño del Bulto</span>
-              <span class="contact-value">{{ selectedProduct.bulk_size }} unidades</span>
+            <div class="flex flex-col gap-1 mb-3">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Tamaño del Bulto</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.bulk_size }} unidades</span>
             </div>
 
-            <div class="contact-info-group">
-              <span class="contact-label">Descripción</span>
-              <span class="contact-value">{{ selectedProduct.description || 'Este producto no cuenta con una descripción
-                detallada por el momento.' }}</span>
+            <div class="flex flex-col gap-1 mb-3">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Descripción</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el momento.' }}</span>
             </div>
           </div>
 
-          <ion-button expand="block" class="edit-details-btn" (click)="editProductFromDetail()">
+          <ion-button expand="block" class="[--background:#006b4d] [--color:white] [--border-radius:12px] mt-4 h-12 font-bold text-[0.95rem] normal-case shadow-[0_4px_10px_rgba(0,107,77,0.15)] mb-4" (click)="editProductFromDetail()">
             Editar Detalles
           </ion-button>
         </div>
@@ -261,4 +259,13 @@
       </ion-content>
     </ng-template>
   </ion-modal>
+
+  <!-- FAB flotante para agregar productos -->
+  @if (!showForm) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="ion-margin-bottom ion-margin-end">
+    <ion-fab-button (click)="toggleForm(true)" class="[--background:#006b4d] [--color:white]">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
 </ion-content>
