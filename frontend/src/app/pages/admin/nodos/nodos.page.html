@@ -1,95 +1,88 @@
-<app-header 
-  [title]="showForm ? (isEditing ? 'Editar Nodo' : 'Nuevo Nodo') : 'Gestión de Nodos'" 
-  [defaultHref]="!showForm ? '/admin/dashboard' : null"
-  [showCustomBack]="showForm"
-  (customBack)="toggleForm(false)">
+<app-header [title]="showForm ? (isEditing ? 'Editar Nodo' : 'Nuevo Nodo') : 'Gestión de Nodos'"
+  [defaultHref]="!showForm ? '/admin/dashboard' : null" [showCustomBack]="showForm" (customBack)="toggleForm(false)">
 </app-header>
 
-<ion-content [scrollY]="showForm">
-  <div class="max-w-[600px] mx-auto py-3 px-3">
-    
+<ion-content>
+  <div class="max-w-[600px] mx-auto py-3 px-2">
+
     <!-- VISTA 1: LISTADO DE NODOS (Se muestra por defecto) -->
     @if (!showForm) {
-      <div class="flex flex-col h-full overflow-hidden">
-        <div class="flex justify-between items-center mb-4 shrink-0">
-          <h3 class="m-0 text-[#002d4b] font-bold text-lg">Nodos Registrados</h3>
+    <div class="flex flex-col h-full overflow-hidden">
+
+      <!-- Mapa de Distribución de Nodos (Siempre visible arriba en el listado) -->
+      <div #listMapContainerRef id="list-map" class="map-container"
+        style="height: 250px; margin-bottom: 20px; flex-shrink: 0;"></div>
+
+      <div class="flex flex-col gap-1.5 pb-4">
+        @if (isLoading) {
+        <div class="flex justify-center py-10 text-gray-400">
+          <ion-spinner name="crescent"></ion-spinner>
         </div>
+        }
 
-        <!-- Mapa de Distribución de Nodos (Siempre visible arriba en el listado) -->
-        <div #listMapContainerRef id="list-map" class="map-container" style="height: 250px; margin-bottom: 20px; flex-shrink: 0;"></div>
-
-        <div class="flex flex-col gap-1.5 pb-4">
-          @if (isLoading) {
-            <div class="flex justify-center py-10 text-gray-400">
-              <ion-spinner name="crescent"></ion-spinner>
-            </div>
-          }
-
-          @if (!isLoading && nodos.length === 0) {
-            <div class="flex justify-center py-10 text-gray-400">
-              <p>No hay nodos registrados todavía.</p>
-            </div>
-          }
-
-          @for (nodo of nodos; track nodo.id) {
-            <ion-card 
-              class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200" 
-              button="true" 
-              (click)="openDetailModal(nodo)">
-              <ion-item lines="none" class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
-                <ion-icon name="business-outline" slot="start" color="primary"></ion-icon>
-                <ion-label class="m-0">
-                  <h2 class="m-0 mb-0.5 text-[1rem] font-bold text-[#002d4b]">{{ nodo.name }}</h2>
-                  <p class="m-0 text-[#666] text-[0.9rem]">{{ nodo.address }}</p>
-                  <small class="text-[#999] text-[0.8rem]">Responsable: {{ nodo.manager_name }}</small>
-                  @if (userLatitude !== null && userLongitude !== null && nodo.latitude && nodo.longitude) {
-                    <br>
-                    <ion-text color="medium">
-                      <small class="font-bold text-[#006b4d] text-[0.8rem]">
-                        A {{ getDistanceFormatted(nodo.latitude, nodo.longitude) }} de distancia
-                      </small>
-                    </ion-text>
-                  }
-                </ion-label>
-                @if (nodo.latitude && nodo.longitude) {
-                  <ion-button slot="end" fill="clear" color="primary" (click)="focusOnNode(nodo, $event)" class="[--padding-start:8px] [--padding-end:8px] m-0">
-                    <ion-icon name="locate-outline" slot="icon-only"></ion-icon>
-                  </ion-button>
-                }
-              </ion-item>
-            </ion-card>
-          }
+        @if (!isLoading && nodos.length === 0) {
+        <div class="flex justify-center py-10 text-gray-400">
+          <p>No hay nodos registrados todavía.</p>
         </div>
+        }
+
+        @for (nodo of nodos; track nodo.id) {
+        <ion-card
+          class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200"
+          button="true" (click)="openDetailModal(nodo)">
+          <ion-item lines="none"
+            class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
+            <div slot="start"
+              class="flex items-center justify-center w-12 h-12 rounded-[8px] bg-[#f1f5f9] text-[#002d4b] mr-2">
+              <ion-icon name="business-outline" class="text-[1.4rem]"></ion-icon>
+            </div>
+            <ion-label class="m-0">
+              <h2 class="m-0 mb-0.5 text-[1rem] font-bold text-[#002d4b]">{{ nodo.name }}</h2>
+              <p class="m-0 text-[#666] text-[0.9rem]">{{ nodo.address }}</p>
+              <small class="text-[#999] text-[0.8rem]">Responsable: {{ nodo.manager_name }}</small>
+              @if (userLatitude !== null && userLongitude !== null && nodo.latitude && nodo.longitude) {
+              <br>
+              <ion-text color="medium">
+                <small class="font-bold text-[#006b4d] text-[0.8rem]">
+                  A {{ getDistanceFormatted(nodo.latitude, nodo.longitude) }} de distancia
+                </small>
+              </ion-text>
+              }
+            </ion-label>
+            @if (nodo.latitude && nodo.longitude) {
+            <ion-button slot="end" fill="clear" (click)="focusOnNode(nodo, $event)"
+              class="[--color:#006b4d] [--color-activated:#004d38] [--color-hover:#00805c] [--color-focused:#00805c] [--padding-start:8px] [--padding-end:8px] m-0">
+              <ion-icon name="locate-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            }
+          </ion-item>
+        </ion-card>
+        }
       </div>
+    </div>
 
-      <!-- FAB flotante para agregar nodos -->
-      <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="ion-margin-bottom ion-margin-end">
-        <ion-fab-button (click)="toggleForm(true)" style="--background: #006b4d; --color: white;">
-          <ion-icon name="add-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
     }
 
     <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN REFACTORIZADO -->
     @if (showForm) {
-      <app-nodo-form
-        #nodoFormRef
-        [isSaving]="isSaving"
-        [isEditing]="isEditing"
-        [errorMessage]="errorMessage"
-        (submitForm)="onSubmitForm($event)"
-        (cancelForm)="toggleForm(false)">
-      </app-nodo-form>
+    <app-nodo-form #nodoFormRef [isSaving]="isSaving" [isEditing]="isEditing" [errorMessage]="errorMessage"
+      (submitForm)="onSubmitForm($event)" (cancelForm)="toggleForm(false)">
+    </app-nodo-form>
     }
 
   </div>
 
+  <!-- FAB flotante para agregar nodos -->
+  @if (!showForm) {
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="ion-margin-bottom ion-margin-end">
+    <ion-fab-button (click)="toggleForm(true)" style="--background: #006b4d; --color: white;">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
+
   <!-- Modal de Detalle del Nodo Refactorizado -->
-  <app-nodo-detail-modal 
-    [isOpen]="selectedNodo !== null" 
-    [nodo]="selectedNodo" 
-    (close)="closeDetailModal()"
-    (edit)="onEditNodo($event)"
-    (delete)="onDeleteNodo($event)">
+  <app-nodo-detail-modal [isOpen]="selectedNodo !== null" [nodo]="selectedNodo" (close)="closeDetailModal()"
+    (edit)="onEditNodo($event)" (delete)="onDeleteNodo($event)">
   </app-nodo-detail-modal>
 </ion-content>

@@ -1,11 +1,5 @@
 ion-content {
   --background: #f8f9fa;
-
-  &::part(scroll) {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
 }
 
 .admin-container {
