@@ -1,47 +1,47 @@
 <app-header title="Panel de Administración" [showLogout]="true" (logout)="logout()"></app-header>
 
-<ion-content class="ion-padding">
-  <div class="admin-dashboard-container">
+<ion-content class="[--background:#f8fafc] ion-padding">
+  <div class="max-w-[600px] mx-auto py-4 px-2">
     
     <!-- Banner de Bienvenida -->
-    <div class="welcome-banner">
-      <div class="welcome-text">
-        <h2>¡Hola, Administrador! 👋</h2>
+    <div class="bg-gradient-to-br from-[#002d4b] to-[#004b7c] rounded-[20px] p-6 text-white mb-6 shadow-[0_8px_24px_rgba(0,45,75,0.15)]">
+      <div class="mb-3">
+        <h2 class="m-0 text-2xl font-bold">¡Hola, Administrador! 👋</h2>
         @if (adminEmail) {
-          <p class="email-sub">{{ adminEmail }}</p>
+          <p class="m-0 mt-1 text-[0.90rem] text-[#93c5fd] font-medium">{{ adminEmail }}</p>
         }
       </div>
-      <p class="banner-desc">Gestioná los nodos de retiro y el catálogo de productos de la Red de compras soberanas.</p>
+      <p class="m-0 text-[0.95rem] leading-normal opacity-90">Gestioná los nodos de retiro y el catálogo de productos de la Red de compras soberanas.</p>
     </div>
 
     <!-- Contenedor de Tarjetas de Navegación -->
-    <div class="cards-grid">
-      <ion-card class="menu-card" routerLink="/admin/nodos" button="true">
-        <div class="card-layout">
-          <div class="icon-wrapper nodes-theme">
-            <ion-icon name="business-outline"></ion-icon>
+    <div class="flex flex-col gap-4">
+      <ion-card class="m-0 rounded-[16px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-250 hover:-translate-y-0.5 hover:border-[#006b4d] hover:shadow-[0_8px_20px_rgba(0,107,77,0.08)] group" routerLink="/admin/nodos" button="true">
+        <div class="flex items-center p-5 gap-4">
+          <div class="flex items-center justify-center w-14 h-14 rounded-[12px] transition-all duration-250 bg-[#edf2f7] text-[#4a5568] group-hover:bg-[#e6f7f2] group-hover:text-[#006b4d]">
+            <ion-icon name="business-outline" class="text-[1.8rem] transition-all duration-250"></ion-icon>
           </div>
-          <div class="card-info">
-            <h3>Gestión de Nodos</h3>
-            <p>Administrá los nodos de distribución, ver detalles y crear nuevos puntos de la red.</p>
+          <div class="flex-1">
+            <h3 class="m-0 mb-1.5 text-[1.15rem] font-bold text-[#002d4b]">Gestión de Nodos</h3>
+            <p class="m-0 text-[0.9rem] text-[#666666] leading-normal">Administrá los nodos de distribución, ver detalles y crear nuevos puntos de la red.</p>
           </div>
-          <div class="arrow-indicator">
-            <ion-icon name="chevron-forward-outline"></ion-icon>
+          <div class="flex items-center text-[#a0aec0] transition-all duration-250 group-hover:translate-x-1 group-hover:text-[#006b4d]">
+            <ion-icon name="chevron-forward-outline" class="text-[1.4rem]"></ion-icon>
           </div>
         </div>
       </ion-card>
 
-      <ion-card class="menu-card" routerLink="/admin/productos" button="true">
-        <div class="card-layout">
-          <div class="icon-wrapper products-theme">
-            <ion-icon name="cube-outline"></ion-icon>
+      <ion-card class="m-0 rounded-[16px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-250 hover:-translate-y-0.5 hover:border-[#006b4d] hover:shadow-[0_8px_20px_rgba(0,107,77,0.08)] group" routerLink="/admin/productos" button="true">
+        <div class="flex items-center p-5 gap-4">
+          <div class="flex items-center justify-center w-14 h-14 rounded-[12px] transition-all duration-250 bg-[#edf2f7] text-[#4a5568] group-hover:bg-[#e6f7f2] group-hover:text-[#006b4d]">
+            <ion-icon name="cube-outline" class="text-[1.8rem] transition-all duration-250"></ion-icon>
           </div>
-          <div class="card-info">
-            <h3>Gestión de Productos</h3>
-            <p>Visualizá el catálogo completo, creá nuevos productos y administrá existencias en el sistema.</p>
+          <div class="flex-1">
+            <h3 class="m-0 mb-1.5 text-[1.15rem] font-bold text-[#002d4b]">Gestión de Productos</h3>
+            <p class="m-0 text-[0.9rem] text-[#666666] leading-normal">Visualizá el catálogo completo, creá nuevos productos y administrá existencias en el sistema.</p>
           </div>
-          <div class="arrow-indicator">
-            <ion-icon name="chevron-forward-outline"></ion-icon>
+          <div class="flex items-center text-[#a0aec0] transition-all duration-250 group-hover:translate-x-1 group-hover:text-[#006b4d]">
+            <ion-icon name="chevron-forward-outline" class="text-[1.4rem]"></ion-icon>
           </div>
         </div>
       </ion-card>
