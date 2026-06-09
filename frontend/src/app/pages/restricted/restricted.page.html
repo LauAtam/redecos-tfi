@@ -1,9 +1,9 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="[--background:#ffffff] [--border-width:0] py-2">
     <ion-buttons slot="start">
       <ion-menu-button color="dark"></ion-menu-button>
     </ion-buttons>
-    <ion-title class="brand-title">Redecos</ion-title>
+    <ion-title class="text-[#006b4d] font-bold text-2xl text-center">Redecos</ion-title>
     <ion-buttons slot="end">
       <ion-button color="dark">
         <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
@@ -12,37 +12,37 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding ion-text-center">
-  <div class="restricted-container">
+<ion-content class="[--background:radial-gradient(circle_at_center,#ffffff_0%,#f9f9fb_100%)] ion-padding ion-text-center">
+  <div class="flex flex-col items-center justify-center h-full max-w-[400px] mx-auto">
     
     <!-- Icono de Bloqueo -->
-    <div class="lock-icon-wrapper">
-      <div class="icon-circle">
-        <ion-icon name="lock-closed" class="lock-icon"></ion-icon>
-        <div class="user-badge">
-          <ion-icon name="person-outline"></ion-icon>
+    <div class="mb-10">
+      <div class="relative w-[140px] h-[140px] bg-[rgba(190,30,45,0.05)] rounded-full flex items-center justify-center">
+        <ion-icon name="lock-closed" class="text-[80px] text-[#be1e2d]"></ion-icon>
+        <div class="absolute bottom-[15px] right-[15px] w-10 h-10 bg-[#be1e2d] border-[3px] border-white rounded-full flex items-center justify-center text-white">
+          <ion-icon name="person-outline" class="text-[20px]"></ion-icon>
         </div>
       </div>
     </div>
 
     <!-- Mensaje -->
-    <div class="message-section">
-      <h1 class="title">Acceso Restringido</h1>
-      <p class="subtitle">
+    <div class="mb-10">
+      <h1 class="text-3xl font-extrabold text-[#002d4b] mb-4">Acceso Restringido</h1>
+      <p class="text-[1.05rem] text-[#666666] leading-normal px-5">
         No tienes los permisos necesarios para ver esta página. 
         Esta sección es exclusiva para Administradores y Nodos.
       </p>
     </div>
 
     <!-- Botón Volver -->
-    <ion-button expand="block" routerLink="/home" class="catalog-button">
+    <ion-button expand="block" routerLink="/home" class="[--background:#006b4d] [--background-activated:#00523a] [--border-radius:16px] h-14 font-bold text-[1.1rem] normal-case w-full mb-6">
       <ion-icon slot="start" name="storefront-outline"></ion-icon>
       Volver al Catálogo
     </ion-button>
 
     <!-- Ayuda -->
-    <div class="help-link">
-      <ion-button fill="clear" color="medium" size="small">
+    <div>
+      <ion-button fill="clear" color="medium" size="small" class="font-semibold normal-case">
         <ion-icon slot="start" name="help-circle-outline"></ion-icon>
         ¿Necesitas ayuda con tu cuenta?
       </ion-button>
@@ -53,20 +53,20 @@
 
 <!-- Simulación de Tabs (según mockup) -->
 <ion-footer class="ion-no-border">
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="catalog" routerLink="/home">
-      <ion-icon name="storefront-outline"></ion-icon>
-      <ion-label>Catalog</ion-label>
+  <ion-tab-bar slot="bottom" class="[--background:#fdfdfe] [--border-color:#f0f0f0] h-20 rounded-t-[24px] shadow-[0_-4px_16px_rgba(0,0,0,0.03)] pb-[env(safe-area-inset-bottom)]">
+    <ion-tab-button tab="catalog" routerLink="/home" class="[--color:#a0a0a0] [--color-selected:#002d4b]">
+      <ion-icon name="storefront-outline" class="text-[24px] mb-1"></ion-icon>
+      <ion-label class="text-[12px] font-semibold">Catalog</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="groups">
-      <ion-icon name="people-outline"></ion-icon>
-      <ion-label>Groups</ion-label>
+    <ion-tab-button tab="groups" class="[--color:#a0a0a0] [--color-selected:#002d4b]">
+      <ion-icon name="people-outline" class="text-[24px] mb-1"></ion-icon>
+      <ion-label class="text-[12px] font-semibold">Groups</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="profile">
-      <ion-icon name="person-outline"></ion-icon>
-      <ion-label>Profile</ion-label>
+    <ion-tab-button tab="profile" class="[--color:#a0a0a0] [--color-selected:#002d4b]">
+      <ion-icon name="person-outline" class="text-[24px] mb-1"></ion-icon>
+      <ion-label class="text-[12px] font-semibold">Profile</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>
