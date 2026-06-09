@@ -6,15 +6,12 @@ import {
   Validators,
 } from '@angular/forms';
 import {
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
   IonInput,
   IonButton,
   IonIcon,
   IonText,
-  IonSpinner
+  IonSpinner,
+  IonCard
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -47,15 +44,12 @@ const customMarkerIcon = L.divIcon({
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
     IonInput,
     IonButton,
     IonIcon,
     IonText,
-    IonSpinner
+    IonSpinner,
+    IonCard
   ],
   templateUrl: './nodo-form.component.html',
   styleUrls: ['./nodo-form.component.scss']
@@ -65,6 +59,7 @@ export class NodoFormComponent implements OnInit, OnDestroy {
   @Input() isEditing = false;
   @Input() errorMessage: string | null = null;
   @Output() submitForm = new EventEmitter<Nodo>();
+  @Output() cancelForm = new EventEmitter<void>();
 
   nodoForm: FormGroup;
   map?: L.Map;
@@ -287,6 +282,10 @@ export class NodoFormComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error in reverse geocoding:', error);
     }
+  }
+
+  onCancel() {
+    this.cancelForm.emit();
   }
 
   onSubmit() {

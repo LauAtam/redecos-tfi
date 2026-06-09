@@ -1,85 +1,65 @@
-<ion-card class="form-card">
-  <ion-card-header>
-    <ion-card-title>{{ isEditing ? 'Modificar Datos del Nodo' : 'Nuevo Nodo de Retiro' }}</ion-card-title>
-  </ion-card-header>
+<ion-card class="m-0 p-5 md:p-6 rounded-[20px] bg-white border border-[#e8e8e8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] overflow-hidden">
+  <form [formGroup]="nodoForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col gap-4">
+    <!-- Contenedor del Mapa Principal con referencia ViewChild -->
+    <div #mapContainerRef id="map" class="map-container"></div>
 
-  <ion-card-content>
-    <form [formGroup]="nodoForm" (ngSubmit)="onSubmit()">
-      <!-- Contenedor del Mapa Principal con referencia ViewChild -->
-      <div #mapContainerRef id="map" class="map-container"></div>
+    <ion-input 
+      label="Nombre del Nodo" 
+      labelPlacement="stacked" 
+      fill="outline"
+      placeholder="Ej: Nodo Centro" 
+      formControlName="name"
+      [errorText]="f['name'].errors?.['required'] ? 'El nombre es obligatorio.' : (f['name'].errors?.['minlength'] ? 'Mínimo 3 caracteres.' : '')"
+      [class.ion-invalid]="f['name'].touched && f['name'].invalid" 
+      [class.ion-touched]="f['name'].touched">
+    </ion-input>
 
-      <div class="input-group">
-        <label>Nombre del Nodo</label>
-        <div class="custom-input" [class.invalid]="f['name'].touched && f['name'].invalid">
-          <ion-icon name="business-outline"></ion-icon>
-          <ion-input formControlName="name" placeholder="Ej: Nodo Centro"></ion-input>
-        </div>
-        @if (f['name'].touched && f['name'].invalid) {
-          <ion-text color="danger">
-            @if (f['name'].errors?.['required']) {
-              <small>El nombre es obligatorio.</small>
-            }
-            @if (f['name'].errors?.['minlength']) {
-              <small>Mínimo 3 caracteres.</small>
-            }
-          </ion-text>
+    <ion-input 
+      label="Dirección Física" 
+      labelPlacement="stacked" 
+      fill="outline"
+      placeholder="Ej: Av. Principal 123" 
+      formControlName="address"
+      [errorText]="f['address'].errors?.['required'] ? 'La dirección es obligatoria.' : (f['address'].errors?.['minlength'] ? 'Mínimo 5 caracteres.' : '')"
+      [class.ion-invalid]="f['address'].touched && f['address'].invalid" 
+      [class.ion-touched]="f['address'].touched">
+    </ion-input>
+
+    <ion-input 
+      label="Responsable del Nodo" 
+      labelPlacement="stacked" 
+      fill="outline"
+      placeholder="Nombre del encargado" 
+      formControlName="manager_name"
+      [errorText]="f['manager_name'].errors?.['required'] ? 'El responsable es obligatorio.' : (f['manager_name'].errors?.['minlength'] ? 'Mínimo 3 caracteres.' : '')"
+      [class.ion-invalid]="f['manager_name'].touched && f['manager_name'].invalid" 
+      [class.ion-touched]="f['manager_name'].touched">
+    </ion-input>
+
+    <div class="flex justify-end items-center gap-3 mt-4">
+      <ion-button fill="clear" color="medium" (click)="onCancel()" [disabled]="isSaving">
+        Cancelar
+      </ion-button>
+      <ion-button type="submit" [disabled]="isSaving" class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] h-12 font-bold normal-case m-0">
+        @if (!isSaving && !isEditing) {
+        <ion-icon slot="start" name="add-outline"></ion-icon>
         }
-      </div>
-
-      <div class="input-group">
-        <label>Dirección Física</label>
-        <div class="custom-input" [class.invalid]="f['address'].touched && f['address'].invalid">
-          <ion-icon name="location-outline"></ion-icon>
-          <ion-input formControlName="address" placeholder="Ej: Av. Principal 123"></ion-input>
-        </div>
-        @if (f['address'].touched && f['address'].invalid) {
-          <ion-text color="danger">
-            @if (f['address'].errors?.['required']) {
-              <small>La dirección es obligatoria.</small>
-            }
-            @if (f['address'].errors?.['minlength']) {
-              <small>Mínimo 5 caracteres.</small>
-            }
-          </ion-text>
+        @if (!isSaving && isEditing) {
+        <ion-icon slot="start" name="checkmark-outline"></ion-icon>
         }
-      </div>
-
-      <div class="input-group">
-        <label>Responsable del Nodo</label>
-        <div class="custom-input" [class.invalid]="f['manager_name'].touched && f['manager_name'].invalid">
-          <ion-icon name="person-outline"></ion-icon>
-          <ion-input formControlName="manager_name" placeholder="Nombre del encargado"></ion-input>
-        </div>
-        @if (f['manager_name'].touched && f['manager_name'].invalid) {
-          <ion-text color="danger">
-            @if (f['manager_name'].errors?.['required']) {
-              <small>El responsable es obligatorio.</small>
-            }
-          </ion-text>
-        }
-      </div>
-
-
-
-      <ion-button expand="block" type="submit" class="submit-button" [disabled]="isSaving">
         @if (!isSaving) {
-          @if (isEditing) {
-            <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-          } @else {
-            <ion-icon slot="start" name="add-outline"></ion-icon>
-          }
-          <span>{{ isEditing ? 'Guardar Cambios' : 'Crear Nodo' }}</span>
+        <span>{{ isEditing ? 'Guardar Cambios' : 'Crear Nodo' }}</span>
         }
         @if (isSaving) {
-          <ion-spinner name="crescent"></ion-spinner>
+        <ion-spinner name="crescent"></ion-spinner>
         }
       </ion-button>
+    </div>
 
-      @if (errorMessage) {
-        <ion-text color="danger" class="ion-text-center">
-          <p>{{ errorMessage }}</p>
-        </ion-text>
-      }
-    </form>
-  </ion-card-content>
+    @if (errorMessage) {
+      <ion-text color="danger" class="ion-text-center">
+        <p>{{ errorMessage }}</p>
+      </ion-text>
+    }
+  </form>
 </ion-card>
