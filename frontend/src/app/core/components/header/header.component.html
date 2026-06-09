@@ -1,18 +1,18 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
+  <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] [--border-width:0] font-bold relative">
+    <ion-buttons slot="start" class="relative z-10">
       @if (showCustomBack || defaultHref) {
-        <ion-button (click)="onBackClick()" aria-label="Volver atrás">
+        <ion-button (click)="onBackClick()" class="[--color:#002d4b]" aria-label="Volver atrás">
           <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
         </ion-button>
       }
     </ion-buttons>
 
-    <ion-title>{{ title }}</ion-title>
+    <ion-title class="text-[1.2rem] text-[#002d4b] font-bold absolute left-0 right-0 top-0 bottom-0 text-center flex items-center justify-center px-[54px] z-0 pointer-events-none">{{ title }}</ion-title>
 
     @if (showLogout) {
-      <ion-buttons slot="end">
-        <ion-button (click)="onLogout()" class="logout-button" aria-label="Cerrar sesión">
+      <ion-buttons slot="end" class="relative z-10">
+        <ion-button (click)="onLogout()" class="[--color:#dc2626]" aria-label="Cerrar sesión">
           <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
