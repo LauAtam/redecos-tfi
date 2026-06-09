@@ -17,29 +17,32 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding detail-modal-content">
-        <div class="modal-detail-container">
-          <div class="detail-info-card">
-            <div class="detail-copy-block">
-              <h3 class="detail-title">{{ nodo.name }}</h3>
-              
-              <div class="contact-info-group">
-                <span class="contact-label">Dirección</span>
-                <span class="contact-value">{{ nodo.address }}</span>
-              </div>
-              
-              <div class="contact-info-group">
-                <span class="contact-label">Encargado</span>
-                <span class="contact-value">{{ nodo.manager_name }}</span>
-              </div>
+        <div class="max-w-[500px] mx-auto min-h-full py-3 px-2 flex flex-col gap-4 max-[480px]:py-2 max-[480px]:px-1 max-[480px]:gap-3.5">
+          <div class="bg-white rounded-[18px] p-[18px] border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] flex flex-col gap-4 max-[480px]:p-4">
+            
+            <h2 class="m-0 text-[1.35rem] font-extrabold text-[#002d4b] leading-snug tracking-[-0.01em] max-[480px]:text-[1.2rem]">
+              {{ nodo.name }}
+            </h2>
+            
+            <div class="flex flex-col gap-1 mb-3">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Dirección</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ nodo.address }}</span>
             </div>
             
-            <div class="detail-description-section">
-              <h3>Ubicación</h3>
+            <div class="flex flex-col gap-1 mb-3">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Encargado</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ nodo.manager_name }}</span>
+            </div>
+            
+            <div class="flex flex-col gap-1 mb-3">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Ubicación</span>
               <div id="modalMap" class="modal-map-container"></div>
             </div>
           </div>
           
-          <ion-button expand="block" class="edit-details-btn" (click)="onEdit()">
+          <ion-button expand="block" 
+            class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] mt-4 h-12 font-bold text-[0.95rem] normal-case shadow-[0_4px_10px_rgba(0,107,77,0.15)] mb-4" 
+            (click)="onEdit()">
             Editar Detalles
           </ion-button>
         </div>
