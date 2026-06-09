@@ -61,65 +61,67 @@
 
     <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN (Implementado con Componentes de Formulario Nativos de Ionic) -->
     @if (showForm) {
-    <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="w-full px-3 py-2 flex flex-col gap-4">
+    <ion-card class="m-0 p-5 md:p-6 rounded-[20px] bg-white border border-[#e8e8e8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] overflow-hidden">
+      <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col gap-4">
 
-      <ion-input label="Nombre del Producto" labelPlacement="stacked" fill="outline"
-        placeholder="Ej: Bolsón de Verduras" formControlName="name"
-        [errorText]="f['name'].errors?.['required'] ? 'El nombre es obligatorio.' : (f['name'].errors?.['minlength'] ? 'Mínimo 3 caracteres.' : '')"
-        [class.ion-invalid]="f['name'].touched && f['name'].invalid" [class.ion-touched]="f['name'].touched">
-      </ion-input>
-
-      <ion-textarea label="Descripción (Opcional)" labelPlacement="stacked" fill="outline"
-        placeholder="Detalles, peso o contenido del bolsón..." formControlName="description"
-        [errorText]="f['description'].errors?.['maxlength'] ? 'Máximo 200 caracteres.' : ''"
-        [class.ion-invalid]="f['description'].touched && f['description'].invalid"
-        [class.ion-touched]="f['description'].touched" rows="3">
-      </ion-textarea>
-
-      <div class="flex gap-4">
-        <ion-input label="Precio Unitario" labelPlacement="stacked" fill="outline" placeholder="0.00" type="number"
-          formControlName="price"
-          [errorText]="f['price'].errors?.['required'] ? 'El precio es obligatorio.' : (f['price'].errors?.['min'] ? 'Debe ser mayor a 0.' : '')"
-          [class.ion-invalid]="f['price'].touched && f['price'].invalid" [class.ion-touched]="f['price'].touched"
-          class="flex-1">
+        <ion-input label="Nombre del Producto" labelPlacement="stacked" fill="outline"
+          placeholder="Ej: Bolsón de Verduras" formControlName="name"
+          [errorText]="f['name'].errors?.['required'] ? 'El nombre es obligatorio.' : (f['name'].errors?.['minlength'] ? 'Mínimo 3 caracteres.' : '')"
+          [class.ion-invalid]="f['name'].touched && f['name'].invalid" [class.ion-touched]="f['name'].touched">
         </ion-input>
 
-        <ion-input label="Unidades por Bulto" labelPlacement="stacked" fill="outline" placeholder="10" type="number"
-          formControlName="bulk_size"
-          [errorText]="f['bulk_size'].errors?.['required'] ? 'El bulto es obligatorio.' : (f['bulk_size'].errors?.['min'] ? 'Mínimo 1 unidad.' : '')"
-          [class.ion-invalid]="f['bulk_size'].touched && f['bulk_size'].invalid"
-          [class.ion-touched]="f['bulk_size'].touched" class="flex-1">
+        <ion-textarea label="Descripción (Opcional)" labelPlacement="stacked" fill="outline"
+          placeholder="Detalles, peso o contenido del bolsón..." formControlName="description"
+          [errorText]="f['description'].errors?.['maxlength'] ? 'Máximo 200 caracteres.' : ''"
+          [class.ion-invalid]="f['description'].touched && f['description'].invalid"
+          [class.ion-touched]="f['description'].touched" rows="3">
+        </ion-textarea>
+
+        <div class="flex gap-4">
+          <ion-input label="Precio Unitario" labelPlacement="stacked" fill="outline" placeholder="0.00" type="number"
+            formControlName="price"
+            [errorText]="f['price'].errors?.['required'] ? 'El precio es obligatorio.' : (f['price'].errors?.['min'] ? 'Debe ser mayor a 0.' : '')"
+            [class.ion-invalid]="f['price'].touched && f['price'].invalid" [class.ion-touched]="f['price'].touched"
+            class="flex-1">
+          </ion-input>
+
+          <ion-input label="Unidades por Bulto" labelPlacement="stacked" fill="outline" placeholder="10" type="number"
+            formControlName="bulk_size"
+            [errorText]="f['bulk_size'].errors?.['required'] ? 'El bulto es obligatorio.' : (f['bulk_size'].errors?.['min'] ? 'Mínimo 1 unidad.' : '')"
+            [class.ion-invalid]="f['bulk_size'].touched && f['bulk_size'].invalid"
+            [class.ion-touched]="f['bulk_size'].touched" class="flex-1">
+          </ion-input>
+        </div>
+
+        <ion-input label="URL de Imagen (Opcional)" labelPlacement="stacked" fill="outline"
+          placeholder="https://ejemplo.com/imagen.jpg" type="url" formControlName="image_url"
+          [errorText]="f['image_url'].errors?.['pattern'] ? 'Ingresá una URL de imagen válida.' : ''"
+          [class.ion-invalid]="f['image_url'].touched && f['image_url'].invalid"
+          [class.ion-touched]="f['image_url'].touched">
         </ion-input>
-      </div>
 
-      <ion-input label="URL de Imagen (Opcional)" labelPlacement="stacked" fill="outline"
-        placeholder="https://ejemplo.com/imagen.jpg" type="url" formControlName="image_url"
-        [errorText]="f['image_url'].errors?.['pattern'] ? 'Ingresá una URL de imagen válida.' : ''"
-        [class.ion-invalid]="f['image_url'].touched && f['image_url'].invalid"
-        [class.ion-touched]="f['image_url'].touched">
-      </ion-input>
+        <div class="flex justify-end items-center gap-3 mt-4">
+          <ion-button fill="clear" color="medium" (click)="toggleForm(false)" [disabled]="isSaving">
+            Cancelar
+          </ion-button>
+          <ion-button type="submit" [disabled]="isSaving" class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] h-12 font-bold normal-case m-0">
+            @if (!isSaving && !isEditing) {
+            <ion-icon slot="start" name="add-outline"></ion-icon>
+            }
+            @if (!isSaving && isEditing) {
+            <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+            }
+            @if (!isSaving) {
+            <span>{{ isEditing ? 'Guardar Cambios' : 'Agregar' }}</span>
+            }
+            @if (isSaving) {
+            <ion-spinner name="crescent"></ion-spinner>
+            }
+          </ion-button>
+        </div>
 
-      <div class="flex justify-end items-center gap-3 mt-4">
-        <ion-button fill="clear" color="medium" (click)="toggleForm(false)" [disabled]="isSaving">
-          Cancelar
-        </ion-button>
-        <ion-button type="submit" [disabled]="isSaving" class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] h-12 font-bold normal-case m-0">
-          @if (!isSaving && !isEditing) {
-          <ion-icon slot="start" name="add-outline"></ion-icon>
-          }
-          @if (!isSaving && isEditing) {
-          <ion-icon slot="start" name="checkmark-outline"></ion-icon>
-          }
-          @if (!isSaving) {
-          <span>{{ isEditing ? 'Guardar Cambios' : 'Agregar' }}</span>
-          }
-          @if (isSaving) {
-          <ion-spinner name="crescent"></ion-spinner>
-          }
-        </ion-button>
-      </div>
-
-    </form>
+      </form>
+    </ion-card>
     }
 
   </div>
