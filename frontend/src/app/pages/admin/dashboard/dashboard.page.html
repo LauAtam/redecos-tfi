@@ -15,35 +15,29 @@
     </div>
 
     <!-- Contenedor de Tarjetas de Navegación -->
-    <div class="flex flex-col gap-4">
-      <ion-card class="m-0 rounded-[16px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-250 hover:-translate-y-0.5 hover:border-[#006b4d] hover:shadow-[0_8px_20px_rgba(0,107,77,0.08)] group" routerLink="/admin/nodos" button="true">
-        <div class="flex items-center p-5 gap-4">
-          <div class="flex items-center justify-center w-14 h-14 rounded-[12px] transition-all duration-250 bg-[#edf2f7] text-[#4a5568] group-hover:bg-[#e6f7f2] group-hover:text-[#006b4d]">
-            <ion-icon name="business-outline" class="text-[1.8rem] transition-all duration-250"></ion-icon>
+    <div class="flex flex-col gap-1.5">
+      <ion-card class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200" routerLink="/admin/nodos" button="true">
+        <ion-item lines="none" class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
+          <div slot="start" class="flex items-center justify-center w-12 h-12 rounded-[8px] bg-[#f1f5f9] text-[#002d4b] mr-2">
+            <ion-icon name="business-outline" class="text-[1.4rem]"></ion-icon>
           </div>
-          <div class="flex-1">
-            <h3 class="m-0 mb-1.5 text-[1.15rem] font-bold text-[#002d4b]">Gestión de Nodos</h3>
-            <p class="m-0 text-[0.9rem] text-[#666666] leading-normal">Administrá los nodos de distribución, ver detalles y crear nuevos puntos de la red.</p>
-          </div>
-          <div class="flex items-center text-[#a0aec0] transition-all duration-250 group-hover:translate-x-1 group-hover:text-[#006b4d]">
-            <ion-icon name="chevron-forward-outline" class="text-[1.4rem]"></ion-icon>
-          </div>
-        </div>
+          <ion-label class="m-0">
+            <h2 class="m-0 text-[1rem] font-bold text-[#002d4b]">Gestión de Nodos</h2>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline" class="text-[1.2rem] text-[#a0aec0] mr-4"></ion-icon>
+        </ion-item>
       </ion-card>
 
-      <ion-card class="m-0 rounded-[16px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-250 hover:-translate-y-0.5 hover:border-[#006b4d] hover:shadow-[0_8px_20px_rgba(0,107,77,0.08)] group" routerLink="/admin/productos" button="true">
-        <div class="flex items-center p-5 gap-4">
-          <div class="flex items-center justify-center w-14 h-14 rounded-[12px] transition-all duration-250 bg-[#edf2f7] text-[#4a5568] group-hover:bg-[#e6f7f2] group-hover:text-[#006b4d]">
-            <ion-icon name="cube-outline" class="text-[1.8rem] transition-all duration-250"></ion-icon>
+      <ion-card class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200" routerLink="/admin/productos" button="true">
+        <ion-item lines="none" class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
+          <div slot="start" class="flex items-center justify-center w-12 h-12 rounded-[8px] bg-[#f1f5f9] text-[#002d4b] mr-2">
+            <ion-icon name="cube-outline" class="text-[1.4rem]"></ion-icon>
           </div>
-          <div class="flex-1">
-            <h3 class="m-0 mb-1.5 text-[1.15rem] font-bold text-[#002d4b]">Gestión de Productos</h3>
-            <p class="m-0 text-[0.9rem] text-[#666666] leading-normal">Visualizá el catálogo completo, creá nuevos productos y administrá existencias en el sistema.</p>
-          </div>
-          <div class="flex items-center text-[#a0aec0] transition-all duration-250 group-hover:translate-x-1 group-hover:text-[#006b4d]">
-            <ion-icon name="chevron-forward-outline" class="text-[1.4rem]"></ion-icon>
-          </div>
-        </div>
+          <ion-label class="m-0">
+            <h2 class="m-0 text-[1rem] font-bold text-[#002d4b]">Gestión de Productos</h2>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline" class="text-[1.2rem] text-[#a0aec0] mr-4"></ion-icon>
+        </ion-item>
       </ion-card>
     </div>
 

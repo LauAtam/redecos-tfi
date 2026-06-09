@@ -3,19 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import {
   IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonButton,
-  IonIcon,
   IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonGrid,
-  IonRow,
-  IonCol,
+  IonIcon,
+  IonItem,
+  IonLabel,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { businessOutline, cubeOutline, chevronForwardOutline } from 'ionicons/icons';
@@ -32,6 +23,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonContent,
     IonCard,
     IonIcon,
+    IonItem,
+    IonLabel,
     HeaderComponent
   ],
 })
