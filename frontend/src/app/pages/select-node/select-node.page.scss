@@ -1,0 +1,38 @@
+#select-node-map {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Ajustes para la consistencia con los mapas de Leaflet */
+.custom-leaflet-marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.user-location-marker {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+/* Evitar scroll global en ion-content */
+ion-content {
+  --background: #f8f9fa;
+  --overflow: hidden;
+}
+
+/* Ionic Segment Styling override para consistencia */
+ion-segment {
+  --background: #f1f5f9;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 2px;
+  --border-width: 0;
+
+  ion-segment-button {
+    --color: #475569;
+    --color-checked: #002d4b;
+    --indicator-color: #ffffff;
+    font-weight: 600;
+    --padding-top: 6px;
+    --padding-bottom: 6px;
+  }
+}

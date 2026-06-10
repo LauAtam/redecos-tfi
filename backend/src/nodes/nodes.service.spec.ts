@@ -1,20 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NodesService } from './nodes.service';
-import { SupabaseService } from '../supabase/supabase.service';
+import { NodesRepository } from './interfaces/nodes-repository.interface';
 import { NotFoundException } from '@nestjs/common';
 
 describe('NodesService', () => {
   let service: NodesService;
-  let supabaseService: SupabaseService;
+  let repository: NodesRepository;
 
-  const mockSupabaseClient = {
-    from: jest.fn().mockReturnThis(),
-    select: jest.fn().mockReturnThis(),
-    insert: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    delete: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockReturnThis(),
-    single: jest.fn().mockReturnThis(),
+  const mockNodesRepository = {
+    findAll: jest.fn(),
+    findOne: jest.fn(),
+    create: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -22,16 +20,16 @@ describe('NodesService', () => {
       providers: [
         NodesService,
         {
-          provide: SupabaseService,
-          useValue: {
-            getClient: jest.fn().mockReturnValue(mockSupabaseClient),
-          },
+          provide: NodesRepository,
+          useValue: mockNodesRepository,
         },
       ],
     }).compile();
 
     service = module.get<NodesService>(NodesService);
-    supabaseService = module.get<SupabaseService>(SupabaseService);
+    repository = module.get<NodesRepository>(NodesRepository);
+
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -41,20 +39,14 @@ describe('NodesService', () => {
   describe('findAll', () => {
     it('should return an array of nodes', async () => {
       const result = [{ id: '1', name: 'Node 1' }];
-      mockSupabaseClient.select.mockResolvedValueOnce({
-        data: result,
-        error: null,
-      });
+      mockNodesRepository.findAll.mockResolvedValueOnce(result);
 
       expect(await service.findAll()).toBe(result);
-      expect(mockSupabaseClient.from).toHaveBeenCalledWith('nodos');
+      expect(mockNodesRepository.findAll).toHaveBeenCalled();
     });
 
-    it('should throw error if supabase returns error', async () => {
-      mockSupabaseClient.select.mockResolvedValueOnce({
-        data: null,
-        error: new Error('DB Error'),
-      });
+    it('should throw error if repository returns error', async () => {
+      mockNodesRepository.findAll.mockRejectedValueOnce(new Error('DB Error'));
 
       await expect(service.findAll()).rejects.toThrow('DB Error');
     });
@@ -63,20 +55,14 @@ describe('NodesService', () => {
   describe('findOne', () => {
     it('should return a single node', async () => {
       const result = { id: '1', name: 'Node 1' };
-      mockSupabaseClient.single.mockResolvedValueOnce({
-        data: result,
-        error: null,
-      });
+      mockNodesRepository.findOne.mockResolvedValueOnce(result);
 
       expect(await service.findOne('1')).toBe(result);
-      expect(mockSupabaseClient.eq).toHaveBeenCalledWith('id', '1');
+      expect(mockNodesRepository.findOne).toHaveBeenCalledWith('1');
     });
 
     it('should throw NotFoundException if node not found', async () => {
-      mockSupabaseClient.single.mockResolvedValueOnce({
-        data: null,
-        error: new Error('Not Found'),
-      });
+      mockNodesRepository.findOne.mockRejectedValueOnce(new NotFoundException());
 
       await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
     });
@@ -86,13 +72,10 @@ describe('NodesService', () => {
     it('should create a new node', async () => {
       const dto = { name: 'New Node', address: 'Addr', manager_name: 'Mgr' };
       const result = { id: '1', ...dto };
-      mockSupabaseClient.single.mockResolvedValueOnce({
-        data: result,
-        error: null,
-      });
+      mockNodesRepository.create.mockResolvedValueOnce(result);
 
       expect(await service.create(dto)).toBe(result);
-      expect(mockSupabaseClient.insert).toHaveBeenCalledWith(dto);
+      expect(mockNodesRepository.create).toHaveBeenCalledWith(dto);
     });
   });
 });

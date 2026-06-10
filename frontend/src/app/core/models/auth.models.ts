@@ -5,6 +5,7 @@ export interface Profile {
   last_name: string;
   role: string;
   created_at?: string;
+  default_node_id?: string;
 }
 
 export interface AppError {
@@ -25,6 +26,7 @@ export interface Nodo {
   manager_name: string;
   latitude?: number;
   longitude?: number;
+  participants_count?: number;
   created_at?: string;
 }
 
@@ -34,6 +36,7 @@ export interface Producto {
   description?: string;
   price: number;
   bulk_size: number;
+  retail_price?: number;
   image_url?: string;
   created_at?: string;
 }

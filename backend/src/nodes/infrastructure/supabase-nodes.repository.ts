@@ -10,9 +10,31 @@ export class SupabaseNodesRepository implements NodesRepository {
 
   async findAll(): Promise<any[]> {
     const client = this.supabaseService.getAdminClient();
-    const { data, error } = await client.from('nodos').select('*');
-    if (error) throw error;
-    return data;
+    const { data: nodes, error: nodesError } = await client.from('nodos').select('*');
+    if (nodesError) throw nodesError;
+
+    // Obtener los conteos de default_node_id desde profiles
+    const { data: profiles, error: profilesError } = await client
+      .from('profiles')
+      .select('default_node_id');
+    
+    // Si hay un error obteniendo perfiles, retornamos los nodos sin recuento (o lanzamos error)
+    if (profilesError) {
+      console.warn('Error fetching profiles default_node_id counts:', profilesError);
+      return nodes.map(n => ({ ...n, participants_count: 0 }));
+    }
+
+    const counts = new Map<string, number>();
+    profiles.forEach(p => {
+      if (p.default_node_id) {
+        counts.set(p.default_node_id, (counts.get(p.default_node_id) || 0) + 1);
+      }
+    });
+
+    return nodes.map(node => ({
+      ...node,
+      participants_count: counts.get(node.id) || 0,
+    }));
   }
 
   async findOne(id: string): Promise<any> {

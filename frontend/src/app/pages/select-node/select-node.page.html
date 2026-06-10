@@ -1,0 +1,115 @@
+<app-header 
+  title="Punto de Retiro" 
+  [defaultHref]="canCancel ? '/home' : null" 
+  [showLogout]="!canCancel" 
+  (logout)="logout()">
+</app-header>
+
+<ion-content [fullscreen]="true" class="[--background:#f8f9fa]" scroll-y="false">
+  <div class="flex flex-col h-full w-full">
+    
+    <!-- Mapa Fijo -->
+    <div class="map-container relative h-[240px] w-full shrink-0 shadow-sm z-10">
+      <div id="select-node-map" #mapContainerRef class="h-full w-full"></div>
+    </div>
+
+    <!-- Filtro / Ordenamiento y Botón de Ayuda Fijo -->
+    <div class="bg-white p-3 border-b border-slate-100 shrink-0 flex flex-col gap-2 shadow-sm z-10">
+      <div class="flex justify-between items-center">
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Puntos de retiro</span>
+        <button (click)="showHelp()" class="text-[#006b4d] flex items-center gap-1 text-xs font-semibold hover:opacity-85 transition-opacity" aria-label="Ayuda">
+          <ion-icon name="help-circle-outline" class="text-base"></ion-icon>
+          <span>¿Qué es un punto de retiro?</span>
+        </button>
+      </div>
+
+      <ion-segment [(ngModel)]="sortBy" (ionChange)="onSortChange()" class="h-9">
+        <ion-segment-button value="proximity" class="min-h-0 py-1">
+          <ion-label class="text-xs">Más Cercano</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="popularity" class="min-h-0 py-1">
+          <ion-label class="text-xs">Más Popular</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- Listado de Nodos con Scroll propio -->
+    <div class="flex-1 overflow-y-auto p-3">
+      <!-- Spinner de carga -->
+      <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-10 text-slate-500 gap-2">
+        <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
+        <p class="text-sm">Cargando puntos de retiro...</p>
+      </div>
+
+      <!-- Errores -->
+      <div *ngIf="errorMessage" class="text-center p-4 bg-red-50 border border-red-100 rounded-xl my-2">
+        <ion-text color="danger">
+          <p class="text-sm font-medium mb-3">{{ errorMessage }}</p>
+        </ion-text>
+        <ion-button fill="outline" size="small" class="[--color:#dc2626] [--border-color:#fca5a5]" (click)="loadNodos()">Reintentar</ion-button>
+      </div>
+
+      <!-- Lista de Puntos de Retiro -->
+      <div *ngIf="!isLoading && !errorMessage">
+        <div *ngIf="nodos.length === 0" class="text-center py-10 text-slate-500 text-sm">
+          <p>No se encontraron puntos de retiro activos en este momento.</p>
+        </div>
+
+        <div *ngFor="let nodo of nodos" 
+             [class.border-[#006b4d]]="nodo.id === currentSelectedNodeId"
+             [class.bg-emerald-50]="nodo.id === currentSelectedNodeId"
+             class="bg-white rounded-xl p-3 mb-3 border border-slate-100 shadow-sm flex flex-col gap-2.5 transition-all">
+          
+          <!-- Encabezado de Tarjeta (click para enfocar en mapa) -->
+          <div class="flex justify-between items-start gap-2 cursor-pointer" (click)="focusOnNode(nodo)">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <h3 class="text-sm font-bold text-[#002d4b] leading-tight m-0 truncate">{{ nodo.name }}</h3>
+                <span *ngIf="nodo.id === currentSelectedNodeId" 
+                      class="bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0">
+                  Activo
+                </span>
+              </div>
+              <p class="text-[11px] text-slate-500 m-0 mt-1 flex items-center gap-0.5">
+                <ion-icon name="pin-outline" class="text-xs text-slate-400"></ion-icon>
+                <span class="truncate">{{ nodo.address }}</span>
+              </p>
+            </div>
+            
+            <!-- Distancia -->
+            <span *ngIf="userLatitude !== null && userLongitude !== null && nodo.latitude && nodo.longitude" 
+                  class="text-[10px] font-bold text-[#006b4d] shrink-0 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5 border border-emerald-100/50">
+              <ion-icon name="locate-outline" class="text-xs"></ion-icon>
+              {{ getDistanceFormatted(nodo.latitude, nodo.longitude) }}
+            </span>
+          </div>
+
+          <!-- Detalles Rápidos -->
+          <div class="flex justify-between items-center text-[11px] text-slate-600 border-t border-slate-50 pt-2 cursor-pointer" (click)="focusOnNode(nodo)">
+            <span class="truncate pr-2">
+              <strong class="text-slate-500">Responsable:</strong> {{ nodo.manager_name }}
+            </span>
+            <span class="shrink-0 flex items-center gap-0.5 text-slate-400">
+              <ion-icon name="people-outline" class="text-xs"></ion-icon>
+              {{ nodo.participants_count || 0 }} part.
+            </span>
+          </div>
+
+          <!-- Acción -->
+          <ion-button 
+            expand="block" 
+            size="small"
+            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-semibold text-xs h-8.5 m-0 mt-0.5"
+            [disabled]="isSaving || nodo.id === currentSelectedNodeId"
+            (click)="selectNode(nodo)">
+            <ion-spinner name="crescent" size="small" *ngIf="isSaving && nodo.id === savingNodeId"></ion-spinner>
+            <span *ngIf="!(isSaving && nodo.id === savingNodeId)">
+              {{ nodo.id === currentSelectedNodeId ? 'Seleccionado' : 'Seleccionar Punto de Retiro' }}
+            </span>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

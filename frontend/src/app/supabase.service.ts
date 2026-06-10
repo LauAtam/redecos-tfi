@@ -17,6 +17,8 @@ export class SupabaseService {
   private currentUserSignal = signal<Profile | null>(null);
   public currentUser = this.currentUserSignal.asReadonly();
   public userRole = computed(() => this.currentUser()?.role || null);
+  private authInitializedSubject = new BehaviorSubject<boolean>(false);
+  public authInitialized$ = this.authInitializedSubject.asObservable();
   public authInitialized = signal<boolean>(false);
 
   public getRoleFromToken(token: string): string {
@@ -39,6 +41,7 @@ export class SupabaseService {
       first_name: user.user_metadata?.['first_name'] || '',
       last_name: user.user_metadata?.['last_name'] || '',
       role: String(rawRole).toUpperCase(),
+      default_node_id: user.user_metadata?.['default_node_id'] || undefined,
     };
   }
 
@@ -58,14 +61,40 @@ export class SupabaseService {
     // Escuchamos los cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        const profile = this.mapUserToProfile(session.user, session.access_token);
-        this.currentUserSubject.next(profile);
-        this.currentUserSignal.set(profile);
+        // Marcamos como no inicializado mientras cargamos el perfil enriquecido de la base de datos
+        this.authInitialized.set(false);
+        this.authInitializedSubject.next(false);
+
+        const baseProfile = this.mapUserToProfile(session.user, session.access_token);
+        this.currentUserSubject.next(baseProfile);
+        this.currentUserSignal.set(baseProfile);
+
+        // Obtenemos el perfil completo en segundo plano para no bloquear onAuthStateChange
+        this.getUserProfile(session.user.id)
+          .then(({ user: dbProfile, error }) => {
+            if (dbProfile && !error) {
+              const enrichedProfile = {
+                ...baseProfile,
+                ...dbProfile,
+                role: baseProfile.role // Priorizar rol de token
+              };
+              this.currentUserSubject.next(enrichedProfile);
+              this.currentUserSignal.set(enrichedProfile);
+            }
+            this.authInitialized.set(true);
+            this.authInitializedSubject.next(true);
+          })
+          .catch((e) => {
+            console.error('Error fetching profile from DB:', e);
+            this.authInitialized.set(true);
+            this.authInitializedSubject.next(true);
+          });
       } else {
         this.currentUserSubject.next(null);
         this.currentUserSignal.set(null);
+        this.authInitialized.set(true);
+        this.authInitializedSubject.next(true);
       }
-      this.authInitialized.set(true);
     });
   }
 
@@ -228,6 +257,41 @@ export class SupabaseService {
         error: {
           code: 'auth/unexpected',
           message: 'Error al obtener el perfil de usuario.',
+          originalError: err,
+        },
+      };
+    }
+  }
+
+  async updateProfile(dto: { first_name?: string; last_name?: string; default_node_id?: string }): Promise<AuthResponse> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/profiles/me`, {
+        method: 'PATCH',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(dto),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { user: null, error: { code: 'api/error', message: errData.message || 'Error al actualizar el perfil.' } };
+      }
+
+      const updatedProfile = await response.json() as Profile;
+      
+      // Actualizamos cache/ BehaviorSubject y Signals en el servicio
+      this.currentUserSubject.next(updatedProfile);
+      this.currentUserSignal.set(updatedProfile);
+
+      return { user: updatedProfile, error: null };
+    } catch (err) {
+      return {
+        user: null,
+        error: {
+          code: 'api/unexpected',
+          message: 'Error de red al actualizar el perfil.',
           originalError: err,
         },
       };

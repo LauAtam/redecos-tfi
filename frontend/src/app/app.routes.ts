@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 import { guestGuard } from './core/guards/guest.guard';
+import { nodeGuard } from './core/guards/node.guard';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,14 @@ export const routes: Routes = [
   {
     path: 'home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    canActivate: [authGuard, nodeGuard],
+  },
+  {
+    path: 'pages/select-node',
+    loadComponent: () =>
+      import('./pages/select-node/select-node.page').then(
+        (m) => m.SelectNodePage,
+      ),
     canActivate: [authGuard],
   },
   {
