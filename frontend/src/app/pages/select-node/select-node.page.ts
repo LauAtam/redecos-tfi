@@ -351,7 +351,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
   async showHelp() {
     const alert = await this.alertController.create({
       header: '¿Qué es un Punto de Retiro?',
-      message: 'Un <strong>Punto de Retiro</strong> (o Nodo de distribución) es un espacio físico gestionado por la comunidad (vecinos, cooperativas, etc.) donde se reciben y entregan los productos de la red de consumo soberano.<br><br>Al elegir uno, tus compras se enviarán allí para que las retires en los días y horarios coordinados por ese nodo.',
+      message: 'Un Punto de Retiro (o Nodo de distribución) es un espacio físico gestionado por la comunidad (vecinos, cooperativas, etc.) donde se reciben y entregan los productos de la red de consumo soberano.\n\nAl elegir uno, tus compras se enviarán allí para que las retires en los días y horarios coordinados por ese nodo.',
       buttons: ['Entendido']
     });
     await alert.present();
