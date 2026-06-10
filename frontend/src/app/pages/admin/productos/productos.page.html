@@ -127,16 +127,21 @@
   </div>
 
   <!-- Modal de Detalles / Vista Previa -->
-  <ion-modal [isOpen]="isDetailModalOpen" (didDismiss)="closeProductDetail()" class="product-detail-modal">
+  <ion-modal 
+    [isOpen]="isDetailModalOpen" 
+    (didDismiss)="closeProductDetail()"
+    [initialBreakpoint]="0.85"
+    [breakpoints]="[0, 0.85, 1]"
+    [handle]="true">
     <ng-template>
       <ion-header class="ion-no-border">
-        <ion-toolbar>
+        <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
           <ion-buttons slot="start">
             <ion-button (click)="presentProductActionSheet()" title="Opciones">
               <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
-          <ion-title>Detalles del Producto</ion-title>
+          <ion-title class="text-[#002d4b]">Detalles del Producto</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="closeProductDetail()">
               <ion-icon slot="icon-only" name="close-outline"></ion-icon>

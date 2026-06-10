@@ -1,14 +1,20 @@
-<ion-modal [isOpen]="isOpen" (didDismiss)="onDidDismiss()" (didPresent)="onDidPresent()" class="product-detail-modal">
+<ion-modal 
+  [isOpen]="isOpen" 
+  (didDismiss)="onDidDismiss()" 
+  (didPresent)="onDidPresent()"
+  [initialBreakpoint]="0.85"
+  [breakpoints]="[0, 0.85, 1]"
+  [handle]="true">
   <ng-template>
     @if (nodo) {
       <ion-header class="ion-no-border">
-        <ion-toolbar>
+        <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
           <ion-buttons slot="start">
             <ion-button (click)="presentActionSheet()" title="Opciones">
               <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
-          <ion-title>Detalles del Nodo</ion-title>
+          <ion-title class="text-[#002d4b]">Detalles del Nodo</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="closeModal()">
               <ion-icon slot="icon-only" name="close-outline"></ion-icon>
@@ -16,7 +22,7 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding detail-modal-content">
+      <ion-content class="ion-padding">
         <div class="max-w-[500px] mx-auto min-h-full py-3 px-2 flex flex-col gap-4 max-[480px]:py-2 max-[480px]:px-1 max-[480px]:gap-3.5">
           <div class="bg-white rounded-[18px] p-[18px] border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] flex flex-col gap-4 max-[480px]:p-4">
             
