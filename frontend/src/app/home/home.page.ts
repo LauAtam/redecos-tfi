@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import {
@@ -6,7 +6,8 @@ import {
   IonButton,
   IonIcon,
   IonSpinner,
-  IonText
+  IonText,
+  IonFooter
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -15,7 +16,12 @@ import {
   storefrontOutline,
   peopleOutline,
   cartOutline,
-  swapHorizontalOutline
+  swapHorizontalOutline,
+  personOutline,
+  helpCircleOutline,
+  chevronForwardOutline,
+  cubeOutline,
+  businessOutline
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { SupabaseService } from '../supabase.service';
@@ -36,11 +42,13 @@ import { HeaderComponent } from '../core/components/header/header.component';
     IonButton,
     IonIcon,
     IonSpinner,
-    IonText
+    IonText,
+    IonFooter
   ],
   providers: [CurrencyPipe]
 })
 export class HomePage implements OnInit, OnDestroy {
+  currentTab = signal<'groups' | 'products' | 'config'>('products');
   activeNode: Nodo | null = null;
   products: Producto[] = [];
   isLoadingProducts = false;
@@ -60,7 +68,12 @@ export class HomePage implements OnInit, OnDestroy {
       storefrontOutline,
       peopleOutline,
       cartOutline,
-      swapHorizontalOutline
+      swapHorizontalOutline,
+      personOutline,
+      helpCircleOutline,
+      chevronForwardOutline,
+      cubeOutline,
+      businessOutline
     });
   }
 
@@ -82,6 +95,34 @@ export class HomePage implements OnInit, OnDestroy {
     if (this.userSub) {
       this.userSub.unsubscribe();
     }
+  }
+
+  setTab(tab: 'groups' | 'products' | 'config') {
+    this.currentTab.set(tab);
+  }
+
+  get activeGroups() {
+    return this.products.slice(0, 2).map((p, index) => {
+      const mockUnitsBought = [14, 9][index] || 5;
+      const unitsLeft = Math.max(1, p.bulk_size - mockUnitsBought);
+      return {
+        id: p.id,
+        product: p,
+        unitsBought: p.bulk_size - unitsLeft,
+        unitsLeft: unitsLeft,
+        progress: ((p.bulk_size - unitsLeft) / p.bulk_size) * 100
+      };
+    });
+  }
+
+  isGroupActive(productId?: string): boolean {
+    if (!productId) return false;
+    return this.activeGroups.some(g => g.id === productId);
+  }
+
+  getGroupForProduct(productId?: string) {
+    if (!productId) return null;
+    return this.activeGroups.find(g => g.id === productId) || null;
   }
 
   async loadActiveNode(nodeId: string) {
@@ -114,9 +155,12 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async joinGroupBuy(producto: Producto) {
+    const group = this.getGroupForProduct(producto.id);
+    const unitsLeftText = group ? `Faltan ${group.unitsLeft} unidades para cerrar el bulto.` : '';
+
     const alert = await this.alertController.create({
-      header: 'Unirse a Compra Colectiva',
-      message: `¿Querés sumarte a la compra colectiva de "${producto.name}"? Se agregará un bulto de ${producto.bulk_size} unidades a tu pedido.`,
+      header: 'Sumarse a Compra Colectiva',
+      message: `¿Querés sumarte a la compra colectiva de "${producto.name}"?\nCada unidad cuesta ${producto.price} mayorista. ${unitsLeftText}`,
       buttons: [
         {
           text: 'Cancelar',
@@ -125,7 +169,28 @@ export class HomePage implements OnInit, OnDestroy {
         {
           text: 'Sumarme',
           handler: () => {
-            this.toastService.showSuccess(`Te sumaste a la compra de "${producto.name}"!`);
+            this.toastService.showSuccess(`¡Te sumaste a la compra de "${producto.name}"!`);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async startGroupBuy(producto: Producto) {
+    const alert = await this.alertController.create({
+      header: 'Iniciar Grupo de Compra',
+      message: `¿Querés iniciar un nuevo bulto mayorista para "${producto.name}"?\nSe requiere juntar ${producto.bulk_size} unidades totales entre los miembros de tu Punto de Retiro para concretar la compra.`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Iniciar',
+          handler: () => {
+            this.toastService.showSuccess(`¡Iniciaste el grupo de compra para "${producto.name}"!`);
           }
         }
       ]
