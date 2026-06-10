@@ -22,7 +22,7 @@ export class ToastService {
       duration,
       position: 'bottom',
       icon: 'checkmark-circle-outline',
-      cssClass: 'custom-toast toast-success',
+      color: 'success',
       buttons: [
         {
           text: 'OK',
@@ -39,7 +39,7 @@ export class ToastService {
       duration,
       position: 'bottom',
       icon: 'alert-circle-outline',
-      cssClass: 'custom-toast toast-error',
+      color: 'danger',
       buttons: [
         {
           text: 'Cerrar',
@@ -56,7 +56,7 @@ export class ToastService {
       duration,
       position: 'bottom',
       icon: 'warning-outline',
-      cssClass: 'custom-toast toast-warning',
+      color: 'warning',
       buttons: [
         {
           text: 'Entendido',
