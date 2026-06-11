@@ -1,0 +1,139 @@
+<!-- Encabezado del Catálogo -->
+<div class="mb-4">
+  <h1 class="font-headline-md text-headline-md text-on-surface mb-4">Iniciar Grupo</h1>
+  <p class="text-xs text-slate-500 m-0 mt-0.5">Elegí un producto para sumarte o iniciar un grupo de compra colectiva.</p>
+</div>
+
+<!-- Barra de Búsqueda -->
+<div class="relative w-full mb-4">
+  <ion-icon name="search-outline" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></ion-icon>
+  <input 
+    type="text" 
+    (input)="onSearch($event)" 
+    [value]="searchQuery()" 
+    class="w-full h-12 pl-10 pr-4 bg-white border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" 
+    placeholder="Buscar productos..." />
+</div>
+
+<!-- Filtros por Categorías Horizontales -->
+<div class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 pb-2 -mx-4 px-4">
+  <button 
+    (click)="selectCategory('Todos')"
+    [class]="selectedCategory() === 'Todos' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
+    Todos
+  </button>
+  <button 
+    (click)="selectCategory('Almacén')"
+    [class]="selectedCategory() === 'Almacén' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
+    Almacén
+  </button>
+  <button 
+    (click)="selectCategory('Verduras')"
+    [class]="selectedCategory() === 'Verduras' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
+    Verduras
+  </button>
+  <button 
+    (click)="selectCategory('Lácteos')"
+    [class]="selectedCategory() === 'Lácteos' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
+    Lácteos
+  </button>
+</div>
+
+<!-- Spinner -->
+<div *ngIf="isLoadingProducts" class="flex flex-col items-center justify-center py-12 text-slate-500 gap-2">
+  <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
+</div>
+
+<!-- Errores -->
+<div *ngIf="errorMessage" class="text-center p-6 bg-red-50 border border-red-100 rounded-2xl my-3">
+  <ion-text color="danger">
+    <p class="text-sm font-medium mb-3">{{ errorMessage }}</p>
+  </ion-text>
+  <ion-button fill="outline" size="small" class="[--color:#dc2626] [--border-color:#fca5a5]" (click)="loadProducts()">Reintentar</ion-button>
+</div>
+
+<!-- Grilla de productos en 2 columnas -->
+<div *ngIf="!isLoadingProducts && !errorMessage">
+  <div *ngIf="filteredProducts.length === 0" class="text-center py-12 text-slate-500 text-sm bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
+    <p>No se encontraron productos en esta categoría o búsqueda.</p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3" *ngIf="filteredProducts.length > 0">
+    <div *ngFor="let product of filteredProducts" 
+         class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between hover:border-[#006b4d] hover:shadow-md transition-all">
+      
+      <!-- Imagen con badges de Stitch -->
+      <div class="relative w-full aspect-video bg-slate-50 border-b border-slate-100 overflow-hidden">
+        <img [src]="product.image_url || 'assets/placeholder-product.png'" 
+             [alt]="product.name" 
+             class="w-full h-full object-cover"
+             onerror="this.src='https://placehold.co/200x150?text=Prod'" />
+        
+        <!-- Badge de Grupo Activo en top-left -->
+        <div *ngIf="isGroupActive(product.id)" 
+             class="absolute top-2 left-2 bg-[#008767] text-white font-bold text-[9px] px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
+          <ion-icon name="people-outline" class="text-[10px]"></ion-icon>
+          Grupo Activo: Faltan {{ getGroupForProduct(product.id)?.unitsLeft }} u.
+        </div>
+        
+        <!-- Badge de Sin Grupo en top-left -->
+        <div *ngIf="!isGroupActive(product.id)" 
+             class="absolute top-2 left-2 bg-slate-200/90 text-slate-700 font-bold text-[9px] px-2 py-1 rounded-full shadow-sm border border-slate-300/30">
+          Sin grupo iniciado
+        </div>
+
+        <!-- Badge de ahorro en bottom-right -->
+        <span *ngIf="product.retail_price && calculateSavings(product.price, product.retail_price) > 0" 
+              class="absolute bottom-1.5 right-1.5 bg-[#002d4b] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+          -{{ calculateSavings(product.price, product.retail_price) }}%
+        </span>
+      </div>
+
+      <!-- Detalles del Producto -->
+      <div class="p-3 flex flex-col flex-1 gap-2 justify-between">
+        <div class="flex flex-col gap-1">
+          <h3 class="text-xs font-bold text-[#002d4b] leading-tight m-0 line-clamp-2 min-h-[2rem]">{{ product.name }}</h3>
+          
+          <div class="flex flex-col mt-0.5">
+            <span class="text-xs font-extrabold text-[#006b4d]">{{ product.price | currency:'ARS':'symbol-narrow':'1.2-2' }}</span>
+            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Bulto: {{ product.bulk_size }} u.</span>
+          </div>
+
+          <!-- Precio Minorista Comparativo -->
+          <div *ngIf="product.retail_price" class="text-[9px] text-slate-400">
+            Precio minorista: {{ product.retail_price | currency:'ARS':'symbol-narrow':'1.2-2' }} (Ahorro {{ calculateSavings(product.price, product.retail_price) }}%)
+          </div>
+
+          <p class="text-[10px] text-slate-500 m-0 leading-normal line-clamp-2 mt-1" *ngIf="product.description">
+            {{ product.description }}
+          </p>
+        </div>
+
+        <!-- Acciones -->
+        <div>
+          <!-- Si hay un grupo de compra activo, se suma al grupo existente -->
+          <ion-button 
+            *ngIf="isGroupActive(product.id)"
+            expand="block" 
+            size="small"
+            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-[10px] h-8 m-0 mt-2"
+            (click)="joinGroupBuy(product)">
+            <ion-icon name="cart-outline" slot="start" class="text-xs mr-0.5"></ion-icon>
+            Sumarme
+          </ion-button>
+
+          <!-- Si no hay grupo activo, inicia un nuevo grupo de compra -->
+          <ion-button 
+            *ngIf="!isGroupActive(product.id)"
+            expand="block" 
+            size="small"
+            class="[--background:#002d4b] [--background-hover:#001e33] [--color:#ffffff] font-bold text-[10px] h-8 m-0 mt-2"
+            (click)="startGroupBuy(product)">
+            <ion-icon name="people-outline" slot="start" class="text-xs mr-0.5"></ion-icon>
+            Iniciar Grupo
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

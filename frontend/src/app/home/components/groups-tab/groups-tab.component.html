@@ -1,0 +1,101 @@
+<!-- Título de la Sección -->
+<div class="mb-4">
+  <h2 class="text-base font-bold text-[#002d4b] m-0">Compras Activas</h2>
+  <p class="text-xs text-slate-500 m-0 mt-0.5">Sumate a las compras colectivas abiertas en tu nodo de distribución.</p>
+</div>
+
+<!-- Banner del Punto de Retiro Activo -->
+<div *ngIf="!isLoadingNode && activeNode" 
+     class="bg-gradient-to-r from-[#006b4d] to-[#004d37] rounded-2xl p-4 text-white shadow-sm mb-6 flex justify-between items-center gap-3">
+  <div class="min-w-0 flex-1">
+    <span class="text-[9px] text-emerald-200 font-bold uppercase tracking-wider block mb-0.5">Punto de Retiro</span>
+    <h3 class="m-0 text-sm font-bold truncate leading-tight">{{ activeNode.name }}</h3>
+    <p class="m-0 mt-1 text-xs text-emerald-100/80 truncate">{{ activeNode.address }}</p>
+  </div>
+  <ion-button 
+    fill="clear" 
+    size="small" 
+    routerLink="/pages/select-node" 
+    class="[--color:#ffffff] bg-white/10 rounded-lg hover:bg-white/20 transition-all shrink-0 m-0 text-xs font-semibold px-3 border border-white/20">
+    Cambiar Nodo
+  </ion-button>
+</div>
+
+<!-- Advertencia si no hay nodo seleccionado -->
+<div *ngIf="!isLoadingNode && !activeNode" 
+     class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-5 flex flex-col justify-between items-start gap-3">
+  <div class="flex-1">
+    <span class="text-xs font-bold text-red-700 block">¡Atención!</span>
+    <p class="m-0 mt-0.5 text-xs text-red-600">Debés seleccionar un punto de retiro para ver los grupos de compra.</p>
+  </div>
+  <ion-button 
+    fill="solid" 
+    size="small" 
+    routerLink="/pages/select-node"
+    class="[--background:#dc2626] [--background-hover:#b91c1c] [--color:#ffffff] font-bold text-xs h-8 m-0 rounded-lg w-full">
+    Seleccionar Punto de Retiro
+  </ion-button>
+</div>
+
+<!-- Spinner -->
+<div *ngIf="isLoadingProducts || isLoadingNode || isLoadingGroups" class="flex flex-col items-center justify-center py-12 text-slate-500 gap-2">
+  <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
+</div>
+
+<!-- Lista de Grupos Activos -->
+<div *ngIf="!isLoadingProducts && !isLoadingNode && !isLoadingGroups">
+  <div *ngIf="activeGroups.length === 0" class="text-center py-12 text-slate-500 text-sm bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
+    <p>No hay compras colectivas en curso en este momento.</p>
+  </div>
+
+  <div *ngIf="activeGroups.length > 0" class="flex flex-col gap-4">
+    <!-- Tarjetas de Grupos Activos -->
+    <div *ngFor="let group of activeGroups" 
+         class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:shadow-md transition-all">
+      
+      <!-- Banner/Imagen superior con badge de Stitch -->
+      <div class="h-32 bg-slate-50 relative overflow-hidden border-b border-slate-100">
+        <img [src]="group.product?.image_url || 'assets/placeholder-product.png'" 
+             [alt]="group.product?.name" 
+             class="w-full h-full object-cover opacity-80"
+             onerror="this.src='https://placehold.co/400x130?text=Grupo'" />
+        
+        <div class="absolute top-2 left-2 bg-[#008767] text-white font-bold text-[9px] px-2.5 py-1 rounded-full shadow-sm border border-emerald-500/10">
+          {{ getRemainingDaysText(group.createdAt) }}
+        </div>
+      </div>
+
+      <!-- Contenido y Progreso -->
+      <div class="p-4 flex flex-col gap-3">
+        <div class="flex justify-between items-start">
+          <h3 class="font-bold text-xs text-[#002d4b] leading-tight m-0 line-clamp-2" *ngIf="group.product">{{ group.product.name }}</h3>
+          <span class="font-extrabold text-sm text-[#006b4d] whitespace-nowrap ml-2" *ngIf="group.product">{{ group.product.price | currency:'ARS':'symbol-narrow':'1.2-2' }}</span>
+        </div>
+
+        <!-- Barra de progreso e info de bulto -->
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100/50 flex flex-col gap-2" *ngIf="group.product">
+          <p class="font-bold text-[10px] text-slate-600 m-0 uppercase tracking-wider">
+            Bulto de {{ group.product.bulk_size }} unidades
+          </p>
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-slate-600">Reunido: {{ group.unitsBought }} u.</span>
+            <span class="text-[#006b4d]">Faltan: {{ group.unitsLeft }} u.</span>
+          </div>
+          <!-- Barra de progreso -->
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div class="h-full bg-[#006b4d] transition-all" [style.width.%]="group.progress"></div>
+          </div>
+        </div>
+
+        <ion-button 
+          expand="block" 
+          size="small"
+          class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-9 m-0"
+          (click)="joinGroupBuy(group)">
+          <ion-icon name="cart-outline" slot="start" class="text-sm mr-1"></ion-icon>
+          Sumar Unidades
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</div>

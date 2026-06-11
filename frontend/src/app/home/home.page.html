@@ -1,5 +1,5 @@
 <app-header 
-  [title]="currentTab() === 'groups' ? 'Compras Activas' : (currentTab() === 'products' ? 'Iniciar Compra' : 'Mi Cuenta')" 
+  title="Redecos" 
   [showLogout]="currentTab() === 'config'" 
   (logout)="logout()">
 </app-header>
@@ -9,283 +9,32 @@
     
     <!-- PESTAÑA 1: GRUPOS DE COMPRA ACTIVOS -->
     <div *ngIf="currentTab() === 'groups'">
-      <!-- Banner del Punto de Retiro Activo -->
-      <div *ngIf="!isLoadingNode && activeNode" 
-           class="bg-[#002d4b] rounded-2xl p-4 text-white mb-5 shadow-sm flex justify-between items-center gap-3">
-        <div class="flex-1 min-w-0">
-          <span class="text-[10px] text-slate-300 font-bold uppercase tracking-wider block">Punto de retiro de distribución</span>
-          <h2 class="m-0 mt-0.5 text-base font-bold truncate">{{ activeNode.name }}</h2>
-          <p class="m-0 mt-1 text-xs text-slate-400 truncate opacity-90">{{ activeNode.address }}</p>
-        </div>
-        <ion-button 
-          fill="clear" 
-          size="small" 
-          routerLink="/pages/select-node" 
-          class="[--color:#ffffff] bg-white/10 rounded-lg hover:bg-white/20 transition-all shrink-0 m-0 w-10 h-10">
-          <ion-icon slot="icon-only" name="swap-horizontal-outline" class="text-lg"></ion-icon>
-        </ion-button>
-      </div>
-
-      <div *ngIf="!isLoadingNode && !activeNode" 
-           class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-5 flex flex-col justify-between items-start gap-3">
-        <div class="flex-1">
-          <span class="text-xs font-bold text-red-700 block">¡Atención!</span>
-          <p class="m-0 mt-0.5 text-xs text-red-600">Debés seleccionar un punto de retiro para ver los grupos de compra.</p>
-        </div>
-        <ion-button 
-          fill="solid" 
-          size="small" 
-          routerLink="/pages/select-node"
-          class="[--background:#dc2626] [--background-hover:#b91c1c] [--color:#ffffff] font-bold text-xs h-8 m-0 rounded-lg w-full">
-          Seleccionar Punto de Retiro
-        </ion-button>
-      </div>
-
-      <!-- Título de sección -->
-      <div class="mb-4">
-        <h2 class="text-base font-bold text-[#002d4b] m-0">Compras colectivas en curso</h2>
-        <p class="text-xs text-slate-500 m-0 mt-0.5">Sumate a las compras abiertas en tu nodo de distribución.</p>
-      </div>
-
-      <!-- Spinner o Lista de Grupos -->
-      <div *ngIf="isLoadingProducts || isLoadingNode" class="flex flex-col items-center justify-center py-12 text-slate-500 gap-2">
-        <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
-      </div>
-
-      <div *ngIf="!isLoadingProducts && !isLoadingNode">
-        <div *ngIf="products.length === 0" class="text-center py-12 text-slate-500 text-sm bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
-          <p>No hay compras colectivas en curso en este momento.</p>
-        </div>
-
-        <div *ngIf="products.length > 0">
-          <!-- Tarjetas de Grupos Activos (Mapeados dinámicamente) -->
-          <div *ngFor="let group of activeGroups" 
-               class="bg-white rounded-2xl border border-slate-100 p-4 mb-4 shadow-sm flex flex-col gap-3">
-            
-            <!-- Encabezado del Grupo -->
-            <div class="flex justify-between items-start gap-3">
-              <div class="flex-1 min-w-0">
-                <h3 class="text-sm font-bold text-[#002d4b] m-0 leading-tight">{{ group.product.name }}</h3>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">
-                  Bulto de {{ group.product.bulk_size }} unidades
-                </p>
-              </div>
-              <div class="text-right shrink-0">
-                <span class="text-sm font-extrabold text-[#006b4d] block">{{ group.product.price | currency:'ARS':'symbol-narrow':'1.2-2' }}</span>
-                <span class="text-[9px] text-slate-400 font-medium block">Precio unitario</span>
-              </div>
-            </div>
-
-            <!-- Barra de Progreso y Unidades Faltantes -->
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100/50 flex flex-col gap-2">
-              <div class="flex justify-between text-xs font-semibold">
-                <span class="text-slate-600">Reunido: {{ group.unitsBought }} u.</span>
-                <span class="text-[#006b4d]">Faltan: {{ group.unitsLeft }} u.</span>
-              </div>
-              <!-- Barra de progreso -->
-              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-                <div class="h-full bg-[#006b4d] transition-all" [style.width.%]="group.progress"></div>
-              </div>
-            </div>
-
-            <!-- Botón para Sumar Unidades -->
-            <ion-button 
-              expand="block" 
-              size="small"
-              class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-semibold text-xs h-9 m-0"
-              (click)="joinGroupBuy(group.product)">
-              <ion-icon name="cart-outline" slot="start" class="text-sm mr-1"></ion-icon>
-              Sumarme al Grupo
-            </ion-button>
-          </div>
-        </div>
-      </div>
+      <app-groups-tab 
+        [activeNode]="activeNode" 
+        [isLoadingNode]="isLoadingNode">
+      </app-groups-tab>
     </div>
 
     <!-- PESTAÑA 2: PRODUCTOS DISPONIBLES PARA CREAR GRUPOS -->
     <div *ngIf="currentTab() === 'products'">
-      <!-- Encabezado del Catálogo -->
-      <div class="mb-4">
-        <h2 class="text-base font-bold text-[#002d4b] m-0">Productos Disponibles</h2>
-        <p class="text-xs text-slate-500 m-0 mt-0.5">Elegí un producto para sumarte o iniciar un grupo de compra colectiva.</p>
-      </div>
-
-      <!-- Spinner -->
-      <div *ngIf="isLoadingProducts" class="flex flex-col items-center justify-center py-12 text-slate-500 gap-2">
-        <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
-      </div>
-
-      <!-- Errores -->
-      <div *ngIf="errorMessage" class="text-center p-6 bg-red-50 border border-red-100 rounded-2xl my-3">
-        <ion-text color="danger">
-          <p class="text-sm font-medium mb-3">{{ errorMessage }}</p>
-        </ion-text>
-        <ion-button fill="outline" size="small" class="[--color:#dc2626] [--border-color:#fca5a5]" (click)="loadProducts()">Reintentar</ion-button>
-      </div>
-
-      <!-- Grilla de productos en 2 columnas -->
-      <div *ngIf="!isLoadingProducts && !errorMessage">
-        <div *ngIf="products.length === 0" class="text-center py-12 text-slate-500 text-sm bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
-          <p>No hay productos disponibles en el catálogo en este momento.</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div *ngFor="let product of products" 
-               class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between hover:border-[#006b4d] hover:shadow-md transition-all">
-            
-            <!-- Imagen con badge de ahorro -->
-            <div class="relative w-full aspect-video bg-slate-50 border-b border-slate-100 overflow-hidden">
-              <img [src]="product.image_url || 'assets/placeholder-product.png'" 
-                   [alt]="product.name" 
-                   class="w-full h-full object-cover"
-                   onerror="this.src='https://placehold.co/200x150?text=Prod'" />
-              
-              <!-- Badge de ahorro -->
-              <span *ngIf="product.retail_price && calculateSavings(product.price, product.retail_price) > 0" 
-                    class="absolute top-1.5 right-1.5 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                -{{ calculateSavings(product.price, product.retail_price) }}%
-              </span>
-            </div>
-
-            <!-- Detalles del Producto -->
-            <div class="p-3 flex flex-col flex-1 gap-2 justify-between">
-              <div class="flex flex-col gap-1">
-                <h3 class="text-xs font-bold text-[#002d4b] leading-tight m-0 line-clamp-2 min-h-[2rem]">{{ product.name }}</h3>
-                
-                <div class="flex flex-col mt-0.5">
-                  <span class="text-xs font-extrabold text-[#006b4d]">{{ product.price | currency:'ARS':'symbol-narrow':'1.2-2' }}</span>
-                  <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Bulto: {{ product.bulk_size }} u.</span>
-                </div>
-
-                <!-- Estado del Grupo -->
-                <div class="mt-1">
-                  <span *ngIf="isGroupActive(product.id)" 
-                        class="inline-block bg-emerald-100 text-emerald-800 text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                    Grupo Activo: Faltan {{ getGroupForProduct(product.id)?.unitsLeft }} u.
-                  </span>
-                  <span *ngIf="!isGroupActive(product.id)" 
-                        class="inline-block bg-slate-100 text-slate-500 text-[8px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                    Sin grupo activo
-                  </span>
-                </div>
-
-                <p class="text-[10px] text-slate-500 m-0 leading-normal line-clamp-2 mt-1" *ngIf="product.description">
-                  {{ product.description }}
-                </p>
-              </div>
-
-              <!-- Acciones -->
-              <div>
-                <!-- Si hay un grupo de compra activo, se suma al grupo existente -->
-                <ion-button 
-                  *ngIf="isGroupActive(product.id)"
-                  expand="block" 
-                  size="small"
-                  class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-[10px] h-8 m-0 mt-2"
-                  (click)="joinGroupBuy(product)">
-                  <ion-icon name="cart-outline" slot="start" class="text-xs mr-0.5"></ion-icon>
-                  Sumarme
-                </ion-button>
-
-                <!-- Si no hay grupo activo, inicia un nuevo grupo de compra -->
-                <ion-button 
-                  *ngIf="!isGroupActive(product.id)"
-                  expand="block" 
-                  size="small"
-                  class="[--background:#002d4b] [--background-hover:#001e33] [--color:#ffffff] font-bold text-[10px] h-8 m-0 mt-2"
-                  (click)="startGroupBuy(product)">
-                  <ion-icon name="people-outline" slot="start" class="text-xs mr-0.5"></ion-icon>
-                  Iniciar Grupo
-                </ion-button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-catalog-tab [activeNode]="activeNode"></app-catalog-tab>
     </div>
 
     <!-- PESTAÑA 3: CONFIGURACIÓN / MI CUENTA -->
     <div *ngIf="currentTab() === 'config'">
-      <!-- Banner de Cuenta -->
-      <div class="bg-gradient-to-br from-[#002d4b] to-[#004b7c] rounded-2xl p-5 text-white mb-5 shadow-sm">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-xl font-bold shrink-0">
-            <ion-icon name="person-outline"></ion-icon>
-          </div>
-          <div>
-            <h2 class="m-0 text-base font-bold">Mi Perfil</h2>
-            <p class="m-0 text-xs text-blue-200 mt-0.5">Cliente de Redecos</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tarjeta del Punto de Retiro Activo -->
-      <div class="bg-white rounded-2xl border border-slate-100 p-4 mb-4 shadow-sm">
-        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-2">Mi punto de retiro preferido</span>
-        
-        <div *ngIf="activeNode" class="flex justify-between items-center gap-4">
-          <div class="flex-1 min-w-0">
-            <h3 class="m-0 text-sm font-bold text-[#002d4b] truncate">{{ activeNode.name }}</h3>
-            <p class="m-0 mt-0.5 text-xs text-slate-500 truncate">{{ activeNode.address }}</p>
-          </div>
-          <ion-button 
-            fill="solid" 
-            size="small" 
-            routerLink="/pages/select-node"
-            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-8 m-0 shrink-0">
-            Cambiar
-          </ion-button>
-        </div>
-
-        <div *ngIf="!activeNode" class="flex justify-between items-center gap-4">
-          <p class="m-0 text-xs text-red-600">No tenés seleccionado ningún nodo de retiro.</p>
-          <ion-button 
-            fill="solid" 
-            size="small" 
-            routerLink="/pages/select-node"
-            class="[--background:#dc2626] [--background-hover:#b91c1c] [--color:#ffffff] font-bold text-xs h-8 m-0 shrink-0">
-            Seleccionar
-          </ion-button>
-        </div>
-      </div>
-
-      <!-- Acciones de Cuenta -->
-      <div class="flex flex-col gap-2">
-        <ion-button 
-          expand="block" 
-          fill="outline"
-          class="[--color:#006b4d] [--border-color:#006b4d] font-semibold text-xs h-9 m-0"
-          routerLink="/pages/select-node">
-          <ion-icon name="swap-horizontal-outline" slot="start" class="mr-1"></ion-icon>
-          Cambiar Punto de Retiro
-        </ion-button>
-
-        <ion-button 
-          expand="block" 
-          fill="solid"
-          class="[--background:#dc2626] [--background-hover:#b91c1c] [--color:#ffffff] font-semibold text-xs h-9 m-0 mt-2"
-          (click)="logout()">
-          <ion-icon name="log-out-outline" slot="start" class="mr-1"></ion-icon>
-          Cerrar Sesión
-        </ion-button>
-      </div>
+      <app-account-tab 
+        [activeNode]="activeNode" 
+        [userEmail]="userEmail" 
+        [userName]="userName" 
+        (logout)="logout()">
+      </app-account-tab>
     </div>
-
   </div>
 </ion-content>
 
 <!-- Navegación Inferior (Footer Fijo) -->
 <ion-footer class="ion-no-border bg-white border-t border-slate-100 shrink-0">
   <div class="flex justify-around items-center py-2">
-    <!-- Pestaña: Grupos -->
-    <button (click)="setTab('groups')" 
-            [class.text-[#006b4d]]="currentTab() === 'groups'"
-            [class.text-slate-400]="currentTab() !== 'groups'"
-            class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
-      <ion-icon name="people-outline" class="text-lg"></ion-icon>
-      <span>Grupos</span>
-    </button>
-    
     <!-- Pestaña: Productos -->
     <button (click)="setTab('products')" 
             [class.text-[#006b4d]]="currentTab() === 'products'"
@@ -295,6 +44,15 @@
       <span>Productos</span>
     </button>
 
+    <!-- Pestaña: Grupos -->
+    <button (click)="setTab('groups')" 
+            [class.text-[#006b4d]]="currentTab() === 'groups'"
+            [class.text-slate-400]="currentTab() !== 'groups'"
+            class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
+      <ion-icon name="people-outline" class="text-lg"></ion-icon>
+      <span>Grupos</span>
+    </button>
+    
     <!-- Pestaña: Configuración -->
     <button (click)="setTab('config')" 
             [class.text-[#006b4d]]="currentTab() === 'config'"

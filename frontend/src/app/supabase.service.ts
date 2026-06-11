@@ -1,7 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { AuthResponse, Profile, AppError, Nodo, Producto } from './core/models/auth.models';
+import { AuthResponse, Profile, AppError, Nodo, Producto, BuyGroup, GroupOrder } from './core/models/auth.models';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Injectable({
@@ -524,6 +524,75 @@ export class SupabaseService {
       return { success: true, error: null };
     } catch (err) {
       return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar el producto.', originalError: err } };
+    }
+  }
+
+  // --- MÉTODOS PARA GRUPOS DE COMPRA ---
+
+  async getActiveBuyGroups(nodeId: string): Promise<{ data: BuyGroup[] | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/buy-groups/active?nodeId=${nodeId}`, {
+        method: 'GET',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener los grupos de compra activos.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as BuyGroup[], error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener grupos de compra.', originalError: err } };
+    }
+  }
+
+  async joinOrCreateBuyGroup(dto: { productId: string; quantity: number; nodeId: string }): Promise<{ data: GroupOrder | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/buy-groups/join`, {
+        method: 'POST',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(dto),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al unirse al grupo de compra.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as GroupOrder, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al unirse al grupo de compra.', originalError: err } };
+    }
+  }
+
+  async getMyOrders(): Promise<{ data: GroupOrder[] | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/buy-groups/my-orders`, {
+        method: 'GET',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener tus pedidos.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as GroupOrder[], error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener pedidos.', originalError: err } };
     }
   }
 }

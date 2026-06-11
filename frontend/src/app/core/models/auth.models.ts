@@ -40,3 +40,35 @@ export interface Producto {
   image_url?: string;
   created_at?: string;
 }
+
+export interface BuyGroup {
+  id: string;
+  productId: string;
+  nodeId: string;
+  status: 'OPEN' | 'COMPLETED' | 'CANCELLED';
+  targetSize: number;
+  createdAt: string;
+  closedAt?: string | null;
+  product?: Producto;
+  unitsBought: number;
+  unitsLeft: number;
+  progress: number;
+}
+
+export interface GroupOrder {
+  id: string;
+  group_id: string;
+  profile_id: string;
+  quantity: number;
+  unit_price: number;
+  status: 'CONFIRMED' | 'CANCELLED';
+  created_at: string;
+  group?: {
+    id: string;
+    status: string;
+    target_size: number;
+    product?: Producto;
+    node?: Nodo;
+  };
+}
+
