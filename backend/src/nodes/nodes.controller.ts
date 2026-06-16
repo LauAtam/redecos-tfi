@@ -13,7 +13,12 @@ import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
 import { RolesGuard } from '../supabase/roles.guard';
 import { Roles } from '../supabase/roles.decorator';
-import { ApiBearerAuth, ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiTags,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('nodes')
 @Controller('nodes')
@@ -40,7 +45,10 @@ export class NodesController {
   @UseGuards(RolesGuard)
   @Roles('ADMIN')
   @ApiOperation({ summary: 'Create a new withdrawal node (Admin only)' })
-  @ApiResponse({ status: 201, description: 'The node has been successfully created.' })
+  @ApiResponse({
+    status: 201,
+    description: 'The node has been successfully created.',
+  })
   create(@Body() createNodeDto: CreateNodeDto) {
     return this.nodesService.create(createNodeDto);
   }

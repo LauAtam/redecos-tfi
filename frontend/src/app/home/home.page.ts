@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import {
   IonContent,
   IonIcon,
@@ -53,12 +53,14 @@ export class HomePage implements OnInit, OnDestroy {
   userName = '';
   userEmail = '';
 
-  private userSub?: Subscription;
+  private supabaseService = inject(SupabaseService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {
+  private userSub?: Subscription;
+  private routeSub?: Subscription;
+
+  constructor() {
     addIcons({
       logOutOutline,
       storefrontOutline,
@@ -93,11 +95,21 @@ export class HomePage implements OnInit, OnDestroy {
         this.isLoadingNode = false;
       }
     });
+
+    this.routeSub = this.route.queryParams.subscribe(params => {
+      const tab = params['tab'];
+      if (tab === 'groups' || tab === 'products' || tab === 'config') {
+        this.currentTab.set(tab);
+      }
+    });
   }
 
   ngOnDestroy() {
     if (this.userSub) {
       this.userSub.unsubscribe();
+    }
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
     }
   }
 

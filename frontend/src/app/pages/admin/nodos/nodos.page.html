@@ -82,7 +82,7 @@
   }
 
   <!-- Modal de Detalle del Nodo Refactorizado -->
-  <app-nodo-detail-modal [isOpen]="selectedNodo !== null" [nodo]="selectedNodo" (close)="closeDetailModal()"
+  <app-nodo-detail-modal [isOpen]="selectedNodo !== null" [nodo]="selectedNodo" (closeDetail)="closeDetailModal()"
     (edit)="onEditNodo($event)" (delete)="onDeleteNodo($event)">
   </app-nodo-detail-modal>
 </ion-content>

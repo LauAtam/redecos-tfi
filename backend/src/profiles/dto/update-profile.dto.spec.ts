@@ -25,9 +25,11 @@ describe('UpdateProfileDto', () => {
 
     const errors = await validate(dto);
     expect(errors.length).toBeGreaterThan(0);
-    
-    const nodeError = errors.find(e => e.property === 'default_node_id');
+
+    const nodeError = errors.find((e) => e.property === 'default_node_id');
     expect(nodeError).toBeDefined();
-    expect(Object.values(nodeError!.constraints!)).toContain('El ID del nodo debe ser un UUID válido.');
+    expect(Object.values(nodeError!.constraints!)).toContain(
+      'El ID del nodo debe ser un UUID válido.',
+    );
   });
 });

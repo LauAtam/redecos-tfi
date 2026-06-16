@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router';
 import {
@@ -31,10 +31,10 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
 export class DashboardPage implements OnInit {
   adminEmail: string = '';
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router,
-  ) {
+  private supabaseService = inject(SupabaseService);
+  private router = inject(Router);
+
+  constructor() {
     addIcons({ businessOutline, cubeOutline, chevronForwardOutline });
   }
 

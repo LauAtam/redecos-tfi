@@ -23,7 +23,7 @@ export class RolesGuard implements CanActivate {
     if (!supabaseUrl) {
       throw new Error('SUPABASE_URL is missing in environment configuration');
     }
-    
+
     this.jwksClientInstance = jwksClient({
       jwksUri: `${supabaseUrl}/auth/v1/.well-known/jwks.json`,
       cache: true,
@@ -74,7 +74,9 @@ export class RolesGuard implements CanActivate {
       // Validación manual de expiración del token (Defensa en Profundidad)
       const currentTime = Math.floor(Date.now() / 1000);
       if (payload.exp && payload.exp <= currentTime) {
-        console.warn(`[RolesGuard] Intento de acceso con token vencido. Exp: ${payload.exp}, Actual: ${currentTime}`);
+        console.warn(
+          `[RolesGuard] Intento de acceso con token vencido. Exp: ${payload.exp}, Actual: ${currentTime}`,
+        );
         throw new UnauthorizedException('Token has expired');
       }
 
@@ -106,5 +108,3 @@ export class RolesGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
-
-

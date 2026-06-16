@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, inject } from '@angular/core';
 import {
   IonModal,
   IonHeader,
@@ -47,14 +47,16 @@ const customMarkerIcon = L.divIcon({
 export class NodoDetailModalComponent implements OnDestroy {
   @Input() isOpen = false;
   @Input() nodo: Nodo | null = null;
-  @Output() close = new EventEmitter<void>();
+  @Output() closeDetail = new EventEmitter<void>();
   @Output() edit = new EventEmitter<Nodo>();
   @Output() delete = new EventEmitter<Nodo>();
 
   modalMap?: L.Map;
   modalMarker?: L.Marker;
 
-  constructor(private actionSheetController: ActionSheetController) {
+  private actionSheetController = inject(ActionSheetController);
+
+  constructor() {
     addIcons({ closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline });
   }
 
@@ -101,7 +103,7 @@ export class NodoDetailModalComponent implements OnDestroy {
 
   onDidDismiss() {
     this.cleanupModalMap();
-    this.close.emit();
+    this.closeDetail.emit();
   }
 
   initModalMap() {
@@ -157,6 +159,6 @@ export class NodoDetailModalComponent implements OnDestroy {
   }
 
   closeModal() {
-    this.close.emit();
+    this.closeDetail.emit();
   }
 }

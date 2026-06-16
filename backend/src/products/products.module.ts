@@ -17,4 +17,3 @@ import { SupabaseProductsRepository } from './infrastructure/supabase-products.r
   ],
 })
 export class ProductsModule {}
-

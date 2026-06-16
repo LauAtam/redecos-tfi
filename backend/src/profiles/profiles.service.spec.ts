@@ -56,7 +56,10 @@ describe('ProfilesService', () => {
 
       // Mock first query (select id from nodos) -> returns the node
       mockSupabaseClient.single
-        .mockResolvedValueOnce({ data: { id: dto.default_node_id }, error: null }) // check node exists
+        .mockResolvedValueOnce({
+          data: { id: dto.default_node_id },
+          error: null,
+        }) // check node exists
         .mockResolvedValueOnce({ data: updatedProfile, error: null }); // update profiles
 
       const result = await service.updateProfile(userId, dto);
@@ -71,7 +74,10 @@ describe('ProfilesService', () => {
       };
 
       // Mock first query (select id from nodos) -> node not found
-      mockSupabaseClient.single.mockResolvedValueOnce({ data: null, error: { message: 'Not Found' } });
+      mockSupabaseClient.single.mockResolvedValueOnce({
+        data: null,
+        error: { message: 'Not Found' },
+      });
 
       await expect(service.updateProfile(userId, dto)).rejects.toThrow(
         new BadRequestException('El nodo de retiro no existe.'),
@@ -85,7 +91,10 @@ describe('ProfilesService', () => {
       };
       const updatedProfile = { id: userId, ...dto, default_node_id: null };
 
-      mockSupabaseClient.single.mockResolvedValueOnce({ data: updatedProfile, error: null });
+      mockSupabaseClient.single.mockResolvedValueOnce({
+        data: updatedProfile,
+        error: null,
+      });
 
       const result = await service.updateProfile(userId, dto);
       expect(result).toEqual(updatedProfile);
@@ -99,7 +108,10 @@ describe('ProfilesService', () => {
         first_name: 'Juan',
       };
 
-      mockSupabaseClient.single.mockResolvedValueOnce({ data: null, error: { message: 'Update error' } });
+      mockSupabaseClient.single.mockResolvedValueOnce({
+        data: null,
+        error: { message: 'Update error' },
+      });
 
       await expect(service.updateProfile(userId, dto)).rejects.toThrow(
         new BadRequestException('Update error'),

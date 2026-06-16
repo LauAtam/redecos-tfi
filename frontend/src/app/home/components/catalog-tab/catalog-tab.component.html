@@ -17,26 +17,21 @@
 
 <!-- Filtros por Categorías Horizontales -->
 <div class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 pb-2 -mx-4 px-4">
-  <button 
+  <ion-button 
     (click)="selectCategory('Todos')"
-    [class]="selectedCategory() === 'Todos' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
+    class="category-btn"
+    [class.active]="selectedCategory() === 'Todos'"
+    fill="clear">
     Todos
-  </button>
-  <button 
-    (click)="selectCategory('Almacén')"
-    [class]="selectedCategory() === 'Almacén' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
-    Almacén
-  </button>
-  <button 
-    (click)="selectCategory('Verduras')"
-    [class]="selectedCategory() === 'Verduras' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
-    Verduras
-  </button>
-  <button 
-    (click)="selectCategory('Lácteos')"
-    [class]="selectedCategory() === 'Lácteos' ? 'whitespace-nowrap px-4 py-1.5 bg-[#006b4d] text-white rounded-full text-xs font-bold shadow-sm border border-transparent' : 'whitespace-nowrap px-4 py-1.5 bg-slate-100 text-slate-600 border border-slate-200 rounded-full text-xs font-semibold hover:bg-slate-200 transition-colors'">
-    Lácteos
-  </button>
+  </ion-button>
+  <ion-button 
+    *ngFor="let cat of categories()"
+    (click)="selectCategory(cat.id)"
+    class="category-btn"
+    [class.active]="selectedCategory() === cat.id"
+    fill="clear">
+    {{ cat.name }}
+  </ion-button>
 </div>
 
 <!-- Spinner -->
@@ -60,12 +55,13 @@
 
   <div class="grid grid-cols-2 gap-3" *ngIf="filteredProducts.length > 0">
     <div *ngFor="let product of filteredProducts" 
-         class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between hover:border-[#006b4d] hover:shadow-md transition-all">
+         (click)="onProductClick(product)"
+         class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between hover:border-[#006b4d] hover:shadow-md transition-all cursor-pointer">
       
       <!-- Imagen con badges de Stitch -->
       <div class="relative w-full aspect-video bg-slate-50 border-b border-slate-100 overflow-hidden">
         <img [src]="product.image_url || 'assets/placeholder-product.png'" 
-             [alt]="product.name" 
+             [alt]="formatProductName(product.name)" 
              class="w-full h-full object-cover"
              onerror="this.src='https://placehold.co/200x150?text=Prod'" />
         
@@ -92,7 +88,7 @@
       <!-- Detalles del Producto -->
       <div class="p-3 flex flex-col flex-1 gap-2 justify-between">
         <div class="flex flex-col gap-1">
-          <h3 class="text-xs font-bold text-[#002d4b] leading-tight m-0 line-clamp-2 min-h-[2rem]">{{ product.name }}</h3>
+          <h3 class="text-xs font-bold text-[#002d4b] leading-tight m-0 line-clamp-2 min-h-[2rem]">{{ formatProductName(product.name) }}</h3>
           
           <div class="flex flex-col mt-0.5">
             <span class="text-xs font-extrabold text-[#006b4d]">{{ product.price | currency:'ARS':'symbol-narrow':'1.2-2' }}</span>
@@ -108,32 +104,146 @@
             {{ product.description }}
           </p>
         </div>
-
-        <!-- Acciones -->
-        <div>
-          <!-- Si hay un grupo de compra activo, se suma al grupo existente -->
-          <ion-button 
-            *ngIf="isGroupActive(product.id)"
-            expand="block" 
-            size="small"
-            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-[10px] h-8 m-0 mt-2"
-            (click)="joinGroupBuy(product)">
-            <ion-icon name="cart-outline" slot="start" class="text-xs mr-0.5"></ion-icon>
-            Sumarme
-          </ion-button>
-
-          <!-- Si no hay grupo activo, inicia un nuevo grupo de compra -->
-          <ion-button 
-            *ngIf="!isGroupActive(product.id)"
-            expand="block" 
-            size="small"
-            class="[--background:#002d4b] [--background-hover:#001e33] [--color:#ffffff] font-bold text-[10px] h-8 m-0 mt-2"
-            (click)="startGroupBuy(product)">
-            <ion-icon name="people-outline" slot="start" class="text-xs mr-0.5"></ion-icon>
-            Iniciar Grupo
-          </ion-button>
-        </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Modal de Compra Colectiva Detallada -->
+<ion-modal 
+  [isOpen]="isModalOpen()" 
+  (didDismiss)="closeDetailModal()"
+  [initialBreakpoint]="0.85"
+  [breakpoints]="[0, 0.85, 1]"
+  [handle]="true">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
+        <ion-title class="text-[#002d4b]">Detalle de Compra</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeDetailModal()">
+            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding" *ngIf="selectedProduct()">
+      <div class="max-w-[480px] mx-auto flex flex-col gap-4 pb-6">
+        
+        <!-- Ficha de Producto -->
+        <div class="flex gap-3 items-center">
+          <div class="w-24 h-24 bg-slate-50 rounded-2xl flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100">
+            <img [src]="selectedProduct()?.image_url || 'assets/placeholder-product.png'" 
+                 [alt]="selectedProduct()?.name || 'Producto'" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='https://placehold.co/150x150?text=Prod'" />
+          </div>
+          <div class="min-w-0 flex-1">
+            <h2 class="m-0 text-sm font-extrabold text-[#002d4b] leading-tight line-clamp-2">
+              {{ formatProductName(selectedProduct()?.name) }}
+            </h2>
+            <div class="flex items-baseline gap-2 mt-1">
+              <span class="text-sm font-black text-[#006b4d]">
+                {{ selectedProduct()?.price | currency:'ARS':'symbol-narrow':'1.2-2' }}
+              </span>
+              <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                Bulto: {{ selectedProduct()?.bulk_size }} u.
+              </span>
+            </div>
+            <p class="m-0 mt-1.5 text-[10px] text-slate-500 line-clamp-2 leading-relaxed" *ngIf="selectedProduct()?.description">
+              {{ selectedProduct()?.description }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Estado de la Compra Colectiva en este Nodo -->
+        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+          <h4 class="m-0 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Estado en tu Punto de Retiro</h4>
+          
+          <div class="flex flex-col" *ngIf="activeGroup(); else noActiveGroup">
+            <div class="flex justify-between items-center text-xs font-bold text-[#002d4b] mb-1.5">
+              <span>Grupo de compra iniciado</span>
+              <span class="text-[#006b4d]">{{ activeGroup()?.unitsBought }}/{{ selectedProduct()?.bulk_size }} u.</span>
+            </div>
+            
+            <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mb-2">
+              <div class="h-full bg-[#006b4d] transition-all" [style.width.%]="activeGroup()?.progress"></div>
+            </div>
+
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-500">Faltan {{ activeGroup()?.unitsLeft }} unidades para cerrar</span>
+              <span class="px-2 py-0.5 rounded font-bold text-red-600 bg-red-50" *ngIf="getRemainingDaysText(activeGroup()!.createdAt) === 'Cierra mañana' || getRemainingDaysText(activeGroup()!.createdAt) === 'Cierra pronto'">
+                {{ getRemainingDaysText(activeGroup()!.createdAt) }}
+              </span>
+              <span class="px-2 py-0.5 rounded font-bold text-[#006b4d] bg-emerald-50" *ngIf="getRemainingDaysText(activeGroup()!.createdAt) !== 'Cierra mañana' && getRemainingDaysText(activeGroup()!.createdAt) !== 'Cierra pronto'">
+                {{ getRemainingDaysText(activeGroup()!.createdAt) }}
+              </span>
+            </div>
+          </div>
+          
+          <ng-template #noActiveGroup>
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 text-xs font-bold text-[#002d4b]">
+                <ion-icon name="people-outline" class="text-base text-[#002d4b]"></ion-icon>
+                <span>Sin grupo activo en tu punto de retiro</span>
+              </div>
+              <p class="m-0 text-[10px] text-slate-500">
+                Serás el primero en comprar este producto. Al confirmar, iniciarás un nuevo grupo de compra colectiva en tu nodo.
+              </p>
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Selector de Cantidad (Stepper) -->
+        <div class="flex items-center justify-between bg-slate-50 rounded-2xl p-4 border border-slate-100">
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-[#002d4b]">Cantidad a comprar</span>
+            <span class="text-[9px] text-slate-400 mt-0.5" *ngIf="activeGroup()">
+              Máximo disponible: {{ maxQuantity() }} u.
+            </span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <button 
+              type="button" 
+              (click)="decrementQuantity()" 
+              [disabled]="buyQuantity() <= 1 || isProcessingPayment()"
+              class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-slate-600 active:bg-slate-100 disabled:opacity-50 transition-colors">
+              -
+            </button>
+            <span class="text-sm font-extrabold text-[#002d4b] min-w-[24px] text-center">
+              {{ buyQuantity() }}
+            </span>
+            <button 
+              type="button" 
+              (click)="incrementQuantity()" 
+              [disabled]="buyQuantity() >= maxQuantity() || isProcessingPayment()"
+              class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-slate-600 active:bg-slate-100 disabled:opacity-50 transition-colors">
+              +
+            </button>
+          </div>
+        </div>
+
+        <!-- Subtotal -->
+        <div class="flex justify-between items-center px-1 py-1.5" *ngIf="selectedProduct()">
+          <span class="text-xs font-bold text-slate-500">Subtotal de tu compra:</span>
+          <span class="text-lg font-black text-[#006b4d]">
+            {{ ((selectedProduct()?.price || 0) * buyQuantity()) | currency:'ARS':'symbol-narrow':'1.2-2' }}
+          </span>
+        </div>
+
+        <!-- Botón de Acción -->
+        <ion-button 
+          expand="block" 
+          [disabled]="isProcessingPayment()"
+          class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl"
+          (click)="confirmAndPay()">
+          <span *ngIf="!isProcessingPayment()">Confirmar y Pagar</span>
+          <ion-spinner name="crescent" *ngIf="isProcessingPayment()"></ion-spinner>
+        </ion-button>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

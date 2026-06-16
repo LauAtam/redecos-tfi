@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -46,17 +46,17 @@ import { SupabaseService } from '../../supabase.service';
     IonSpinner
   ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   loginForm: FormGroup;
   showPassword = false;
   isLoading = false;
   errorMessage: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private supabaseService: SupabaseService,
-    private router: Router,
-  ) {
+  private fb = inject(FormBuilder);
+  private supabaseService = inject(SupabaseService);
+  private router = inject(Router);
+
+  constructor() {
     addIcons({
       mailOutline,
       lockClosedOutline,
@@ -69,8 +69,6 @@ export class LoginPage implements OnInit {
       password: ['', [Validators.required]],
     });
   }
-
-  ngOnInit() {}
 
   togglePassword() {
     this.showPassword = !this.showPassword;

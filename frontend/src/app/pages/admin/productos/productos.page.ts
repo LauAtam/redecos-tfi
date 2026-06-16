@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -86,13 +86,13 @@ export class ProductosPage implements OnInit {
   errorMessage: string | null = null;
   productos: Producto[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private supabaseService: SupabaseService,
-    private toastService: ToastService,
-    private alertController: AlertController,
-    private actionSheetController: ActionSheetController,
-  ) {
+  private fb = inject(FormBuilder);
+  private supabaseService = inject(SupabaseService);
+  private toastService = inject(ToastService);
+  private alertController = inject(AlertController);
+  private actionSheetController = inject(ActionSheetController);
+
+  constructor() {
     addIcons({
       cubeOutline,
       pricetagOutline,

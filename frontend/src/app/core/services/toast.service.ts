@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ToastController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { checkmarkCircleOutline, alertCircleOutline, warningOutline } from 'ionicons/icons';
@@ -7,7 +7,9 @@ import { checkmarkCircleOutline, alertCircleOutline, warningOutline } from 'ioni
   providedIn: 'root',
 })
 export class ToastService {
-  constructor(private toastController: ToastController) {
+  private toastController = inject(ToastController);
+
+  constructor() {
     // Registramos los iconos que vamos a usar en los toasts
     addIcons({
       checkmarkCircleOutline,

@@ -5,7 +5,6 @@ import { NotFoundException } from '@nestjs/common';
 
 describe('ProductsService', () => {
   let service: ProductsService;
-  let repository: ProductsRepository;
 
   const mockProductsRepository = {
     findAll: jest.fn(),
@@ -13,6 +12,7 @@ describe('ProductsService', () => {
     create: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
+    findCategories: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -27,7 +27,6 @@ describe('ProductsService', () => {
     }).compile();
 
     service = module.get<ProductsService>(ProductsService);
-    repository = module.get<ProductsRepository>(ProductsRepository);
 
     jest.clearAllMocks();
   });
@@ -44,6 +43,20 @@ describe('ProductsService', () => {
       expect(await service.findAll()).toBe(result);
       expect(mockProductsRepository.findAll).toHaveBeenCalled();
     });
+
+    it('should call repository with filters', async () => {
+      const result = [{ id: '1', name: 'Product 1' }];
+      const filters = {
+        search: 'test',
+        categoryId: 'cat-1',
+        page: 1,
+        limit: 10,
+      };
+      mockProductsRepository.findAll.mockResolvedValueOnce(result);
+
+      expect(await service.findAll(filters)).toBe(result);
+      expect(mockProductsRepository.findAll).toHaveBeenCalledWith(filters);
+    });
   });
 
   describe('findOne', () => {
@@ -56,7 +69,9 @@ describe('ProductsService', () => {
     });
 
     it('should throw NotFoundException if product not found', async () => {
-      mockProductsRepository.findOne.mockRejectedValueOnce(new NotFoundException());
+      mockProductsRepository.findOne.mockRejectedValueOnce(
+        new NotFoundException(),
+      );
 
       await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
     });
@@ -70,6 +85,16 @@ describe('ProductsService', () => {
 
       expect(await service.create(dto)).toBe(result);
       expect(mockProductsRepository.create).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('findCategories', () => {
+    it('should return categories', async () => {
+      const result = [{ id: 'cat-1', name: 'Category 1' }];
+      mockProductsRepository.findCategories.mockResolvedValueOnce(result);
+
+      expect(await service.findCategories()).toBe(result);
+      expect(mockProductsRepository.findCategories).toHaveBeenCalled();
     });
   });
 });

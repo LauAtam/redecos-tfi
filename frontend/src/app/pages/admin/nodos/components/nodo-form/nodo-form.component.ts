@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, Output, EventEmitter, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -65,6 +65,8 @@ export class NodoFormComponent implements OnInit, OnDestroy {
   map?: L.Map;
   marker?: L.Marker;
 
+  private fb = inject(FormBuilder);
+
   private addressSubscription?: Subscription;
   private latSubscription?: Subscription;
   private lngSubscription?: Subscription;
@@ -81,7 +83,7 @@ export class NodoFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     addIcons({
       locationOutline,
       personOutline,

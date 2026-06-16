@@ -62,7 +62,9 @@ describe('NodesService', () => {
     });
 
     it('should throw NotFoundException if node not found', async () => {
-      mockNodesRepository.findOne.mockRejectedValueOnce(new NotFoundException());
+      mockNodesRepository.findOne.mockRejectedValueOnce(
+        new NotFoundException(),
+      );
 
       await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
     });

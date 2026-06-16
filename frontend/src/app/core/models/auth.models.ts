@@ -30,6 +30,12 @@ export interface Nodo {
   created_at?: string;
 }
 
+export interface Categoria {
+  id: string;
+  name: string;
+  created_at?: string;
+}
+
 export interface Producto {
   id?: string;
   name: string;
@@ -39,13 +45,14 @@ export interface Producto {
   retail_price?: number;
   image_url?: string;
   created_at?: string;
+  category_id?: string;
 }
 
 export interface BuyGroup {
   id: string;
   productId: string;
   nodeId: string;
-  status: 'OPEN' | 'COMPLETED' | 'CANCELLED';
+  status: 'OPEN' | 'COMPLETED' | 'CLOSED' | 'DELIVERED' | 'CANCELLED';
   targetSize: number;
   createdAt: string;
   closedAt?: string | null;

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
 import {
   ReactiveFormsModule
 } from '@angular/forms';
@@ -94,11 +94,11 @@ export class NodosPage implements OnInit, OnDestroy {
     }
   }
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private toastService: ToastService,
-    private alertController: AlertController,
-  ) {
+  private supabaseService = inject(SupabaseService);
+  private toastService = inject(ToastService);
+  private alertController = inject(AlertController);
+
+  constructor() {
     addIcons({
       businessOutline,
       addOutline,

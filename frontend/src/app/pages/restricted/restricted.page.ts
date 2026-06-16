@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { 
@@ -49,7 +49,7 @@ import {
     IonLabel
   ]
 })
-export class RestrictedPage implements OnInit {
+export class RestrictedPage {
 
   constructor() {
     addIcons({ 
@@ -62,7 +62,5 @@ export class RestrictedPage implements OnInit {
       helpCircleOutline
     });
   }
-
-  ngOnInit() {}
 
 }

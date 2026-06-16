@@ -27,4 +27,3 @@ export class NodesService {
     return this.nodesRepository.remove(id);
   }
 }
-

@@ -10,7 +10,6 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "tailwindcss";
 @import "@ionic/angular/css/core.css";
 
 /* Basic CSS for apps built with Ionic */
@@ -25,6 +24,9 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+/* Tailwind CSS (loaded last so utility classes take priority over Ionic resets) */
+@import "tailwindcss";
 
 
 /**

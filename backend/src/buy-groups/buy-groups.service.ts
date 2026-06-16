@@ -11,7 +11,8 @@ export class BuyGroupsService {
 
     const { data, error } = await client
       .from('buy_groups')
-      .select(`
+      .select(
+        `
         id,
         product_id,
         node_id,
@@ -32,7 +33,8 @@ export class BuyGroupsService {
           quantity,
           status
         )
-      `)
+      `,
+      )
       .eq('node_id', nodeId)
       .eq('status', 'OPEN');
 
@@ -41,8 +43,13 @@ export class BuyGroupsService {
     }
 
     return (data || []).map((group: any) => {
-      const activeOrders = (group.orders || []).filter((o: any) => o.status !== 'CANCELLED');
-      const gathered = activeOrders.reduce((sum: number, order: any) => sum + (order.quantity || 0), 0);
+      const activeOrders = (group.orders || []).filter(
+        (o: any) => o.status !== 'CANCELLED',
+      );
+      const gathered = activeOrders.reduce(
+        (sum: number, order: any) => sum + (order.quantity || 0),
+        0,
+      );
       const unitsLeft = Math.max(0, group.target_size - gathered);
 
       return {
@@ -56,7 +63,8 @@ export class BuyGroupsService {
         product: group.product,
         unitsBought: gathered,
         unitsLeft: unitsLeft,
-        progress: group.target_size > 0 ? (gathered / group.target_size) * 100 : 0
+        progress:
+          group.target_size > 0 ? (gathered / group.target_size) * 100 : 0,
       };
     });
   }
@@ -64,39 +72,36 @@ export class BuyGroupsService {
   async joinOrCreateGroup(userId: string, dto: JoinGroupDto) {
     const client = this.supabaseService.getClient();
 
-    // 1. Fetch product price and bulk size
-    const { data: product, error: prodError } = await client
-      .from('productos')
-      .select('price, bulk_size')
-      .eq('id', dto.productId)
-      .single();
+    // 1. Fetch product, node, and active group in parallel to minimize roundtrips
+    const [prodRes, nodeRes, groupRes] = await Promise.all([
+      client
+        .from('productos')
+        .select('price, bulk_size')
+        .eq('id', dto.productId)
+        .single(),
+      client.from('nodos').select('id').eq('id', dto.nodeId).single(),
+      client
+        .from('buy_groups')
+        .select('id')
+        .eq('product_id', dto.productId)
+        .eq('node_id', dto.nodeId)
+        .eq('status', 'OPEN')
+        .maybeSingle(),
+    ]);
+
+    const { data: product, error: prodError } = prodRes;
+    const { data: node, error: nodeError } = nodeRes;
+    const { data: activeGroup, error: findError } = groupRes;
 
     if (prodError || !product) {
       throw new BadRequestException('El producto no existe.');
     }
-
-    // 2. Fetch node to verify it exists
-    const { data: node, error: nodeError } = await client
-      .from('nodos')
-      .select('id')
-      .eq('id', dto.nodeId)
-      .single();
 
     if (nodeError || !node) {
       throw new BadRequestException('El punto de retiro no existe.');
     }
 
     let groupId: string | undefined;
-
-    // 3. Find if there is an active open group
-    const { data: activeGroup, error: findError } = await client
-      .from('buy_groups')
-      .select('id')
-      .eq('product_id', dto.productId)
-      .eq('node_id', dto.nodeId)
-      .eq('status', 'OPEN')
-      .maybeSingle();
-
     if (!findError && activeGroup) {
       groupId = activeGroup.id;
     }
@@ -109,7 +114,7 @@ export class BuyGroupsService {
           product_id: dto.productId,
           node_id: dto.nodeId,
           target_size: product.bulk_size,
-          status: 'OPEN'
+          status: 'OPEN',
         })
         .select('id')
         .single();
@@ -126,11 +131,15 @@ export class BuyGroupsService {
             .single();
 
           if (retryError || !retryGroup) {
-            throw new BadRequestException('Error al unirse al grupo de compra.');
+            throw new BadRequestException(
+              'Error al unirse al grupo de compra.',
+            );
           }
           groupId = retryGroup.id;
         } else {
-          throw new BadRequestException(`No se pudo crear el grupo de compra: ${createError.message}`);
+          throw new BadRequestException(
+            `No se pudo crear el grupo de compra: ${createError.message}`,
+          );
         }
       } else if (newGroup) {
         groupId = newGroup.id;
@@ -138,7 +147,9 @@ export class BuyGroupsService {
     }
 
     if (!groupId) {
-      throw new BadRequestException('No se pudo establecer el grupo de compra.');
+      throw new BadRequestException(
+        'No se pudo establecer el grupo de compra.',
+      );
     }
 
     // 5. Create the order
@@ -149,13 +160,45 @@ export class BuyGroupsService {
         profile_id: userId,
         quantity: dto.quantity,
         unit_price: product.price,
-        status: 'CONFIRMED'
+        status: 'CONFIRMED',
       })
       .select()
       .single();
 
     if (orderError) {
-      throw new BadRequestException(`No se pudo registrar tu compra: ${orderError.message}`);
+      throw new BadRequestException(
+        `No se pudo registrar tu compra: ${orderError.message}`,
+      );
+    }
+
+    // 6. Check if the group is now completed
+    const { data: activeOrders, error: ordersError } = await client
+      .from('group_orders')
+      .select('quantity')
+      .eq('group_id', groupId)
+      .not('status', 'eq', 'CANCELLED');
+
+    if (!ordersError && activeOrders) {
+      const totalQuantity = activeOrders.reduce(
+        (sum: number, o: any) => sum + (o.quantity || 0),
+        0,
+      );
+      if (totalQuantity >= product.bulk_size) {
+        const adminClient = this.supabaseService.getAdminClient();
+        const { error: updateError } = await adminClient
+          .from('buy_groups')
+          .update({
+            status: 'CLOSED',
+            closed_at: new Date().toISOString(),
+          })
+          .eq('id', groupId);
+
+        if (updateError) {
+          throw new BadRequestException(
+            `No se pudo actualizar el estado del grupo: ${updateError.message}`,
+          );
+        }
+      }
     }
 
     return newOrder;
@@ -166,7 +209,8 @@ export class BuyGroupsService {
 
     const { data, error } = await client
       .from('group_orders')
-      .select(`
+      .select(
+        `
         id,
         group_id,
         profile_id,
@@ -190,7 +234,8 @@ export class BuyGroupsService {
             address
           )
         )
-      `)
+      `,
+      )
       .eq('profile_id', userId)
       .order('created_at', { ascending: false });
 

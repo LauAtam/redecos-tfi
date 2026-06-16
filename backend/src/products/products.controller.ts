@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -28,8 +29,20 @@ export class ProductsController {
   @Get()
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({ status: 200, description: 'Return all products.' })
-  findAll() {
-    return this.productsService.findAll();
+  findAll(
+    @Query('search') search?: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.productsService.findAll({ search, categoryId, page, limit });
+  }
+
+  @Get('categories')
+  @ApiOperation({ summary: 'Get all product categories' })
+  @ApiResponse({ status: 200, description: 'Return all product categories.' })
+  findCategories() {
+    return this.productsService.findCategories();
   }
 
   @Get(':id')

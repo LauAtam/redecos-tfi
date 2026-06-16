@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonHeader,
@@ -34,7 +34,9 @@ export class HeaderComponent {
   @Output() customBack = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 
-  constructor(private router: Router) {
+  private router = inject(Router);
+
+  constructor() {
     addIcons({
       arrowBackOutline,
       logOutOutline

@@ -73,11 +73,10 @@ export class SelectNodePage implements OnInit, OnDestroy {
   }
 
   private alertController = inject(AlertController);
+  private supabaseService = inject(SupabaseService);
+  private router = inject(Router);
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {
+  constructor() {
     addIcons({
       locateOutline,
       peopleOutline,

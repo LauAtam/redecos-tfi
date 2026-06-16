@@ -44,7 +44,9 @@ describe('ProfilesController', () => {
   describe('updateProfile', () => {
     it('should call service with req.user.id and body', async () => {
       const userId = 'user-uuid-123';
-      const req = { user: { id: userId, email: 'juan@example.com', role: 'CLIENTE' } };
+      const req = {
+        user: { id: userId, email: 'juan@example.com', role: 'CLIENTE' },
+      };
       const dto: UpdateProfileDto = {
         first_name: 'Juan',
         last_name: 'Perez',

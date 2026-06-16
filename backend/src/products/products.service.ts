@@ -7,8 +7,13 @@ import { UpdateProductDto } from './dto/update-product.dto';
 export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository) {}
 
-  async findAll() {
-    return this.productsRepository.findAll();
+  async findAll(filters?: {
+    search?: string;
+    categoryId?: string;
+    page?: number;
+    limit?: number;
+  }) {
+    return this.productsRepository.findAll(filters);
   }
 
   async findOne(id: string) {
@@ -26,5 +31,8 @@ export class ProductsService {
   async remove(id: string) {
     return this.productsRepository.remove(id);
   }
-}
 
+  async findCategories() {
+    return this.productsRepository.findCategories();
+  }
+}

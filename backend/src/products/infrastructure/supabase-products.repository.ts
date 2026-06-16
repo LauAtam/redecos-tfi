@@ -8,11 +8,44 @@ import { UpdateProductDto } from '../dto/update-product.dto';
 export class SupabaseProductsRepository implements ProductsRepository {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  async findAll(): Promise<any[]> {
+  async findAll(filters?: {
+    search?: string;
+    categoryId?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<any> {
     const client = this.supabaseService.getAdminClient();
-    const { data, error } = await client.from('productos').select('*');
+    let query = client.from('productos').select('*', { count: 'exact' });
+
+    if (filters?.categoryId) {
+      query = query.eq('category_id', filters.categoryId);
+    }
+
+    if (filters?.search) {
+      query = query.or(
+        `name.ilike.%${filters.search}%,description.ilike.%${filters.search}%`,
+      );
+    }
+
+    if (filters?.page && filters?.limit) {
+      const from = (filters.page - 1) * filters.limit;
+      const to = from + filters.limit - 1;
+      query = query.range(from, to);
+    }
+
+    const { data, error, count } = await query;
     if (error) throw error;
-    return data;
+
+    if (filters?.page && filters?.limit) {
+      return {
+        items: data || [],
+        total: count || 0,
+        page: Number(filters.page),
+        limit: Number(filters.limit),
+      };
+    }
+
+    return data || [];
   }
 
   async findOne(id: string): Promise<any> {
@@ -54,5 +87,15 @@ export class SupabaseProductsRepository implements ProductsRepository {
     const { error } = await client.from('productos').delete().eq('id', id);
     if (error) throw error;
     return { deleted: true };
+  }
+
+  async findCategories(): Promise<any[]> {
+    const client = this.supabaseService.getAdminClient();
+    const { data, error } = await client
+      .from('categories')
+      .select('*')
+      .order('name', { ascending: true });
+    if (error) throw error;
+    return data;
   }
 }

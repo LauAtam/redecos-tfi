@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -46,7 +46,7 @@ import { HeaderComponent } from '../../core/components/header/header.component';
     HeaderComponent
   ],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage {
   registerForm: FormGroup;
   otpForm: FormGroup;
   step: 'form' | 'verification' = 'form';
@@ -56,11 +56,11 @@ export class RegisterPage implements OnInit {
   errorMessage: string | null = null;
   registeredEmail: string = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private supabaseService: SupabaseService,
-    private router: Router,
-  ) {
+  private fb = inject(FormBuilder);
+  private supabaseService = inject(SupabaseService);
+  private router = inject(Router);
+
+  constructor() {
     addIcons({
       personOutline,
       mailOutline,
@@ -85,8 +85,6 @@ export class RegisterPage implements OnInit {
       token: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
     });
   }
-
-  ngOnInit() {}
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');

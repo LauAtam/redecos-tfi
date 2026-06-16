@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional, Min, Max } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  Min,
+  Max,
+} from 'class-validator';
 
 export class CreateNodeDto {
   @IsString()
@@ -25,4 +32,3 @@ export class CreateNodeDto {
   @Max(180)
   longitude?: number;
 }
-

@@ -14,7 +14,7 @@ async function bootstrap() {
     .addTag('products', 'Product catalog management')
     .addBearerAuth()
     .build();
-  
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
