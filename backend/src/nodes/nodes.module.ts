@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
 import { NodesController } from './nodes.controller';
 import { NodesService } from './nodes.service';
-import { SupabaseModule } from '../supabase/supabase.module';
 import { NodesRepository } from './interfaces/nodes-repository.interface';
-import { SupabaseNodesRepository } from './infrastructure/supabase-nodes.repository';
+import { PrismaNodesRepository } from './infrastructure/prisma-nodes.repository';
 
 @Module({
-  imports: [SupabaseModule],
   controllers: [NodesController],
   providers: [
     NodesService,
     {
       provide: NodesRepository,
-      useClass: SupabaseNodesRepository,
+      useClass: PrismaNodesRepository,
     },
   ],
 })
-export class NodesModule {}
+export class NodesModule { }
