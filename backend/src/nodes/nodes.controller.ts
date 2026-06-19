@@ -11,8 +11,8 @@ import {
 import { NodesService } from './nodes.service';
 import { CreateNodeDto } from './dto/create-node.dto';
 import { UpdateNodeDto } from './dto/update-node.dto';
-import { RolesGuard } from '../supabase/roles.guard';
-import { Roles } from '../supabase/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 import {
   ApiBearerAuth,
   ApiOperation,

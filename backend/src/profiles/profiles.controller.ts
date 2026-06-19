@@ -1,8 +1,8 @@
 import { Controller, Patch, Body, Req, UseGuards } from '@nestjs/common';
 import { ProfilesService } from './profiles.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { RolesGuard } from '../supabase/roles.guard';
-import { Roles } from '../supabase/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 import {
   ApiBearerAuth,
   ApiOperation,

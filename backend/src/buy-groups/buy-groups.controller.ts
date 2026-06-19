@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { BuyGroupsService } from './buy-groups.service';
 import { JoinGroupDto } from './dto/join-group.dto';
-import { RolesGuard } from '../supabase/roles.guard';
-import { Roles } from '../supabase/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 import {
   ApiBearerAuth,
   ApiOperation,

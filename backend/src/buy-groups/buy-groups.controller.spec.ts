@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { BuyGroupsController } from './buy-groups.controller';
 import { BuyGroupsService } from './buy-groups.service';
-import { RolesGuard } from '../supabase/roles.guard';
+import { RolesGuard } from '../auth/roles.guard';
 import { Reflector } from '@nestjs/core';
 
 describe('BuyGroupsController', () => {

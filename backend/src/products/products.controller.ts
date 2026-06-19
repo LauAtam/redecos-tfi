@@ -12,8 +12,8 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { RolesGuard } from '../supabase/roles.guard';
-import { Roles } from '../supabase/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 import {
   ApiBearerAuth,
   ApiOperation,
