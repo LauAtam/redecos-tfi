@@ -1,18 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProfilesService } from './profiles.service';
-import { SupabaseService } from '../supabase/supabase.service';
+import { ProfilesRepository } from './interfaces/profiles-repository.interface';
 import { BadRequestException } from '@nestjs/common';
 
 describe('ProfilesService', () => {
   let service: ProfilesService;
-  let supabaseService: SupabaseService;
+  let repository: ProfilesRepository;
 
-  const mockSupabaseClient = {
-    from: jest.fn().mockReturnThis(),
-    select: jest.fn().mockReturnThis(),
-    update: jest.fn().mockReturnThis(),
-    eq: jest.fn().mockReturnThis(),
-    single: jest.fn(),
+  const mockProfilesRepository = {
+    updateProfile: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -20,23 +16,16 @@ describe('ProfilesService', () => {
       providers: [
         ProfilesService,
         {
-          provide: SupabaseService,
-          useValue: {
-            getAdminClient: jest.fn().mockReturnValue(mockSupabaseClient),
-          },
+          provide: ProfilesRepository,
+          useValue: mockProfilesRepository,
         },
       ],
     }).compile();
 
     service = module.get<ProfilesService>(ProfilesService);
-    supabaseService = module.get<SupabaseService>(SupabaseService);
+    repository = module.get<ProfilesRepository>(ProfilesRepository);
 
-    // Reset mocks before each test
     jest.clearAllMocks();
-    mockSupabaseClient.from.mockReturnThis();
-    mockSupabaseClient.select.mockReturnThis();
-    mockSupabaseClient.update.mockReturnThis();
-    mockSupabaseClient.eq.mockReturnThis();
   });
 
   it('should be defined', () => {
@@ -46,7 +35,7 @@ describe('ProfilesService', () => {
   describe('updateProfile', () => {
     const userId = 'user-uuid-123';
 
-    it('should update profile successfully when default_node_id is provided and valid', async () => {
+    it('should delegate to repository and return updated profile', async () => {
       const dto = {
         first_name: 'Juan',
         last_name: 'Perez',
@@ -54,67 +43,24 @@ describe('ProfilesService', () => {
       };
       const updatedProfile = { id: userId, ...dto };
 
-      // Mock first query (select id from nodos) -> returns the node
-      mockSupabaseClient.single
-        .mockResolvedValueOnce({
-          data: { id: dto.default_node_id },
-          error: null,
-        }) // check node exists
-        .mockResolvedValueOnce({ data: updatedProfile, error: null }); // update profiles
+      mockProfilesRepository.updateProfile.mockResolvedValueOnce(updatedProfile);
 
       const result = await service.updateProfile(userId, dto);
       expect(result).toEqual(updatedProfile);
-      expect(mockSupabaseClient.from).toHaveBeenCalledWith('nodos');
-      expect(mockSupabaseClient.from).toHaveBeenCalledWith('profiles');
+      expect(mockProfilesRepository.updateProfile).toHaveBeenCalledWith(userId, dto);
     });
 
-    it('should throw BadRequestException if default_node_id does not exist in database', async () => {
+    it('should propagate exceptions from repository', async () => {
       const dto = {
         default_node_id: 'non-existent-node',
       };
 
-      // Mock first query (select id from nodos) -> node not found
-      mockSupabaseClient.single.mockResolvedValueOnce({
-        data: null,
-        error: { message: 'Not Found' },
-      });
+      mockProfilesRepository.updateProfile.mockRejectedValueOnce(
+        new BadRequestException('El nodo de retiro no existe.'),
+      );
 
       await expect(service.updateProfile(userId, dto)).rejects.toThrow(
         new BadRequestException('El nodo de retiro no existe.'),
-      );
-    });
-
-    it('should update profile successfully when default_node_id is not provided', async () => {
-      const dto = {
-        first_name: 'Juan',
-        last_name: 'Perez',
-      };
-      const updatedProfile = { id: userId, ...dto, default_node_id: null };
-
-      mockSupabaseClient.single.mockResolvedValueOnce({
-        data: updatedProfile,
-        error: null,
-      });
-
-      const result = await service.updateProfile(userId, dto);
-      expect(result).toEqual(updatedProfile);
-      // It shouldn't query the 'nodos' table
-      expect(mockSupabaseClient.from).not.toHaveBeenCalledWith('nodos');
-      expect(mockSupabaseClient.from).toHaveBeenCalledWith('profiles');
-    });
-
-    it('should throw BadRequestException if profiles table update fails', async () => {
-      const dto = {
-        first_name: 'Juan',
-      };
-
-      mockSupabaseClient.single.mockResolvedValueOnce({
-        data: null,
-        error: { message: 'Update error' },
-      });
-
-      await expect(service.updateProfile(userId, dto)).rejects.toThrow(
-        new BadRequestException('Update error'),
       );
     });
   });
