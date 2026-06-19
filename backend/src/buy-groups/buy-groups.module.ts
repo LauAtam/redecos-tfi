@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
 import { BuyGroupsController } from './buy-groups.controller';
 import { BuyGroupsService } from './buy-groups.service';
-import { SupabaseModule } from '../supabase/supabase.module';
+import { BuyGroupsRepository } from './interfaces/buy-groups-repository.interface';
+import { PrismaBuyGroupsRepository } from './infrastructure/prisma-buy-groups.repository';
 
 @Module({
-  imports: [SupabaseModule],
   controllers: [BuyGroupsController],
-  providers: [BuyGroupsService],
-  exports: [BuyGroupsService],
+  providers: [
+    BuyGroupsService,
+    {
+      provide: BuyGroupsRepository,
+      useClass: PrismaBuyGroupsRepository,
+    },
+  ],
 })
 export class BuyGroupsModule {}
