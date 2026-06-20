@@ -42,7 +42,12 @@ Adoptamos el estándar de **Conventional Commits** en español con prefijos téc
 
 ## 4. Backend: NestJS (v11)
 * **Arquitectura**: Mantener el patrón modular nativo de NestJS (`Module`, `Controller`, `Service`).
-* **Integración con Supabase**: Consumir `supabase-js` mediante un servicio inyectable unificado (`SupabaseService`).
+* **Base de Datos & ORM**:
+  * Utilizar exclusivamente **Prisma ORM** para toda la interacción de datos (CRUD) aplicando el **Repository Pattern**.
+  * El uso del cliente HTTP nativo `@supabase/supabase-js` queda estrictamente prohibido para consultas de base de datos en el backend (solo se preservan configuraciones de JWT o roles manejados por `AuthModule` sin depender del cliente).
+* **Integración con Prisma**:
+  * Todos los repositorios deben inyectar el `PrismaService`.
+  * La configuración de pooling (Transaction pooler `DATABASE_URL` y Session pooler `DIRECT_URL`) se debe manejar vía `prisma.config.ts` o variables de entorno nativas, en cumplimiento con Prisma v7.
 * **Validación**: Usar NestJS DTOs con `PartialType` de `@nestjs/mapped-types` para simplificar y sanitizar los payloads de actualización parcial.
 
 ---
