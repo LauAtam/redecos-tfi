@@ -47,7 +47,7 @@ Adoptamos el estándar de **Conventional Commits** en español con prefijos téc
   * El uso del cliente HTTP nativo `@supabase/supabase-js` queda estrictamente prohibido para consultas de base de datos en el backend (solo se preservan configuraciones de JWT o roles manejados por `AuthModule` sin depender del cliente).
 * **Integración con Prisma**:
   * Todos los repositorios deben inyectar el `PrismaService`.
-  * La configuración de pooling (Transaction pooler `DATABASE_URL` y Session pooler `DIRECT_URL`) se debe manejar vía `prisma.config.ts` o variables de entorno nativas, en cumplimiento con Prisma v7.
+  * La configuración de pooling (Transaction pooler `DATABASE_URL` y Session pooler `DIRECT_URL`) se debe manejar a través de variables de entorno e integrarse de forma nativa en `schema.prisma`, asegurando compatibilidad total con Prisma v6.
 * **Validación**: Usar NestJS DTOs con `PartialType` de `@nestjs/mapped-types` para simplificar y sanitizar los payloads de actualización parcial.
 
 ---
