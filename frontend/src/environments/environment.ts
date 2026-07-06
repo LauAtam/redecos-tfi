@@ -4,8 +4,12 @@
 
 export const environment = {
   production: false,
-  supabaseUrl: 'https://tddzhhtzveqbatmqtjon.supabase.co',
-  supabaseKey: 'sb_publishable_e6OSCEI0ww3hm11TUiBuhg_Zxux-vE_',
+  // Prod supabase
+  // supabaseUrl: 'https://tddzhhtzveqbatmqtjon.supabase.co',
+  // supabaseKey: 'sb_publishable_e6OSCEI0ww3hm11TUiBuhg_Zxux-vE_',
+  // Dev supabase
+  supabaseUrl: 'https://jlhhfnuwgxummuisquwq.supabase.co',
+  supabaseKey: 'sb_publishable_MJPxMIGI0EvZLBkjX4dXoA_AVY7N-OJ',
   apiUrl: 'http://localhost:3000',
 };
 
