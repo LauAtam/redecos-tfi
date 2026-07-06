@@ -27,6 +27,8 @@ import {
   ActionSheetController,
   IonFab,
   IonFabButton,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -42,7 +44,7 @@ import {
   ellipsisVerticalOutline,
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
-import { Producto } from '../../../core/models/auth.models';
+import { Producto, Categoria } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../../../core/components/header/header.component';
@@ -71,6 +73,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonModal,
     IonFab,
     IonFabButton,
+    IonSelect,
+    IonSelectOption,
     HeaderComponent
   ],
 })
@@ -85,6 +89,7 @@ export class ProductosPage implements OnInit {
   isDetailModalOpen = false;
   errorMessage: string | null = null;
   productos: Producto[] = [];
+  categorias: Categoria[] = [];
 
   private fb = inject(FormBuilder);
   private supabaseService = inject(SupabaseService);
@@ -112,11 +117,21 @@ export class ProductosPage implements OnInit {
       price: [null, [Validators.required, Validators.min(0.01)]],
       bulk_size: [null, [Validators.required, Validators.min(1)]],
       image_url: ['', [Validators.pattern(/https?:\/\/.+/)]],
+      category_id: [null],
+      retail_price: [null, [Validators.min(0.01)]],
     });
   }
 
   ngOnInit() {
+    this.loadCategorias();
     this.loadProductos();
+  }
+
+  async loadCategorias() {
+    const { data, error } = await this.supabaseService.getCategorias();
+    if (!error && data) {
+      this.categorias = data;
+    }
   }
 
   async loadProductos() {
@@ -150,6 +165,8 @@ export class ProductosPage implements OnInit {
       price: prod.price,
       bulk_size: prod.bulk_size,
       image_url: prod.image_url || '',
+      category_id: prod.category_id || null,
+      retail_price: prod.retail_price || null,
     });
     this.showForm = true;
   }

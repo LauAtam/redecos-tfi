@@ -47,8 +47,20 @@
             }
 
             <ion-label class="m-0">
-              <h2 class="m-0 mb-0.5 text-[1rem] font-bold text-[#002d4b]">{{ formatProductName(prod.name) }}</h2>
-              <p class="m-0 font-bold text-[#006b4d] text-[0.95rem]">{{ formatPrice(prod.price) }}</p>
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <h2 class="m-0 text-[1rem] font-bold text-[#002d4b]">{{ formatProductName(prod.name) }}</h2>
+                @if (prod.categories) {
+                  <span class="px-2 py-0.5 text-[0.75rem] font-semibold text-[#006b4d] bg-[#e6f4f0] rounded-full">
+                    {{ prod.categories.name }}
+                  </span>
+                }
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-bold text-[#006b4d] text-[0.95rem]">{{ formatPrice(prod.price) }} <span class="text-[0.75rem] font-normal text-[#64748b]">(Bulto)</span></span>
+                @if (prod.retail_price) {
+                  <span class="text-[#64748b] text-[0.85rem] font-medium">{{ formatPrice(prod.retail_price) }} <span class="text-[0.75rem] font-normal text-[#94a3b8]">(Ref. Minorista)</span></span>
+                }
+              </div>
             </ion-label>
           </ion-item>
         </ion-card>
@@ -78,19 +90,37 @@
         </ion-textarea>
 
         <div class="flex gap-4">
-          <ion-input label="Precio Unitario" labelPlacement="stacked" fill="outline" placeholder="0.00" type="number"
+          <ion-input label="Precio Mayorista" labelPlacement="stacked" fill="outline" placeholder="0.00" type="number"
             formControlName="price"
             [errorText]="f['price'].errors?.['required'] ? 'El precio es obligatorio.' : (f['price'].errors?.['min'] ? 'Debe ser mayor a 0.' : '')"
             [class.ion-invalid]="f['price'].touched && f['price'].invalid" [class.ion-touched]="f['price'].touched"
             class="flex-1">
           </ion-input>
 
+          <ion-input label="Precio Minorista (Ref)" labelPlacement="stacked" fill="outline" placeholder="0.00" type="number"
+            formControlName="retail_price"
+            [errorText]="f['retail_price'].errors?.['min'] ? 'Debe ser mayor a 0.' : ''"
+            [class.ion-invalid]="f['retail_price'].touched && f['retail_price'].invalid" [class.ion-touched]="f['retail_price'].touched"
+            class="flex-1">
+          </ion-input>
+        </div>
+
+        <div class="flex gap-4">
           <ion-input label="Unidades por Bulto" labelPlacement="stacked" fill="outline" placeholder="10" type="number"
             formControlName="bulk_size"
             [errorText]="f['bulk_size'].errors?.['required'] ? 'El bulto es obligatorio.' : (f['bulk_size'].errors?.['min'] ? 'Mínimo 1 unidad.' : '')"
             [class.ion-invalid]="f['bulk_size'].touched && f['bulk_size'].invalid"
             [class.ion-touched]="f['bulk_size'].touched" class="flex-1">
           </ion-input>
+
+          <ion-select label="Categoría" labelPlacement="stacked" fill="outline"
+            placeholder="Seleccioná..." formControlName="category_id"
+            [class.ion-invalid]="f['category_id'].touched && f['category_id'].invalid" [class.ion-touched]="f['category_id'].touched"
+            class="flex-1">
+            @for (cat of categorias; track cat.id) {
+              <ion-select-option [value]="cat.id">{{ cat.name }}</ion-select-option>
+            }
+          </ion-select>
         </div>
 
         <ion-input label="URL de Imagen (Opcional)" labelPlacement="stacked" fill="outline"
@@ -176,21 +206,35 @@
               class="m-0 text-[1.35rem] font-extrabold text-[#002d4b] leading-snug tracking-[-0.01em] max-[480px]:text-[1.2rem]">
               {{ formatProductName(selectedProduct.name) }}</h2>
 
-            <div class="flex flex-col gap-1 mb-3">
-              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio</span>
-              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.price) }}</span>
+            @if (selectedProduct.categories) {
+            <div class="flex flex-col gap-1 mb-1">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Categoría</span>
+              <span class="text-[0.95rem] font-medium text-[#006b4d]">{{ selectedProduct.categories.name }}</span>
+            </div>
+            }
+
+            <div class="flex gap-4">
+              <div class="flex flex-col gap-1 mb-1 flex-1">
+                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio Mayorista</span>
+                <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.price) }}</span>
+              </div>
+
+              @if (selectedProduct.retail_price) {
+              <div class="flex flex-col gap-1 mb-1 flex-1">
+                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio Minorista (Ref)</span>
+                <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.retail_price) }}</span>
+              </div>
+              }
             </div>
 
-            <div class="flex flex-col gap-1 mb-3">
-              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Tamaño del
-                Bulto</span>
+            <div class="flex flex-col gap-1 mb-1">
+              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Tamaño del Bulto</span>
               <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.bulk_size }} unidades</span>
             </div>
 
-            <div class="flex flex-col gap-1 mb-3">
+            <div class="flex flex-col gap-1 mb-1">
               <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Descripción</span>
-              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.description || 'Este producto
-                no cuenta con una descripción detallada por el momento.' }}</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el momento.' }}</span>
             </div>
           </div>
 

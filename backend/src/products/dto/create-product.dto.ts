@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsInt,
   Min,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -27,4 +28,14 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   image_url?: string;
+
+  @IsUUID()
+  @IsOptional()
+  category_id?: string;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  retail_price?: number;
 }
+

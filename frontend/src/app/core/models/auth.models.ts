@@ -46,6 +46,7 @@ export interface Producto {
   image_url?: string;
   created_at?: string;
   category_id?: string;
+  categories?: Categoria;
 }
 
 export interface BuyGroup {

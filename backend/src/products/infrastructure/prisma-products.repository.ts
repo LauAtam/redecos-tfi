@@ -31,7 +31,12 @@ export class PrismaProductsRepository implements ProductsRepository {
       const skip = (filters.page - 1) * filters.limit;
       const take = filters.limit;
       const [items, total] = await Promise.all([
-        this.prisma.productos.findMany({ where, skip, take }),
+        this.prisma.productos.findMany({ 
+          where, 
+          skip, 
+          take,
+          include: { categories: true }
+        }),
         this.prisma.productos.count({ where }),
       ]);
       return {
@@ -42,12 +47,16 @@ export class PrismaProductsRepository implements ProductsRepository {
       };
     }
 
-    return await this.prisma.productos.findMany({ where });
+    return await this.prisma.productos.findMany({ 
+      where,
+      include: { categories: true }
+    });
   }
 
   async findOne(id: string): Promise<any> {
     const product = await this.prisma.productos.findUnique({
       where: { id },
+      include: { categories: true }
     });
     if (!product) throw new NotFoundException(`Product with ID ${id} not found`);
     return product;
