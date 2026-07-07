@@ -1,1 +1,5 @@
-/* Estilos migrados a Tailwind CSS */
+:host {
+  display: block;
+  width: 100%;
+  z-index: 10;
+}

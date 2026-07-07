@@ -1,0 +1,45 @@
+<app-header title="Gestiones" [showAdminAvatar]="true"></app-header>
+
+<ion-content class="[--background:#f8fafc] ion-padding">
+  <div class="max-w-[600px] mx-auto py-4 px-2">
+
+    <!-- Contenedor de Tarjetas de Navegación -->
+    <div class="flex flex-col gap-3">
+      <ion-card
+        class="m-0 rounded-[16px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-200 active:scale-[0.98]"
+        (click)="navegarA('/admin/nodos')" button="true">
+        <ion-item lines="none"
+          class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-3">
+          <div slot="start"
+            class="flex items-center justify-center w-12 h-12 rounded-[12px] bg-[#e6f4f0] text-[#006b4d] mr-2">
+            <ion-icon name="business-outline" class="text-[1.5rem]"></ion-icon>
+          </div>
+          <ion-label class="m-0">
+            <h2 class="m-0 text-[1.05rem] font-bold text-[#002d4b]">Gestión de Nodos</h2>
+            <p class="m-0 text-[0.8rem] text-[#64748b] mt-0.5">Control de puntos de retiro, coordinadores y
+              geolocalización</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline" class="text-[1.2rem] text-[#a0aec0] mr-4"></ion-icon>
+        </ion-item>
+      </ion-card>
+
+      <ion-card
+        class="m-0 rounded-[16px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-200 active:scale-[0.98]"
+        (click)="navegarA('/admin/productos')" button="true">
+        <ion-item lines="none"
+          class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-3">
+          <div slot="start"
+            class="flex items-center justify-center w-12 h-12 rounded-[12px] bg-[#e6f2f7] text-[#004b7c] mr-2">
+            <ion-icon name="cube-outline" class="text-[1.5rem]"></ion-icon>
+          </div>
+          <ion-label class="m-0">
+            <h2 class="m-0 text-[1.05rem] font-bold text-[#002d4b]">Catálogo de Productos</h2>
+            <p class="m-0 text-[0.8rem] text-[#64748b] mt-0.5">Alta, edición, categorías y precios del stock.</p>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline" class="text-[1.2rem] text-[#a0aec0] mr-4"></ion-icon>
+        </ion-item>
+      </ion-card>
+    </div>
+
+  </div>
+</ion-content>

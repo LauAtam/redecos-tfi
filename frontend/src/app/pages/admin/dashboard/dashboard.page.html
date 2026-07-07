@@ -1,45 +1,162 @@
-<app-header title="Panel de Administración" [showLogout]="true" (logout)="logout()"></app-header>
+<app-header title="Administración" [showAdminAvatar]="true"></app-header>
 
 <ion-content class="[--background:#f8fafc] ion-padding">
   <div class="max-w-[600px] mx-auto py-4 px-2">
-    
-    <!-- Banner de Bienvenida -->
-    <div class="bg-gradient-to-br from-[#002d4b] to-[#004b7c] rounded-[20px] p-6 text-white mb-6 shadow-[0_8px_24px_rgba(0,45,75,0.15)]">
-      <div class="mb-3">
-        <h2 class="m-0 text-2xl font-bold">¡Hola, Administrador! 👋</h2>
-        @if (adminEmail) {
-          <p class="m-0 mt-1 text-[0.90rem] text-[#93c5fd] font-medium">{{ adminEmail }}</p>
-        }
+
+    <!-- Sección de Estadísticas de la Red -->
+    <div class="mb-4 text-[#64748b]">
+      <h2 class="m-0 text-lg font-bold text-[#002d4b]">Estado de la Red</h2>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <!-- Tarjeta 1: Productos -->
+      <ion-card class="m-0 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between w-full">
+          <div class="flex items-center justify-center w-10 h-10 rounded-[12px] bg-[#e6f2f7] text-[#004b7c]">
+            <ion-icon name="cube-outline" class="text-[1.3rem]"></ion-icon>
+          </div>
+          <span class="text-[0.7rem] font-bold uppercase tracking-[0.5px] text-[#64748b]">Catálogo</span>
+        </div>
+        <div class="mt-2">
+          <h3 class="m-0 text-[2rem] font-extrabold text-[#002d4b] leading-none">
+            @if (isLoadingStats) {
+              <ion-spinner name="crescent" class="h-6 w-6"></ion-spinner>
+            } @else {
+              {{ totalProductos }}
+            }
+          </h3>
+          <p class="m-0 text-[0.85rem] text-[#64748b] mt-1 font-medium">Productos Activos</p>
+        </div>
+      </ion-card>
+
+      <!-- Tarjeta 2: Nodos -->
+      <ion-card class="m-0 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex flex-col gap-2">
+        <div class="flex items-center justify-between w-full">
+          <div class="flex items-center justify-center w-10 h-10 rounded-[12px] bg-[#e6f4f0] text-[#006b4d]">
+            <ion-icon name="business-outline" class="text-[1.3rem]"></ion-icon>
+          </div>
+          <span class="text-[0.7rem] font-bold uppercase tracking-[0.5px] text-[#64748b]">Nodos</span>
+        </div>
+        <div class="mt-2">
+          <h3 class="m-0 text-[2rem] font-extrabold text-[#002d4b] leading-none">
+            @if (isLoadingStats) {
+              <ion-spinner name="crescent" class="h-6 w-6"></ion-spinner>
+            } @else {
+              {{ totalNodos }}
+            }
+          </h3>
+          <p class="m-0 text-[0.85rem] text-[#64748b] mt-1 font-medium">Puntos de Retiro</p>
+        </div>
+      </ion-card>
+    </div>
+
+    <!-- Compras Colectivas Activas -->
+    <div class="mb-3 text-[#64748b]">
+      <h2 class="m-0 text-lg font-bold text-[#002d4b]">Compras Colectivas Activas</h2>
+    </div>
+
+    <ion-card class="m-0 mb-6 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4">
+      <div class="flex flex-col gap-4">
+        <!-- Grupo 1 -->
+        <div class="flex flex-col gap-2 pb-3 border-b border-[#f1f5f9]">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="m-0 font-bold text-[#002d4b] text-[0.95rem]">Bolsón de Verduras Orgánicas</h4>
+              <p class="m-0 text-[0.75rem] text-[#64748b] mt-0.5">Nodo: Centro Vecinal Alberdi</p>
+            </div>
+            <span class="px-2 py-0.5 text-[0.7rem] font-bold text-[#006b4d] bg-[#e6f4f0] rounded-full">
+              60% Completado
+            </span>
+          </div>
+          <!-- Barra de progreso -->
+          <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] overflow-hidden">
+            <div class="h-full rounded-full bg-[#006b4d]" style="width: 60%"></div>
+          </div>
+          <div class="flex justify-between text-[0.75rem] text-[#64748b] font-medium">
+            <span>12 de 20 unidades</span>
+            <span>Cierre: Viernes 10/07</span>
+          </div>
+        </div>
+
+        <!-- Grupo 2 -->
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="m-0 font-bold text-[#002d4b] text-[0.95rem]">Aceite de Oliva Extra Virgen (1L)</h4>
+              <p class="m-0 text-[0.75rem] text-[#64748b] mt-0.5">Nodo: Biblioteca Popular Belgrano</p>
+            </div>
+            <span class="px-2 py-0.5 text-[0.7rem] font-bold text-[#004b7c] bg-[#e6f2f7] rounded-full">
+              85% Completado
+            </span>
+          </div>
+          <!-- Barra de progreso -->
+          <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] overflow-hidden">
+            <div class="h-full rounded-full bg-[#004b7c]" style="width: 85%"></div>
+          </div>
+          <div class="flex justify-between text-[0.75rem] text-[#64748b] font-medium">
+            <span>17 de 20 unidades</span>
+            <span>Cierre: Jueves 09/07</span>
+          </div>
+        </div>
       </div>
-      <p class="m-0 text-[0.95rem] leading-normal opacity-90">Gestioná los nodos de retiro y el catálogo de productos de la Red de compras soberanas.</p>
+    </ion-card>
+
+    <!-- Próximas Entregas de la Red -->
+    <div class="mb-3 text-[#64748b]">
+      <h2 class="m-0 text-lg font-bold text-[#002d4b]">Cronograma de Entregas</h2>
     </div>
 
-    <!-- Contenedor de Tarjetas de Navegación -->
-    <div class="flex flex-col gap-1.5">
-      <ion-card class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200" routerLink="/admin/nodos" button="true">
-        <ion-item lines="none" class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
-          <div slot="start" class="flex items-center justify-center w-12 h-12 rounded-[8px] bg-[#f1f5f9] text-[#002d4b] mr-2">
-            <ion-icon name="business-outline" class="text-[1.4rem]"></ion-icon>
-          </div>
-          <ion-label class="m-0">
-            <h2 class="m-0 text-[1rem] font-bold text-[#002d4b]">Gestión de Nodos</h2>
-          </ion-label>
-          <ion-icon slot="end" name="chevron-forward-outline" class="text-[1.2rem] text-[#a0aec0] mr-4"></ion-icon>
-        </ion-item>
-      </ion-card>
+    <ion-card class="m-0 mb-6 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex flex-col gap-3">
+      <!-- Entrega 1 -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-[10px] bg-[#f1f5f9] text-[#64748b]">
+          <ion-icon name="calendar-outline" class="text-[1.3rem]"></ion-icon>
+        </div>
+        <div class="flex-1">
+          <h4 class="m-0 font-bold text-[#002d4b] text-[0.9rem]">Despacho General Alberdi</h4>
+          <p class="m-0 text-[0.75rem] text-[#64748b] mt-0.5">Sábado 11/07 — 10:00 a 13:00 hs</p>
+        </div>
+        <span class="text-[0.75rem] font-bold text-[#006b4d] bg-[#e6f4f0] px-2.5 py-1 rounded-[8px]">
+          Confirmado
+        </span>
+      </div>
 
-      <ion-card class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200" routerLink="/admin/productos" button="true">
-        <ion-item lines="none" class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
-          <div slot="start" class="flex items-center justify-center w-12 h-12 rounded-[8px] bg-[#f1f5f9] text-[#002d4b] mr-2">
-            <ion-icon name="cube-outline" class="text-[1.4rem]"></ion-icon>
-          </div>
-          <ion-label class="m-0">
-            <h2 class="m-0 text-[1rem] font-bold text-[#002d4b]">Gestión de Productos</h2>
-          </ion-label>
-          <ion-icon slot="end" name="chevron-forward-outline" class="text-[1.2rem] text-[#a0aec0] mr-4"></ion-icon>
-        </ion-item>
-      </ion-card>
+      <!-- Entrega 2 -->
+      <div class="flex items-center gap-3 border-t border-[#f1f5f9] pt-3">
+        <div class="flex items-center justify-center w-10 h-10 rounded-[10px] bg-[#f1f5f9] text-[#64748b]">
+          <ion-icon name="calendar-outline" class="text-[1.3rem]"></ion-icon>
+        </div>
+        <div class="flex-1">
+          <h4 class="m-0 font-bold text-[#002d4b] text-[0.9rem]">Despacho Nodo Centro</h4>
+          <p class="m-0 text-[0.75rem] text-[#64748b] mt-0.5">Miércoles 15/07 — 16:30 a 19:30 hs</p>
+        </div>
+        <span class="text-[0.75rem] font-bold text-[#475569] bg-[#f1f5f9] px-2.5 py-1 rounded-[8px]">
+          Pendiente
+        </span>
+      </div>
+    </ion-card>
+
+    <!-- Comisiones y Finanzas del Administrador -->
+    <div class="mb-3 text-[#64748b]">
+      <h2 class="m-0 text-lg font-bold text-[#002d4b]">Finanzas y Comisiones del Nodo</h2>
     </div>
+
+    <ion-card class="m-0 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-5 flex flex-col items-center gap-4">
+      <div class="flex items-center justify-between w-full pb-3 border-b border-[#f1f5f9]">
+        <div class="flex items-center gap-2">
+          <div class="flex items-center justify-center w-8 h-8 rounded-[8px] bg-[#e6f4f0] text-[#006b4d]">
+            <ion-icon name="cash-outline" class="text-[1.1rem]"></ion-icon>
+          </div>
+          <span class="text-[0.85rem] font-bold text-[#002d4b]">Comisiones Acumuladas</span>
+        </div>
+        <span class="text-[1.25rem] font-extrabold text-[#006b4d]">$45.320,00</span>
+      </div>
+      
+      <div class="flex justify-between w-full text-[0.8rem] text-[#64748b] font-medium">
+        <span>Pedidos entregados este mes: <strong>48 pedidos</strong></span>
+        <span class="text-[#006b4d] cursor-pointer hover:underline">Ver Historial →</span>
+      </div>
+    </ion-card>
 
   </div>
 </ion-content>

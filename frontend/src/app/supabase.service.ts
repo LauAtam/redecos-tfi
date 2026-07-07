@@ -21,6 +21,9 @@ export class SupabaseService {
   public authInitialized$ = this.authInitializedSubject.asObservable();
   public authInitialized = signal<boolean>(false);
 
+  private lastFetchedProfileId: string | null = null;
+  private lastFetchedTime: number = 0;
+
   public getRoleFromToken(token: string): string {
     try {
       const payloadBase64 = token.split('.')[1];
@@ -68,6 +71,15 @@ export class SupabaseService {
         const baseProfile = this.mapUserToProfile(session.user, session.access_token);
         this.currentUserSubject.next(baseProfile);
         this.currentUserSignal.set(baseProfile);
+
+        const now = Date.now();
+        if (this.lastFetchedProfileId === session.user.id && (now - this.lastFetchedTime) < 1500) {
+          this.authInitialized.set(true);
+          this.authInitializedSubject.next(true);
+          return;
+        }
+        this.lastFetchedProfileId = session.user.id;
+        this.lastFetchedTime = now;
 
         // Obtenemos el perfil completo en segundo plano para no bloquear onAuthStateChange
         this.getUserProfile(session.user.id)

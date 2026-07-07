@@ -9,7 +9,7 @@ import {
   IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, logOutOutline } from 'ionicons/icons';
+import { arrowBackOutline, logOutOutline, personOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-header',
@@ -30,6 +30,7 @@ export class HeaderComponent {
   @Input() defaultHref: string | null = null;
   @Input() showCustomBack: boolean = false;
   @Input() showLogout: boolean = false;
+  @Input() showAdminAvatar: boolean = false;
 
   @Output() customBack = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
@@ -39,7 +40,8 @@ export class HeaderComponent {
   constructor() {
     addIcons({
       arrowBackOutline,
-      logOutOutline
+      logOutOutline,
+      personOutline
     });
   }
 
@@ -53,5 +55,9 @@ export class HeaderComponent {
 
   onLogout() {
     this.logout.emit();
+  }
+
+  onAvatarClick() {
+    this.router.navigateByUrl('/admin/perfil');
   }
 }

@@ -1,5 +1,5 @@
-<app-header [title]="showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Gestión de Productos'"
-  [defaultHref]="!showForm ? '/admin/dashboard' : null" [showCustomBack]="showForm" (customBack)="toggleForm(false)">
+<app-header [title]="showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Catálogo de Productos'"
+  [showCustomBack]="showForm" [showAdminAvatar]="!showForm" [defaultHref]="!showForm ? '/admin/gestiones' : null" (customBack)="toggleForm(false)">
 </app-header>
 
 <ion-content>

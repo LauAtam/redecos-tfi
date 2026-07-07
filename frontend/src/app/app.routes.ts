@@ -44,27 +44,52 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    loadComponent: () =>
+      import('./pages/admin/admin-layout/admin-layout.page').then(
+        (m) => m.AdminLayoutPage,
+      ),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRoles: ['ADMIN'] },
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./pages/admin/dashboard/dashboard.page').then(m => m.DashboardPage)
+        loadComponent: () =>
+          import('./pages/admin/dashboard/dashboard.page').then(
+            (m) => m.DashboardPage,
+          ),
       },
       {
-        path: 'nodos',
-        loadComponent: () => import('./pages/admin/nodos/nodos.page').then(m => m.NodosPage)
+        path: 'gestiones',
+        loadComponent: () =>
+          import('./pages/admin/gestiones/gestiones.page').then(
+            (m) => m.GestionesPage,
+          ),
+      },
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('./pages/admin/perfil/perfil.page').then(
+            (m) => m.PerfilPage,
+          ),
       },
       {
         path: 'productos',
-        loadComponent: () => import('./pages/admin/productos/productos.page').then(m => m.ProductosPage)
+        loadComponent: () =>
+          import('./pages/admin/productos/productos.page').then(
+            (m) => m.ProductosPage,
+          ),
+      },
+      {
+        path: 'nodos',
+        loadComponent: () =>
+          import('./pages/admin/nodos/nodos.page').then((m) => m.NodosPage),
       },
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
+        pathMatch: 'full',
+      },
     ],
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['ADMIN'] }
   },
   {
     path: 'nodo',
