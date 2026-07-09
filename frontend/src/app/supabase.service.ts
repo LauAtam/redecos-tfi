@@ -1,7 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { AuthResponse, Profile, AppError, Nodo, Producto, BuyGroup, GroupOrder, Categoria } from './core/models/auth.models';
+import { AuthResponse, Profile, AppError, Nodo, Producto, BuyGroup, GroupOrder, Categoria, UserCard } from './core/models/auth.models';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
 @Injectable({
@@ -292,7 +292,7 @@ export class SupabaseService {
       }
 
       const updatedProfile = await response.json() as Profile;
-      
+
       // Actualizamos cache/ BehaviorSubject y Signals en el servicio
       this.currentUserSubject.next(updatedProfile);
       this.currentUserSignal.set(updatedProfile);
@@ -461,8 +461,8 @@ export class SupabaseService {
       if (filters?.page) queryParams.append('page', filters.page.toString());
       if (filters?.limit) queryParams.append('limit', filters.limit.toString());
 
-      const url = queryParams.toString() 
-        ? `${environment.apiUrl}/products?${queryParams.toString()}` 
+      const url = queryParams.toString()
+        ? `${environment.apiUrl}/products?${queryParams.toString()}`
         : `${environment.apiUrl}/products`;
 
       const response = await fetch(url, {
@@ -593,7 +593,14 @@ export class SupabaseService {
     }
   }
 
-  async joinOrCreateBuyGroup(dto: { productId: string; quantity: number; nodeId: string }): Promise<{ data: GroupOrder | null, error: AppError | null }> {
+  async joinOrCreateBuyGroup(dto: {
+    productId: string;
+    quantity: number;
+    nodeId: string;
+    paymentToken: string;
+    paymentMethodId: string;
+    cardholderEmail: string;
+  }): Promise<{ data: GroupOrder | null, error: AppError | null }> {
     try {
       const { data: sessionData } = await this.supabase.auth.getSession();
       const token = sessionData.session?.access_token || '';
@@ -635,6 +642,74 @@ export class SupabaseService {
       return { data: data as GroupOrder[], error: null };
     } catch (err) {
       return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener pedidos.', originalError: err } };
+    }
+  }
+
+  // --- MÉTODOS PARA TARJETAS GUARDADAS ---
+
+  async listSavedCards(): Promise<{ data: UserCard[] | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/profiles/cards`, {
+        method: 'GET',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener tus tarjetas guardadas.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as UserCard[], error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener tarjetas guardadas.', originalError: err } };
+    }
+  }
+
+  async addSavedCard(cardToken: string): Promise<{ data: UserCard | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/profiles/cards`, {
+        method: 'POST',
+        headers: this.getHeaders(token),
+        body: JSON.stringify({ token: cardToken }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al guardar la tarjeta.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as UserCard, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al guardar la tarjeta.', originalError: err } };
+    }
+  }
+
+  async deleteSavedCard(cardId: string): Promise<{ success: boolean, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/profiles/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { success: false, error: { code: 'api/error', message: errData.message || 'Error al eliminar la tarjeta.' } };
+      }
+
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar la tarjeta.', originalError: err } };
     }
   }
 }

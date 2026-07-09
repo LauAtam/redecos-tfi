@@ -48,6 +48,7 @@ import { Producto, Categoria } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../../../core/components/header/header.component';
+import { StockBadgeClassPipe } from '../../../core/pipes/stock-badge-class.pipe';
 
 @Component({
   selector: 'app-productos',
@@ -75,7 +76,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonFabButton,
     IonSelect,
     IonSelectOption,
-    HeaderComponent
+    HeaderComponent,
+    StockBadgeClassPipe
   ],
 })
 export class ProductosPage implements OnInit {
@@ -119,6 +121,7 @@ export class ProductosPage implements OnInit {
       image_url: ['', [Validators.pattern(/https?:\/\/.+/)]],
       category_id: [null],
       retail_price: [null, [Validators.min(0.01)]],
+      stock: [0, [Validators.required, Validators.min(0)]],
     });
   }
 
@@ -167,6 +170,7 @@ export class ProductosPage implements OnInit {
       image_url: prod.image_url || '',
       category_id: prod.category_id || null,
       retail_price: prod.retail_price || null,
+      stock: prod.stock || 0,
     });
     this.showForm = true;
   }

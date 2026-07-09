@@ -62,16 +62,17 @@ export class GroupsTabComponent implements OnInit, OnChanges {
     }
   }
 
-  getRemainingDaysText(createdAt: string): string {
-    const createdDate = new Date(createdAt);
-    const endDate = new Date(createdDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days group lifetime
+  getRemainingTimeText(createdAt: string): string {
     const now = new Date();
-    const diffTime = endDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays <= 0) return 'Cierra pronto';
-    if (diffDays === 1) return 'Cierra mañana';
-    return `Cierra en ${diffDays} días`;
+    const midnight = new Date(now);
+    midnight.setHours(23, 59, 59, 999);
+    const diffMs = midnight.getTime() - now.getTime();
+
+    if (diffMs <= 0) return 'Cierra ahora';
+
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    return `Cierra en ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} Hs`;
   }
 
   formatProductName(name: string | undefined): string {

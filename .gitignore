@@ -1,2 +1,9 @@
 .engram/
 engram-export.json
+
+# Environments and Secrets
+.env
+.env.*
+backend/.env
+frontend/src/environments/environment.ts
+frontend/src/environments/environment.prod.ts

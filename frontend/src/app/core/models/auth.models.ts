@@ -47,16 +47,18 @@ export interface Producto {
   created_at?: string;
   category_id?: string;
   categories?: Categoria;
+  stock?: number;
 }
 
 export interface BuyGroup {
   id: string;
   productId: string;
   nodeId: string;
-  status: 'OPEN' | 'COMPLETED' | 'CLOSED' | 'DELIVERED' | 'CANCELLED';
+  status: 'OPEN' | 'COMPLETED' | 'PROCESSING_ORDER' | 'SHIPPED' | 'READY_FOR_PICKUP' | 'FINALIZED' | 'CANCELLED';
   targetSize: number;
   createdAt: string;
   closedAt?: string | null;
+  expires_at?: string;
   product?: Producto;
   unitsBought: number;
   unitsLeft: number;
@@ -69,7 +71,8 @@ export interface GroupOrder {
   profile_id: string;
   quantity: number;
   unit_price: number;
-  status: 'CONFIRMED' | 'CANCELLED';
+  status: 'PAYMENT_HELD' | 'CONFIRMED' | 'CANCELLED' | 'PENDING';
+  payment_intent_id?: string;
   created_at: string;
   group?: {
     id: string;
@@ -78,5 +81,16 @@ export interface GroupOrder {
     product?: Producto;
     node?: Nodo;
   };
+}
+
+export interface UserCard {
+  id: string;
+  profile_id: string;
+  card_id: string;
+  last_four: string;
+  brand: string;
+  expiration_mo: number;
+  expiration_yr: number;
+  created_at: string;
 }
 

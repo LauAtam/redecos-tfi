@@ -50,9 +50,16 @@ describe('BuyGroupsService', () => {
   describe('joinOrCreateGroup', () => {
     it('should delegate to repository', async () => {
       const userId = 'user-123';
-      const dto: JoinGroupDto = { productId: 'prod-1', nodeId: 'node-1', quantity: 2 };
+      const dto: JoinGroupDto = {
+        productId: 'prod-1',
+        nodeId: 'node-1',
+        quantity: 2,
+        paymentToken: 'mock_token',
+        paymentMethodId: 'visa',
+        cardholderEmail: 'test@example.com',
+      };
       const expectedResult = { id: 'order-1' };
-      
+
       mockBuyGroupsRepository.joinOrCreateGroup.mockResolvedValueOnce(expectedResult);
 
       const result = await service.joinOrCreateGroup(userId, dto);

@@ -3,11 +3,13 @@ import { ProfilesController } from './profiles.controller';
 import { ProfilesService } from './profiles.service';
 import { ProfilesRepository } from './interfaces/profiles-repository.interface';
 import { PrismaProfilesRepository } from './infrastructure/prisma-profiles.repository';
+import { MercadoPagoService } from '../buy-groups/infrastructure/mercado-pago.service';
 
 @Module({
   controllers: [ProfilesController],
   providers: [
     ProfilesService,
+    MercadoPagoService,
     {
       provide: ProfilesRepository,
       useClass: PrismaProfilesRepository,

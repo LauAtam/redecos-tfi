@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, signal, Input, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { IonSpinner, IonText, IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonContent } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -9,6 +10,7 @@ import { SupabaseService } from '../../../supabase.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Nodo, Producto, BuyGroup, Categoria } from '../../../core/models/auth.models';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-catalog-tab',
@@ -18,6 +20,7 @@ import { Subscription } from 'rxjs';
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     IonSpinner,
     IonText,
     IonButton,
@@ -33,7 +36,7 @@ import { Subscription } from 'rxjs';
 })
 export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   @Input() activeNode: Nodo | null = null;
-  
+
   private supabaseService = inject(SupabaseService);
   private toastService = inject(ToastService);
   private alertController = inject(AlertController);
@@ -56,6 +59,20 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   buyQuantity = signal<number>(1);
   isProcessingPayment = signal<boolean>(false);
   activeGroup = signal<BuyGroup | null>(null);
+
+  // Tarjeta de prueba hardcodeada (Mastercard sandbox de MercadoPago)
+  readonly testCard = {
+    number: '5031755734530604',
+    cvv: '123',
+    expirationMonth: '11',
+    expirationYear: '2030',
+    cardholderName: 'APRO',
+    docType: 'DNI',
+    docNumber: '12345678',
+    label: 'Mastercard de prueba terminada en 0604',
+  };
+
+  paymentError = '';
 
   private routeSub?: Subscription;
 
@@ -88,6 +105,8 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
       this.routeSub.unsubscribe();
     }
   }
+
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['activeNode']) {
@@ -174,7 +193,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
 
   onProductClick(product: Producto) {
     if (!product || !product.id) return;
-    
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -249,12 +268,14 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     this.activeGroup.set(group);
     this.buyQuantity.set(1);
     this.isModalOpen.set(true);
+    this.paymentError = '';
   }
 
   closeDetailModal() {
     this.isModalOpen.set(false);
     this.selectedProduct.set(null);
     this.activeGroup.set(null);
+    this.paymentError = '';
     this.clearQueryParams();
   }
 
@@ -292,10 +313,14 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  /**
+   * Tokeniza la tarjeta de prueba hardcodeada contra la API REST de Mercado Pago
+   * y envía el token al backend para pre-autorizar el pago.
+   */
   async confirmAndPay() {
     const product = this.selectedProduct();
     if (!product || !product.id) return;
-    
+
     if (!this.activeNode || !this.activeNode.id) {
       this.toastService.showError('Debes seleccionar un punto de retiro para comprar.');
       return;
@@ -308,37 +333,95 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.isProcessingPayment.set(true);
+    this.paymentError = '';
 
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    let paymentToken = '';
+    let paymentMethodId = '';
 
+    try {
+      const mpInstance = (window as any).MercadoPago 
+        ? new (window as any).MercadoPago(environment.mercadoPagoPublicKey) 
+        : null;
+
+      if (!mpInstance) {
+        throw new Error('El SDK de Mercado Pago no está disponible. Volvé a intentar en unos segundos.');
+      }
+
+      // Obtener dinámicamente el paymentMethodId usando el BIN (primeros 6 dígitos) de la tarjeta
+      const rawCardNumber = this.testCard.number.replace(/\s/g, '');
+      const bin = rawCardNumber.substring(0, 6);
+      
+      try {
+        const paymentMethods = await mpInstance.getPaymentMethods({ bin });
+        if (paymentMethods && paymentMethods.length > 0) {
+          paymentMethodId = paymentMethods[0].id;
+          console.log('Método de pago detectado:', paymentMethodId);
+        } else {
+          paymentMethodId = 'master'; // fallback
+        }
+      } catch (pmErr) {
+        console.warn('No se pudo determinar el método de pago por BIN, usando master por defecto:', pmErr);
+        paymentMethodId = 'master';
+      }
+
+      const tokenResponse = await mpInstance.createCardToken({
+        cardNumber: rawCardNumber,
+        cardholderName: this.testCard.cardholderName,
+        cardExpirationMonth: this.testCard.expirationMonth,
+        cardExpirationYear: this.testCard.expirationYear,
+        securityCode: this.testCard.cvv,
+        identificationType: this.testCard.docType,
+        identificationNumber: this.testCard.docNumber
+      });
+
+      if (!tokenResponse || !tokenResponse.id) {
+        throw new Error('No se pudo generar el token de pago.');
+      }
+
+      paymentToken = tokenResponse.id;
+      console.log('Token de tarjeta generado vía SDK:', paymentToken);
+    } catch (err: any) {
+      console.error('Fallo tokenización de tarjeta:', err);
+      this.isProcessingPayment.set(false);
+      this.paymentError = `Error de pago: ${err.message}`;
+      this.toastService.showError(this.paymentError);
+      return;
+    }
+
+    // Paso 2: Enviar token al backend para pre-autorizar el pago
+    const profile = this.supabaseService.currentUser();
     const { data: order, error } = await this.supabaseService.joinOrCreateBuyGroup({
       productId: product.id,
       quantity: qty,
-      nodeId: this.activeNode.id
+      nodeId: this.activeNode.id,
+      paymentToken,
+      paymentMethodId,
+      cardholderEmail: profile?.email || '',
     });
 
     this.isProcessingPayment.set(false);
 
     if (error) {
+      this.paymentError = error.message;
       this.toastService.showError(error.message);
     } else {
       const formattedName = this.formatProductName(product.name);
-      this.toastService.showSuccess(`¡Compra realizada! Compraste ${qty} u. de "${formattedName}".`);
-      
+      this.toastService.showSuccess(`¡Compra pre-autorizada! Compraste ${qty} u. de "${formattedName}".`);
       this.closeDetailModal();
       this.loadActiveGroups();
     }
   }
 
-  getRemainingDaysText(createdAt: string): string {
-    const createdDate = new Date(createdAt);
-    const endDate = new Date(createdDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+  getRemainingTimeText(createdAt: string): string {
     const now = new Date();
-    const diffTime = endDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays <= 0) return 'Cierra pronto';
-    if (diffDays === 1) return 'Cierra mañana';
-    return `Cierra en ${diffDays} días`;
+    const midnight = new Date(now);
+    midnight.setHours(23, 59, 59, 999);
+    const diffMs = midnight.getTime() - now.getTime();
+
+    if (diffMs <= 0) return 'Cierra ahora';
+
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    return `Cierra en ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} Hs`;
   }
 }

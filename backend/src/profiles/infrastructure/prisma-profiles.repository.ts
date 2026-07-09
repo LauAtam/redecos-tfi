@@ -5,7 +5,7 @@ import { UpdateProfileDto } from '../dto/update-profile.dto';
 
 @Injectable()
 export class PrismaProfilesRepository implements ProfilesRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async updateProfile(
     userId: string,
@@ -33,5 +33,49 @@ export class PrismaProfilesRepository implements ProfilesRepository {
       }
       throw new BadRequestException(error.message);
     }
+  }
+
+  async findProfileById(userId: string): Promise<any> {
+    return await this.prisma.profiles.findUnique({
+      where: { id: userId },
+    });
+  }
+
+  async addCard(
+    userId: string,
+    card: { card_id: string; last_four: string; brand: string; expiration_mo: number; expiration_yr: number },
+  ): Promise<any> {
+    return await this.prisma.user_cards.create({
+      data: {
+        profile_id: userId,
+        card_id: card.card_id,
+        last_four: card.last_four,
+        brand: card.brand,
+        expiration_mo: card.expiration_mo,
+        expiration_yr: card.expiration_yr,
+      },
+    });
+  }
+
+  async listCards(userId: string): Promise<any[]> {
+    return await this.prisma.user_cards.findMany({
+      where: { profile_id: userId },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async deleteCard(userId: string, cardId: string): Promise<any> {
+    return await this.prisma.user_cards.deleteMany({
+      where: {
+        id: cardId,
+        profile_id: userId,
+      },
+    });
+  }
+
+  async findCardById(cardId: string): Promise<any> {
+    return await this.prisma.user_cards.findFirst({
+      where: { id: cardId },
+    });
   }
 }

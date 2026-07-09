@@ -1,5 +1,6 @@
 <app-header [title]="showForm ? (isEditing ? 'Editar Producto' : 'Nuevo Producto') : 'Catálogo de Productos'"
-  [showCustomBack]="showForm" [showAdminAvatar]="!showForm" [defaultHref]="!showForm ? '/admin/gestiones' : null" (customBack)="toggleForm(false)">
+  [showCustomBack]="showForm" [showAdminAvatar]="!showForm" [defaultHref]="!showForm ? '/admin/gestiones' : null"
+  (customBack)="toggleForm(false)">
 </app-header>
 
 <ion-content>
@@ -50,16 +51,25 @@
               <div class="flex items-center justify-between gap-2 mb-1">
                 <h2 class="m-0 text-[1rem] font-bold text-[#002d4b]">{{ formatProductName(prod.name) }}</h2>
                 @if (prod.categories) {
-                  <span class="px-2 py-0.5 text-[0.75rem] font-semibold text-[#006b4d] bg-[#e6f4f0] rounded-full">
-                    {{ prod.categories.name }}
-                  </span>
+                <span class="px-2 py-0.5 text-[0.75rem] font-semibold text-[#006b4d] bg-[#e6f4f0] rounded-full">
+                  {{ prod.categories.name }}
+                </span>
                 }
               </div>
-              <div class="flex items-center gap-3">
-                <span class="font-bold text-[#006b4d] text-[0.95rem]">{{ formatPrice(prod.price) }} <span class="text-[0.75rem] font-normal text-[#64748b]">(Bulto)</span></span>
-                @if (prod.retail_price) {
-                  <span class="text-[#64748b] text-[0.85rem] font-medium">{{ formatPrice(prod.retail_price) }} <span class="text-[0.75rem] font-normal text-[#94a3b8]">(Ref. Minorista)</span></span>
-                }
+              <div class="flex items-center justify-between gap-3 mt-1">
+                <div class="flex items-center gap-3">
+                  <span class="font-bold text-[#006b4d] text-[0.95rem]">{{ formatPrice(prod.price) }} <span
+                      class="text-[0.75rem] font-normal text-[#64748b]">(Bulto)</span></span>
+                  @if (prod.retail_price) {
+                  <span class="text-[#64748b] text-[0.85rem] font-medium">{{ formatPrice(prod.retail_price) }} <span
+                      class="text-[0.75rem] font-normal text-[#94a3b8]">(Ref. Minorista)</span></span>
+                  }
+                </div>
+                <!-- Badge de stock físico -->
+                <span class="px-2 py-0.5 text-[0.7rem] font-bold rounded-full select-none"
+                  [class]="prod.stock | stockBadgeClass">
+                  Stock: {{ prod.stock || 0 }}
+                </span>
               </div>
             </ion-label>
           </ion-item>
@@ -73,7 +83,8 @@
 
     <!-- VISTA 2: FORMULARIO DE ALTA / EDICIÓN (Implementado con Componentes de Formulario Nativos de Ionic) -->
     @if (showForm) {
-    <ion-card class="m-0 p-5 md:p-6 rounded-[20px] bg-white border border-[#e8e8e8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] overflow-hidden">
+    <ion-card
+      class="m-0 p-5 md:p-6 rounded-[20px] bg-white border border-[#e8e8e8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] overflow-hidden">
       <form [formGroup]="productoForm" (ngSubmit)="onSubmit()" class="w-full flex flex-col gap-4">
 
         <ion-input label="Nombre del Producto" labelPlacement="stacked" fill="outline"
@@ -97,11 +108,11 @@
             class="flex-1">
           </ion-input>
 
-          <ion-input label="Precio Minorista (Ref)" labelPlacement="stacked" fill="outline" placeholder="0.00" type="number"
-            formControlName="retail_price"
+          <ion-input label="Precio Minorista (Ref)" labelPlacement="stacked" fill="outline" placeholder="0.00"
+            type="number" formControlName="retail_price"
             [errorText]="f['retail_price'].errors?.['min'] ? 'Debe ser mayor a 0.' : ''"
-            [class.ion-invalid]="f['retail_price'].touched && f['retail_price'].invalid" [class.ion-touched]="f['retail_price'].touched"
-            class="flex-1">
+            [class.ion-invalid]="f['retail_price'].touched && f['retail_price'].invalid"
+            [class.ion-touched]="f['retail_price'].touched" class="flex-1">
           </ion-input>
         </div>
 
@@ -113,28 +124,37 @@
             [class.ion-touched]="f['bulk_size'].touched" class="flex-1">
           </ion-input>
 
-          <ion-select label="Categoría" labelPlacement="stacked" fill="outline"
-            placeholder="Seleccioná..." formControlName="category_id"
-            [class.ion-invalid]="f['category_id'].touched && f['category_id'].invalid" [class.ion-touched]="f['category_id'].touched"
-            class="flex-1">
+          <ion-select label="Categoría" labelPlacement="stacked" fill="outline" placeholder="Seleccioná..."
+            formControlName="category_id" [class.ion-invalid]="f['category_id'].touched && f['category_id'].invalid"
+            [class.ion-touched]="f['category_id'].touched" class="flex-1">
             @for (cat of categorias; track cat.id) {
-              <ion-select-option [value]="cat.id">{{ cat.name }}</ion-select-option>
+            <ion-select-option [value]="cat.id">{{ cat.name }}</ion-select-option>
             }
           </ion-select>
         </div>
 
-        <ion-input label="URL de Imagen (Opcional)" labelPlacement="stacked" fill="outline"
-          placeholder="https://ejemplo.com/imagen.jpg" type="url" formControlName="image_url"
-          [errorText]="f['image_url'].errors?.['pattern'] ? 'Ingresá una URL de imagen válida.' : ''"
-          [class.ion-invalid]="f['image_url'].touched && f['image_url'].invalid"
-          [class.ion-touched]="f['image_url'].touched">
-        </ion-input>
+        <div class="flex gap-4">
+          <ion-input label="Stock Disponible" labelPlacement="stacked" fill="outline" placeholder="0" type="number"
+            formControlName="stock"
+            [errorText]="f['stock'].errors?.['required'] ? 'El stock es obligatorio.' : (f['stock'].errors?.['min'] ? 'No puede ser negativo.' : '')"
+            [class.ion-invalid]="f['stock'].touched && f['stock'].invalid" [class.ion-touched]="f['stock'].touched"
+            class="flex-1">
+          </ion-input>
+
+          <ion-input label="URL de Imagen (Opcional)" labelPlacement="stacked" fill="outline"
+            placeholder="https://ejemplo.com/imagen.jpg" type="url" formControlName="image_url"
+            [errorText]="f['image_url'].errors?.['pattern'] ? 'Ingresá una URL de imagen válida.' : ''"
+            [class.ion-invalid]="f['image_url'].touched && f['image_url'].invalid"
+            [class.ion-touched]="f['image_url'].touched" class="flex-1">
+          </ion-input>
+        </div>
 
         <div class="flex justify-end items-center gap-3 mt-4">
           <ion-button fill="clear" color="medium" (click)="toggleForm(false)" [disabled]="isSaving">
             Cancelar
           </ion-button>
-          <ion-button type="submit" [disabled]="isSaving" class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] h-12 font-bold normal-case m-0">
+          <ion-button type="submit" [disabled]="isSaving"
+            class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] h-12 font-bold normal-case m-0">
             @if (!isSaving && !isEditing) {
             <ion-icon slot="start" name="add-outline"></ion-icon>
             }
@@ -157,12 +177,8 @@
   </div>
 
   <!-- Modal de Detalles / Vista Previa -->
-  <ion-modal 
-    [isOpen]="isDetailModalOpen" 
-    (didDismiss)="closeProductDetail()"
-    [initialBreakpoint]="0.85"
-    [breakpoints]="[0, 0.85, 1]"
-    [handle]="true">
+  <ion-modal [isOpen]="isDetailModalOpen" (didDismiss)="closeProductDetail()" [initialBreakpoint]="0.85"
+    [breakpoints]="[0, 0.85, 1]" [handle]="true">
     <ng-template>
       <ion-header class="ion-no-border">
         <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
@@ -215,26 +231,42 @@
 
             <div class="flex gap-4">
               <div class="flex flex-col gap-1 mb-1 flex-1">
-                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio Mayorista</span>
+                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio
+                  Mayorista</span>
                 <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.price) }}</span>
               </div>
 
               @if (selectedProduct.retail_price) {
               <div class="flex flex-col gap-1 mb-1 flex-1">
-                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio Minorista (Ref)</span>
-                <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.retail_price) }}</span>
+                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Precio Minorista
+                  (Ref)</span>
+                <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ formatPrice(selectedProduct.retail_price)
+                  }}</span>
               </div>
               }
             </div>
 
-            <div class="flex flex-col gap-1 mb-1">
-              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Tamaño del Bulto</span>
-              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.bulk_size }} unidades</span>
+            <div class="flex gap-4">
+              <div class="flex flex-col gap-1 mb-1 flex-1">
+                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Tamaño del
+                  Bulto</span>
+                <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.bulk_size }} unidades</span>
+              </div>
+
+              <div class="flex flex-col gap-1 mb-1 flex-1">
+                <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Stock
+                  Disponible</span>
+                <span class="px-2 py-0.5 text-[0.8rem] font-bold rounded-full w-fit mt-0.5"
+                  [class]="selectedProduct.stock | stockBadgeClass">
+                  {{ selectedProduct.stock || 0 }} unidades
+                </span>
+              </div>
             </div>
 
             <div class="flex flex-col gap-1 mb-1">
               <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Descripción</span>
-              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.description || 'Este producto no cuenta con una descripción detallada por el momento.' }}</span>
+              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ selectedProduct.description || 'Este producto
+                no cuenta con una descripción detallada por el momento.' }}</span>
             </div>
           </div>
 

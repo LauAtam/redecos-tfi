@@ -79,7 +79,7 @@ describe('ProductsService', () => {
 
   describe('create', () => {
     it('should create a new product', async () => {
-      const dto = { name: 'New Product', price: 100, bulk_size: 10 };
+      const dto = { name: 'New Product', price: 100, bulk_size: 10, stock: 5 };
       const result = { id: '1', ...dto };
       mockProductsRepository.create.mockResolvedValueOnce(result);
 

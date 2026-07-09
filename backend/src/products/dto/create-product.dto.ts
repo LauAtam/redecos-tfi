@@ -37,5 +37,10 @@ export class CreateProductDto {
   @Min(0)
   @IsOptional()
   retail_price?: number;
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  stock?: number;
 }
 

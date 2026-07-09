@@ -16,7 +16,7 @@ Adoptamos el estándar de **Conventional Commits** en español con prefijos téc
 
 ## 2. Base de Datos & Supabase
 * **Arquitectura Database-First**: Supabase (mediante su interfaz o scripts SQL crudos) es la única fuente de verdad para la estructura de la base de datos (tablas, RLS, Triggers). Prisma se utilizará **exclusivamente como cliente ORM (Query Builder)** en el backend para gestionar transacciones. No se permite el uso de `prisma migrate dev` para alterar la base de datos; las actualizaciones del esquema en Prisma se realizan mediante `prisma db pull` (Introspección).
-* **Gestión de Entornos (Dev/Prod)**: Se mantiene la sincronización de bases de datos mediante extracciones directas y ejecución manual de scripts SQL en la interfaz de Supabase. Queda desestimado el uso de Branching o flujos automatizados de CI/CD para migraciones.
+* **Gestión de Entornos (Dev/Prod)**: Se trabaja directamente sobre la base de datos de producción (Supabase). Todas las modificaciones de esquema SQL se ejecutan de forma directa en la base de datos de producción. Queda desestimado el uso de Branching o flujos automatizados de CI/CD para migraciones.
 * **MultiSchema y Foreign Keys**: Es obligatorio mantener la integridad referencial (Foreign Keys) hacia tablas internas de Supabase como `auth.users`. Para evitar que Prisma falle durante la introspección, se debe utilizar la característica `multiSchema` en `schema.prisma`.
 * **Idioma del Esquema**: Todo el diseño de tablas, columnas y constraints se define estrictamente en **inglés** (ej. `products`, `nodos`, `profiles`).
 * **Seguridad (RLS)**:

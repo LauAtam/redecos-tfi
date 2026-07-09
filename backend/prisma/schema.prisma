@@ -505,6 +505,7 @@ model buy_groups {
   target_size  Int
   created_at   DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
   closed_at    DateTime?      @db.Timestamptz(6)
+  expires_at   DateTime?      @default(dbgenerated("(CURRENT_DATE + '23:59:59'::time without time zone)")) @db.Timestamptz(6)
   nodos        nodos          @relation(fields: [node_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   productos    productos      @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   group_orders group_orders[]
@@ -526,15 +527,16 @@ model categories {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model group_orders {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  group_id   String     @db.Uuid
-  profile_id String     @db.Uuid
-  quantity   Int
-  unit_price Decimal    @db.Decimal
-  status     String     @default("PENDING")
-  created_at DateTime   @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
-  buy_groups buy_groups @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  profiles   profiles   @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id                String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  group_id          String     @db.Uuid
+  profile_id        String     @db.Uuid
+  quantity          Int
+  unit_price        Decimal    @db.Decimal
+  status            String     @default("PENDING")
+  created_at        DateTime   @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  payment_intent_id String?
+  buy_groups        buy_groups @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  profiles          profiles   @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([group_id], map: "idx_group_orders_group_id")
   @@schema("public")
@@ -556,6 +558,7 @@ model nodos {
   @@schema("public")
 }
 
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model productos {
   id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -567,6 +570,7 @@ model productos {
   created_at   DateTime     @default(now()) @db.Timestamptz(6)
   retail_price Decimal?     @db.Decimal
   category_id  String?      @db.Uuid
+  stock        Int?         @default(0)
   buy_groups   buy_groups[]
   categories   categories?  @relation(fields: [category_id], references: [id], onUpdate: NoAction)
 
@@ -582,9 +586,26 @@ model profiles {
   role            String         @default("CLIENTE")
   created_at      DateTime       @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
   default_node_id String?        @db.Uuid
+  customer_id     String?        @db.VarChar(255)
   group_orders    group_orders[]
   nodos           nodos?         @relation(fields: [default_node_id], references: [id], onUpdate: NoAction, map: "fk_profiles_default_node")
   users           users          @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user_cards      user_cards[]
+
+  @@schema("public")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model user_cards {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profile_id    String   @db.Uuid
+  card_id       String   @db.VarChar(255)
+  last_four     String   @db.VarChar(4)
+  brand         String   @db.VarChar(50)
+  expiration_mo Int
+  expiration_yr Int
+  created_at    DateTime @default(dbgenerated("timezone('utc'::text, now())")) @db.Timestamptz(6)
+  profiles      profiles @relation(fields: [profile_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@schema("public")
 }

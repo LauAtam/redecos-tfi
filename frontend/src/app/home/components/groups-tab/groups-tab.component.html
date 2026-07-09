@@ -79,12 +79,8 @@
             </div>
             
             <div class="flex justify-end items-center text-[10px] text-slate-500">
-              <span class="px-2 py-0.5 rounded font-bold transition-colors"
-                    [ngClass]="{
-                      'bg-red-50 text-red-600': getRemainingDaysText(group.createdAt) === 'Cierra mañana' || getRemainingDaysText(group.createdAt) === 'Cierra pronto',
-                      'bg-emerald-50 text-[#006b4d]': getRemainingDaysText(group.createdAt) !== 'Cierra mañana' && getRemainingDaysText(group.createdAt) !== 'Cierra pronto'
-                    }">
-                {{ getRemainingDaysText(group.createdAt) }}
+              <span class="px-2 py-0.5 rounded font-bold transition-colors bg-red-50 text-red-600">
+                {{ getRemainingTimeText(group.createdAt) }}
               </span>
             </div>
           </div>

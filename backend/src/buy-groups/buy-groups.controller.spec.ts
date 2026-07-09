@@ -59,7 +59,14 @@ describe('BuyGroupsController', () => {
 
   describe('joinGroup', () => {
     it('should call service with user id and dto', async () => {
-      const mockDto = { productId: 'prod-1', quantity: 3, nodeId: 'node-1' };
+      const mockDto = {
+        productId: 'prod-1',
+        quantity: 3,
+        nodeId: 'node-1',
+        paymentToken: 'mock_token',
+        paymentMethodId: 'visa',
+        cardholderEmail: 'test@example.com',
+      };
       mockBuyGroupsService.joinOrCreateGroup.mockResolvedValueOnce({
         id: 'order-1',
       });

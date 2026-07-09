@@ -16,6 +16,14 @@ export const routes: Routes = [
     canActivate: [authGuard, nodeGuard],
   },
   {
+    path: 'mis-compras',
+    loadComponent: () =>
+      import('./pages/cliente/mis-compras/mis-compras.page').then(
+        (m) => m.MisComprasPage,
+      ),
+    canActivate: [authGuard],
+  },
+  {
     path: 'pages/select-node',
     loadComponent: () =>
       import('./pages/select-node/select-node.page').then(
