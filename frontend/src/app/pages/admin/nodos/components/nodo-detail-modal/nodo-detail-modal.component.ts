@@ -11,7 +11,7 @@ import {
   ActionSheetController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline } from 'ionicons/icons';
+import { closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline, locationOutline, businessOutline, personOutline } from 'ionicons/icons';
 import * as L from 'leaflet';
 import { Nodo } from '../../../../../core/models/auth.models';
 
@@ -57,7 +57,7 @@ export class NodoDetailModalComponent implements OnDestroy {
   private actionSheetController = inject(ActionSheetController);
 
   constructor() {
-    addIcons({ closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline });
+    addIcons({ closeOutline, pencilOutline, trashOutline, ellipsisVerticalOutline, locationOutline, businessOutline, personOutline });
   }
 
   onEdit() {

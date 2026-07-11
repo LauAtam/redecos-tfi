@@ -1,58 +1,81 @@
-<ion-modal 
-  [isOpen]="isOpen" 
-  (didDismiss)="onDidDismiss()" 
-  (didPresent)="onDidPresent()"
-  [initialBreakpoint]="0.85"
-  [breakpoints]="[0, 0.85, 1]"
-  [handle]="true">
+<ion-modal [isOpen]="isOpen" (didDismiss)="onDidDismiss()" (didPresent)="onDidPresent()" [initialBreakpoint]="0.85"
+  [breakpoints]="[0, 0.85, 1]" [handle]="true">
   <ng-template>
     @if (nodo) {
-      <ion-header class="ion-no-border">
-        <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
-          <ion-buttons slot="start">
-            <ion-button (click)="presentActionSheet()" title="Opciones">
-              <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-          <ion-title class="text-[#002d4b]">Detalles del Nodo</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="closeModal()">
-              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <div class="max-w-[500px] mx-auto min-h-full py-3 px-2 flex flex-col gap-4 max-[480px]:py-2 max-[480px]:px-1 max-[480px]:gap-3.5">
-          <div class="bg-white rounded-[18px] p-[18px] border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] flex flex-col gap-4 max-[480px]:p-4">
-            
-            <h2 class="m-0 text-[1.35rem] font-extrabold text-[#002d4b] leading-snug tracking-[-0.01em] max-[480px]:text-[1.2rem]">
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold px-2">
+        <ion-buttons slot="start">
+          <ion-button (click)="closeModal()" title="Cerrar">
+            <ion-icon slot="icon-only" name="close-outline" class="text-xl"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title class="text-[#002d4b] font-extrabold text-sm text-center">Detalles del Nodo</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="presentActionSheet()" title="Opciones">
+            <ion-icon slot="icon-only" name="ellipsis-vertical-outline" class="text-xl"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding [--background:#ffffff]">
+      <div class="max-w-[500px] mx-auto py-1 flex flex-col gap-4">
+
+        <!-- Encabezado con Ícono Comercial (Directo en el modal, sin tarjeta) -->
+        <div class="flex items-center gap-3 pb-3.5 border-b border-slate-100">
+          <div class="w-11 h-11 rounded-xl bg-emerald-50 text-[#006b4d] flex items-center justify-center shrink-0">
+            <ion-icon name="business-outline" class="text-xl"></ion-icon>
+          </div>
+          <div class="min-w-0">
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Nombre del nodo</span>
+            <h2 class="m-0 text-base font-extrabold text-[#002d4b] leading-tight truncate">
               {{ nodo.name }}
             </h2>
-            
-            <div class="flex flex-col gap-1 mb-3">
-              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Dirección</span>
-              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ nodo.address }}</span>
+          </div>
+        </div>
+
+        <!-- Lista de Detalles compacta -->
+        <div class="flex flex-col gap-3">
+          <!-- Detalle: Dirección -->
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-slate-50 text-slate-500 flex items-center justify-center shrink-0 mt-0.5">
+              <ion-icon name="location-outline" class="text-base"></ion-icon>
             </div>
-            
-            <div class="flex flex-col gap-1 mb-3">
-              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Encargado</span>
-              <span class="text-[0.95rem] font-medium text-[#1e293b]">{{ nodo.manager_name }}</span>
-            </div>
-            
-            <div class="flex flex-col gap-1 mb-3">
-              <span class="text-[0.75rem] font-semibold uppercase tracking-[0.5px] text-[#64748b]">Ubicación</span>
-              <div id="modalMap" class="modal-map-container"></div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Dirección</span>
+              <span class="text-xs font-semibold text-[#334155] leading-normal break-words">{{ nodo.address }}</span>
             </div>
           </div>
-          
-          <ion-button expand="block" 
-            class="[--background:#006b4d] [--background-activated:#004d38] [--background-hover:#00805c] [--background-focused:#00805c] [--color:white] [--border-radius:12px] mt-4 h-12 font-bold text-[0.95rem] normal-case shadow-[0_4px_10px_rgba(0,107,77,0.15)] mb-4" 
-            (click)="onEdit()">
-            Editar Detalles
-          </ion-button>
+
+          <hr class="border-slate-100/70 m-0" />
+
+          <!-- Detalle: Encargado -->
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-lg bg-slate-50 text-slate-500 flex items-center justify-center shrink-0 mt-0.5">
+              <ion-icon name="person-outline" class="text-base"></ion-icon>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Encargado del nodo</span>
+              <span class="text-xs font-semibold text-[#334155] leading-normal truncate">{{ nodo.manager_name }}</span>
+            </div>
+          </div>
         </div>
-      </ion-content>
+
+        <!-- Ubicación en el Mapa -->
+        <div class="flex flex-col mt-1">
+          <div id="modalMap" class="modal-map-container border border-slate-200 rounded-xl overflow-hidden"
+            style="height: 180px; margin-top: 0;"></div>
+        </div>
+
+        <!-- Botón de Edición -->
+        <ion-button expand="block"
+          class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-extrabold text-xs h-11 m-0 rounded-xl mt-2 shadow-sm"
+          (click)="onEdit()">
+          <ion-icon name="pencil-outline" slot="start" class="mr-1.5 text-base"></ion-icon>
+          Editar
+        </ion-button>
+      </div>
+    </ion-content>
     }
   </ng-template>
 </ion-modal>

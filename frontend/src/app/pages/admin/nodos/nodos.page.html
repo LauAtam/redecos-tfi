@@ -10,27 +10,35 @@
     @if (!showForm) {
     <div class="flex flex-col">
 
-      <!-- Contenedor pegajoso para el mapa con escudo de fondo sólido -->
+      <!-- Contenedor pegajoso para buscador y mapa con escudo de fondo sólido -->
       <div
-        style="position: sticky; top: 0; z-index: 1000; background: #f8fafc; padding-top: 0; padding-bottom: 12px; margin-bottom: 8px;">
+        style="position: sticky; top: 0; z-index: 1000; background: #f8fafc; padding-top: 4px; padding-bottom: 12px; margin-bottom: 8px;"
+        class="flex flex-col gap-2">
+        <ion-searchbar placeholder="Buscar por nombre, dirección o encargado..." [value]="searchQuery"
+          (ionInput)="onSearchChange($event)"
+          class="[--background:#ffffff] [--placeholder-color:#94a3b8] [--icon-color:#94a3b8] [--border-radius:12px] p-0 text-xs font-semibold">
+        </ion-searchbar>
         <div #listMapContainerRef id="list-map" class="map-container"
           style="height: 250px; margin-bottom: 0; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);"></div>
       </div>
 
-      <div class="flex flex-col gap-1.5 pb-4">
+      <div class="flex flex-col gap-1.5 pb-28">
         @if (isLoading) {
         <div class="flex justify-center py-10 text-gray-400">
           <ion-spinner name="crescent"></ion-spinner>
         </div>
         }
 
-        @if (!isLoading && nodos.length === 0) {
-        <div class="flex justify-center py-10 text-gray-400">
-          <p>No hay nodos registrados todavía.</p>
+        @if (!isLoading && filteredNodos.length === 0) {
+        <div class="flex flex-col items-center justify-center py-10 text-gray-400 gap-2">
+          <ion-icon name="search-outline" class="text-3xl text-gray-300"></ion-icon>
+          <p class="text-sm font-semibold m-0 text-gray-400">
+            {{ searchQuery ? 'No se encontraron resultados' : 'No hay nodos registrados todavía' }}
+          </p>
         </div>
         }
 
-        @for (nodo of nodos; track nodo.id) {
+        @for (nodo of filteredNodos; track nodo.id) {
         <ion-card
           class="m-0 rounded-[12px] bg-white border border-[#e8e8e8] shadow-[0_2px_8px_rgba(0,0,0,0.03)] overflow-hidden transition-all duration-200"
           button="true" (click)="openDetailModal(nodo)">

@@ -3,7 +3,7 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import {
-  IonContent, 
+  IonContent,
   IonItem,
   IonLabel,
   IonButton,
@@ -12,14 +12,16 @@ import {
   IonSpinner,
   IonCard,
   IonFab,
-  IonFabButton
+  IonFabButton,
+  IonSearchbar
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   businessOutline,
   addOutline,
-  locateOutline
+  locateOutline,
+  searchOutline
 } from 'ionicons/icons';
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -51,7 +53,7 @@ const customMarkerIcon = L.divIcon({
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    IonContent, 
+    IonContent,
     IonItem,
     IonLabel,
     IonButton,
@@ -61,6 +63,7 @@ const customMarkerIcon = L.divIcon({
     IonCard,
     IonFab,
     IonFabButton,
+    IonSearchbar,
     NodoDetailModalComponent,
     NodoFormComponent,
     HeaderComponent
@@ -76,6 +79,29 @@ export class NodosPage implements OnInit, OnDestroy {
   showForm = false;
   errorMessage: string | null = null;
   nodos: Nodo[] = [];
+  searchQuery = '';
+
+  get filteredNodos(): Nodo[] {
+    if (!this.searchQuery || !this.searchQuery.trim()) {
+      return this.nodos;
+    }
+    const term = this.normalizeStr(this.searchQuery);
+    return this.nodos.filter(n => {
+      const name = n.name ? this.normalizeStr(n.name) : '';
+      const address = n.address ? this.normalizeStr(n.address) : '';
+      const manager = n.manager_name ? this.normalizeStr(n.manager_name) : '';
+      return name.includes(term) || address.includes(term) || manager.includes(term);
+    });
+  }
+
+  private normalizeStr(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  onSearchChange(event: any) {
+    this.searchQuery = event.detail.value || '';
+    this.refreshListMapMarkers();
+  }
 
   listMap?: L.Map;
   listMarkers: L.Marker[] = [];
@@ -102,7 +128,8 @@ export class NodosPage implements OnInit, OnDestroy {
     addIcons({
       businessOutline,
       addOutline,
-      locateOutline
+      locateOutline,
+      searchOutline
     });
   }
 
@@ -204,7 +231,7 @@ export class NodosPage implements OnInit, OnDestroy {
     this.listMarkers.forEach(m => m.remove());
     this.listMarkers = [];
 
-    this.nodos.forEach(nodo => {
+    this.filteredNodos.forEach(nodo => {
       if (nodo.latitude && nodo.longitude) {
         const marker = L.marker([nodo.latitude, nodo.longitude], { icon: customMarkerIcon })
           .addTo(this.listMap!)
@@ -229,7 +256,7 @@ export class NodosPage implements OnInit, OnDestroy {
     this.listMap.invalidateSize();
 
     const coords: L.LatLng[] = [];
-    this.nodos.forEach(n => {
+    this.filteredNodos.forEach(n => {
       if (n.latitude && n.longitude) {
         coords.push(L.latLng(n.latitude, n.longitude));
       }
@@ -374,12 +401,12 @@ export class NodosPage implements OnInit, OnDestroy {
     event.stopPropagation();
     if (this.listMap && nodo.latitude && nodo.longitude) {
       this.listMap.setView([nodo.latitude, nodo.longitude], 16);
-      
+
       const marker = this.listMarkers.find(m => {
         const latLng = m.getLatLng();
         return latLng.lat === nodo.latitude && latLng.lng === nodo.longitude;
       });
-      
+
       if (marker) {
         marker.openPopup();
       }
