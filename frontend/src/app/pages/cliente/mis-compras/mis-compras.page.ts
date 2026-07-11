@@ -9,6 +9,11 @@ import {
   IonSpinner,
   IonText,
   IonIcon,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonButtons,
+  IonTitle
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -17,7 +22,9 @@ import {
   closeCircleOutline,
   timeOutline,
   cubeOutline,
-  arrowBackOutline
+  arrowBackOutline,
+  qrCodeOutline,
+  closeOutline
 } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { GroupOrder } from '../../../core/models/auth.models';
@@ -39,6 +46,11 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonSpinner,
     IonText,
     IonIcon,
+    IonModal,
+    IonHeader,
+    IonToolbar,
+    IonButtons,
+    IonTitle
   ],
   providers: [CurrencyPipe],
 })
@@ -46,6 +58,8 @@ export class MisComprasPage implements OnInit {
   orders: GroupOrder[] = [];
   isLoading = false;
   errorMessage: string | null = null;
+  selectedOrderForQr: GroupOrder | null = null;
+  qrModalOpen = false;
 
   private supabaseService = inject(SupabaseService);
 
@@ -56,7 +70,9 @@ export class MisComprasPage implements OnInit {
       closeCircleOutline,
       timeOutline,
       cubeOutline,
-      arrowBackOutline
+      arrowBackOutline,
+      qrCodeOutline,
+      closeOutline
     });
   }
 
@@ -111,5 +127,24 @@ export class MisComprasPage implements OnInit {
       default:
         return 'bg-blue-100 text-blue-800 border-blue-200';
     }
+  }
+
+  openQrModal(order: GroupOrder) {
+    this.selectedOrderForQr = order;
+    this.qrModalOpen = true;
+  }
+
+  closeQrModal() {
+    this.selectedOrderForQr = null;
+    this.qrModalOpen = false;
+  }
+
+  getQrCodeUrl(order: GroupOrder): string {
+    const payload = JSON.stringify({
+      orderId: order.id,
+      quantity: order.quantity,
+      buyerEmail: this.supabaseService.currentUserValue?.email || 'N/A'
+    });
+    return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}&color=002d4b&bgcolor=ffffff`;
   }
 }

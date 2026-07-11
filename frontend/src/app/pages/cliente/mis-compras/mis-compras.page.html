@@ -1,9 +1,10 @@
-<app-header title="Mi Historial de Compras" [showCustomBack]="false" [showAdminAvatar]="false" defaultHref="/home?tab=config">
+<app-header title="Mi Historial de Compras" [showCustomBack]="false" [showAdminAvatar]="false"
+  defaultHref="/home?tab=config">
 </app-header>
 
 <ion-content class="[--background:#f8fafc]">
   <div class="max-w-[540px] mx-auto p-4 flex flex-col gap-4">
-    
+
     <!-- Spinner de carga -->
     <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20 text-slate-500 gap-2">
       <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
@@ -15,33 +16,40 @@
       <ion-text color="danger">
         <p class="text-sm font-semibold mb-3">{{ errorMessage }}</p>
       </ion-text>
-      <ion-button fill="outline" size="small" class="[--color:#dc2626] [--border-color:#fca5a5]" (click)="loadOrders()">Reintentar</ion-button>
+      <ion-button fill="outline" size="small" class="[--color:#dc2626] [--border-color:#fca5a5]"
+        (click)="loadOrders()">Reintentar</ion-button>
     </div>
 
     <!-- Lista de compras vacía -->
-    <div *ngIf="!isLoading && !errorMessage && orders.length === 0" class="text-center py-16 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm flex flex-col items-center gap-3">
-      <div class="w-14 h-14 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center text-2xl border border-slate-100">
+    <div *ngIf="!isLoading && !errorMessage && orders.length === 0"
+      class="text-center py-16 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm flex flex-col items-center gap-3">
+      <div
+        class="w-14 h-14 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center text-2xl border border-slate-100">
         <ion-icon name="card-outline"></ion-icon>
       </div>
       <h3 class="m-0 text-sm font-bold text-[#002d4b]">Todavía no realizaste compras</h3>
       <p class="text-xs text-slate-500 m-0 leading-normal">
         Sumate a un grupo de compra colectiva en el catálogo para empezar a ahorrar junto a tus vecinos.
       </p>
-      <ion-button routerLink="/home" [queryParams]="{tab: 'products'}" class="[--background:#006b4d] [--color:white] text-xs font-bold mt-2 h-10 px-4 rounded-xl m-0">
+      <ion-button routerLink="/home" [queryParams]="{tab: 'products'}"
+        class="[--background:#006b4d] [--color:white] text-xs font-bold mt-2 h-10 px-4 rounded-xl m-0">
         Explorar Catálogo
       </ion-button>
     </div>
 
     <!-- Listado de Órdenes -->
     <div *ngIf="!isLoading && !errorMessage && orders.length > 0" class="flex flex-col gap-3">
-      <ion-card *ngFor="let order of orders" class="m-0 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
+      <ion-card *ngFor="let order of orders"
+        class="m-0 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden">
         <ion-card-content class="p-4 flex flex-col gap-3">
-          
+
           <!-- Encabezado de la Tarjeta (Producto + Badge de Estado) -->
           <div class="flex justify-between items-start gap-3">
             <div class="flex gap-2 items-center min-w-0">
-              <div class="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center text-lg text-[#002d4b] border border-slate-100 flex-shrink-0">
-                <img *ngIf="order.group?.product?.image_url" [src]="order.group?.product?.image_url" alt="Product Image" class="w-full h-full object-cover rounded-lg" />
+              <div
+                class="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center text-lg text-[#002d4b] border border-slate-100 flex-shrink-0">
+                <img *ngIf="order.group?.product?.image_url" [src]="order.group?.product?.image_url" alt="Product Image"
+                  class="w-full h-full object-cover rounded-lg" />
                 <ion-icon *ngIf="!order.group?.product?.image_url" name="cube-outline"></ion-icon>
               </div>
               <div class="min-w-0">
@@ -53,31 +61,42 @@
                 </p>
               </div>
             </div>
-            
+
             <!-- Badge de Estado -->
-            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase border select-none tracking-wider flex items-center gap-1"
-                  [ngClass]="getStatusColor(order.status)">
+            <span
+              class="px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase border select-none tracking-wider flex items-center gap-1"
+              [ngClass]="getStatusColor(order.status)">
               <ion-icon *ngIf="order.status === 'PAYMENT_HELD'" name="time-outline" class="text-[10px]"></ion-icon>
-              <ion-icon *ngIf="order.status === 'CONFIRMED'" name="checkmark-circle-outline" class="text-[10px]"></ion-icon>
+              <ion-icon *ngIf="order.status === 'CONFIRMED'" name="checkmark-circle-outline"
+                class="text-[10px]"></ion-icon>
               <ion-icon *ngIf="order.status === 'CANCELLED'" name="close-circle-outline" class="text-[10px]"></ion-icon>
               {{ getStatusLabel(order.status) }}
             </span>
           </div>
 
           <!-- Explicación Informativa del Estado del Pago -->
-          <div class="p-2.5 rounded-xl border text-[10px] leading-normal" 
-               [class.bg-amber-50]="order.status === 'PAYMENT_HELD'" [class.text-amber-800]="order.status === 'PAYMENT_HELD'" [class.border-amber-100]="order.status === 'PAYMENT_HELD'"
-               [class.bg-emerald-50]="order.status === 'CONFIRMED'" [class.text-emerald-800]="order.status === 'CONFIRMED'" [class.border-emerald-100]="order.status === 'CONFIRMED'"
-               [class.bg-slate-50]="order.status === 'CANCELLED'" [class.text-slate-500]="order.status === 'CANCELLED'" [class.border-slate-100]="order.status === 'CANCELLED'">
-            
+          <div class="p-2.5 rounded-xl border text-[10px] leading-normal"
+            [class.bg-amber-50]="order.status === 'PAYMENT_HELD'"
+            [class.text-amber-800]="order.status === 'PAYMENT_HELD'"
+            [class.border-amber-100]="order.status === 'PAYMENT_HELD'"
+            [class.bg-emerald-50]="order.status === 'CONFIRMED'" [class.text-emerald-800]="order.status === 'CONFIRMED'"
+            [class.border-emerald-100]="order.status === 'CONFIRMED'" [class.bg-slate-50]="order.status === 'CANCELLED'"
+            [class.text-slate-500]="order.status === 'CANCELLED'"
+            [class.border-slate-100]="order.status === 'CANCELLED'">
+
             <span *ngIf="order.status === 'PAYMENT_HELD'">
-              <strong>Pre-autorización activa</strong>: El dinero está retenido en tu tarjeta. Solo se cobrará si el grupo de compra consolidada llega al objetivo antes de la medianoche. Si el grupo no se completa, los fondos se liberan automáticamente.
+              <strong>Pre-autorización activa</strong>: El dinero está retenido en tu tarjeta. Solo se cobrará si el
+              grupo de compra consolidada llega al objetivo antes de la medianoche. Si el grupo no se completa, los
+              fondos se liberan automáticamente.
             </span>
             <span *ngIf="order.status === 'CONFIRMED'">
-              <strong>Compra confirmada</strong>: El grupo de compra colectiva se consolidó con éxito. Los fondos fueron cobrados y el pedido está en proceso con el mayorista del Nodo <strong>{{ order.group?.node?.name }}</strong>.
+              <strong>Compra confirmada</strong>: El grupo de compra colectiva se consolidó con éxito. Los fondos fueron
+              cobrados y el pedido está en proceso con el mayorista del Nodo <strong>{{ order.group?.node?.name
+                }}</strong>.
             </span>
             <span *ngIf="order.status === 'CANCELLED'">
-              <strong>Compra anulada</strong>: El grupo de compra no alcanzó el mínimo a tiempo o fue suspendido. La pre-autorización de cobro fue cancelada y tu saldo ya está liberado.
+              <strong>Compra anulada</strong>: El grupo de compra no alcanzó el mínimo a tiempo o fue suspendido. La
+              pre-autorización de cobro fue cancelada y tu saldo ya está liberado.
             </span>
           </div>
 
@@ -85,16 +104,94 @@
           <div class="flex justify-between items-baseline pt-2 border-t border-slate-50 text-xs">
             <span class="text-slate-400 font-medium">Total facturado:</span>
             <div class="flex items-baseline gap-1">
-              <span class="text-[10px] text-slate-400 font-bold">({{ order.quantity }} x {{ order.unit_price | currency:'ARS':'symbol-narrow':'1.2-2' }})</span>
+              <span class="text-[10px] text-slate-400 font-bold">({{ order.quantity }} x {{ order.unit_price |
+                currency:'ARS':'symbol-narrow':'1.2-2' }})</span>
               <span class="font-extrabold text-[#002d4b] text-sm">
                 {{ (order.unit_price * order.quantity) | currency:'ARS':'symbol-narrow':'1.2-2' }}
               </span>
             </div>
           </div>
 
+          <!-- Botón QR para Retiro (Solo para confirmadas) -->
+          <ion-button *ngIf="order.status === 'CONFIRMED'" expand="block" fill="outline"
+            class="[--color:#006b4d] [--border-color:#e2e8f0] font-bold text-xs h-9 m-0 mt-3 rounded-xl"
+            (click)="openQrModal(order)">
+            <ion-icon name="qr-code-outline" slot="start" class="mr-1.5 text-base"></ion-icon>
+            Ver Credencial de Retiro
+          </ion-button>
+
         </ion-card-content>
       </ion-card>
     </div>
 
   </div>
+
+  <!-- Modal de Credencial QR de Retiro -->
+  <ion-modal [isOpen]="qrModalOpen" (didDismiss)="closeQrModal()" [initialBreakpoint]="0.75"
+    [breakpoints]="[0, 0.75, 0.9]" [handle]="true">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold px-2">
+          <ion-buttons slot="start">
+            <ion-button (click)="closeQrModal()" title="Cerrar">
+              <ion-icon slot="icon-only" name="close-outline" class="text-xl"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title class="text-[#002d4b] font-extrabold text-sm text-center">Credencial de Retiro</ion-title>
+          <div slot="end" class="w-12"></div>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding [--background:#ffffff]">
+        <div class="max-w-[450px] mx-auto py-2 px-1 flex flex-col items-center gap-4 text-center"
+          *ngIf="selectedOrderForQr">
+
+          <!-- Info del Producto -->
+          <div class="flex flex-col items-center gap-1 mt-1">
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Código de Compra</span>
+            <span
+              class="text-xs font-mono font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
+              {{ selectedOrderForQr.id.substring(0, 8) }}
+            </span>
+            <h3 class="m-0 mt-2 text-base font-extrabold text-[#002d4b] leading-tight">
+              {{ formatProductName(selectedOrderForQr.group?.product?.name) }}
+            </h3>
+            <p class="m-0 text-xs text-slate-500 font-semibold mt-0.5">
+              Cantidad: {{ selectedOrderForQr.quantity }} unidades
+            </p>
+          </div>
+
+          <!-- Código QR -->
+          <div
+            class="w-[200px] h-[200px] bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center p-3 shadow-inner mt-2">
+            <img [src]="getQrCodeUrl(selectedOrderForQr)" alt="QR Code"
+              class="w-full h-full object-contain rounded-lg" />
+          </div>
+
+          <!-- Indicaciones de Retiro -->
+          <div
+            class="bg-[#f0fdf4] text-[#15803d] rounded-2xl p-4 border border-[#bcf0da]/50 text-xs leading-relaxed max-w-[320px] mt-2">
+            <p class="m-0 font-bold">Presentá este código QR en tu punto de retiro:</p>
+            <p class="m-0 mt-1.5 font-medium text-[11px] text-[#166534]">
+              Nodo: <strong>{{ selectedOrderForQr.group?.node?.name }}</strong><br>
+              Dirección: <strong>{{ selectedOrderForQr.group?.node?.address }}</strong>
+            </p>
+          </div>
+
+          <!-- Estado del Bulto Informativo -->
+          <div class="text-[10px] text-slate-400 font-bold mt-1">
+            Estado del bulto:
+            <span class="text-[#006b4d]" *ngIf="selectedOrderForQr.group?.status === 'READY_FOR_PICKUP'">¡Listo para
+              retirar!</span>
+            <span class="text-[#004b7c]" *ngIf="selectedOrderForQr.group?.status === 'PROCESSING_ORDER'">En
+              preparación</span>
+            <span class="text-[#e67e22]" *ngIf="selectedOrderForQr.group?.status === 'SHIPPED'">En viaje al nodo</span>
+            <span class="text-slate-400" *ngIf="selectedOrderForQr.group?.status === 'COMPLETED'">Aguardando
+              consolidación</span>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>
