@@ -34,8 +34,16 @@ export class ProductsController {
     @Query('categoryId') categoryId?: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
+    @Query('onlyWithStock') onlyWithStock?: string,
   ) {
-    return this.productsService.findAll({ search, categoryId, page, limit });
+    const filterStock = onlyWithStock !== 'false';
+    return this.productsService.findAll({ 
+      search, 
+      categoryId, 
+      page, 
+      limit, 
+      onlyWithStock: filterStock 
+    });
   }
 
   @Get('categories')

@@ -14,7 +14,8 @@ import {
   addOutline,
   cardOutline,
   closeOutline,
-  businessOutline
+  businessOutline,
+  clipboardOutline
 } from 'ionicons/icons';
 import { Nodo, UserCard } from '../../../core/models/auth.models';
 import { SupabaseService } from '../../../supabase.service';
@@ -52,6 +53,9 @@ export class AccountTabComponent implements OnInit {
 
   @Output() logout = new EventEmitter<void>();
 
+  // Exponer el rol del usuario desde el servicio
+  userRole = this.supabaseService.userRole;
+
   // State
   savedCards = signal<UserCard[]>([]);
   isLoadingCards = signal<boolean>(false);
@@ -62,8 +66,7 @@ export class AccountTabComponent implements OnInit {
   // Form Fields
   cardNumber = '';
   cardholderName = '';
-  cardExpirationMonth = '';
-  cardExpirationYear = '';
+  cardExpiration = '';
   securityCode = '';
   docType = 'DNI';
   docNumber = '';
@@ -82,7 +85,8 @@ export class AccountTabComponent implements OnInit {
       addOutline,
       cardOutline,
       closeOutline,
-      businessOutline
+      businessOutline,
+      clipboardOutline
     });
   }
 
@@ -120,8 +124,7 @@ export class AccountTabComponent implements OnInit {
   openAddCardModal() {
     this.isAddCardModalOpen = true;
     this.cardNumber = '';
-    this.cardExpirationMonth = '';
-    this.cardExpirationYear = '';
+    this.cardExpiration = '';
     this.securityCode = '';
     this.docNumber = '';
     this.cardholderEmail = this.userEmail;
@@ -136,20 +139,86 @@ export class AccountTabComponent implements OnInit {
   onCardNumberInput(event: any) {
     const input = event.target.value.replace(/\D/g, '');
     const formatted = input.match(/.{1,4}/g)?.join(' ') || '';
+    event.target.value = formatted;
     this.cardNumber = formatted;
   }
 
+  onCardExpirationInput(event: any) {
+    let input = event.target.value.replace(/\D/g, '');
+    if (input.length > 2) {
+      input = input.substring(0, 2) + '/' + input.substring(2, 4);
+    }
+    event.target.value = input;
+    this.cardExpiration = input;
+  }
+
+  onCvvInput(event: any) {
+    const val = event.target.value.replace(/\D/g, '');
+    event.target.value = val;
+    this.securityCode = val;
+  }
+
+  onDocNumberInput(event: any) {
+    const val = event.target.value.replace(/\D/g, '');
+    event.target.value = val;
+    this.docNumber = val;
+  }
+
   async saveNewCard() {
+    // 1. Validaciones básicas de presencia
     if (
       !this.cardholderName.trim() ||
       !this.cardNumber.replace(/\s/g, '').trim() ||
-      !this.cardExpirationMonth.trim() ||
-      !this.cardExpirationYear.trim() ||
+      !this.cardExpiration.trim() ||
       !this.securityCode.trim() ||
       !this.docNumber.trim() ||
       !this.cardholderEmail.trim()
     ) {
       this.saveCardError = 'Todos los campos son obligatorios.';
+      return;
+    }
+
+    const rawCardNumber = this.cardNumber.replace(/\s/g, '');
+    const expParts = this.cardExpiration.split('/');
+
+    // 2. Validar formato de número de tarjeta
+    if (!/^\d{15,16}$/.test(rawCardNumber)) {
+      this.saveCardError = 'El número de tarjeta debe tener 15 o 16 dígitos.';
+      return;
+    }
+
+    // 3. Validar formato y valores de fecha de vencimiento
+    if (expParts.length !== 2 || !/^\d{2}$/.test(expParts[0]) || !/^\d{2}$/.test(expParts[1])) {
+      this.saveCardError = 'La fecha de vencimiento debe estar en formato MM/AA (ej: 08/30).';
+      return;
+    }
+
+    const expMonth = parseInt(expParts[0], 10);
+    const expYear = parseInt('20' + expParts[1], 10);
+
+    if (expMonth < 1 || expMonth > 12) {
+      this.saveCardError = 'El mes de vencimiento debe estar entre 01 y 12.';
+      return;
+    }
+
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+
+    if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+      this.saveCardError = 'La tarjeta ingresada está vencida.';
+      return;
+    }
+
+    // 4. Validar CVV
+    if (!/^\d{3,4}$/.test(this.securityCode.trim())) {
+      this.saveCardError = 'El código de seguridad (CVV) debe tener 3 o 4 dígitos.';
+      return;
+    }
+
+    // 5. Validar número de documento
+    if (!/^\d{6,10}$/.test(this.docNumber.trim())) {
+      this.saveCardError = 'El número de documento debe tener entre 6 y 10 dígitos numéricos.';
       return;
     }
 
@@ -164,14 +233,12 @@ export class AccountTabComponent implements OnInit {
         throw new Error('El SDK de Mercado Pago no está disponible. Volvé a intentar en unos segundos.');
       }
 
-      const rawCardNumber = this.cardNumber.replace(/\s/g, '');
-
       // Crear token de tarjeta usando Mercado Pago SDK v2
       const tokenResponse = await mpInstance.createCardToken({
         cardNumber: rawCardNumber,
         cardholderName: this.cardholderName,
-        cardExpirationMonth: this.cardExpirationMonth,
-        cardExpirationYear: this.cardExpirationYear,
+        cardExpirationMonth: expParts[0],
+        cardExpirationYear: expParts[1],
         securityCode: this.securityCode,
         identificationType: this.docType,
         identificationNumber: this.docNumber
@@ -185,7 +252,7 @@ export class AccountTabComponent implements OnInit {
     } catch (err: any) {
       console.error('Fallo tokenización real de MP:', err);
       this.isSavingCard.set(false);
-      this.saveCardError = `Error de tokenización: ${err.message || 'Verifica los datos de la tarjeta.'}`;
+      this.saveCardError = 'No se pudo registrar la tarjeta. Verificá los datos ingresados.';
       this.toastService.showError(this.saveCardError);
       return;
     }
@@ -217,6 +284,10 @@ export class AccountTabComponent implements OnInit {
 
   goToMisCompras() {
     this.router.navigate(['/mis-compras']);
+  }
+
+  goToConsolidacion() {
+    this.router.navigate(['/consolidacion']);
   }
 
   onLogout() {

@@ -51,24 +51,28 @@
 
   <!-- Cards List -->
   <div *ngIf="!isLoadingCards() && savedCards().length > 0" class="flex flex-col gap-2">
-    <div *ngFor="let card of savedCards()" class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100">
+    <div *ngFor="let card of savedCards()"
+      class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-emerald-50 text-[#006b4d] flex items-center justify-center text-base">
           <ion-icon name="card-outline"></ion-icon>
         </div>
         <div class="flex flex-col">
-          <span class="text-xs text-slate-700 font-bold capitalize">{{ card.brand }} terminado en {{ card.last_four }}</span>
+          <span class="text-xs text-slate-700 font-bold capitalize">{{ card.brand }} terminado en {{ card.last_four
+            }}</span>
           <span class="text-[9px] text-slate-400">Vence {{ card.expiration_mo }}/{{ card.expiration_yr }}</span>
         </div>
       </div>
-      <button (click)="deleteCard(card.id)" class="text-red-500 hover:text-red-700 active:scale-95 transition-all bg-transparent border-0 outline-none p-1.5 flex items-center justify-center">
+      <button (click)="deleteCard(card.id)"
+        class="text-red-500 hover:text-red-700 active:scale-95 transition-all bg-transparent border-0 outline-none p-1.5 flex items-center justify-center">
         <ion-icon name="trash-outline" class="text-base"></ion-icon>
       </button>
     </div>
   </div>
 
   <!-- Empty state -->
-  <div *ngIf="!isLoadingCards() && savedCards().length === 0" class="p-4 bg-white rounded-xl shadow-sm border border-slate-100 text-center flex flex-col items-center justify-center gap-1.5">
+  <div *ngIf="!isLoadingCards() && savedCards().length === 0"
+    class="p-4 bg-white rounded-xl shadow-sm border border-slate-100 text-center flex flex-col items-center justify-center gap-1.5">
     <ion-icon name="card-outline" class="text-slate-300 text-2xl"></ion-icon>
     <p class="text-xs text-slate-500 font-medium m-0">No tenés tarjetas guardadas para tus compras rápidas.</p>
   </div>
@@ -93,6 +97,18 @@
         <ion-icon name="swap-horizontal-outline"></ion-icon>
       </div>
       <span class="text-xs text-slate-700 font-semibold">Historial de Compras</span>
+    </div>
+    <ion-icon name="chevron-forward-outline" class="text-slate-400 text-sm"></ion-icon>
+  </div>
+
+  <div *ngIf="userRole() === 'NODO' || userRole() === 'ADMIN'"
+    class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer"
+    (click)="goToConsolidacion()">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center text-base">
+        <ion-icon name="clipboard-outline"></ion-icon>
+      </div>
+      <span class="text-xs text-slate-700 font-semibold">Gestión de Pedidos</span>
     </div>
     <ion-icon name="chevron-forward-outline" class="text-slate-400 text-sm"></ion-icon>
   </div>
@@ -124,7 +140,8 @@
       <ion-toolbar class="[--background:#ffffff] border-b border-slate-100 px-2">
         <ion-title class="font-extrabold text-[#002d4b] text-sm">Nueva Tarjeta</ion-title>
         <ion-buttons slot="end">
-          <button (click)="closeAddCardModal()" class="text-slate-400 hover:text-slate-600 bg-transparent border-0 outline-none p-1">
+          <button (click)="closeAddCardModal()"
+            class="text-slate-400 hover:text-slate-600 bg-transparent border-0 outline-none p-1">
             <ion-icon name="close-outline" class="text-xl"></ion-icon>
           </button>
         </ion-buttons>
@@ -133,7 +150,7 @@
 
     <ion-content class="ion-padding [--background:#f8fafc]">
       <div class="flex flex-col gap-4 max-w-[450px] mx-auto pb-6">
-        
+
         <!-- Tarjeta Virtual Estética -->
         <div
           class="bg-gradient-to-br from-[#002d4b] to-[#006b4d] rounded-2xl p-4 text-white shadow-sm flex flex-col justify-between h-36 relative overflow-hidden mb-1 select-none">
@@ -152,7 +169,7 @@
             </div>
             <div class="flex flex-col text-right">
               <span class="text-[8px] text-slate-300 tracking-wider">Vence</span>
-              <span class="font-bold">{{ cardExpirationMonth || 'MM' }}/{{ cardExpirationYear || 'AA' }}</span>
+              <span class="font-bold">{{ cardExpiration || 'MM/AA' }}</span>
             </div>
           </div>
         </div>
@@ -160,33 +177,33 @@
         <!-- Formulario -->
         <div class="flex flex-col gap-3">
           <div>
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nombre en la tarjeta</label>
+            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nombre en la
+              tarjeta</label>
             <input type="text" [(ngModel)]="cardholderName"
               class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
               placeholder="Juan Pérez" />
           </div>
 
           <div>
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Número de tarjeta</label>
+            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Número de
+              tarjeta</label>
             <input type="text" [(ngModel)]="cardNumber" (input)="onCardNumberInput($event)" maxlength="19"
+              inputmode="numeric"
               class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
               placeholder="4517 6000 0000 0000" />
           </div>
 
           <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Mes Venc.</label>
-              <input type="text" [(ngModel)]="cardExpirationMonth" maxlength="2" placeholder="MM"
-                class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
-            </div>
-            <div>
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Año Venc.</label>
-              <input type="text" [(ngModel)]="cardExpirationYear" maxlength="2" placeholder="AA"
+            <div class="col-span-2">
+              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Vencimiento</label>
+              <input type="text" [(ngModel)]="cardExpiration" (input)="onCardExpirationInput($event)" maxlength="5"
+                placeholder="MM/AA" inputmode="numeric"
                 class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
             </div>
             <div>
               <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">CVV</label>
-              <input type="password" [(ngModel)]="securityCode" maxlength="4" placeholder="123"
+              <input type="password" [(ngModel)]="securityCode" (input)="onCvvInput($event)" maxlength="4" placeholder="123"
+                inputmode="numeric"
                 class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
             </div>
           </div>
@@ -203,15 +220,17 @@
               </select>
             </div>
             <div class="col-span-2">
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nro de Documento</label>
-              <input type="text" [(ngModel)]="docNumber"
+              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nro de
+                Documento</label>
+              <input type="text" [(ngModel)]="docNumber" (input)="onDocNumberInput($event)" inputmode="numeric"
                 class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
                 placeholder="35123456" />
             </div>
           </div>
 
           <div>
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Email del pagador</label>
+            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Email del
+              pagador</label>
             <input type="email" [(ngModel)]="cardholderEmail"
               class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
               placeholder="juan@ejemplo.com" />

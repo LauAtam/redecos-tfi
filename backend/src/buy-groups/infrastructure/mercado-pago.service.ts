@@ -11,6 +11,9 @@ export class MercadoPagoService {
   constructor(private readonly config: ConfigService) {
     this.accessToken = this.config.get<string>('MERCADO_PAGO_ACCESS_TOKEN') || '';
     this.isProduction = this.config.get<string>('NODE_ENV') === 'production';
+    // Log de arranque: mostrar prefijo de credencial para diagnóstico (nunca el token completo)
+    const tokenPrefix = this.accessToken ? this.accessToken.substring(0, 20) + '...' : '(vacío)';
+    this.logger.log(`🔑 Access Token cargado: ${tokenPrefix} | Producción: ${this.isProduction}`);
   }
 
 
@@ -19,6 +22,7 @@ export class MercadoPagoService {
     token: string,
     email: string,
     paymentMethodId: string,
+    customerId?: string,
   ): Promise<{ id: string; status: string }> {
     // Si no hay credencial configurada, usar simulación en modo dev
     if (!this.accessToken || this.accessToken.startsWith('MOCK_') || this.accessToken === '') {
@@ -28,6 +32,34 @@ export class MercadoPagoService {
 
     try {
       const idempotencyKey = crypto.randomUUID();
+
+      const payer: any = { email };
+      if (customerId) {
+        payer.id = customerId;
+      }
+
+      const requestBody = {
+        transaction_amount: amount,
+        token,
+        description: 'Redecos - Reserva de Compra Colectiva',
+        installments: 1,
+        payment_method_id: paymentMethodId,
+        payer,
+        capture: false,
+      };
+
+      this.logger.log(`📤 Enviando pre-autorización a MP:`);
+      this.logger.log(`   → Monto: $${amount}`);
+      this.logger.log(`   → Token: ${token}`);
+      this.logger.log(`   → PaymentMethodId: ${paymentMethodId}`);
+      this.logger.log(`   → Email: ${email}`);
+      if (customerId) {
+        this.logger.log(`   → CustomerId: ${customerId}`);
+      }
+      this.logger.log(`   → Capture: false (pre-auth)`);
+      this.logger.log(`   → IdempotencyKey: ${idempotencyKey}`);
+      this.logger.log(`   → Access Token prefix: ${this.accessToken.substring(0, 20)}...`);
+
       const response = await fetch('https://api.mercadopago.com/v1/payments', {
         method: 'POST',
         headers: {
@@ -35,24 +67,16 @@ export class MercadoPagoService {
           'Content-Type': 'application/json',
           'X-Idempotency-Key': idempotencyKey,
         },
-        body: JSON.stringify({
-          transaction_amount: amount,
-          token,
-          description: 'Redecos - Reserva de Compra Colectiva',
-          installments: 1,
-          payment_method_id: paymentMethodId,
-          payer: {
-            email,
-          },
-          capture: false,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       const data = await response.json() as any;
 
       if (!response.ok) {
         this.logger.error(`Error en Mercado Pago al pre-autorizar: ${JSON.stringify(data)}`);
-        throw new Error(data.message || 'Error al comunicarse con Mercado Pago.');
+        const error = new Error(data.message || 'Error al comunicarse con Mercado Pago.');
+        (error as any).raw = data;
+        throw error;
       }
 
       this.logger.log(`Pago pre-autorizado creado con éxito: ${data.id}`);
@@ -208,14 +232,16 @@ export class MercadoPagoService {
 
       if (!response.ok) {
         this.logger.error(`Error al guardar tarjeta en Mercado Pago: ${JSON.stringify(data)}`);
-        throw new Error(data.message || 'Error al guardar tarjeta en Mercado Pago');
+        const error = new Error(data.message || 'Error al guardar tarjeta en Mercado Pago');
+        (error as any).raw = data;
+        throw error;
       }
 
       this.logger.log(`Tarjeta guardada con éxito en Mercado Pago: ${data.id}`);
       return {
         id: String(data.id),
-        last_four: String(data.last_four),
-        brand: String(data.payment_method?.name || 'card'),
+        last_four: String(data.last_four_digits),
+        brand: String(data.payment_method?.id || 'card'),
         expiration_mo: Number(data.expiration_month),
         expiration_yr: Number(data.expiration_year),
       };

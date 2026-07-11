@@ -8,7 +8,7 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { businessOutline, cubeOutline, chevronForwardOutline } from 'ionicons/icons';
+import { businessOutline, cubeOutline, chevronForwardOutline, clipboardOutline } from 'ionicons/icons';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 
 @Component({
@@ -29,7 +29,7 @@ export class GestionesPage {
   private router = inject(Router);
 
   constructor() {
-    addIcons({ businessOutline, cubeOutline, chevronForwardOutline });
+    addIcons({ businessOutline, cubeOutline, chevronForwardOutline, clipboardOutline });
   }
 
   navegarA(ruta: string) {

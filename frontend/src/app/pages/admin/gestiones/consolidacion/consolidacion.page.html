@@ -1,0 +1,351 @@
+<app-header title="Gestión de Pedidos" [showCustomBack]="true" (customBack)="goBack()"></app-header>
+
+<ion-content class="[--background:#f8fafc] ion-padding">
+  <div class="max-w-[650px] mx-auto py-2 px-1 flex flex-col gap-4">
+
+    <!-- SELECTOR DE NODO (Solo visible para ADMIN) -->
+    <div *ngIf="userRole() === 'ADMIN'" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+      <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">Punto de Retiro
+        Seleccionado</label>
+      <div class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#006b4d] flex items-center justify-center shrink-0">
+          <ion-icon name="business-outline" class="text-xl"></ion-icon>
+        </div>
+        <ion-select [value]="selectedNodeId()" (ionChange)="onNodeChange($event)"
+          placeholder="Seleccionar Punto de Retiro" interface="popover" class="w-full text-xs font-bold text-[#002d4b]">
+          <ion-select-option *ngFor="let nodo of nodos()" [value]="nodo.id">
+            {{ nodo.name }}
+          </ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+
+    <!-- NODO SELECCIONADO INFORMATIVO (Solo para coordinadores de NODO) -->
+    <div *ngIf="userRole() === 'NODO'"
+      class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#006b4d] flex items-center justify-center shrink-0">
+          <ion-icon name="business-outline" class="text-xl"></ion-icon>
+        </div>
+        <div>
+          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Tu Punto de Retiro</span>
+          <span class="text-xs font-extrabold text-[#002d4b]">Coordinador de Nodo</span>
+        </div>
+      </div>
+      <ion-badge class="[--background:#006b4d] [--color:#ffffff] font-extrabold text-[10px] px-2.5 py-1 rounded-full">
+        Restringido
+      </ion-badge>
+    </div>
+
+    <!-- TABS LOGÍSTICOS -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-1 shrink-0">
+      <ion-segment [value]="activeTab()" (ionChange)="onTabChange($event)" mode="md"
+        class="bg-transparent [--background:transparent]">
+        <ion-segment-button value="order" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+          <div class="flex flex-col items-center gap-1">
+            <ion-icon name="clipboard-outline" class="text-base"></ion-icon>
+            <span class="text-[9px] font-bold uppercase tracking-wider">Pedir</span>
+          </div>
+        </ion-segment-button>
+
+        <ion-segment-button value="shipping" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+          <div class="flex flex-col items-center gap-1">
+            <ion-icon name="car-outline" class="text-base"></ion-icon>
+            <span class="text-[9px] font-bold uppercase tracking-wider">En Camino</span>
+          </div>
+        </ion-segment-button>
+
+        <ion-segment-button value="pickup" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+          <div class="flex flex-col items-center gap-1">
+            <ion-icon name="cube-outline" class="text-base"></ion-icon>
+            <span class="text-[9px] font-bold uppercase tracking-wider">Entregar</span>
+          </div>
+        </ion-segment-button>
+
+        <ion-segment-button value="finalized" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+          <div class="flex flex-col items-center gap-1">
+            <ion-icon name="checkmark-circle-outline" class="text-base"></ion-icon>
+            <span class="text-[9px] font-bold uppercase tracking-wider">Historial</span>
+          </div>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- LOADER -->
+    <div *ngIf="isLoading()" class="flex justify-center items-center py-12">
+      <ion-spinner name="crescent" class="text-[#006b4d]"></ion-spinner>
+    </div>
+
+    <!-- LISTA DE BULTOS / GRUPOS DE COMPRA -->
+    <div *ngIf="!isLoading()" class="flex flex-col gap-3">
+
+      <!-- EMPTY STATE -->
+      <div *ngIf="filteredBuyGroups().length === 0"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 text-center flex flex-col items-center justify-center gap-3">
+        <div class="w-14 h-14 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center">
+          <ion-icon name="alert-circle-outline" class="text-2xl"></ion-icon>
+        </div>
+        <div>
+          <h3 class="font-bold text-[#002d4b] text-sm m-0">No hay bultos en esta etapa</h3>
+          <p class="text-xs text-slate-500 m-0 mt-0.5">Los grupos de compra colectiva de este nodo aparecerán acá según
+            cambien de estado.</p>
+        </div>
+        <ion-button fill="outline" (click)="fetchGroups()"
+          class="[--color:#006b4d] [--border-color:#e2e8f0] font-bold text-xs h-9 m-0">
+          <ion-icon name="refresh-outline" slot="start" class="mr-1"></ion-icon>
+          Actualizar Lista
+        </ion-button>
+      </div>
+
+      <!-- CARDS DE GRUPOS -->
+      <div *ngFor="let group of filteredBuyGroups()"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative flex flex-col transition-all">
+        <!-- Indicador de color lateral por estado -->
+        <div class="absolute left-0 top-0 bottom-0 w-1.5" [ngClass]="{
+               'bg-emerald-500': group.status === 'COMPLETED',
+               'bg-blue-500': group.status === 'PROCESSING_ORDER',
+               'bg-orange-500': group.status === 'SHIPPED',
+               'bg-purple-500': group.status === 'READY_FOR_PICKUP',
+               'bg-slate-300': group.status === 'FINALIZED',
+               'bg-red-400': group.status === 'CANCELLED'
+             }">
+        </div>
+
+        <div class="p-4 pl-5 flex flex-col gap-3">
+
+          <!-- Encabezado de la Tarjeta -->
+          <div class="flex justify-between items-start gap-2">
+            <div class="min-w-0">
+              <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">ID Bulto: {{
+                group.id.substring(0, 8) }}</span>
+              <h3 class="font-bold text-[#002d4b] text-sm m-0 mt-0.5 truncate">{{ group.product?.name }}</h3>
+            </div>
+
+            <!-- Badge de Estado -->
+            <ion-badge class="font-extrabold text-[8px] px-2 py-0.5 rounded-full" [ngClass]="{
+                         '[--background:#e6f4f0] [--color:#006b4d]': group.status === 'COMPLETED',
+                         '[--background:#e6f2f7] [--color:#004b7c]': group.status === 'PROCESSING_ORDER',
+                         '[--background:#fef3e7] [--color:#b25e00]': group.status === 'SHIPPED',
+                         '[--background:#f3e8ff] [--color:#6b21a8]': group.status === 'READY_FOR_PICKUP',
+                         '[--background:#f1f5f9] [--color:#475569]': group.status === 'FINALIZED',
+                         '[--background:#fef2f2] [--color:#991b1b]': group.status === 'CANCELLED'
+                       }">
+              <span *ngIf="group.status === 'COMPLETED'">Completado</span>
+              <span *ngIf="group.status === 'PROCESSING_ORDER'">Pedido Realizado</span>
+              <span *ngIf="group.status === 'SHIPPED'">Enviado</span>
+              <span *ngIf="group.status === 'READY_FOR_PICKUP'">En Nodo / Retiro</span>
+              <span *ngIf="group.status === 'FINALIZED'">Entregado</span>
+              <span *ngIf="group.status === 'CANCELLED'">Cancelado</span>
+            </ion-badge>
+          </div>
+
+          <!-- Barra de Progreso y Cantidad (Detalle visual) -->
+          <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 flex flex-col gap-2">
+            <div class="flex justify-between items-center text-[11px] font-bold text-[#002d4b]">
+              <span class="flex items-center gap-1">
+                <ion-icon name="people-outline" class="text-slate-500"></ion-icon>
+                Cantidad Agrupada
+              </span>
+              <span>{{ group.unitsBought }} / {{ group.targetSize }} Unidades</span>
+            </div>
+
+            <!-- Barra estética -->
+            <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+              <div class="bg-[#006b4d] h-full rounded-full transition-all duration-300"
+                [style.width.%]="(group.unitsBought / group.targetSize) * 100">
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center text-[10px] text-slate-500 mt-0.5">
+              <span>Bulto de {{ group.targetSize }} unidades</span>
+              <span class="font-extrabold text-[#006b4d]" *ngIf="group.status === 'COMPLETED'">Listo para
+                Consolidar</span>
+            </div>
+          </div>
+
+          <!-- BOTONES DE ACCIÓN LOGÍSTICA -->
+          <div class="flex gap-2 justify-end mt-1">
+
+            <!-- BOTÓN CANCELAR (Solo en COMPLETED/PROCESSING_ORDER para ADMIN) -->
+            <ion-button
+              *ngIf="(group.status === 'COMPLETED' || group.status === 'PROCESSING_ORDER') && userRole() === 'ADMIN'"
+              fill="clear" (click)="cancelGroup(group)" class="[--color:#dc2626] font-bold text-xs h-9 m-0 shrink-0">
+              Cancelar
+            </ion-button>
+
+            <!-- ACCIÓN: COMPLETED -> PROCESSING_ORDER -->
+            <ion-button *ngIf="group.status === 'COMPLETED'" (click)="openConsolidarModal(group)"
+              class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-extrabold text-xs h-9 m-0 rounded-xl">
+              Consolidar y Pedir
+            </ion-button>
+
+            <!-- ACCIÓN: PROCESSING_ORDER -> SHIPPED (Solo ADMIN puede marcar envío mayorista) -->
+            <ion-button *ngIf="group.status === 'PROCESSING_ORDER' && userRole() === 'ADMIN'"
+              (click)="markAsShipped(group)"
+              class="[--background:#004b7c] [--background-hover:#003456] [--color:#ffffff] font-extrabold text-xs h-9 m-0 rounded-xl">
+              <ion-icon name="car-outline" slot="start" class="mr-1"></ion-icon>
+              Marcar como Enviado
+            </ion-button>
+
+            <!-- ACCIÓN: SHIPPED -> READY_FOR_PICKUP -->
+            <ion-button *ngIf="group.status === 'SHIPPED'" (click)="markAsReceived(group)"
+              class="[--background:#e67e22] [--background-hover:#c0392b] [--color:#ffffff] font-extrabold text-xs h-9 m-0 rounded-xl">
+              <ion-icon name="cube-outline" slot="start" class="mr-1"></ion-icon>
+              Recibir en Nodo
+            </ion-button>
+
+            <!-- ACCIÓN: READY_FOR_PICKUP -> FINALIZED (Entrega) -->
+            <ion-button *ngIf="group.status === 'READY_FOR_PICKUP'" (click)="openDeliveryModal(group)"
+              class="[--background:#6b21a8] [--background-hover:#581c87] [--color:#ffffff] font-extrabold text-xs h-9 m-0 rounded-xl">
+              <ion-icon name="qr-code-outline" slot="start" class="mr-1"></ion-icon>
+              Entregar Pedidos
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- MODAL DE CONSOLIDACIÓN (Detalle de Compra Mayorista) -->
+<ion-modal [isOpen]="isConsolidarModalOpen()" (willDismiss)="closeConsolidarModal()">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="[--background:#ffffff] border-b border-slate-100 px-2">
+        <ion-title class="font-extrabold text-[#002d4b] text-sm">Consolidación de Compra</ion-title>
+        <ion-buttons slot="end">
+          <button (click)="closeConsolidarModal()"
+            class="text-slate-400 hover:text-slate-600 bg-transparent border-0 outline-none p-1">
+            <ion-icon name="close-outline" class="text-xl"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding [--background:#f8fafc]">
+      <div class="flex flex-col gap-4 max-w-[450px] mx-auto pb-6" *ngIf="selectedGroupForModal()">
+
+        <!-- Ficha de Consolidación -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex flex-col gap-3">
+          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Producto a Adquirir</span>
+          <h2 class="font-extrabold text-[#002d4b] text-base m-0">{{ selectedGroupForModal()?.product?.name }}</h2>
+
+          <hr class="border-slate-100 my-1" />
+
+          <!-- Detalle de Bultos -->
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500 font-semibold">Tamaño del Bulto:</span>
+            <span class="font-extrabold text-[#002d4b]">{{ selectedGroupForModal()?.targetSize }} unidades</span>
+          </div>
+
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500 font-semibold">Unidades Agrupadas:</span>
+            <span class="font-extrabold text-[#002d4b]">{{ selectedGroupForModal()?.unitsBought }} unidades</span>
+          </div>
+
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-500 font-semibold">Costo Unitario Mayorista:</span>
+            <span class="font-extrabold text-[#006b4d]">${{ selectedGroupForModal()?.product?.price | number:'1.2-2'
+              }}</span>
+          </div>
+
+          <hr class="border-slate-100 my-1" />
+
+          <!-- Total a Pagar al Mayorista -->
+          <div
+            class="flex justify-between items-center py-2 bg-emerald-50/50 rounded-xl px-3 border border-emerald-100/50">
+            <span class="text-xs font-bold text-[#006b4d]">Total Mayorista:</span>
+            <span class="font-black text-lg text-[#006b4d]">${{ (selectedGroupForModal()!.unitsBought *
+              selectedGroupForModal()!.product!.price) | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-slate-500 text-center leading-relaxed px-2">
+          Al confirmar la consolidación, avanzarás el estado del bulto a <strong>"Pedido Realizado"</strong>. Esto
+          mantendrá los pagos autorizados de los clientes mientras procesás la compra física con el proveedor.
+        </p>
+
+        <!-- Botones de Acción -->
+        <div class="flex flex-col gap-2">
+          <ion-button expand="block" (click)="confirmWholesaleOrder()"
+            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-extrabold text-xs h-11 m-0 rounded-xl">
+            Confirmar y Pedir al Mayorista
+          </ion-button>
+
+          <ion-button expand="block" fill="clear" (click)="closeConsolidarModal()"
+            class="[--color:#64748b] font-bold text-xs h-10 m-0">
+            Volver
+          </ion-button>
+        </div>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- MODAL DE ENTREGA SIMULADA (Hito #4 QR manual) -->
+<ion-modal [isOpen]="isDeliveryModalOpen()" (willDismiss)="closeDeliveryModal()">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="[--background:#ffffff] border-b border-slate-100 px-2">
+        <ion-title class="font-extrabold text-[#002d4b] text-sm">Entregar Pedidos del Bulto</ion-title>
+        <ion-buttons slot="end">
+          <button (click)="closeDeliveryModal()"
+            class="text-slate-400 hover:text-slate-600 bg-transparent border-0 outline-none p-1">
+            <ion-icon name="close-outline" class="text-xl"></ion-icon>
+          </button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding [--background:#f8fafc]">
+      <div class="flex flex-col gap-4 max-w-[450px] mx-auto pb-6" *ngIf="selectedGroupForModal()">
+
+        <!-- Mock de Escáner QR de Cámara -->
+        <div
+          class="bg-slate-900 rounded-2xl p-6 text-center text-white flex flex-col items-center justify-center gap-3 relative overflow-hidden h-48">
+          <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,107,77,0.15)_0%,transparent_80%)]">
+          </div>
+
+          <!-- Mira del escáner animada -->
+          <div class="w-24 h-24 border-2 border-[#006b4d] rounded-2xl flex items-center justify-center relative p-1">
+            <div class="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-emerald-400 -mt-1.5 -ml-1.5"></div>
+            <div class="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-emerald-400 -mt-1.5 -mr-1.5"></div>
+            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-emerald-400 -mb-1.5 -ml-1.5">
+            </div>
+            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-emerald-400 -mb-1.5 -mr-1.5">
+            </div>
+
+            <ion-icon name="qr-code-outline" class="text-4xl text-emerald-400"></ion-icon>
+          </div>
+
+          <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-1">Hito #4: Escáner
+            Simulado</span>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 flex flex-col gap-3">
+          <h3 class="font-bold text-[#002d4b] text-xs m-0">Confirmación de Retiro Físico</h3>
+          <p class="text-xs text-slate-500 m-0 leading-relaxed">
+            En esta fase (Hito #4), podés confirmar la entrega física manual de la totalidad de las compras del bulto.
+            En el Hito #5, se integrará la lectura real del QR del cliente por cámara con <code>html5-qrcode</code>.
+          </p>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="flex flex-col gap-2">
+          <ion-button expand="block" [disabled]="isDeliveringOrder()" (click)="confirmManualDelivery()"
+            class="[--background:#6b21a8] [--background-hover:#581c87] [--color:#ffffff] font-extrabold text-xs h-11 m-0 rounded-xl">
+            <span *ngIf="!isDeliveringOrder()">Confirmar Entrega Completa</span>
+            <ion-spinner name="crescent" *ngIf="isDeliveringOrder()"></ion-spinner>
+          </ion-button>
+
+          <ion-button expand="block" fill="clear" (click)="closeDeliveryModal()"
+            class="[--color:#64748b] font-bold text-xs h-10 m-0">
+            Volver
+          </ion-button>
+        </div>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

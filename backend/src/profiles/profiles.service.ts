@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { ProfilesRepository } from './interfaces/profiles-repository.interface';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { MercadoPagoService } from '../buy-groups/infrastructure/mercado-pago.service';
+import { MercadoPagoErrorMapper } from '../buy-groups/infrastructure/mercado-pago-error.mapper';
 
 @Injectable()
 export class ProfilesService {
@@ -25,15 +26,29 @@ export class ProfilesService {
     }
 
     let customerId = profile.customer_id;
-    if (!customerId) {
-      // Si el perfil no tiene customer_id en la base de datos, lo buscamos o creamos en Mercado Pago
-      customerId = await this.mpService.getOrCreateCustomer(profile.email);
-      // Guardar el customerId en el perfil del usuario en la base de datos
-      await this.profilesRepository.updateProfile(userId, { customer_id: customerId } as any);
-    }
+    let mpCard;
 
-    // Guardar la tarjeta en Mercado Pago
-    const mpCard = await this.mpService.saveCard(customerId, token);
+    try {
+      if (!customerId) {
+        // Si el perfil no tiene customer_id en la base de datos, lo buscamos o creamos en Mercado Pago
+        customerId = await this.mpService.getOrCreateCustomer(profile.email);
+        // Guardar el customerId en el perfil del usuario en la base de datos
+        await this.profilesRepository.updateProfile(userId, { customer_id: customerId } as any);
+      }
+      
+      // Intentar guardar la tarjeta con el customerId existente
+      mpCard = await this.mpService.saveCard(customerId, token);
+    } catch (error: any) {
+      // Si el cliente no existe en esta cuenta de Mercado Pago (p. ej. quedó un ID huérfano o de sandbox)
+      if (error.message && error.message.includes('customer not found')) {
+        console.log(`Customer ID ${customerId} no encontrado. Creando uno nuevo para ${profile.email}...`);
+        customerId = await this.mpService.getOrCreateCustomer(profile.email);
+        await this.profilesRepository.updateProfile(userId, { customer_id: customerId } as any);
+        mpCard = await this.mpService.saveCard(customerId, token);
+      } else {
+        throw MercadoPagoErrorMapper.map(error.raw || error);
+      }
+    }
 
     // Guardar la tarjeta en la base de datos
     return await this.profilesRepository.addCard(userId, {

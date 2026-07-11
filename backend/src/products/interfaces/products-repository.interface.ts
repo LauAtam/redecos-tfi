@@ -7,6 +7,7 @@ export abstract class ProductsRepository {
     categoryId?: string;
     page?: number;
     limit?: number;
+    onlyWithStock?: boolean;
   }): Promise<any>;
   abstract findOne(id: string): Promise<any>;
   abstract create(createProductDto: CreateProductDto): Promise<any>;

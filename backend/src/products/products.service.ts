@@ -12,6 +12,7 @@ export class ProductsService {
     categoryId?: string;
     page?: number;
     limit?: number;
+    onlyWithStock?: boolean;
   }) {
     return this.productsRepository.findAll(filters);
   }

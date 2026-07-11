@@ -64,6 +64,13 @@ export class SupabaseService {
     // Escuchamos los cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
+        // Si el usuario ya está cargado en memoria, evitamos resetear el estado y volver a pegarle a la DB
+        if (this.lastFetchedProfileId === session.user.id && this.currentUserSubject.value !== null) {
+          this.authInitialized.set(true);
+          this.authInitializedSubject.next(true);
+          return;
+        }
+
         // Marcamos como no inicializado mientras cargamos el perfil enriquecido de la base de datos
         this.authInitialized.set(false);
         this.authInitializedSubject.next(false);
@@ -73,11 +80,6 @@ export class SupabaseService {
         this.currentUserSignal.set(baseProfile);
 
         const now = Date.now();
-        if (this.lastFetchedProfileId === session.user.id && (now - this.lastFetchedTime) < 1500) {
-          this.authInitialized.set(true);
-          this.authInitializedSubject.next(true);
-          return;
-        }
         this.lastFetchedProfileId = session.user.id;
         this.lastFetchedTime = now;
 
@@ -314,6 +316,8 @@ export class SupabaseService {
     await this.supabase.auth.signOut();
     this.currentUserSubject.next(null); // LIMPIAMOS CACHE
     this.currentUserSignal.set(null);
+    this.lastFetchedProfileId = null;
+    this.lastFetchedTime = 0;
   }
 
   async getSession() {
@@ -710,6 +714,59 @@ export class SupabaseService {
       return { success: true, error: null };
     } catch (err) {
       return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar la tarjeta.', originalError: err } };
+    }
+  }
+
+  async listBuyGroups(filters?: { status?: string; nodeId?: string; productId?: string }): Promise<{ data: BuyGroup[] | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const queryParams = new URLSearchParams();
+      if (filters) {
+        if (filters.status) queryParams.append('status', filters.status);
+        if (filters.nodeId) queryParams.append('nodeId', filters.nodeId);
+        if (filters.productId) queryParams.append('productId', filters.productId);
+      }
+
+      const url = `${environment.apiUrl}/buy-groups${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al listar los grupos de compra.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as BuyGroup[], error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al listar los grupos de compra.', originalError: err } };
+    }
+  }
+
+  async updateBuyGroupStatus(id: string, status: string): Promise<{ data: BuyGroup | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/buy-groups/${id}/status`, {
+        method: 'PATCH',
+        headers: this.getHeaders(token),
+        body: JSON.stringify({ status }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al actualizar el estado del grupo.' } };
+      }
+
+      const data = await response.json();
+      return { data: data as BuyGroup, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al actualizar el estado del grupo.', originalError: err } };
     }
   }
 }

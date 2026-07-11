@@ -5,10 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { IonSpinner, IonText, IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonContent } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cartOutline, peopleOutline, searchOutline, closeOutline } from 'ionicons/icons';
+import { cartOutline, peopleOutline, searchOutline, closeOutline, cardOutline } from 'ionicons/icons';
 import { SupabaseService } from '../../../supabase.service';
 import { ToastService } from '../../../core/services/toast.service';
-import { Nodo, Producto, BuyGroup, Categoria } from '../../../core/models/auth.models';
+import { Nodo, Producto, BuyGroup, Categoria, UserCard } from '../../../core/models/auth.models';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 
@@ -72,6 +72,12 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     label: 'Mastercard de prueba terminada en 0604',
   };
 
+  // Gestión de tarjetas guardadas en el flujo de compra
+  savedCards = signal<UserCard[]>([]);
+  selectedCard = signal<UserCard | null>(null);
+  useSavedCard = signal<boolean>(false);
+  cvv = signal<string>('');
+
   paymentError = '';
 
   private routeSub?: Subscription;
@@ -81,7 +87,8 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
       cartOutline,
       peopleOutline,
       searchOutline,
-      closeOutline
+      closeOutline,
+      cardOutline
     });
   }
 
@@ -262,13 +269,33 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  openProductModal(product: Producto) {
+  async openProductModal(product: Producto) {
     this.selectedProduct.set(product);
     const group = this.getGroupForProduct(product.id);
     this.activeGroup.set(group);
     this.buyQuantity.set(1);
     this.isModalOpen.set(true);
     this.paymentError = '';
+    this.cvv.set('');
+
+    // Cargar tarjetas guardadas para el flujo rápido
+    try {
+      const { data } = await this.supabaseService.listSavedCards();
+      if (data && data.length > 0) {
+        this.savedCards.set(data);
+        this.selectedCard.set(data[0]); // Por defecto la primera
+        this.useSavedCard.set(true);
+      } else {
+        this.savedCards.set([]);
+        this.selectedCard.set(null);
+        this.useSavedCard.set(false);
+      }
+    } catch (err) {
+      console.warn('Error al cargar tarjetas para el checkout:', err);
+      this.savedCards.set([]);
+      this.selectedCard.set(null);
+      this.useSavedCard.set(false);
+    }
   }
 
   closeDetailModal() {
@@ -276,6 +303,9 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedProduct.set(null);
     this.activeGroup.set(null);
     this.paymentError = '';
+    this.cvv.set('');
+    this.selectedCard.set(null);
+    this.useSavedCard.set(false);
     this.clearQueryParams();
   }
 
@@ -347,38 +377,63 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
         throw new Error('El SDK de Mercado Pago no está disponible. Volvé a intentar en unos segundos.');
       }
 
-      // Obtener dinámicamente el paymentMethodId usando el BIN (primeros 6 dígitos) de la tarjeta
-      const rawCardNumber = this.testCard.number.replace(/\s/g, '');
-      const bin = rawCardNumber.substring(0, 6);
-      
-      try {
-        const paymentMethods = await mpInstance.getPaymentMethods({ bin });
-        if (paymentMethods && paymentMethods.length > 0) {
-          paymentMethodId = paymentMethods[0].id;
-          console.log('Método de pago detectado:', paymentMethodId);
-        } else {
-          paymentMethodId = 'master'; // fallback
+      if (this.useSavedCard()) {
+        const savedCard = this.selectedCard();
+        if (!savedCard) {
+          throw new Error('No seleccionaste ninguna tarjeta guardada.');
         }
-      } catch (pmErr) {
-        console.warn('No se pudo determinar el método de pago por BIN, usando master por defecto:', pmErr);
-        paymentMethodId = 'master';
+        if (!this.cvv().trim()) {
+          throw new Error('Por favor ingresá el código de seguridad (CVV) de tu tarjeta.');
+        }
+
+        paymentMethodId = savedCard.brand.toLowerCase();
+
+        console.log('Tokenizando tarjeta guardada ID:', savedCard.card_id);
+        const tokenResponse = await mpInstance.createCardToken({
+          cardId: savedCard.card_id,
+          securityCode: this.cvv()
+        });
+
+        if (!tokenResponse || !tokenResponse.id) {
+          throw new Error('No se pudo generar el token para la tarjeta guardada.');
+        }
+
+        paymentToken = tokenResponse.id;
+      } else {
+        // Obtener dinámicamente el paymentMethodId usando el BIN (primeros 6 dígitos) de la tarjeta
+        const rawCardNumber = this.testCard.number.replace(/\s/g, '');
+        const bin = rawCardNumber.substring(0, 6);
+        
+        try {
+          const paymentMethods = await mpInstance.getPaymentMethods({ bin });
+          if (paymentMethods && paymentMethods.length > 0) {
+            paymentMethodId = paymentMethods[0].id;
+            console.log('Método de pago detectado:', paymentMethodId);
+          } else {
+            paymentMethodId = 'master'; // fallback
+          }
+        } catch (pmErr) {
+          console.warn('No se pudo determinar el método de pago por BIN, usando master por defecto:', pmErr);
+          paymentMethodId = 'master';
+        }
+
+        const tokenResponse = await mpInstance.createCardToken({
+          cardNumber: rawCardNumber,
+          cardholderName: this.testCard.cardholderName,
+          cardExpirationMonth: this.testCard.expirationMonth,
+          cardExpirationYear: this.testCard.expirationYear,
+          securityCode: this.testCard.cvv,
+          identificationType: this.testCard.docType,
+          identificationNumber: this.testCard.docNumber
+        });
+
+        if (!tokenResponse || !tokenResponse.id) {
+          throw new Error('No se pudo generar el token de pago.');
+        }
+
+        paymentToken = tokenResponse.id;
       }
 
-      const tokenResponse = await mpInstance.createCardToken({
-        cardNumber: rawCardNumber,
-        cardholderName: this.testCard.cardholderName,
-        cardExpirationMonth: this.testCard.expirationMonth,
-        cardExpirationYear: this.testCard.expirationYear,
-        securityCode: this.testCard.cvv,
-        identificationType: this.testCard.docType,
-        identificationNumber: this.testCard.docNumber
-      });
-
-      if (!tokenResponse || !tokenResponse.id) {
-        throw new Error('No se pudo generar el token de pago.');
-      }
-
-      paymentToken = tokenResponse.id;
       console.log('Token de tarjeta generado vía SDK:', paymentToken);
     } catch (err: any) {
       console.error('Fallo tokenización de tarjeta:', err);

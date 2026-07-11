@@ -1,17 +1,21 @@
 <app-header [title]="showForm ? (isEditing ? 'Editar Nodo' : 'Nuevo Nodo') : 'Nodos de Retiro'"
-  [showCustomBack]="showForm" [showAdminAvatar]="!showForm" [defaultHref]="!showForm ? '/admin/gestiones' : null" (customBack)="toggleForm(false)">
+  [showCustomBack]="showForm" [showAdminAvatar]="!showForm" [defaultHref]="!showForm ? '/admin/gestiones' : null"
+  (customBack)="toggleForm(false)">
 </app-header>
 
 <ion-content>
-  <div class="max-w-[600px] mx-auto py-3 px-2">
+  <div class="max-w-[600px] mx-auto pt-0 pb-3 px-2">
 
     <!-- VISTA 1: LISTADO DE NODOS (Se muestra por defecto) -->
     @if (!showForm) {
-    <div class="flex flex-col h-full overflow-hidden">
+    <div class="flex flex-col">
 
-      <!-- Mapa de Distribución de Nodos (Siempre visible arriba en el listado) -->
-      <div #listMapContainerRef id="list-map" class="map-container"
-        style="height: 250px; margin-bottom: 20px; flex-shrink: 0;"></div>
+      <!-- Contenedor pegajoso para el mapa con escudo de fondo sólido -->
+      <div
+        style="position: sticky; top: 0; z-index: 1000; background: #f8fafc; padding-top: 0; padding-bottom: 12px; margin-bottom: 8px;">
+        <div #listMapContainerRef id="list-map" class="map-container"
+          style="height: 250px; margin-bottom: 0; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);"></div>
+      </div>
 
       <div class="flex flex-col gap-1.5 pb-4">
         @if (isLoading) {

@@ -215,29 +215,47 @@
         <div class="mt-4 border-t border-slate-100 pt-4 flex flex-col gap-3">
           <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Información de Pago</span>
 
-          <!-- Tarjeta de prueba hardcodeada -->
-          <div class="flex flex-col gap-3">
-            <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
-              <div class="w-10 h-7 bg-[#002d4b] rounded-md flex items-center justify-center text-white text-[8px] font-black tracking-wider">MC</div>
-              <div class="flex flex-col">
-                <span class="text-xs font-bold text-[#002d4b]">{{ testCard.label }}</span>
-                <span class="text-[9px] text-slate-400">Vence {{ testCard.expirationMonth }}/{{ testCard.expirationYear }} · Tarjeta sandbox</span>
-              </div>
-            </div>
-
-            <div class="text-red-500 text-[10px] font-bold mt-1" *ngIf="paymentError">
-              {{ paymentError }}
-            </div>
-
-            <!-- Botón de Pago -->
-            <ion-button expand="block" [disabled]="isProcessingPayment()"
-              class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl mt-1"
-              (click)="confirmAndPay()">
-              <span *ngIf="!isProcessingPayment()">Confirmar y Reservar Pago</span>
-              <ion-spinner name="crescent" *ngIf="isProcessingPayment()"></ion-spinner>
-            </ion-button>
+          <!-- Selector de Tarjetas Guardadas -->
+          <div *ngIf="savedCards().length > 0" class="flex flex-col gap-2">
+            <select [ngModel]="selectedCard()"
+              (ngModelChange)="selectedCard.set($event); useSavedCard.set($event !== null); cvv.set('')"
+              class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all">
+              <option *ngFor="let card of savedCards()" [ngValue]="card">
+                {{ card.brand | uppercase }} terminada en {{ card.last_four }} (Vence {{ card.expiration_mo }}/{{
+                card.expiration_yr }})
+              </option>
+            </select>
           </div>
 
+          <!-- Si usa tarjeta guardada, pide CVV -->
+          <div *ngIf="useSavedCard() && savedCards().length > 0" class="flex flex-col gap-1">
+            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Código de seguridad
+              (CVV)</label>
+            <input type="password" [value]="cvv()" (input)="cvv.set($any($event.target).value)" maxlength="4"
+              placeholder="123"
+              class="w-24 h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
+          </div>
+
+          <!-- Si no hay tarjetas guardadas, advierte al usuario -->
+          <div *ngIf="savedCards().length === 0"
+            class="flex flex-col gap-1.5 p-3.5 bg-red-50 text-red-700 rounded-2xl border border-red-100 text-xs">
+            <span class="font-extrabold uppercase tracking-wider text-[9px] text-red-800">No tenés tarjetas
+              guardadas</span>
+            <span class="text-[10px] leading-relaxed">Para comprar colectivamente, primero debés registrar una tarjeta
+              en tu **Perfil** (sección Tarjetas).</span>
+          </div>
+
+          <div class="text-red-500 text-[10px] font-bold mt-1" *ngIf="paymentError">
+            {{ paymentError }}
+          </div>
+
+          <!-- Botón de Pago -->
+          <ion-button expand="block" [disabled]="isProcessingPayment() || savedCards().length === 0"
+            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl mt-1"
+            (click)="confirmAndPay()">
+            <span *ngIf="!isProcessingPayment()">Confirmar y Reservar Pago</span>
+            <ion-spinner name="crescent" *ngIf="isProcessingPayment()"></ion-spinner>
+          </ion-button>
         </div>
 
       </div>

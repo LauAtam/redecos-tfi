@@ -17,4 +17,12 @@ export class BuyGroupsService {
   async getMyOrders(userId: string) {
     return await this.buyGroupsRepository.getMyOrders(userId);
   }
+
+  async findFiltered(filters: { status?: string; nodeId?: string; productId?: string }) {
+    return await this.buyGroupsRepository.findFiltered(filters);
+  }
+
+  async updateStatus(id: string, status: string) {
+    return await this.buyGroupsRepository.updateStatus(id, status);
+  }
 }

@@ -13,8 +13,13 @@ export class PrismaProductsRepository implements ProductsRepository {
     categoryId?: string;
     page?: number;
     limit?: number;
+    onlyWithStock?: boolean;
   }): Promise<any> {
     const where: any = {};
+
+    if (filters?.onlyWithStock) {
+      where.stock = { gt: 0 };
+    }
 
     if (filters?.categoryId) {
       where.category_id = filters.categoryId;

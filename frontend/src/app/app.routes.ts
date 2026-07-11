@@ -105,4 +105,13 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { expectedRoles: ['NODO', 'ADMIN'] }
   },
+  {
+    path: 'consolidacion',
+    loadComponent: () =>
+      import('./pages/admin/gestiones/consolidacion/consolidacion.page').then(
+        (m) => m.ConsolidacionPage,
+      ),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRoles: ['NODO', 'ADMIN'] },
+  },
 ];
