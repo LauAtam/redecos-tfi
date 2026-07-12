@@ -15,6 +15,7 @@ import { BuyGroupsService } from './buy-groups.service';
 import { BuyGroupsCronService } from './buy-groups-cron.service';
 import { JoinGroupDto } from './dto/join-group.dto';
 import { UpdateGroupStatusDto } from './dto/update-group-status.dto';
+import { ConsolidateGroupsDto } from './dto/consolidate-groups.dto';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { PrismaService } from '../prisma/prisma.service';
@@ -175,6 +176,22 @@ export class BuyGroupsController {
     }
 
     return this.buyGroupsService.updateStatus(id, updateDto.status);
+  }
+
+  @Post('consolidate')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'NODO')
+  @ApiOperation({ summary: 'Consolidar grupos COMPLETED en un nodo y pasarlos a PROCESSING_ORDER' })
+  @ApiResponse({
+    status: 201,
+    description: 'Grupos consolidados con éxito y pasados a PROCESSING_ORDER.',
+  })
+  @ApiResponse({ status: 400, description: 'Datos inválidos o sin grupos COMPLETED.' })
+  @ApiResponse({ status: 401, description: 'No autorizado.' })
+  @ApiResponse({ status: 403, description: 'Permisos insuficientes.' })
+  async consolidateGroups(@Req() req: any, @Body() dto: ConsolidateGroupsDto) {
+    return this.buyGroupsService.consolidateGroups(req.user.id, req.user.role, dto);
   }
 
   @Post('test-cron')

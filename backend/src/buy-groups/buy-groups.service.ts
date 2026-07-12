@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BuyGroupsRepository } from './interfaces/buy-groups-repository.interface';
 import { JoinGroupDto } from './dto/join-group.dto';
+import { ConsolidateGroupsDto } from './dto/consolidate-groups.dto';
 
 @Injectable()
 export class BuyGroupsService {
@@ -25,4 +26,9 @@ export class BuyGroupsService {
   async updateStatus(id: string, status: string) {
     return await this.buyGroupsRepository.updateStatus(id, status);
   }
+
+  async consolidateGroups(userId: string, userRole: string, dto: ConsolidateGroupsDto) {
+    return await this.buyGroupsRepository.consolidateGroups(userId, userRole, dto);
+  }
 }
+

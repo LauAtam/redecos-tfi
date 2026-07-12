@@ -769,5 +769,54 @@ export class SupabaseService {
       return { data: null, error: { code: 'api/unexpected', message: 'Error de red al actualizar el estado del grupo.', originalError: err } };
     }
   }
+
+  async consolidateBuyGroups(dto: {
+    nodeId: string;
+    groupIds?: string[];
+  }): Promise<{ data: any | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/buy-groups/consolidate`, {
+        method: 'POST',
+        headers: this.getHeaders(token),
+        body: JSON.stringify(dto),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al consolidar los grupos de compra.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al consolidar grupos de compra.', originalError: err } };
+    }
+  }
+
+  async getNodeDashboardStats(nodeId: string): Promise<{ data: any | null, error: AppError | null }> {
+    try {
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
+
+      const response = await fetch(`${environment.apiUrl}/nodes/${nodeId}/dashboard-stats`, {
+        method: 'GET',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener estadísticas del nodo.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener estadísticas del nodo.', originalError: err } };
+    }
+  }
 }
+
 

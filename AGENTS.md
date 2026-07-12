@@ -28,14 +28,27 @@ Adoptamos el estándar de **Conventional Commits** en español con prefijos téc
 
 ## 3. Frontend: Angular (v20) & Ionic (v8)
 * **Formularios**: Se utiliza **estrictamente** Formularios Reactivos (`ReactiveFormsModule` con `FormBuilder` y `Validators`). Evitar el uso de Directivas de Plantilla (`ngModel`) para lógica de negocio o validaciones.
-* **Componentes**: Diseñar utilizando componentes standalone de Angular e Ionic.
+* **Componentes**:
+  * Diseñar utilizando componentes standalone de Angular e Ionic.
+  * **Sintaxis de Control Flow Nativo (Angular 17+)**: Utilizar estrictamente las directivas de control de flujo nativas (`@if`, `@else if`, `@else`, `@for`, `@switch`) en todas las plantillas HTML. Queda prohibido el uso de directivas estructurales obsoletas como `*ngIf`, `*ngFor` o `*ngSwitchCase`.
+  * **Importaciones Granulares**: No importar `CommonModule` completo en componentes standalone. En su lugar, importar únicamente las clases específicas requeridas (ej: `NgClass`, `DecimalPipe`, `DatePipe`) de `@angular/common` para optimizar el bundle y mejorar el rendimiento de compilación.
 * **Gestión de Estado**:
   * Implementar caché en memoria con RxJS (`BehaviorSubject`) en los servicios (ej. `SupabaseService`) para el perfil del usuario autenticado.
   * Esto permite que los **Angular Functional Guards** (`AuthGuard`, `RoleGuard`, `GuestGuard`) resuelvan las redirecciones de forma síncrona y ultra veloz sin golpear la base de datos de Supabase en cada navegación.
-* **Estilo y Estética (UI/UX)**:
+* **Estilo y Estética (UI/UX) - Arquitectura Híbrida (Ionic + Tailwind)**:
+  * **División de Responsabilidades**:
+    * **Ionic (Estructura y Comportamiento)**: Utilizar estrictamente componentes de Ionic (`ion-card`, `ion-item`, `ion-label`, `ion-badge`, etc.) para dar estructura semántica, transiciones móviles, efectos de toque y accesibilidad nativa.
+    * **Tailwind (Maquetación y Estética)**: Utilizar clases de utilidad para layouts (`flex`, `grid`, `gap`), espaciados (`p-*`, `m-*`), sombras (`shadow-*`), y bordes (`rounded-*`).
+  * **Integración con Shadow DOM (CSS Variables)**:
+    * Evitar aplicar clases directas de Tailwind de fondo/color (ej. `bg-green-500` o `text-white`) sobre la etiqueta host de componentes web de Ionic que usan Shadow DOM. En su lugar, inyectar variables nativas de Ionic utilizando clases arbitrarias de Tailwind (ej. `class="[--background:#006b4d] [--color:#ffffff]"`).
+  * **Tipografía y Especificidad**:
+    * Evitar el uso de etiquetas tipográficas globales de Ionic (`h1` a `h6` y `p`) dentro de las vistas personalizadas, ya que Ionic les inyecta tamaños y line-heights gigantes difíciles de sobreescribir.
+    * En su lugar, utilizar elementos neutros (`div` o `span`) estilizados con clases de Tailwind (ej. `text-xs`, `text-sm`, `text-base`, `text-lg`, `font-bold`).
+    * No utilizar estilos inline con `!important` para tipografías. Si se usan elementos neutros (`div`/`span`), Tailwind aplicará los tamaños sin interferencias de Ionic.
+  * **Consistencia de Espacios (Mobile-First)**:
+    * Los layouts móviles deben ser compactos, limpios y densos. Evitar el aire excesivo (utilizar `gap-3`, `mb-3` o `p-3` en tarjetas).
+    * Los títulos de secciones operacionales deben ser legibles pero discretos (ej. `text-xs font-bold uppercase tracking-wider text-slate-400`).
   * **Paleta de Colores**: Verde (#006b4d) y Azul Oscuro (#002d4b) como colores principales de marca.
-  * Temas: Mantener un diseño claro y limpio, saneando y eliminando selectores oscuros redundantes en `global.scss`.
-  * **TailwindCSS**: Sí se utiliza en el proyecto frontend (Tailwind v4 integrado con PostCSS). Se prioriza su uso en los componentes (estilos de utilidad, espaciado, layouts) antes de definir estilos globales o ad-hoc en `global.scss`.
 * **Manejo de Errores**:
   * Desacoplar los componentes de la interfaz de los errores crudos de base de datos o Supabase.
   * Usar la interfaz `AppError` (`src/app/core/models/auth.models.ts`) para normalizar los errores con códigos y mensajes legibles.

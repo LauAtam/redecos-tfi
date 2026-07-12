@@ -7,4 +7,5 @@ export abstract class NodesRepository {
   abstract create(createNodeDto: CreateNodeDto): Promise<any>;
   abstract update(id: string, updateNodeDto: UpdateNodeDto): Promise<any>;
   abstract remove(id: string): Promise<{ deleted: boolean }>;
+  abstract getDashboardStats(id: string): Promise<any>;
 }

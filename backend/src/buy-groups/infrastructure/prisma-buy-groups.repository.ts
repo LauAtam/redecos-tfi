@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { BuyGroupsRepository } from '../interfaces/buy-groups-repository.interface';
 import { PrismaService } from '../../prisma/prisma.service';
 import { JoinGroupDto } from '../dto/join-group.dto';
+import { ConsolidateGroupsDto } from '../dto/consolidate-groups.dto';
 import { MercadoPagoService } from './mercado-pago.service';
 import { MercadoPagoErrorMapper } from './mercado-pago-error.mapper';
 import * as crypto from 'crypto';
@@ -515,5 +516,107 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
 
       return updatedGroup;
     });
+  }
+
+  async consolidateGroups(userId: string, userRole: string, dto: ConsolidateGroupsDto): Promise<any> {
+    const { nodeId, groupIds } = dto;
+
+    // 1. Validar que el nodo existe
+    const node = await this.prisma.nodos.findUnique({
+      where: { id: nodeId },
+    });
+    if (!node) {
+      throw new BadRequestException('El nodo de retiro especificado no existe.');
+    }
+
+    // 2. Aislamiento de seguridad: si es rol NODO, validar correspondencia de nodo
+    if (userRole === 'NODO') {
+      const profile = await this.prisma.profiles.findUnique({
+        where: { id: userId },
+        select: { default_node_id: true },
+      });
+      if (!profile || profile.default_node_id !== nodeId) {
+        throw new ForbiddenException('No tiene permisos para consolidar grupos de otros nodos.');
+      }
+    }
+
+    // 3. Determinar los grupos a consolidar
+    const whereClause: any = {
+      node_id: nodeId,
+      status: 'COMPLETED',
+    };
+
+    if (groupIds && groupIds.length > 0) {
+      whereClause.id = { in: groupIds };
+    }
+
+    const groupsToConsolidate = await this.prisma.buy_groups.findMany({
+      where: whereClause,
+      include: {
+        productos: true,
+        group_orders: {
+          where: { status: 'CONFIRMED' },
+        },
+      },
+    });
+
+    if (groupsToConsolidate.length === 0) {
+      throw new BadRequestException('No se encontraron grupos en estado COMPLETED para consolidar.');
+    }
+
+    const actualGroupIds = groupsToConsolidate.map((g) => g.id);
+
+    // 4. Cambiar transaccionalmente el estado a 'PROCESSING_ORDER'
+    await this.prisma.$transaction(async (tx) => {
+      await tx.buy_groups.updateMany({
+        where: { id: { in: actualGroupIds } },
+        data: { status: 'PROCESSING_ORDER' },
+      });
+    });
+
+    // 5. Calcular consolidado agrupando por producto
+    const productSummaryMap = new Map<string, {
+      productId: string;
+      productName: string;
+      totalQuantity: number;
+      bulkSize: number;
+      totalBulks: number;
+      wholesaleUnitPrice: number;
+      totalAmount: number;
+    }>();
+
+    for (const group of groupsToConsolidate) {
+      const totalQuantity = group.group_orders.reduce((sum, order) => sum + order.quantity, 0);
+      const wholesaleUnitPrice = Number(group.productos.price);
+      const amount = totalQuantity * wholesaleUnitPrice;
+
+      const existing = productSummaryMap.get(group.product_id);
+      if (existing) {
+        existing.totalQuantity += totalQuantity;
+        existing.totalAmount += amount;
+        existing.totalBulks = Math.ceil(existing.totalQuantity / existing.bulkSize);
+      } else {
+        productSummaryMap.set(group.product_id, {
+          productId: group.product_id,
+          productName: group.productos.name,
+          totalQuantity,
+          bulkSize: group.productos.bulk_size,
+          totalBulks: Math.ceil(totalQuantity / group.productos.bulk_size),
+          wholesaleUnitPrice,
+          totalAmount: amount,
+        });
+      }
+    }
+
+    const items = Array.from(productSummaryMap.values());
+    const totalPurchaseAmount = items.reduce((sum, item) => sum + item.totalAmount, 0);
+
+    return {
+      nodeId,
+      consolidatedAt: new Date(),
+      consolidatedGroupsCount: actualGroupIds.length,
+      items,
+      totalPurchaseAmount,
+    };
   }
 }

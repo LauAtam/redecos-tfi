@@ -8,16 +8,16 @@ import {
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonInput, 
-  IonButton, 
-  IonIcon, 
-  IonText, 
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonInput,
+  IonButton,
+  IonIcon,
+  IonText,
   IonSpinner
-  } from '@ionic/angular/standalone';
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   mailOutline,
@@ -35,14 +35,14 @@ import { SupabaseService } from '../../supabase.service';
   imports: [
     ReactiveFormsModule,
     RouterModule,
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonInput, 
-    IonButton, 
-    IonIcon, 
-    IonText, 
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonInput,
+    IonButton,
+    IonIcon,
+    IonText,
     IonSpinner
   ],
 })
@@ -98,6 +98,8 @@ export class LoginPage {
           this.router.navigate(['/admin/dashboard']);
           break;
         case 'NODO':
+          this.router.navigate(['/nodo/dashboard']);
+          break;
         case 'CLIENTE':
         default:
           this.router.navigate(['/home']);

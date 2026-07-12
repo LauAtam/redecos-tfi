@@ -67,4 +67,38 @@ export class PrismaNodesRepository implements NodesRepository {
       throw error;
     }
   }
+
+  async getDashboardStats(id: string): Promise<any> {
+    const node = await this.findOne(id);
+
+    const [
+      processingOrderCount,
+      shippedCount,
+      readyForPickupCount,
+      completedCount,
+      finalizedCount
+    ] = await Promise.all([
+      this.prisma.buy_groups.count({ where: { node_id: id, status: 'PROCESSING_ORDER' } }),
+      this.prisma.buy_groups.count({ where: { node_id: id, status: 'SHIPPED' } }),
+      this.prisma.buy_groups.count({ where: { node_id: id, status: 'READY_FOR_PICKUP' } }),
+      this.prisma.buy_groups.count({ where: { node_id: id, status: 'COMPLETED' } }),
+      this.prisma.buy_groups.count({ where: { node_id: id, status: 'FINALIZED' } }),
+    ]);
+
+    return {
+      node: {
+        id: node.id,
+        name: node.name,
+        address: node.address,
+        manager_name: node.manager_name,
+      },
+      stats: {
+        processingOrderCount,
+        shippedCount,
+        readyForPickupCount,
+        completedCount,
+        finalizedCount,
+      },
+    };
+  }
 }

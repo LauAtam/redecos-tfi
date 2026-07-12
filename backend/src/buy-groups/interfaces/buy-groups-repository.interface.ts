@@ -1,4 +1,5 @@
 import { JoinGroupDto } from '../dto/join-group.dto';
+import { ConsolidateGroupsDto } from '../dto/consolidate-groups.dto';
 
 export abstract class BuyGroupsRepository {
   abstract getActiveGroups(nodeId: string): Promise<any>;
@@ -6,4 +7,5 @@ export abstract class BuyGroupsRepository {
   abstract getMyOrders(userId: string): Promise<any>;
   abstract findFiltered(filters: { status?: string; nodeId?: string; productId?: string }): Promise<any[]>;
   abstract updateStatus(id: string, status: string): Promise<any>;
+  abstract consolidateGroups(userId: string, userRole: string, dto: ConsolidateGroupsDto): Promise<any>;
 }

@@ -1,0 +1,141 @@
+<app-header title="Gestión de Nodo" [showLogout]="true" (logout)="logout()"></app-header>
+
+<ion-content class="[--background:#f8fafc] ion-padding">
+  <div class="max-w-[600px] mx-auto py-4 px-2 flex flex-col gap-6">
+
+    <!-- LOADER -->
+    @if (isLoading) {
+    <div class="flex justify-center items-center py-12">
+      <ion-spinner name="crescent" class="text-[#006b4d]"></ion-spinner>
+    </div>
+    }
+
+    <!-- ERROR STATE -->
+    @else if (errorMessage) {
+    <div
+      class="bg-white rounded-2xl border border-slate-200 p-8 text-center flex flex-col items-center justify-center gap-3 shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+      <div class="w-12 h-12 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center">
+        <ion-icon name="alert-circle-outline" class="text-2xl"></ion-icon>
+      </div>
+      <div>
+        <div class="font-bold text-base text-[#002d4b]">Error de Conexión</div>
+        <div class="text-sm text-slate-500 mt-1">{{ errorMessage }}</div>
+      </div>
+      <button (click)="loadStats()"
+        class="bg-[#006b4d] hover:bg-[#00543c] text-white font-extrabold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-[0.98] flex items-center gap-1.5">
+        <ion-icon name="refresh-outline" class="text-sm"></ion-icon>
+        Reintentar
+      </button>
+    </div>
+    }
+
+    <!-- CONTENT -->
+    @else {
+    <div class="flex flex-col gap-6">
+
+      <!-- Ficha de mi nodo -->
+      <div>
+        <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+          Punto de Retiro Asignado
+        </div>
+
+        <ion-card
+          class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex items-center gap-3">
+          <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#e6f4f0] text-[#006b4d] shrink-0">
+            <ion-icon name="business-outline" class="text-xl"></ion-icon>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-base font-extrabold text-[#002d4b] leading-tight">
+              {{ nodeName }} — <span class="text-sm font-semibold text-slate-500">{{ nodeAddress }}</span>
+            </div>
+            <div class="text-xs text-slate-400 font-bold mt-1.5">
+              Encargado: <span class="text-slate-600 font-semibold">{{ managerName }}</span>
+            </div>
+          </div>
+        </ion-card>
+      </div>
+
+      <!-- Sección de Estadísticas -->
+      <div>
+        <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+          Estado de los Pedidos
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <!-- En Preparación -->
+          <ion-card
+            class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-3 flex flex-col gap-1.5 items-center justify-center text-center">
+            <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-[#e6f2f7] text-[#004b7c]">
+              <ion-icon name="cube-outline" class="text-lg"></ion-icon>
+            </div>
+            <div class="text-2xl font-extrabold text-[#002d4b] mt-0.5">
+              {{ processingOrderCount }}
+            </div>
+            <div class="text-xs font-bold text-slate-500 leading-tight">
+              En Preparación
+            </div>
+          </ion-card>
+
+          <!-- En Camino -->
+          <ion-card
+            class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-3 flex flex-col gap-1.5 items-center justify-center text-center">
+            <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-[#fef3e7] text-[#b25e00]">
+              <ion-icon name="car-outline" class="text-lg"></ion-icon>
+            </div>
+            <div class="text-2xl font-extrabold text-[#002d4b] mt-0.5">
+              {{ shippedCount }}
+            </div>
+            <div class="text-xs font-bold text-slate-500 leading-tight">
+              En Camino
+            </div>
+          </ion-card>
+
+          <!-- Listos para Retirar -->
+          <ion-card
+            class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-3 flex flex-col gap-1.5 items-center justify-center text-center">
+            <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-[#f3e8ff] text-[#6b21a8]">
+              <ion-icon name="people-outline" class="text-lg"></ion-icon>
+            </div>
+            <div class="text-2xl font-extrabold text-[#002d4b] mt-0.5">
+              {{ readyForPickupCount }}
+            </div>
+            <div class="text-xs font-bold text-slate-500 leading-tight">
+              Para Retirar
+            </div>
+          </ion-card>
+        </div>
+      </div>
+
+      <!-- Operaciones / Accesos rápidos -->
+      <div>
+        <div class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+          Operaciones
+        </div>
+
+        <ion-card
+          class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] overflow-hidden transition-all duration-200 active:scale-[0.98]"
+          (click)="navegarA('/consolidacion')" button="true">
+          <ion-item lines="none"
+            class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-3">
+            <div slot="start"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#fdf2e9] text-[#e67e22] mr-2">
+              <ion-icon name="clipboard-outline" class="text-xl"></ion-icon>
+            </div>
+            <ion-label class="m-0">
+              <div class="text-base font-bold text-[#002d4b] leading-snug">
+                Gestión de Pedidos
+              </div>
+              <div class="text-xs text-slate-500 mt-1 font-medium leading-normal">
+                Controlar recepción de bultos y registrar entregas a clientes.
+              </div>
+            </ion-label>
+            <ion-icon slot="end" name="chevron-forward-outline" class="text-xl text-[#a0aec0] mr-4"></ion-icon>
+          </ion-item>
+        </ion-card>
+      </div>
+
+    </div>
+    }
+
+  </div>
+</ion-content>

@@ -26,4 +26,8 @@ export class NodesService {
   async remove(id: string) {
     return this.nodesRepository.remove(id);
   }
+
+  async getDashboardStats(id: string) {
+    return this.nodesRepository.getDashboardStats(id);
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass, DecimalPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
@@ -43,7 +43,8 @@ import { HeaderComponent } from '../../../../core/components/header/header.compo
   styleUrls: ['./consolidacion.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
+    NgClass,
+    DecimalPipe,
     RouterModule,
     FormsModule,
     HeaderComponent,
@@ -83,7 +84,7 @@ export class ConsolidacionPage implements OnInit {
   selectedGroupForModal = signal<BuyGroup | null>(null);
   isConsolidarModalOpen = signal<boolean>(false);
   isDeliveryModalOpen = signal<boolean>(false);
-  
+
   // Mock delivery order selection
   manualOrderCode = '';
   isDeliveringOrder = signal<boolean>(false);
@@ -106,7 +107,7 @@ export class ConsolidacionPage implements OnInit {
 
   async ngOnInit() {
     this.isLoading.set(true);
-    
+
     // 1. Cargar nodos si es ADMIN
     if (this.userRole() === 'ADMIN') {
       const { data, error } = await this.supabaseService.getNodos();
@@ -132,7 +133,7 @@ export class ConsolidacionPage implements OnInit {
   filteredBuyGroups = computed(() => {
     const tab = this.activeTab();
     const groups = this.buyGroups();
-    
+
     return groups.filter(g => {
       switch (tab) {
         case 'order':
@@ -199,7 +200,20 @@ export class ConsolidacionPage implements OnInit {
     if (!group) return;
 
     this.closeConsolidarModal();
-    await this.updateStatus(group.id, 'PROCESSING_ORDER', 'Pedido consolidado y ordenado al mayorista.');
+    this.isLoading.set(true);
+
+    const { data, error } = await this.supabaseService.consolidateBuyGroups({
+      nodeId: this.selectedNodeId(),
+      groupIds: [group.id],
+    });
+
+    if (error) {
+      this.toastService.showError(error.message);
+      this.isLoading.set(false);
+    } else {
+      this.toastService.showSuccess('Pedido consolidado y ordenado al mayorista.');
+      await this.fetchGroups(); // Recargar lista de bultos
+    }
   }
 
   async markAsShipped(group: BuyGroup) {
@@ -226,13 +240,13 @@ export class ConsolidacionPage implements OnInit {
     if (!group) return;
 
     this.isDeliveringOrder.set(true);
-    
+
     // Simular procesamiento del código u orden
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
+
     this.isDeliveringOrder.set(false);
     this.closeDeliveryModal();
-    
+
     // Transicionar el grupo a FINALIZED (Hito #4: marca todo el bulto como entregado)
     await this.updateStatus(group.id, 'FINALIZED', 'Todos los pedidos de este bulto fueron entregados exitosamente.');
   }
@@ -247,7 +261,7 @@ export class ConsolidacionPage implements OnInit {
   private async updateStatus(id: string, status: string, successMessage: string) {
     this.isLoading.set(true);
     const { error } = await this.supabaseService.updateBuyGroupStatus(id, status);
-    
+
     if (error) {
       this.toastService.showError(error.message);
       this.isLoading.set(false);

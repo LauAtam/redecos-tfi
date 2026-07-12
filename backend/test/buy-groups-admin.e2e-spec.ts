@@ -245,4 +245,75 @@ describe('BuyGroups Admin (E2E)', () => {
       expect(orderInDb?.status).toBe('CANCELLED');
     });
   });
+
+  describe('POST /buy-groups/consolidate (Consolidación en lote)', () => {
+    let completedGroup: any;
+
+    beforeAll(async () => {
+      // Crear un grupo en estado COMPLETED para probar la consolidación
+      completedGroup = await prisma.buy_groups.create({
+        data: {
+          product_id: product.id,
+          node_id: nodeA.id,
+          status: 'COMPLETED',
+          target_size: 2,
+        },
+      });
+
+      // Crear una orden CONFIRMED en el grupo
+      await prisma.group_orders.create({
+        data: {
+          group_id: completedGroup.id,
+          profile_id: adminUser.id,
+          quantity: 2,
+          unit_price: 10.0,
+          status: 'CONFIRMED',
+        },
+      });
+    });
+
+    afterAll(async () => {
+      await prisma.group_orders.deleteMany({
+        where: { group_id: completedGroup.id },
+      });
+      await prisma.buy_groups.delete({
+        where: { id: completedGroup.id },
+      });
+    });
+
+    it('debería prohibir a un Coordinador de Nodo consolidar grupos de otro nodo', async () => {
+      await request(app.getHttpServer())
+        .post('/buy-groups/consolidate')
+        .set('Authorization', `Bearer ${nodoBToken}`) // Token del Nodo B intentando consolidar en Nodo A
+        .send({
+          nodeId: nodeA.id,
+          groupIds: [completedGroup.id],
+        })
+        .expect(403);
+    });
+
+    it('debería permitir al Coordinador de su nodo consolidar sus grupos COMPLETED', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/buy-groups/consolidate')
+        .set('Authorization', `Bearer ${nodoAToken}`)
+        .send({
+          nodeId: nodeA.id,
+          groupIds: [completedGroup.id],
+        })
+        .expect(201);
+
+      expect(res.body.nodeId).toBe(nodeA.id);
+      expect(res.body.consolidatedGroupsCount).toBe(1);
+      expect(res.body.items.length).toBe(1);
+      expect(res.body.items[0].productId).toBe(product.id);
+      expect(res.body.items[0].totalQuantity).toBe(2);
+
+      // Verificar que el estado del grupo en base de datos cambió a PROCESSING_ORDER
+      const groupInDb = await prisma.buy_groups.findUnique({
+        where: { id: completedGroup.id },
+      });
+      expect(groupInDb?.status).toBe('PROCESSING_ORDER');
+    });
+  });
 });
+

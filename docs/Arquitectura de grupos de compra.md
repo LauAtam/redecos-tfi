@@ -38,7 +38,33 @@ stateDiagram-v2
 
 ---
 
-## 3. Flujo Secuencial de Transacciones y Retención de Pagos
+## 3. Mapeo y Relación de Estados (Grupo vs. Órdenes)
+
+Para garantizar la consistencia, el ciclo de vida del grupo de compra (`buy_groups`) se sincroniza con el estado de las órdenes individuales de los clientes (`group_orders`):
+
+| Fase Logística | Estado del Grupo (`buy_groups.status`) | Estado de las Órdenes del Cliente (`group_orders.status`) | Comportamiento / Acción Disparadora |
+| :--- | :--- | :--- | :--- |
+| **1. Compra Activa** | `OPEN` | `PAYMENT_HELD` | El cliente se une al grupo. Se pre-autoriza y retiene el dinero en Mercado Pago. |
+| **2. Bulto Cerrado** | `COMPLETED` | `CONFIRMED` | Se alcanza el `target_size`. Se capturan en paralelo los pagos pre-autorizados y se reduce el stock. |
+| **3. Pedido al Mayorista** | `PROCESSING_ORDER` | `CONFIRMED` | El Administrador consolida los bultos y procesa la compra física con el proveedor. |
+| **4. En Tránsito** | `SHIPPED` | `CONFIRMED` | El proveedor despacha la mercadería consolidada hacia el Nodo. |
+| **5. Recepción en Nodo** | `READY_FOR_PICKUP` | `CONFIRMED` | El Coordinador del Nodo recibe y fracciona los productos. Los clientes son notificados. |
+| **6. Entrega al Cliente** | `FINALIZED` | `FINALIZED` | Retiro físico de la mercadería por parte del usuario. |
+
+### Flujo de Cancelación y Reembolsos
+
+Si ocurre una cancelación, el comportamiento varía según el punto en el que se encuentre el flujo:
+
+* **Cancelación en Paso 1 (Grupo `OPEN` / Órdenes en `PAYMENT_HELD`):**
+  * **Comportamiento lógico:** El grupo y sus órdenes pasan al estado `CANCELLED`.
+  * **Impacto financiero:** El backend anula automáticamente la pre-autorización en Mercado Pago (`cancelPayment`). Los fondos del cliente se liberan de inmediato sin haber impactado su saldo o resumen de tarjeta. Ocurre automáticamente mediante el Cron Job a medianoche o si el administrador cancela el grupo de forma manual.
+* **Cancelación en Paso 2 (Grupo `COMPLETED` / Órdenes en `CONFIRMED`):**
+  * **Comportamiento lógico:** El grupo se marca como `CANCELLED`. Las órdenes en `CONFIRMED` no se modifican automáticamente a nivel de base de datos ni de Mercado Pago para evitar inconsistencias de caja.
+  * **Impacto financiero:** Dado que los pagos de las órdenes en `CONFIRMED` ya fueron capturados y acreditados en la cuenta de Redecos, **cualquier cancelación posterior requiere un reembolso (Refund) manual** en la consola de Mercado Pago o la implementación futura de un flujo de devolución automatizado.
+
+---
+
+## 4. Flujo Secuencial de Transacciones y Retención de Pagos
 
 El siguiente diagrama detalla cómo interactúan los actores en el sistema, haciendo foco en la creación automática por el comprador y la expiración automática a medianoche controlada por el backend.
 
@@ -106,7 +132,7 @@ sequenceDiagram
 
 ---
 
-## 4. Beneficios del Diseño para Presentar ante la Reunión
+## 5. Beneficios del Diseño para Presentar ante la Reunión
 
 * **Experiencia de Usuario Dinámica**: Los grupos se crean orgánicamente por el consumo real, evitando que el administrador deba crear grupos vacíos manualmente.
 * **Respeto a las Reglas del Mayorista**: El vencimiento automático a medianoche se alinea a la perfección con la volatilidad de precios en Argentina y el congelamiento diario que exigen los proveedores mayoristas.

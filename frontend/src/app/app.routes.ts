@@ -100,10 +100,18 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'nodo',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    path: 'nodo/dashboard',
+    loadComponent: () =>
+      import('./pages/nodo/dashboard/nodo-dashboard.page').then(
+        (m) => m.NodoDashboardPage,
+      ),
     canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['NODO', 'ADMIN'] }
+    data: { expectedRoles: ['NODO'] },
+  },
+  {
+    path: 'nodo',
+    redirectTo: 'nodo/dashboard',
+    pathMatch: 'full',
   },
   {
     path: 'consolidacion',
