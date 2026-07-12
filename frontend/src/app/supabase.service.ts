@@ -64,10 +64,8 @@ export class SupabaseService {
     // Escuchamos los cambios en el estado de autenticación
     this.supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        // Si el usuario ya está cargado en memoria, evitamos resetear el estado y volver a pegarle a la DB
-        if (this.lastFetchedProfileId === session.user.id && this.currentUserSubject.value !== null) {
-          this.authInitialized.set(true);
-          this.authInitializedSubject.next(true);
+        // Si el usuario ya está cargado en memoria (o en proceso de carga), evitamos resetear el estado y consultar de nuevo
+        if (this.lastFetchedProfileId === session.user.id) {
           return;
         }
 
@@ -94,12 +92,14 @@ export class SupabaseService {
               };
               this.currentUserSubject.next(enrichedProfile);
               this.currentUserSignal.set(enrichedProfile);
+            } else if (error) {
+              console.error('Error al cargar perfil en inicialización de sesión:', error);
             }
             this.authInitialized.set(true);
             this.authInitializedSubject.next(true);
           })
           .catch((e) => {
-            console.error('Error fetching profile from DB:', e);
+            console.error('Excepción al cargar perfil en inicialización de sesión:', e);
             this.authInitialized.set(true);
             this.authInitializedSubject.next(true);
           });
@@ -254,23 +254,37 @@ export class SupabaseService {
 
   async getUserProfile(userId: string): Promise<AuthResponse> {
     try {
-      const { data, error } = await this.supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      const { data: sessionData } = await this.supabase.auth.getSession();
+      const token = sessionData.session?.access_token || '';
 
-      if (error) {
-        return { user: null, error: this.mapError(error) };
+      if (!token) {
+        return {
+          user: null,
+          error: { code: 'auth/no-session', message: 'No hay sesión de autenticación activa.' }
+        };
       }
 
-      return { user: data as Profile, error: null };
+      const response = await fetch(`${environment.apiUrl}/profiles/me`, {
+        method: 'GET',
+        headers: this.getHeaders(token),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        return {
+          user: null,
+          error: { code: 'api/error', message: errData.message || 'Error al obtener el perfil del servidor.' }
+        };
+      }
+
+      const dbProfile = await response.json() as Profile;
+      return { user: dbProfile, error: null };
     } catch (err) {
       return {
         user: null,
         error: {
-          code: 'auth/unexpected',
-          message: 'Error al obtener el perfil de usuario.',
+          code: 'api/unexpected',
+          message: 'Error al obtener el perfil del servidor.',
           originalError: err,
         },
       };

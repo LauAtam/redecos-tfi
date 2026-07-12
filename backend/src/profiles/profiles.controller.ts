@@ -14,12 +14,26 @@ import {
 @ApiTags('profiles')
 @Controller('profiles')
 export class ProfilesController {
-  constructor(private readonly profilesService: ProfilesService) {}
+  constructor(private readonly profilesService: ProfilesService) { }
+
+  @Get('me')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'CLIENTE', 'NODO')
+  @ApiOperation({ summary: "Get current user's profile" })
+  @ApiResponse({
+    status: 200,
+    description: 'The profile has been successfully retrieved.',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  async getProfile(@Req() req: any) {
+    return this.profilesService.getProfile(req.user.id);
+  }
 
   @Patch('me')
   @ApiBearerAuth()
   @UseGuards(RolesGuard)
-  @Roles('ADMIN', 'CLIENTE')
+  @Roles('ADMIN', 'CLIENTE', 'NODO')
   @ApiOperation({ summary: "Update current user's profile" })
   @ApiResponse({
     status: 200,

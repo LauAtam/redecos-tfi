@@ -15,6 +15,14 @@ export class ProfilesService {
     return await this.profilesRepository.updateProfile(userId, dto);
   }
 
+  async getProfile(userId: string) {
+    const profile = await this.profilesRepository.findProfileById(userId);
+    if (!profile) {
+      throw new NotFoundException('El perfil de usuario no existe.');
+    }
+    return profile;
+  }
+
   async listCards(userId: string): Promise<any[]> {
     return await this.profilesRepository.listCards(userId);
   }
