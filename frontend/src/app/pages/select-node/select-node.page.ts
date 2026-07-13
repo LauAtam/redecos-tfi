@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import {
@@ -14,13 +13,11 @@ import {
   AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { locateOutline, peopleOutline, pinOutline, helpCircleOutline } from 'ionicons/icons';
+import { locateOutline, peopleOutline, pinOutline, helpCircleOutline, checkmarkOutline } from 'ionicons/icons';
 import * as L from 'leaflet';
 import { SupabaseService } from '../../supabase.service';
 import { Nodo } from '../../core/models/auth.models';
 import { HeaderComponent } from '../../core/components/header/header.component';
-
-
 
 @Component({
   selector: 'app-select-node',
@@ -28,7 +25,6 @@ import { HeaderComponent } from '../../core/components/header/header.component';
   styleUrls: ['./select-node.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     RouterModule,
     HeaderComponent,
@@ -43,24 +39,24 @@ import { HeaderComponent } from '../../core/components/header/header.component';
   ]
 })
 export class SelectNodePage implements OnInit, OnDestroy {
+  userId: string | null = null;
+  currentSelectedNodeId: string | null = null;
+  savingNodeId: string | null = null;
+  isSaving = false;
+  canCancel = false;
   nodos: Nodo[] = [];
   isLoading = false;
-  isSaving = false;
-  savingNodeId: string | null = null;
   errorMessage: string | null = null;
-  currentSelectedNodeId: string | null = null;
-  canCancel = false;
-
-  private customMarkerIcon?: L.DivIcon;
-  private userLocationIcon?: L.DivIcon;
-
   sortBy: 'proximity' | 'popularity' = 'proximity';
+  
   userLatitude: number | null = null;
   userLongitude: number | null = null;
-
-  map?: L.Map;
-  markers: L.Marker[] = [];
-  userMarker?: L.Marker;
+  
+  private map: L.Map | undefined;
+  private markers: L.Marker[] = [];
+  private userMarker: L.Marker | undefined;
+  private customMarkerIcon: L.DivIcon | undefined;
+  private userLocationIcon: L.DivIcon | undefined;
 
   @ViewChild('mapContainerRef') set mapContainerRef(content: ElementRef) {
     if (content) {
@@ -81,7 +77,8 @@ export class SelectNodePage implements OnInit, OnDestroy {
       locateOutline,
       peopleOutline,
       pinOutline,
-      helpCircleOutline
+      helpCircleOutline,
+      checkmarkOutline
     });
   }
 

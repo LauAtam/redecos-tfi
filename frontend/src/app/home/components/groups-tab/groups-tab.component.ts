@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input, inject } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonButton, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -13,7 +13,7 @@ import { Nodo, Producto, BuyGroup } from '../../../core/models/auth.models';
   styleUrls: ['./groups-tab.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
+    CurrencyPipe,
     RouterModule,
     IonButton,
     IonIcon,
@@ -22,6 +22,9 @@ import { Nodo, Producto, BuyGroup } from '../../../core/models/auth.models';
   providers: [CurrencyPipe]
 })
 export class GroupsTabComponent implements OnInit, OnChanges {
+  blurActiveElement() {
+    (document.activeElement as HTMLElement)?.blur();
+  }
   @Input() activeNode: Nodo | null = null;
   @Input() products: Producto[] = [];
   @Input() isLoadingProducts = false;
