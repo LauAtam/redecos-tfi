@@ -26,7 +26,7 @@ import {
   eyeOffOutline,
   idCardOutline,
 } from 'ionicons/icons';
-import { SupabaseService } from '../../supabase.service';
+import { AppFacadeService } from '../../app-facade.service';
 import { HeaderComponent } from '../../core/components/header/header.component';
 
 @Component({
@@ -57,7 +57,7 @@ export class RegisterPage {
   registeredEmail: string = '';
 
   private fb = inject(FormBuilder);
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
 
   constructor() {
@@ -122,7 +122,7 @@ export class RegisterPage {
     const { firstName, lastName, email, password } = this.registerForm.value;
     this.registeredEmail = email;
 
-    const { user, error } = await this.supabaseService.register(
+    const { user, error } = await this.appFacadeService.register(
       email,
       password,
       firstName,
@@ -146,7 +146,7 @@ export class RegisterPage {
     this.errorMessage = null;
 
     const { token } = this.otpForm.value;
-    const { user, error } = await this.supabaseService.verifyOtp(this.registeredEmail, token);
+    const { user, error } = await this.appFacadeService.verifyOtp(this.registeredEmail, token);
 
     this.isLoading = false;
 

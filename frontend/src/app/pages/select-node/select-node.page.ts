@@ -15,7 +15,7 @@ import {
 import { addIcons } from 'ionicons';
 import { locateOutline, peopleOutline, pinOutline, helpCircleOutline, checkmarkOutline } from 'ionicons/icons';
 import * as L from 'leaflet';
-import { SupabaseService } from '../../supabase.service';
+import { AppFacadeService } from '../../app-facade.service';
 import { Nodo } from '../../core/models/auth.models';
 import { HeaderComponent } from '../../core/components/header/header.component';
 
@@ -69,7 +69,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
   }
 
   private alertController = inject(AlertController);
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
 
   constructor() {
@@ -83,7 +83,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const user = this.supabaseService.currentUserValue;
+    const user = this.appFacadeService.currentUserValue;
     if (user && user.default_node_id) {
       this.currentSelectedNodeId = user.default_node_id;
       this.canCancel = true;
@@ -110,7 +110,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const { data, error } = await this.supabaseService.getNodos();
+    const { data, error } = await this.appFacadeService.getNodos();
     this.isLoading = false;
 
     if (error) {
@@ -327,7 +327,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
     this.savingNodeId = nodo.id;
     this.errorMessage = null;
 
-    const { user, error } = await this.supabaseService.updateProfile({ default_node_id: nodo.id });
+    const { user, error } = await this.appFacadeService.updateProfile({ default_node_id: nodo.id });
     this.isSaving = false;
     this.savingNodeId = null;
 
@@ -340,7 +340,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
   }
 
   async logout() {
-    await this.supabaseService.logout();
+    await this.appFacadeService.logout();
     this.router.navigate(['/login']);
   }
 

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NodosPage } from './nodos.page';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { of } from 'rxjs';
 import * as L from 'leaflet';
@@ -9,11 +9,11 @@ import * as L from 'leaflet';
 describe('NodosPage', () => {
   let component: NodosPage;
   let fixture: ComponentFixture<NodosPage>;
-  let mockSupabaseService: any;
+  let mockAppFacadeService: any;
   let mockToastService: any;
 
   beforeEach(async () => {
-    mockSupabaseService = {
+    mockAppFacadeService = {
       getNodos: jasmine.createSpy('getNodos').and.returnValue(Promise.resolve({ data: [], error: null })),
       createNodo: jasmine.createSpy('createNodo').and.returnValue(Promise.resolve({ data: { id: '1', name: 'Test' }, error: null })),
       updateNodo: jasmine.createSpy('updateNodo').and.returnValue(Promise.resolve({ data: { id: '1', name: 'Updated Test' }, error: null }))
@@ -27,7 +27,7 @@ describe('NodosPage', () => {
     await TestBed.configureTestingModule({
       imports: [NodosPage, ReactiveFormsModule],
       providers: [
-        { provide: SupabaseService, useValue: mockSupabaseService },
+        { provide: AppFacadeService, useValue: mockAppFacadeService },
         { provide: ToastService, useValue: mockToastService }
       ]
     }).compileComponents();

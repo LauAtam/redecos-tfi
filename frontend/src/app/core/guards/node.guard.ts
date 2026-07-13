@@ -1,17 +1,17 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { SupabaseService } from '../../supabase.service';
+import { AuthService } from '../services/auth.service';
 import { filter, map, take } from 'rxjs';
 
 export const nodeGuard: CanActivateFn = (route, state) => {
-  const supabaseService = inject(SupabaseService);
+  const authService = inject(AuthService);
   const router = inject(Router);
 
-  return supabaseService.authInitialized$.pipe(
+  return authService.authInitialized$.pipe(
     filter((initialized) => initialized),
     take(1),
     map(() => {
-      const user = supabaseService.currentUserValue;
+      const user = authService.currentUserValue;
       if (!user) {
         return true;
       }

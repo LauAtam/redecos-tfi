@@ -32,7 +32,7 @@ import {
   refreshOutline,
   peopleOutline
 } from 'ionicons/icons';
-import { SupabaseService } from '../../../../supabase.service';
+import { AppFacadeService } from '../../../../app-facade.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { BuyGroup, Nodo } from '../../../../core/models/auth.models';
 import { HeaderComponent } from '../../../../core/components/header/header.component';
@@ -65,7 +65,7 @@ import { HeaderComponent } from '../../../../core/components/header/header.compo
   ]
 })
 export class ConsolidacionPage implements OnInit {
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
   private toastService = inject(ToastService);
 
@@ -77,8 +77,8 @@ export class ConsolidacionPage implements OnInit {
   buyGroups = signal<BuyGroup[]>([]);
 
   // User Profile
-  userRole = this.supabaseService.userRole;
-  currentUser = this.supabaseService.currentUser;
+  userRole = this.appFacadeService.userRole;
+  currentUser = this.appFacadeService.currentUser;
 
   // Modals state
   selectedGroupForModal = signal<BuyGroup | null>(null);
@@ -110,7 +110,7 @@ export class ConsolidacionPage implements OnInit {
 
     // 1. Cargar nodos si es ADMIN
     if (this.userRole() === 'ADMIN') {
-      const { data, error } = await this.supabaseService.getNodos();
+      const { data, error } = await this.appFacadeService.getNodos();
       if (!error && data) {
         this.nodos.set(data);
         if (data.length > 0) {
@@ -155,7 +155,7 @@ export class ConsolidacionPage implements OnInit {
     if (!nodeId) return;
 
     this.isLoading.set(true);
-    const { data, error } = await this.supabaseService.listBuyGroups({ nodeId });
+    const { data, error } = await this.appFacadeService.listBuyGroups({ nodeId });
     this.isLoading.set(false);
 
     if (error) {
@@ -202,7 +202,7 @@ export class ConsolidacionPage implements OnInit {
     this.closeConsolidarModal();
     this.isLoading.set(true);
 
-    const { data, error } = await this.supabaseService.consolidateBuyGroups({
+    const { data, error } = await this.appFacadeService.consolidateBuyGroups({
       nodeId: this.selectedNodeId(),
       groupIds: [group.id],
     });
@@ -260,7 +260,7 @@ export class ConsolidacionPage implements OnInit {
   // Helper centralizado para actualizar estado
   private async updateStatus(id: string, status: string, successMessage: string) {
     this.isLoading.set(true);
-    const { error } = await this.supabaseService.updateBuyGroupStatus(id, status);
+    const { error } = await this.appFacadeService.updateBuyGroupStatus(id, status);
 
     if (error) {
       this.toastService.showError(error.message);

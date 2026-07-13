@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { HomePage } from './home.page';
-import { SupabaseService } from '../supabase.service';
+import { AppFacadeService } from '../app-facade.service';
 import { BehaviorSubject } from 'rxjs';
 
 describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
-  let mockSupabaseService: any;
+  let mockAppFacadeService: any;
   let mockRouter: any;
   let currentUserSubject: BehaviorSubject<any>;
 
@@ -22,7 +22,7 @@ describe('HomePage', () => {
       navigate: jasmine.createSpy('navigate')
     };
 
-    mockSupabaseService = {
+    mockAppFacadeService = {
       currentUser$: currentUserSubject.asObservable(),
       currentUserValue: { id: 'user-123', role: 'CLIENTE', default_node_id: 'node-1' },
       getNodos: jasmine.createSpy('getNodos').and.returnValue(Promise.resolve({
@@ -37,7 +37,7 @@ describe('HomePage', () => {
     await TestBed.configureTestingModule({
       imports: [HomePage],
       providers: [
-        { provide: SupabaseService, useValue: mockSupabaseService },
+        { provide: AppFacadeService, useValue: mockAppFacadeService },
         { provide: Router, useValue: mockRouter }
       ]
     }).compileComponents();
@@ -53,7 +53,7 @@ describe('HomePage', () => {
 
   it('should resolve active node from default_node_id', fakeAsync(() => {
     tick();
-    expect(mockSupabaseService.getNodos).toHaveBeenCalled();
+    expect(mockAppFacadeService.getNodos).toHaveBeenCalled();
     expect(component.activeNode).toBeDefined();
     expect(component.activeNode!.name).toBe('Nodo Central');
   }));
@@ -62,7 +62,7 @@ describe('HomePage', () => {
     component.logout();
     tick();
 
-    expect(mockSupabaseService.logout).toHaveBeenCalled();
+    expect(mockAppFacadeService.logout).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
   }));
 });

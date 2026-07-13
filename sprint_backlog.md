@@ -15,19 +15,16 @@ Este archivo detalla las prioridades redefinidas para los últimos 10 días de d
 * **Acción**: Implementados endpoints flexibles `GET /buy-groups` y `PATCH /buy-groups/:id/status` con validaciones DTO y controles de seguridad por nodo. Cubierto con tests de integración E2E en `test/buy-groups-admin.e2e-spec.ts`.
 
 ### 3. `WB407926-54` — [Frontend] Pantalla de Consolidación y Logística para el Administrador
-* **Estado**: 🔴 **Por hacer (To Do)**
-* **Acción**: Diseñar la interfaz del Administrador/Coordinador de Nodo. Debe permitir:
-  * Listar los grupos del nodo que estén listos para pedir (`COMPLETED`) o en camino.
-  * Consolidar los pedidos (ver cantidades agrupadas por producto para comprar al mayorista).
-  * Avanzar el estado de cada grupo a través de botones de acción simples, afectando la visualización del cliente.
+* **Estado**: 🟢 **Listo (Done)**
+* **Acción**: Implementada la pantalla de consolidación y logística en `src/app/pages/admin/gestiones/consolidacion`. Permite filtrar y listar los grupos de compra del nodo, consolidar las unidades acumuladas de productos para comprar al mayorista, y avanzar el estado del bulto mediante botones de acción simples que sincronizan la base de datos y notifican el flujo al cliente. Totalmente migrado a Angular 17+ Control Flow.
 
 ---
 
 ## 📅 Backlog de Cierre (Prioridad Baja / Postergado)
 
 ### 4. `WB407926-53` — [Frontend] Dinamizar el Dashboard del Administrador y Gráficos
-* **Estado**: 🔴 **Por hacer (To Do) — Al final**
-* **Acción**: Conectar contadores del dashboard y gráficos con endpoints reales de la DB de Supabase.
+* **Estado**: 🟡 **En Progreso (In Progress)**
+* **Acción**: Conectar contadores del dashboard y gráficos con endpoints agregados en NestJS. Implementar visualizaciones de ganancias, retiros y ahorros utilizando `Chart.js` en Angular.
 
 ### 5. `WB407926-50` — Testear las funcionalidades del motor de transacciones, stock y pasarela de pagos
 * **Estado**: 🟡 **Postergado / Baja Prioridad**

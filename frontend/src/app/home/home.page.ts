@@ -21,7 +21,7 @@ import {
   searchOutline
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
-import { SupabaseService } from '../supabase.service';
+import { AppFacadeService } from '../app-facade.service';
 import { Nodo } from '../core/models/auth.models';
 import { HeaderComponent } from '../core/components/header/header.component';
 import { CatalogTabComponent } from './components/catalog-tab/catalog-tab.component';
@@ -53,7 +53,7 @@ export class HomePage implements OnInit, OnDestroy {
   userName = '';
   userEmail = '';
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -78,7 +78,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoadingNode = true;
-    this.userSub = this.supabaseService.currentUser$.subscribe(async (profile) => {
+    this.userSub = this.appFacadeService.currentUser$.subscribe(async (profile) => {
       if (profile) {
         this.userEmail = profile.email || '';
         this.userName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Usuario';
@@ -119,7 +119,7 @@ export class HomePage implements OnInit, OnDestroy {
 
   async loadActiveNode(nodeId: string) {
     this.isLoadingNode = true;
-    const { data: nodes, error } = await this.supabaseService.getNodos();
+    const { data: nodes, error } = await this.appFacadeService.getNodos();
     this.isLoadingNode = false;
 
     if (!error && nodes) {
@@ -128,7 +128,7 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   async logout() {
-    await this.supabaseService.logout();
+    await this.appFacadeService.logout();
     this.router.navigate(['/login']);
   }
 }

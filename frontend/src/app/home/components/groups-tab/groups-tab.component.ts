@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { IonButton, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { swapHorizontalOutline, chevronForwardOutline } from 'ionicons/icons';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { Nodo, Producto, BuyGroup } from '../../../core/models/auth.models';
 
 @Component({
@@ -30,7 +30,7 @@ export class GroupsTabComponent implements OnInit, OnChanges {
   @Input() isLoadingProducts = false;
   @Input() isLoadingNode = false;
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
 
   activeGroups: BuyGroup[] = [];
   isLoadingGroups = false;
@@ -58,7 +58,7 @@ export class GroupsTabComponent implements OnInit, OnChanges {
       return;
     }
     this.isLoadingGroups = true;
-    const { data, error } = await this.supabaseService.getActiveBuyGroups(this.activeNode.id);
+    const { data, error } = await this.appFacadeService.getActiveBuyGroups(this.activeNode.id);
     this.isLoadingGroups = false;
     if (!error) {
       this.activeGroups = data || [];

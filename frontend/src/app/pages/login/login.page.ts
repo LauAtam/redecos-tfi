@@ -25,7 +25,7 @@ import {
   eyeOutline,
   eyeOffOutline,
 } from 'ionicons/icons';
-import { SupabaseService } from '../../supabase.service';
+import { AppFacadeService } from '../../app-facade.service';
 
 @Component({
   selector: 'app-login',
@@ -53,7 +53,7 @@ export class LoginPage {
   errorMessage: string | null = null;
 
   private fb = inject(FormBuilder);
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
 
   constructor() {
@@ -85,7 +85,7 @@ export class LoginPage {
 
     const { email, password } = this.loginForm.value;
 
-    const { user, error } = await this.supabaseService.login(email, password);
+    const { user, error } = await this.appFacadeService.login(email, password);
 
     this.isLoading = false;
 

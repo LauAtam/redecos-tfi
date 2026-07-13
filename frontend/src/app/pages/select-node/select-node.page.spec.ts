@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { SelectNodePage } from './select-node.page';
-import { SupabaseService } from '../../supabase.service';
+import { AppFacadeService } from '../../app-facade.service';
 import { of } from 'rxjs';
 
 describe('SelectNodePage', () => {
   let component: SelectNodePage;
   let fixture: ComponentFixture<SelectNodePage>;
-  let mockSupabaseService: any;
+  let mockAppFacadeService: any;
   let mockRouter: any;
 
   beforeEach(async () => {
@@ -15,7 +15,7 @@ describe('SelectNodePage', () => {
       navigate: jasmine.createSpy('navigate')
     };
 
-    mockSupabaseService = {
+    mockAppFacadeService = {
       currentUserValue: { id: 'user-123', email: 'juan@example.com', role: 'CLIENTE', default_node_id: 'node-1' },
       getNodos: jasmine.createSpy('getNodos').and.returnValue(Promise.resolve({
         data: [
@@ -34,7 +34,7 @@ describe('SelectNodePage', () => {
     await TestBed.configureTestingModule({
       imports: [SelectNodePage],
       providers: [
-        { provide: SupabaseService, useValue: mockSupabaseService },
+        { provide: AppFacadeService, useValue: mockAppFacadeService },
         { provide: Router, useValue: mockRouter }
       ]
     }).compileComponents();
@@ -92,7 +92,7 @@ describe('SelectNodePage', () => {
     component.selectNode(targetNode);
     tick();
 
-    expect(mockSupabaseService.updateProfile).toHaveBeenCalledWith({ default_node_id: 'node-2' });
+    expect(mockAppFacadeService.updateProfile).toHaveBeenCalledWith({ default_node_id: 'node-2' });
     expect(component.currentSelectedNodeId).toBe('node-2');
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/home']);
   }));
@@ -101,7 +101,7 @@ describe('SelectNodePage', () => {
     component.logout();
     tick();
 
-    expect(mockSupabaseService.logout).toHaveBeenCalled();
+    expect(mockAppFacadeService.logout).toHaveBeenCalled();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
   }));
 });

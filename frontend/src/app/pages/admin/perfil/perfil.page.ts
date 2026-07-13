@@ -15,7 +15,7 @@ import {
   shieldCheckmarkOutline,
   logOutOutline,
 } from 'ionicons/icons';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 
 @Component({
@@ -38,7 +38,7 @@ export class PerfilPage implements OnInit {
   adminName: string = 'Administrador';
   adminRole: string = 'ADMIN';
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
 
   constructor() {
@@ -51,7 +51,7 @@ export class PerfilPage implements OnInit {
   }
 
   ngOnInit() {
-    const user = this.supabaseService.currentUserValue;
+    const user = this.appFacadeService.currentUserValue;
     if (user) {
       this.adminEmail = user.email;
       this.adminName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Gestor de Red';
@@ -60,7 +60,7 @@ export class PerfilPage implements OnInit {
   }
 
   async logout() {
-    await this.supabaseService.logout();
+    await this.appFacadeService.logout();
     this.router.navigate(['/login']);
   }
 }

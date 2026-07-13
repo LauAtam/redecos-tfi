@@ -43,7 +43,7 @@ import {
   closeOutline,
   ellipsisVerticalOutline,
 } from 'ionicons/icons';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { Producto, Categoria } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { AlertController } from '@ionic/angular/standalone';
@@ -94,7 +94,7 @@ export class ProductosPage implements OnInit {
   categorias: Categoria[] = [];
 
   private fb = inject(FormBuilder);
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private toastService = inject(ToastService);
   private alertController = inject(AlertController);
   private actionSheetController = inject(ActionSheetController);
@@ -131,7 +131,7 @@ export class ProductosPage implements OnInit {
   }
 
   async loadCategorias() {
-    const { data, error } = await this.supabaseService.getCategorias();
+    const { data, error } = await this.appFacadeService.getCategorias();
     if (!error && data) {
       this.categorias = data;
     }
@@ -139,7 +139,7 @@ export class ProductosPage implements OnInit {
 
   async loadProductos() {
     this.isLoading = true;
-    const { data, error } = await this.supabaseService.getProductos();
+    const { data, error } = await this.appFacadeService.getProductos();
     this.isLoading = false;
 
     if (error) {
@@ -190,7 +190,7 @@ export class ProductosPage implements OnInit {
           handler: async () => {
             this.isLoading = true;
             const { success, error } =
-              await this.supabaseService.deleteProducto(prod.id!);
+              await this.appFacadeService.deleteProducto(prod.id!);
             this.isLoading = false;
 
             if (error) {
@@ -228,7 +228,7 @@ export class ProductosPage implements OnInit {
 
     const newProducto: Producto = this.productoForm.value;
     const { data, error } =
-      await this.supabaseService.createProducto(newProducto);
+      await this.appFacadeService.createProducto(newProducto);
 
     this.isSaving = false;
 
@@ -251,7 +251,7 @@ export class ProductosPage implements OnInit {
     this.errorMessage = null;
 
     const updatedData: Partial<Producto> = this.productoForm.value;
-    const { data, error } = await this.supabaseService.updateProducto(
+    const { data, error } = await this.appFacadeService.updateProducto(
       this.editingProductId!,
       updatedData,
     );

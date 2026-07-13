@@ -18,7 +18,7 @@ import {
   clipboardOutline
 } from 'ionicons/icons';
 import { Nodo, UserCard } from '../../../core/models/auth.models';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { environment } from '../../../../environments/environment';
 
@@ -48,13 +48,13 @@ export class AccountTabComponent implements OnInit {
   @Input() userName: string = '';
 
   private router = inject(Router);
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private toastService = inject(ToastService);
 
   @Output() logout = new EventEmitter<void>();
 
   // Exponer el rol del usuario desde el servicio
-  userRole = this.supabaseService.userRole;
+  userRole = this.appFacadeService.userRole;
 
   // State
   savedCards = signal<UserCard[]>([]);
@@ -112,7 +112,7 @@ export class AccountTabComponent implements OnInit {
 
   async loadCards() {
     this.isLoadingCards.set(true);
-    const { data, error } = await this.supabaseService.listSavedCards();
+    const { data, error } = await this.appFacadeService.listSavedCards();
     if (error) {
       console.error(error.message);
     } else if (data) {
@@ -258,7 +258,7 @@ export class AccountTabComponent implements OnInit {
     }
 
     // Enviar el token al backend para asociarlo al cliente en MP y guardarlo localmente
-    const { data, error } = await this.supabaseService.addSavedCard(cardToken);
+    const { data, error } = await this.appFacadeService.addSavedCard(cardToken);
 
     this.isSavingCard.set(false);
 
@@ -273,7 +273,7 @@ export class AccountTabComponent implements OnInit {
   }
 
   async deleteCard(cardId: string) {
-    const { success, error } = await this.supabaseService.deleteSavedCard(cardId);
+    const { success, error } = await this.appFacadeService.deleteSavedCard(cardId);
     if (error) {
       this.toastService.showError(error.message);
     } else if (success) {

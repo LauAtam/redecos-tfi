@@ -20,7 +20,7 @@ import {
   peopleOutline,
   alertCircleOutline,
 } from 'ionicons/icons';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 
 @Component({
@@ -51,7 +51,7 @@ export class NodoDashboardPage implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private router = inject(Router);
 
   constructor() {
@@ -73,7 +73,7 @@ export class NodoDashboardPage implements OnInit {
   }
 
   async loadStats() {
-    const user = this.supabaseService.currentUserValue;
+    const user = this.appFacadeService.currentUserValue;
     const defaultNodeId = user?.default_node_id;
 
     if (!defaultNodeId) {
@@ -84,7 +84,7 @@ export class NodoDashboardPage implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const { data, error } = await this.supabaseService.getNodeDashboardStats(defaultNodeId);
+    const { data, error } = await this.appFacadeService.getNodeDashboardStats(defaultNodeId);
     this.isLoading = false;
 
     if (error) {
@@ -101,7 +101,7 @@ export class NodoDashboardPage implements OnInit {
   }
 
   async logout() {
-    await this.supabaseService.logout();
+    await this.appFacadeService.logout();
   }
 
   navegarA(route: string) {

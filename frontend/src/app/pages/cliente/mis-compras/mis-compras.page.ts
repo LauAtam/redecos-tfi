@@ -26,7 +26,7 @@ import {
   qrCodeOutline,
   closeOutline
 } from 'ionicons/icons';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { GroupOrder } from '../../../core/models/auth.models';
 import { HeaderComponent } from '../../../core/components/header/header.component';
 
@@ -61,7 +61,7 @@ export class MisComprasPage implements OnInit {
   selectedOrderForQr: GroupOrder | null = null;
   qrModalOpen = false;
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
 
   constructor() {
     addIcons({
@@ -84,7 +84,7 @@ export class MisComprasPage implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    const { data, error } = await this.supabaseService.getMyOrders();
+    const { data, error } = await this.appFacadeService.getMyOrders();
     this.isLoading = false;
 
     if (error) {
@@ -143,7 +143,7 @@ export class MisComprasPage implements OnInit {
     const payload = JSON.stringify({
       orderId: order.id,
       quantity: order.quantity,
-      buyerEmail: this.supabaseService.currentUserValue?.email || 'N/A'
+      buyerEmail: this.appFacadeService.currentUserValue?.email || 'N/A'
     });
     return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}&color=002d4b&bgcolor=ffffff`;
   }

@@ -6,7 +6,7 @@ import { IonSpinner, IonText, IonButton, IonIcon, IonModal, IonHeader, IonToolba
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { cartOutline, peopleOutline, searchOutline, closeOutline, cardOutline } from 'ionicons/icons';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Nodo, Producto, BuyGroup, Categoria, UserCard } from '../../../core/models/auth.models';
 import { Subscription } from 'rxjs';
@@ -37,7 +37,7 @@ import { environment } from '../../../../environments/environment';
 export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   @Input() activeNode: Nodo | null = null;
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private toastService = inject(ToastService);
   private alertController = inject(AlertController);
   private route = inject(ActivatedRoute);
@@ -122,7 +122,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async loadCategories() {
-    const { data, error } = await this.supabaseService.getCategorias();
+    const { data, error } = await this.appFacadeService.getCategorias();
     if (!error && data) {
       this.categories.set(data);
     }
@@ -136,7 +136,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     const categoryId = categoryValue === 'Todos' ? undefined : categoryValue;
     const search = this.searchQuery().trim() || undefined;
 
-    const { data, error } = await this.supabaseService.getProductos({
+    const { data, error } = await this.appFacadeService.getProductos({
       categoryId,
       search
     });
@@ -155,7 +155,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
     this.isLoadingGroups = true;
-    const { data, error } = await this.supabaseService.getActiveBuyGroups(this.activeNode.id);
+    const { data, error } = await this.appFacadeService.getActiveBuyGroups(this.activeNode.id);
     this.isLoadingGroups = false;
     if (!error) {
       this.activeGroups = data || [];
@@ -228,7 +228,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     if (urlNodeId && this.activeNode && urlNodeId !== this.activeNode.id) {
-      const { data: nodes } = await this.supabaseService.getNodos();
+      const { data: nodes } = await this.appFacadeService.getNodos();
       const urlNodeName = nodes?.find(n => n.id === urlNodeId)?.name || 'otro nodo';
       const userNodeName = this.activeNode.name || 'tu nodo predeterminado';
 
@@ -246,7 +246,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
           {
             text: 'Cambiar y abrir',
             handler: async () => {
-              const { error } = await this.supabaseService.updateProfile({ default_node_id: urlNodeId });
+              const { error } = await this.appFacadeService.updateProfile({ default_node_id: urlNodeId });
               if (error) {
                 this.toastService.showError('No se pudo cambiar el punto de retiro: ' + error.message);
                 this.clearQueryParams();
@@ -280,7 +280,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
 
     // Cargar tarjetas guardadas para el flujo rápido
     try {
-      const { data } = await this.supabaseService.listSavedCards();
+      const { data } = await this.appFacadeService.listSavedCards();
       if (data && data.length > 0) {
         this.savedCards.set(data);
         this.selectedCard.set(data[0]); // Por defecto la primera
@@ -444,8 +444,8 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     // Paso 2: Enviar token al backend para pre-autorizar el pago
-    const profile = this.supabaseService.currentUser();
-    const { data: order, error } = await this.supabaseService.joinOrCreateBuyGroup({
+    const profile = this.appFacadeService.currentUser();
+    const { data: order, error } = await this.appFacadeService.joinOrCreateBuyGroup({
       productId: product.id,
       quantity: qty,
       nodeId: this.activeNode.id,

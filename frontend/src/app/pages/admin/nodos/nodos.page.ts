@@ -26,7 +26,7 @@ import {
 import { Subscription, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import * as L from 'leaflet';
-import { SupabaseService } from '../../../supabase.service';
+import { AppFacadeService } from '../../../app-facade.service';
 import { Nodo } from '../../../core/models/auth.models';
 import { ToastService } from '../../../core/services/toast.service';
 import { NodoDetailModalComponent } from './components/nodo-detail-modal/nodo-detail-modal.component';
@@ -120,7 +120,7 @@ export class NodosPage implements OnInit, OnDestroy {
     }
   }
 
-  private supabaseService = inject(SupabaseService);
+  private appFacadeService = inject(AppFacadeService);
   private toastService = inject(ToastService);
   private alertController = inject(AlertController);
 
@@ -342,7 +342,7 @@ export class NodosPage implements OnInit, OnDestroy {
 
   async loadNodos() {
     this.isLoading = true;
-    const { data, error } = await this.supabaseService.getNodos();
+    const { data, error } = await this.appFacadeService.getNodos();
     this.isLoading = false;
 
     if (error) {
@@ -358,7 +358,7 @@ export class NodosPage implements OnInit, OnDestroy {
     this.isSaving = true;
     this.errorMessage = null;
 
-    const { data, error } = await this.supabaseService.createNodo(newNodo);
+    const { data, error } = await this.appFacadeService.createNodo(newNodo);
 
     this.isSaving = false;
 
@@ -378,7 +378,7 @@ export class NodosPage implements OnInit, OnDestroy {
     this.isSaving = true;
     this.errorMessage = null;
 
-    const { data, error } = await this.supabaseService.updateNodo(id, nodoData);
+    const { data, error } = await this.appFacadeService.updateNodo(id, nodoData);
 
     this.isSaving = false;
 
@@ -428,7 +428,7 @@ export class NodosPage implements OnInit, OnDestroy {
           text: 'Eliminar',
           role: 'destructive',
           handler: async () => {
-            const { success, error } = await this.supabaseService.deleteNodo(nodo.id!);
+            const { success, error } = await this.appFacadeService.deleteNodo(nodo.id!);
             if (error) {
               this.toastService.showError(error.message);
             } else if (success) {
