@@ -14,4 +14,7 @@ export abstract class ProductsRepository {
   abstract update(id: string, updateProductDto: UpdateProductDto): Promise<any>;
   abstract remove(id: string): Promise<{ deleted: boolean }>;
   abstract findCategories(): Promise<any[]>;
+  abstract bulkUpsert(
+    products: any[],
+  ): Promise<{ importedCount: number; categoriesCreated: number }>;
 }

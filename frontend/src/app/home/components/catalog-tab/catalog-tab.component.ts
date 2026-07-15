@@ -1,16 +1,34 @@
 import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, signal, Input, inject } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonSpinner, IonText, IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonContent } from '@ionic/angular/standalone';
+import {
+  IonSpinner,
+  IonText,
+  IonButton,
+  IonIcon,
+  IonChip,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent
+} from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cartOutline, peopleOutline, searchOutline, closeOutline, cardOutline } from 'ionicons/icons';
+import {
+  cartOutline,
+  peopleOutline,
+  searchOutline,
+  closeOutline,
+  cardOutline,
+  removeOutline,
+  addOutline,
+  helpCircleOutline
+} from 'ionicons/icons';
 import { AppFacadeService } from '../../../app-facade.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { Nodo, Producto, BuyGroup, Categoria, UserCard } from '../../../core/models/auth.models';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { ProductModalComponent } from '../../../core/components/product-modal/product-modal.component';
 
 @Component({
   selector: 'app-catalog-tab',
@@ -18,21 +36,18 @@ import { environment } from '../../../../environments/environment';
   styleUrls: ['./catalog-tab.component.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     FormsModule,
+    CurrencyPipe,
     IonSpinner,
     IonText,
     IonButton,
     IonIcon,
-    IonModal,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
-    IonContent
-  ],
-  providers: [CurrencyPipe]
+    IonChip,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    ProductModalComponent
+  ]
 })
 export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   @Input() activeNode: Nodo | null = null;
@@ -42,6 +57,9 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   private alertController = inject(AlertController);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  private searchSubject = new Subject<string>();
+  private searchSub: Subscription | null = null;
 
   products: Producto[] = [];
   activeGroups: BuyGroup[] = [];
@@ -53,32 +71,13 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
   selectedCategory = signal<string>('Todos');
   categories = signal<Categoria[]>([]);
 
-  // Estado del Modal y Stepper
+  currentPage = 1;
+  limit = 20;
+  hasMoreProducts = signal<boolean>(true);
+
+  // Estado del Modal
   selectedProduct = signal<Producto | null>(null);
   isModalOpen = signal<boolean>(false);
-  buyQuantity = signal<number>(1);
-  isProcessingPayment = signal<boolean>(false);
-  activeGroup = signal<BuyGroup | null>(null);
-
-  // Tarjeta de prueba hardcodeada (Mastercard sandbox de MercadoPago)
-  readonly testCard = {
-    number: '5031755734530604',
-    cvv: '123',
-    expirationMonth: '11',
-    expirationYear: '2030',
-    cardholderName: 'APRO',
-    docType: 'DNI',
-    docNumber: '12345678',
-    label: 'Mastercard de prueba terminada en 0604',
-  };
-
-  // Gestión de tarjetas guardadas en el flujo de compra
-  savedCards = signal<UserCard[]>([]);
-  selectedCard = signal<UserCard | null>(null);
-  useSavedCard = signal<boolean>(false);
-  cvv = signal<string>('');
-
-  paymentError = '';
 
   private routeSub?: Subscription;
 
@@ -88,7 +87,10 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
       peopleOutline,
       searchOutline,
       closeOutline,
-      cardOutline
+      cardOutline,
+      removeOutline,
+      addOutline,
+      helpCircleOutline
     });
   }
 
@@ -105,11 +107,26 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
         await this.handleQueryProduct(productId, nodeId);
       }
     });
+
+    // Configurar rate limiter (debounce) y filtro de longitud mínima para el buscador
+    this.searchSub = this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(async (term) => {
+      const trimmed = term.trim();
+      if (trimmed.length === 0 || trimmed.length >= 3) {
+        this.searchQuery.set(trimmed);
+        await this.loadProducts();
+      }
+    });
   }
 
   ngOnDestroy() {
     if (this.routeSub) {
       this.routeSub.unsubscribe();
+    }
+    if (this.searchSub) {
+      this.searchSub.unsubscribe();
     }
   }
 
@@ -128,8 +145,12 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  async loadProducts() {
-    this.isLoadingProducts = true;
+  async loadProducts(append = false) {
+    if (!append) {
+      this.currentPage = 1;
+      this.hasMoreProducts.set(true);
+      this.isLoadingProducts = true;
+    }
     this.errorMessage = null;
 
     const categoryValue = this.selectedCategory();
@@ -138,15 +159,35 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
 
     const { data, error } = await this.appFacadeService.getProductos({
       categoryId,
-      search
+      search,
+      page: this.currentPage,
+      limit: this.limit
     });
-    this.isLoadingProducts = false;
+    
+    if (!append) {
+      this.isLoadingProducts = false;
+    }
 
     if (error) {
       this.errorMessage = error.message;
     } else {
-      this.products = data || [];
+      const newProducts = data || [];
+      if (append) {
+        this.products = [...this.products, ...newProducts];
+      } else {
+        this.products = newProducts;
+      }
+      
+      if (newProducts.length < this.limit) {
+        this.hasMoreProducts.set(false);
+      }
     }
+  }
+
+  async loadMore(event: any) {
+    this.currentPage++;
+    await this.loadProducts(true);
+    event.target.complete();
   }
 
   async loadActiveGroups() {
@@ -164,8 +205,7 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
 
   onSearch(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.searchQuery.set(input.value || '');
-    this.loadProducts();
+    this.searchSubject.next(input.value || '');
   }
 
   selectCategory(category: string) {
@@ -182,6 +222,17 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
     if (!productId) return null;
     return this.activeGroups.find(g => g.productId === productId) || null;
   }
+
+  formatCardOptionText(card: UserCard): string {
+    let brand = card.brand ? card.brand.trim().toUpperCase() : 'TARJETA';
+    brand = brand.charAt(0) + brand.slice(1).toLowerCase();
+
+    const month = String(card.expiration_mo).padStart(2, '0');
+    const yrStr = String(card.expiration_yr);
+    const year = yrStr.length === 4 ? yrStr.slice(2) : yrStr;
+    return `${brand} •••• ${card.last_four} (${month}/${year})`;
+  }
+
 
   get filteredProducts(): Producto[] {
     return this.products;
@@ -271,41 +322,12 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
 
   async openProductModal(product: Producto) {
     this.selectedProduct.set(product);
-    const group = this.getGroupForProduct(product.id);
-    this.activeGroup.set(group);
-    this.buyQuantity.set(1);
     this.isModalOpen.set(true);
-    this.paymentError = '';
-    this.cvv.set('');
-
-    // Cargar tarjetas guardadas para el flujo rápido
-    try {
-      const { data } = await this.appFacadeService.listSavedCards();
-      if (data && data.length > 0) {
-        this.savedCards.set(data);
-        this.selectedCard.set(data[0]); // Por defecto la primera
-        this.useSavedCard.set(true);
-      } else {
-        this.savedCards.set([]);
-        this.selectedCard.set(null);
-        this.useSavedCard.set(false);
-      }
-    } catch (err) {
-      console.warn('Error al cargar tarjetas para el checkout:', err);
-      this.savedCards.set([]);
-      this.selectedCard.set(null);
-      this.useSavedCard.set(false);
-    }
   }
 
   closeDetailModal() {
     this.isModalOpen.set(false);
     this.selectedProduct.set(null);
-    this.activeGroup.set(null);
-    this.paymentError = '';
-    this.cvv.set('');
-    this.selectedCard.set(null);
-    this.useSavedCard.set(false);
     this.clearQueryParams();
   }
 
@@ -318,165 +340,5 @@ export class CatalogTabComponent implements OnInit, OnDestroy, OnChanges {
       },
       queryParamsHandling: 'merge'
     });
-  }
-
-  maxQuantity(): number {
-    const group = this.activeGroup();
-    if (group) {
-      return group.unitsLeft || 1;
-    }
-    return this.selectedProduct()?.bulk_size || 1;
-  }
-
-  incrementQuantity() {
-    const current = this.buyQuantity();
-    const max = this.maxQuantity();
-    if (current < max) {
-      this.buyQuantity.set(current + 1);
-    }
-  }
-
-  decrementQuantity() {
-    const current = this.buyQuantity();
-    if (current > 1) {
-      this.buyQuantity.set(current - 1);
-    }
-  }
-
-  /**
-   * Tokeniza la tarjeta de prueba hardcodeada contra la API REST de Mercado Pago
-   * y envía el token al backend para pre-autorizar el pago.
-   */
-  async confirmAndPay() {
-    const product = this.selectedProduct();
-    if (!product || !product.id) return;
-
-    if (!this.activeNode || !this.activeNode.id) {
-      this.toastService.showError('Debes seleccionar un punto de retiro para comprar.');
-      return;
-    }
-
-    const qty = this.buyQuantity();
-    if (qty <= 0 || qty > this.maxQuantity()) {
-      this.toastService.showError('Cantidad no permitida.');
-      return;
-    }
-
-    this.isProcessingPayment.set(true);
-    this.paymentError = '';
-
-    let paymentToken = '';
-    let paymentMethodId = '';
-
-    try {
-      const mpInstance = (window as any).MercadoPago 
-        ? new (window as any).MercadoPago(environment.mercadoPagoPublicKey) 
-        : null;
-
-      if (!mpInstance) {
-        throw new Error('El SDK de Mercado Pago no está disponible. Volvé a intentar en unos segundos.');
-      }
-
-      if (this.useSavedCard()) {
-        const savedCard = this.selectedCard();
-        if (!savedCard) {
-          throw new Error('No seleccionaste ninguna tarjeta guardada.');
-        }
-        if (!this.cvv().trim()) {
-          throw new Error('Por favor ingresá el código de seguridad (CVV) de tu tarjeta.');
-        }
-
-        paymentMethodId = savedCard.brand.toLowerCase();
-
-        console.log('Tokenizando tarjeta guardada ID:', savedCard.card_id);
-        const tokenResponse = await mpInstance.createCardToken({
-          cardId: savedCard.card_id,
-          securityCode: this.cvv()
-        });
-
-        if (!tokenResponse || !tokenResponse.id) {
-          throw new Error('No se pudo generar el token para la tarjeta guardada.');
-        }
-
-        paymentToken = tokenResponse.id;
-      } else {
-        // Obtener dinámicamente el paymentMethodId usando el BIN (primeros 6 dígitos) de la tarjeta
-        const rawCardNumber = this.testCard.number.replace(/\s/g, '');
-        const bin = rawCardNumber.substring(0, 6);
-        
-        try {
-          const paymentMethods = await mpInstance.getPaymentMethods({ bin });
-          if (paymentMethods && paymentMethods.length > 0) {
-            paymentMethodId = paymentMethods[0].id;
-            console.log('Método de pago detectado:', paymentMethodId);
-          } else {
-            paymentMethodId = 'master'; // fallback
-          }
-        } catch (pmErr) {
-          console.warn('No se pudo determinar el método de pago por BIN, usando master por defecto:', pmErr);
-          paymentMethodId = 'master';
-        }
-
-        const tokenResponse = await mpInstance.createCardToken({
-          cardNumber: rawCardNumber,
-          cardholderName: this.testCard.cardholderName,
-          cardExpirationMonth: this.testCard.expirationMonth,
-          cardExpirationYear: this.testCard.expirationYear,
-          securityCode: this.testCard.cvv,
-          identificationType: this.testCard.docType,
-          identificationNumber: this.testCard.docNumber
-        });
-
-        if (!tokenResponse || !tokenResponse.id) {
-          throw new Error('No se pudo generar el token de pago.');
-        }
-
-        paymentToken = tokenResponse.id;
-      }
-
-      console.log('Token de tarjeta generado vía SDK:', paymentToken);
-    } catch (err: any) {
-      console.error('Fallo tokenización de tarjeta:', err);
-      this.isProcessingPayment.set(false);
-      this.paymentError = `Error de pago: ${err.message}`;
-      this.toastService.showError(this.paymentError);
-      return;
-    }
-
-    // Paso 2: Enviar token al backend para pre-autorizar el pago
-    const profile = this.appFacadeService.currentUser();
-    const { data: order, error } = await this.appFacadeService.joinOrCreateBuyGroup({
-      productId: product.id,
-      quantity: qty,
-      nodeId: this.activeNode.id,
-      paymentToken,
-      paymentMethodId,
-      cardholderEmail: profile?.email || '',
-    });
-
-    this.isProcessingPayment.set(false);
-
-    if (error) {
-      this.paymentError = error.message;
-      this.toastService.showError(error.message);
-    } else {
-      const formattedName = this.formatProductName(product.name);
-      this.toastService.showSuccess(`¡Compra pre-autorizada! Compraste ${qty} u. de "${formattedName}".`);
-      this.closeDetailModal();
-      this.loadActiveGroups();
-    }
-  }
-
-  getRemainingTimeText(createdAt: string): string {
-    const now = new Date();
-    const midnight = new Date(now);
-    midnight.setHours(23, 59, 59, 999);
-    const diffMs = midnight.getTime() - now.getTime();
-
-    if (diffMs <= 0) return 'Cierra ahora';
-
-    const hours = Math.floor(diffMs / (1000 * 60 * 60));
-    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    return `Cierra en ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} Hs`;
   }
 }

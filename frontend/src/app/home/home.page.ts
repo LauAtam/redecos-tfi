@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import {
   IonContent,
@@ -8,17 +8,9 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  logOutOutline,
   storefrontOutline,
   peopleOutline,
-  cartOutline,
-  swapHorizontalOutline,
-  personOutline,
-  helpCircleOutline,
-  chevronForwardOutline,
-  cubeOutline,
-  businessOutline,
-  searchOutline
+  personOutline
 } from 'ionicons/icons';
 import { Subscription } from 'rxjs';
 import { AppFacadeService } from '../app-facade.service';
@@ -43,8 +35,7 @@ import { AccountTabComponent } from './components/account-tab/account-tab.compon
     IonContent,
     IonIcon,
     IonFooter
-  ],
-  providers: [CurrencyPipe]
+  ]
 })
 export class HomePage implements OnInit, OnDestroy {
   currentTab = signal<'groups' | 'products' | 'config'>('products');
@@ -62,17 +53,9 @@ export class HomePage implements OnInit, OnDestroy {
 
   constructor() {
     addIcons({
-      logOutOutline,
       storefrontOutline,
       peopleOutline,
-      cartOutline,
-      swapHorizontalOutline,
-      personOutline,
-      helpCircleOutline,
-      chevronForwardOutline,
-      cubeOutline,
-      businessOutline,
-      searchOutline
+      personOutline
     });
   }
 
@@ -114,7 +97,11 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   setTab(tab: 'groups' | 'products' | 'config') {
-    this.currentTab.set(tab);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab },
+      queryParamsHandling: 'merge'
+    });
   }
 
   async loadActiveNode(nodeId: string) {

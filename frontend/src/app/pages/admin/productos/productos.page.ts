@@ -1,4 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef } from '@angular/core';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import {
   FormBuilder,
@@ -29,6 +31,10 @@ import {
   IonFabButton,
   IonSelect,
   IonSelectOption,
+  IonSearchbar,
+  IonChip,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -76,11 +82,20 @@ import { StockBadgeClassPipe } from '../../../core/pipes/stock-badge-class.pipe'
     IonFabButton,
     IonSelect,
     IonSelectOption,
+    IonSearchbar,
+    IonChip,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
     HeaderComponent,
     StockBadgeClassPipe
   ],
 })
-export class ProductosPage implements OnInit {
+export class ProductosPage implements OnInit, OnDestroy {
+  @ViewChild('csvFileInput') csvFileInput!: ElementRef<HTMLInputElement>;
+  
+  private searchSubject = new Subject<string>();
+  private searchSub: Subscription | null = null;
+  
   productoForm: FormGroup;
   isLoading = false;
   isSaving = false;
@@ -92,6 +107,12 @@ export class ProductosPage implements OnInit {
   errorMessage: string | null = null;
   productos: Producto[] = [];
   categorias: Categoria[] = [];
+  
+  searchQuery = '';
+  selectedCategoryId: string | null = null;
+  currentPage = 1;
+  limit = 20;
+  hasMoreProducts = true;
 
   private fb = inject(FormBuilder);
   private appFacadeService = inject(AppFacadeService);
@@ -128,6 +149,24 @@ export class ProductosPage implements OnInit {
   ngOnInit() {
     this.loadCategorias();
     this.loadProductos();
+
+    // Configurar rate limiter (debounce) y longitud mínima
+    this.searchSub = this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe((term) => {
+      const trimmed = term.trim();
+      if (trimmed.length === 0 || trimmed.length >= 3) {
+        this.searchQuery = trimmed;
+        this.loadProductos();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.searchSub) {
+      this.searchSub.unsubscribe();
+    }
   }
 
   async loadCategorias() {
@@ -137,16 +176,54 @@ export class ProductosPage implements OnInit {
     }
   }
 
-  async loadProductos() {
-    this.isLoading = true;
-    const { data, error } = await this.appFacadeService.getProductos();
-    this.isLoading = false;
+  async loadProductos(append = false) {
+    if (!append) {
+      this.currentPage = 1;
+      this.hasMoreProducts = true;
+      this.isLoading = true;
+    }
+
+    const { data, error } = await this.appFacadeService.getProductos({
+      search: this.searchQuery || undefined,
+      categoryId: this.selectedCategoryId || undefined,
+      page: this.currentPage,
+      limit: this.limit,
+    });
+
+    if (!append) {
+      this.isLoading = false;
+    }
 
     if (error) {
       this.errorMessage = error.message;
     } else {
-      this.productos = data || [];
+      const newProducts = data || [];
+      if (append) {
+        this.productos = [...this.productos, ...newProducts];
+      } else {
+        this.productos = newProducts;
+      }
+      
+      if (newProducts.length < this.limit) {
+        this.hasMoreProducts = false;
+      }
     }
+  }
+
+  selectCategory(catId: string | null) {
+    this.selectedCategoryId = catId;
+    this.loadProductos();
+  }
+
+  onSearch(event: any) {
+    const val = event.target.value;
+    this.searchSubject.next(val || '');
+  }
+
+  async loadMore(event: any) {
+    this.currentPage++;
+    await this.loadProductos(true);
+    event.target.complete();
   }
 
   toggleForm(show: boolean) {
@@ -333,6 +410,35 @@ export class ProductosPage implements OnInit {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(price);
+  }
+
+  triggerCsvUpload() {
+    this.csvFileInput.nativeElement.click();
+  }
+
+  async onCsvFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    const { data, error } = await this.appFacadeService.importCatalog(file);
+    
+    // Resetear valor para permitir subidas consecutivas del mismo archivo
+    input.value = '';
+    this.isLoading = false;
+
+    if (error) {
+      this.toastService.showError(error.message);
+    } else if (data) {
+      this.toastService.showSuccess(
+        `Importación exitosa: se crearon/actualizaron ${data.importedCount} productos y ${data.categoriesCreated} categorías.`,
+      );
+      this.loadCategorias();
+      this.loadProductos();
+    }
   }
 
   get f() {

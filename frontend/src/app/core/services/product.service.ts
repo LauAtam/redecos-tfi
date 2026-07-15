@@ -115,4 +115,34 @@ export class ProductService {
       return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar el producto.', originalError: err } };
     }
   }
+
+  async importCatalog(file: File): Promise<{ data: { importedCount: number; categoriesCreated: number } | null, error: AppError | null }> {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Obtenemos los headers estándar de auth para extraer el token Bearer
+      const authHeaders = await this.authService.getHeaders() as any;
+      const headers: Record<string, string> = {};
+      if (authHeaders && authHeaders['Authorization']) {
+        headers['Authorization'] = authHeaders['Authorization'];
+      }
+
+      const response = await fetch(`${environment.apiUrl}/products/import`, {
+        method: 'POST',
+        headers,
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al importar catálogo.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al importar catálogo.', originalError: err } };
+    }
+  }
 }

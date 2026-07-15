@@ -7,258 +7,118 @@
 </div>
 
 <!-- Filtros por Categorías Horizontales -->
-<div class="flex gap-2 overflow-x-auto hide-scrollbar mb-4 pb-2 -mx-4 px-4">
-  <ion-button (click)="selectCategory('Todos')" class="category-btn" [class.active]="selectedCategory() === 'Todos'"
-    fill="clear">
+<div class="flex gap-1.5 overflow-x-auto pb-3 mb-4 -mx-4 px-4 scrollbar-none">
+  <ion-chip
+    [class]="selectedCategory() === 'Todos' ? '[--background:#006b4d] [--color:#ffffff]' : '[--background:#f1f5f9] [--color:#475569]'"
+    (click)="selectCategory('Todos')"
+    class="m-0 text-xs font-semibold rounded-full py-1 px-3.5 transition-all shrink-0 whitespace-nowrap">
     Todos
-  </ion-button>
-  <ion-button *ngFor="let cat of categories()" (click)="selectCategory(cat.id)" class="category-btn"
-    [class.active]="selectedCategory() === cat.id" fill="clear">
+  </ion-chip>
+  @for (cat of categories(); track cat.id) {
+  <ion-chip
+    [class]="selectedCategory() === cat.id ? '[--background:#006b4d] [--color:#ffffff]' : '[--background:#f1f5f9] [--color:#475569]'"
+    (click)="selectCategory(cat.id)"
+    class="m-0 text-xs font-semibold rounded-full py-1 px-3.5 transition-all shrink-0 whitespace-nowrap">
     {{ cat.name }}
-  </ion-button>
+  </ion-chip>
+  }
 </div>
 
 <!-- Spinner -->
-<div *ngIf="isLoadingProducts" class="flex flex-col items-center justify-center py-12 text-slate-500 gap-2">
+@if (isLoadingProducts) {
+<div class="flex flex-col items-center justify-center py-12 text-slate-500 gap-2">
   <ion-spinner name="crescent" class="[--color:#006b4d] w-10 h-10"></ion-spinner>
 </div>
+}
 
 <!-- Errores -->
-<div *ngIf="errorMessage" class="text-center p-6 bg-red-50 border border-red-100 rounded-2xl my-3">
+@if (errorMessage) {
+<div class="text-center p-6 bg-red-50 border border-red-100 rounded-2xl my-3">
   <ion-text color="danger">
     <p class="text-sm font-medium mb-3">{{ errorMessage }}</p>
   </ion-text>
   <ion-button fill="outline" size="small" class="[--color:#dc2626] [--border-color:#fca5a5]"
     (click)="loadProducts()">Reintentar</ion-button>
 </div>
+}
 
 <!-- Grilla de productos en 2 columnas -->
-<div *ngIf="!isLoadingProducts && !errorMessage">
-  <div *ngIf="filteredProducts.length === 0"
-    class="text-center py-12 text-slate-500 text-sm bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
-    <p>No se encontraron productos en esta categoría o búsqueda.</p>
-  </div>
+@if (!isLoadingProducts && !errorMessage) {
+@if (filteredProducts.length === 0) {
+<div class="text-center py-12 text-slate-500 text-sm bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
+  <p>No se encontraron productos en esta categoría o búsqueda.</p>
+</div>
+}
 
-  <div class="grid grid-cols-2 gap-3" *ngIf="filteredProducts.length > 0">
-    <div *ngFor="let product of filteredProducts" (click)="onProductClick(product)"
-      class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between hover:border-[#006b4d] hover:shadow-md transition-all cursor-pointer">
+@if (filteredProducts.length > 0) {
+<div class="grid grid-cols-2 gap-3">
+  @for (product of filteredProducts; track product.id) {
+  <div (click)="onProductClick(product)"
+    class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col hover:border-[#006b4d] hover:shadow-md transition-all cursor-pointer">
 
-      <!-- Imagen con badges de Stitch -->
-      <div class="relative w-full aspect-video bg-slate-50 border-b border-slate-100 overflow-hidden">
-        <img [src]="product.image_url || 'assets/placeholder-product.png'" [alt]="formatProductName(product.name)"
-          class="w-full h-full object-cover" onerror="this.src='https://placehold.co/200x150?text=Prod'" />
+    <!-- Imagen con badges de Stitch -->
+    <div
+      class="relative w-full aspect-video bg-slate-50 border-b border-slate-100 overflow-hidden flex items-center justify-center p-2">
+      <img [src]="product.image_url || 'assets/placeholder-product.png'" referrerpolicy="no-referrer"
+        [alt]="formatProductName(product.name)" class="max-w-full max-h-full object-contain"
+        onerror="this.src='https://placehold.co/200x150?text=Prod'" />
 
-        <!-- Badge de Grupo Activo en top-left -->
-        <div *ngIf="isGroupActive(product.id)"
-          class="absolute top-2 left-2 bg-[#008767] text-white font-bold text-[9px] px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
-          <ion-icon name="people-outline" class="text-[10px]"></ion-icon>
-          Grupo Activo: Faltan {{ getGroupForProduct(product.id)?.unitsLeft }} u.
-        </div>
+      <!-- Badge de Grupo Activo en top-left -->
+      @if (isGroupActive(product.id)) {
+      <div
+        class="absolute top-2 left-2 bg-[#008767] text-white font-bold text-[9px] px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
+        <ion-icon name="people-outline" class="text-[10px]"></ion-icon>
+        Faltan {{ getGroupForProduct(product.id)?.unitsLeft }} u.
+      </div>
+      } @else {
+      <div
+        class="absolute top-2 left-2 bg-slate-200/90 text-slate-700 font-bold text-[9px] px-2 py-1 rounded-full shadow-sm border border-slate-300/30">
+        Sin grupo
+      </div>
+      }
 
-        <!-- Badge de Sin Grupo en top-left -->
-        <div *ngIf="!isGroupActive(product.id)"
-          class="absolute top-2 left-2 bg-slate-200/90 text-slate-700 font-bold text-[9px] px-2 py-1 rounded-full shadow-sm border border-slate-300/30">
-          Sin grupo iniciado
-        </div>
+      <!-- Badge de ahorro en bottom-right -->
+      @if (product.retail_price && calculateSavings(product.price, product.retail_price) > 0) {
+      <span
+        class="absolute bottom-1.5 right-1.5 bg-[#002d4b] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+        -{{ calculateSavings(product.price, product.retail_price) }}%
+      </span>
+      }
+    </div>
 
-        <!-- Badge de ahorro en bottom-right -->
-        <span *ngIf="product.retail_price && calculateSavings(product.price, product.retail_price) > 0"
-          class="absolute bottom-1.5 right-1.5 bg-[#002d4b] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-          -{{ calculateSavings(product.price, product.retail_price) }}%
-        </span>
+    <!-- Detalles del Producto -->
+    <div class="p-2.5 flex flex-col gap-1.5 justify-between flex-1">
+      <!-- Título del producto (div neutro para evitar estilos intrusivos de Ionic) -->
+      <div class="text-[11px] font-bold text-[#002d4b] leading-tight line-clamp-2 min-h-[2rem]">
+        {{ formatProductName(product.name) }}
       </div>
 
-      <!-- Detalles del Producto -->
-      <div class="p-3 flex flex-col flex-1 gap-2 justify-between">
-        <div class="flex flex-col gap-1">
-          <h3 class="text-xs font-bold text-[#002d4b] leading-tight m-0 line-clamp-2 min-h-[2rem]">{{
-            formatProductName(product.name) }}</h3>
-
-          <div class="flex flex-col mt-0.5">
-            <span class="text-xs font-extrabold text-[#006b4d]">{{ product.price |
-              currency:'ARS':'symbol-narrow':'1.2-2' }}</span>
-            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Bulto: {{ product.bulk_size }}
-              u.</span>
-          </div>
-
-          <!-- Precio Minorista Comparativo -->
-          <div *ngIf="product.retail_price" class="text-[9px] text-slate-400">
-            Precio minorista: {{ product.retail_price | currency:'ARS':'symbol-narrow':'1.2-2' }} (Ahorro {{
-            calculateSavings(product.price, product.retail_price) }}%)
-          </div>
-
-          <p class="text-[10px] text-slate-500 m-0 leading-normal line-clamp-2 mt-1" *ngIf="product.description">
-            {{ product.description }}
-          </p>
-        </div>
+      <!-- Precio y unidades por bulto debajo -->
+      <div class="flex flex-col gap-0.5 mt-0.5">
+        <span class="text-xs font-black text-[#006b4d]">
+          {{ product.price | currency:'ARS':'symbol-narrow':'1.2-2' }}
+        </span>
+        <span class="text-[9px] text-[#64748b] font-bold uppercase tracking-wider">
+          Bulto: {{ product.bulk_size }} unidades
+        </span>
       </div>
     </div>
   </div>
+  }
 </div>
 
+<!-- Scroll Infinito para Catálogo de Clientes -->
+@if (hasMoreProducts()) {
+<ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+  <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más productos...">
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>
+}
+}
+}
+
 <!-- Modal de Compra Colectiva Detallada -->
-<ion-modal [isOpen]="isModalOpen()" (didDismiss)="closeDetailModal()" [initialBreakpoint]="0.85"
-  [breakpoints]="[0, 0.85, 1]" [handle]="true">
-  <ng-template>
-    <ion-header class="ion-no-border">
-      <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
-        <ion-title class="text-[#002d4b]">Detalle de Compra</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="closeDetailModal()">
-            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content class="ion-padding" *ngIf="selectedProduct()">
-      <div class="max-w-[480px] mx-auto flex flex-col gap-4 pb-6">
-
-        <!-- Ficha de Producto -->
-        <div class="flex gap-3 items-center">
-          <div
-            class="w-24 h-24 bg-slate-50 rounded-2xl flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100">
-            <img [src]="selectedProduct()?.image_url || 'assets/placeholder-product.png'"
-              [alt]="selectedProduct()?.name || 'Producto'" class="w-full h-full object-cover"
-              onerror="this.src='https://placehold.co/150x150?text=Prod'" />
-          </div>
-          <div class="min-w-0 flex-1">
-            <h2 class="m-0 text-sm font-extrabold text-[#002d4b] leading-tight line-clamp-2">
-              {{ formatProductName(selectedProduct()?.name) }}
-            </h2>
-            <div class="flex items-baseline gap-2 mt-1">
-              <span class="text-sm font-black text-[#006b4d]">
-                {{ selectedProduct()?.price | currency:'ARS':'symbol-narrow':'1.2-2' }}
-              </span>
-              <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                Bulto: {{ selectedProduct()?.bulk_size }} u.
-              </span>
-            </div>
-            <p class="m-0 mt-1.5 text-[10px] text-slate-500 line-clamp-2 leading-relaxed"
-              *ngIf="selectedProduct()?.description">
-              {{ selectedProduct()?.description }}
-            </p>
-          </div>
-        </div>
-
-        <!-- Estado de la Compra Colectiva en este Nodo -->
-        <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-          <h4 class="m-0 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Estado en tu Punto de
-            Retiro</h4>
-
-          <div class="flex flex-col" *ngIf="activeGroup(); else noActiveGroup">
-            <div class="flex justify-between items-center text-xs font-bold text-[#002d4b] mb-1.5">
-              <span>Grupo de compra iniciado</span>
-              <span class="text-[#006b4d]">{{ activeGroup()?.unitsBought }}/{{ selectedProduct()?.bulk_size }} u.</span>
-            </div>
-
-            <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden mb-2">
-              <div class="h-full bg-[#006b4d] transition-all" [style.width.%]="activeGroup()?.progress"></div>
-            </div>
-
-            <div class="flex justify-between items-center text-[10px]">
-              <span class="text-slate-500">Faltan {{ activeGroup()?.unitsLeft }} unidades para cerrar</span>
-              <span class="px-2 py-0.5 rounded font-bold text-red-600 bg-red-50 select-none">
-                {{ getRemainingTimeText(activeGroup()!.createdAt) }}
-              </span>
-            </div>
-          </div>
-
-          <ng-template #noActiveGroup>
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center gap-2 text-xs font-bold text-[#002d4b]">
-                <ion-icon name="people-outline" class="text-base text-[#002d4b]"></ion-icon>
-                <span>Sin grupo activo en tu punto de retiro</span>
-              </div>
-              <p class="m-0 text-[10px] text-slate-500">
-                Serás el primero en comprar este producto. Al confirmar, iniciarás un nuevo grupo de compra colectiva en
-                tu nodo.
-              </p>
-            </div>
-          </ng-template>
-        </div>
-
-        <!-- Selector de Cantidad (Stepper) -->
-        <div class="flex items-center justify-between bg-slate-50 rounded-2xl p-4 border border-slate-100">
-          <div class="flex flex-col">
-            <span class="text-xs font-bold text-[#002d4b]">Cantidad a comprar</span>
-            <span class="text-[9px] text-slate-400 mt-0.5" *ngIf="activeGroup()">
-              Máximo disponible: {{ maxQuantity() }} u.
-            </span>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <button type="button" (click)="decrementQuantity()" [disabled]="buyQuantity() <= 1 || isProcessingPayment()"
-              class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-slate-600 active:bg-slate-100 disabled:opacity-50 transition-colors">
-              -
-            </button>
-            <span class="text-sm font-extrabold text-[#002d4b] min-w-[24px] text-center">
-              {{ buyQuantity() }}
-            </span>
-            <button type="button" (click)="incrementQuantity()"
-              [disabled]="buyQuantity() >= maxQuantity() || isProcessingPayment()"
-              class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-slate-600 active:bg-slate-100 disabled:opacity-50 transition-colors">
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- Subtotal -->
-        <div class="flex justify-between items-center px-1 py-1.5" *ngIf="selectedProduct()">
-          <span class="text-xs font-bold text-slate-500">Subtotal de tu compra:</span>
-          <span class="text-lg font-black text-[#006b4d]">
-            {{ ((selectedProduct()?.price || 0) * buyQuantity()) | currency:'ARS':'symbol-narrow':'1.2-2' }}
-          </span>
-        </div>
-
-        <!-- Sección de Pago -->
-        <div class="mt-4 border-t border-slate-100 pt-4 flex flex-col gap-3">
-          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Información de Pago</span>
-
-          <!-- Selector de Tarjetas Guardadas -->
-          <div *ngIf="savedCards().length > 0" class="flex flex-col gap-2">
-            <select [ngModel]="selectedCard()"
-              (ngModelChange)="selectedCard.set($event); useSavedCard.set($event !== null); cvv.set('')"
-              class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all">
-              <option *ngFor="let card of savedCards()" [ngValue]="card">
-                {{ card.brand | uppercase }} terminada en {{ card.last_four }} (Vence {{ card.expiration_mo }}/{{
-                card.expiration_yr }})
-              </option>
-            </select>
-          </div>
-
-          <!-- Si usa tarjeta guardada, pide CVV -->
-          <div *ngIf="useSavedCard() && savedCards().length > 0" class="flex flex-col gap-1">
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Código de seguridad
-              (CVV)</label>
-            <input type="password" [value]="cvv()" (input)="cvv.set($any($event.target).value)" maxlength="4"
-              placeholder="123"
-              class="w-24 h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
-          </div>
-
-          <!-- Si no hay tarjetas guardadas, advierte al usuario -->
-          <div *ngIf="savedCards().length === 0"
-            class="flex flex-col gap-1.5 p-3.5 bg-red-50 text-red-700 rounded-2xl border border-red-100 text-xs">
-            <span class="font-extrabold uppercase tracking-wider text-[9px] text-red-800">No tenés tarjetas
-              guardadas</span>
-            <span class="text-[10px] leading-relaxed">Para comprar colectivamente, primero debés registrar una tarjeta
-              en tu **Perfil** (sección Tarjetas).</span>
-          </div>
-
-          <div class="text-red-500 text-[10px] font-bold mt-1" *ngIf="paymentError">
-            {{ paymentError }}
-          </div>
-
-          <!-- Botón de Pago -->
-          <ion-button expand="block" [disabled]="isProcessingPayment() || savedCards().length === 0"
-            class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl mt-1"
-            (click)="confirmAndPay()">
-            <span *ngIf="!isProcessingPayment()">Confirmar y Reservar Pago</span>
-            <ion-spinner name="crescent" *ngIf="isProcessingPayment()"></ion-spinner>
-          </ion-button>
-        </div>
-
-      </div>
-    </ion-content>
-  </ng-template>
-</ion-modal>
+<app-product-modal [isOpen]="isModalOpen()" [product]="selectedProduct()" [nodeId]="activeNode?.id"
+  [activeGroup]="selectedProduct() ? getGroupForProduct(selectedProduct()!.id) : null" (closed)="closeDetailModal()"
+  (purchaseSuccess)="loadActiveGroups()">
+</app-product-modal>

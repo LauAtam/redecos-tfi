@@ -23,8 +23,8 @@ Este archivo detalla las prioridades redefinidas para los últimos 10 días de d
 ## 📅 Backlog de Cierre (Prioridad Baja / Postergado)
 
 ### 4. `WB407926-53` — [Frontend] Dinamizar el Dashboard del Administrador y Gráficos
-* **Estado**: 🟡 **En Progreso (In Progress)**
-* **Acción**: Conectar contadores del dashboard y gráficos con endpoints agregados en NestJS. Implementar visualizaciones de ganancias, retiros y ahorros utilizando `Chart.js` en Angular.
+* **Estado**: 🟢 **Listo (Done)**
+* **Acción**: Implementado el endpoint de métricas agregadas en NestJS. Integrado `Chart.js` nativo en el frontend para renderizar gráficos de ganancias (ventas), ahorros colectivos generados y distribución logística de retiros. Completada la refactorización de `SupabaseService` a `AppFacadeService` separando responsabilidades en 5 nuevos servicios de dominio.
 
 ### 5. `WB407926-50` — Testear las funcionalidades del motor de transacciones, stock y pasarela de pagos
 * **Estado**: 🟡 **Postergado / Baja Prioridad**

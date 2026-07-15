@@ -1,17 +1,12 @@
-<app-header 
-  title="Redecos" 
-  [showLogout]="currentTab() === 'config'" 
-  (logout)="logout()">
+<app-header title="Redecos" [showLogout]="false" (logout)="logout()">
 </app-header>
 
 <ion-content class="[--background:#f8fafc] ion-padding">
   <div class="max-w-[600px] mx-auto py-2 px-1">
-    
+
     <!-- PESTAÑA 1: GRUPOS DE COMPRA ACTIVOS -->
     <div *ngIf="currentTab() === 'groups'">
-      <app-groups-tab 
-        [activeNode]="activeNode" 
-        [isLoadingNode]="isLoadingNode">
+      <app-groups-tab [activeNode]="activeNode" [isLoadingNode]="isLoadingNode">
       </app-groups-tab>
     </div>
 
@@ -22,11 +17,7 @@
 
     <!-- PESTAÑA 3: CONFIGURACIÓN / MI CUENTA -->
     <div *ngIf="currentTab() === 'config'">
-      <app-account-tab 
-        [activeNode]="activeNode" 
-        [userEmail]="userEmail" 
-        [userName]="userName" 
-        (logout)="logout()">
+      <app-account-tab [activeNode]="activeNode" [userEmail]="userEmail" [userName]="userName" (logout)="logout()">
       </app-account-tab>
     </div>
   </div>
@@ -36,28 +27,25 @@
 <ion-footer class="ion-no-border bg-white border-t border-slate-100 shrink-0">
   <div class="flex justify-around items-center py-2">
     <!-- Pestaña: Productos -->
-    <button (click)="setTab('products')" 
-            [class.text-[#006b4d]]="currentTab() === 'products'"
-            [class.text-slate-400]="currentTab() !== 'products'"
-            class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
+    <button (click)="setTab('products')" [class.text-[#006b4d]]="currentTab() === 'products'"
+      [class.text-slate-400]="currentTab() !== 'products'"
+      class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
       <ion-icon name="storefront-outline" class="text-lg"></ion-icon>
       <span>Productos</span>
     </button>
 
     <!-- Pestaña: Grupos -->
-    <button (click)="setTab('groups')" 
-            [class.text-[#006b4d]]="currentTab() === 'groups'"
-            [class.text-slate-400]="currentTab() !== 'groups'"
-            class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
+    <button (click)="setTab('groups')" [class.text-[#006b4d]]="currentTab() === 'groups'"
+      [class.text-slate-400]="currentTab() !== 'groups'"
+      class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
       <ion-icon name="people-outline" class="text-lg"></ion-icon>
       <span>Grupos</span>
     </button>
-    
+
     <!-- Pestaña: Configuración -->
-    <button (click)="setTab('config')" 
-            [class.text-[#006b4d]]="currentTab() === 'config'"
-            [class.text-slate-400]="currentTab() !== 'config'"
-            class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
+    <button (click)="setTab('config')" [class.text-[#006b4d]]="currentTab() === 'config'"
+      [class.text-slate-400]="currentTab() !== 'config'"
+      class="flex flex-col items-center gap-1 bg-transparent border-0 outline-none text-[10px] font-bold py-1 flex-1 transition-all">
       <ion-icon name="person-outline" class="text-lg"></ion-icon>
       <span>Mi Cuenta</span>
     </button>

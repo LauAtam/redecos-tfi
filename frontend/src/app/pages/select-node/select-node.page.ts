@@ -48,10 +48,10 @@ export class SelectNodePage implements OnInit, OnDestroy {
   isLoading = false;
   errorMessage: string | null = null;
   sortBy: 'proximity' | 'popularity' = 'proximity';
-  
+
   userLatitude: number | null = null;
   userLongitude: number | null = null;
-  
+
   private map: L.Map | undefined;
   private markers: L.Marker[] = [];
   private userMarker: L.Marker | undefined;
@@ -127,7 +127,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
         (position) => {
           this.userLatitude = position.coords.latitude;
           this.userLongitude = position.coords.longitude;
-          
+
           this.sortNodos();
           this.refreshMapMarkers();
         },
@@ -335,7 +335,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
       this.errorMessage = error.message;
     } else if (user) {
       this.currentSelectedNodeId = user.default_node_id || null;
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home'], { queryParams: { tab: 'products' } });
     }
   }
 

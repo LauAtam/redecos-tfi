@@ -1,0 +1,649 @@
+Categoria,Nombre_Producto,Descripcion,Precio_Mayorista,Tamano_Bulto,URL_Imagen,Precio_Minorista,Stock
+Aceites,Aceite de Girasol Finca el lazo x 850 cc.,Aceite de Girasol Finca el lazo x 850 cc.,2550.00,12,https://davelcor.com.ar/wp-content/uploads/Aceite-de-Girasol-Finca-el-lazo-x-900cc-240x240.jpg,,100
+Aceites,Aceite Girasol Cañuelas x 1.5 Lt.,Aceite Girasol Cañuelas x 1.5 Lt.,5870.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Aceite-Girasol-Canuelas-x-1.5-Lt--240x240.jpg,,100
+Aceites,Aceite Girasol Cañuelas x 900 cc.,Aceite Girasol Cañuelas x 900 cc.,3520.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Aceite-Girasol-Canuelas-x-900-cc-240x240.jpg,,100
+Aceites,Aceite Oliva La posta del olivo x 250 cc.,Aceite Oliva La posta del olivo x 250 cc.,6500.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Aceite-Oliva-Posta-de-olivo-x-250-cc-240x240.jpg,,100
+Aceites,Aceite Oliva La Posta del olivo x 500 cc.,Aceite Oliva La Posta del olivo x 500 cc.,11620.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Aceite-Oliva-Posta-de-olivo-x-500-cc-240x240.jpg,,100
+Aderezos y Condimentos,Aceitunas Verdes Bordi (frasco) x 330 gr.,Aceitunas Verdes Bordi (frasco) x 330 gr.,2900.00,12,https://davelcor.com.ar/wp-content/uploads/2021/08/Aceitunas-Verdes-Bordi-frasco-x-330-gr-240x240.jpg,,100
+Higiene Personal,Acondicionador Plusbelle x 1 Lt.,Acondicionador Plusbelle x 1 Lt.,2875.00,12,https://davelcor.com.ar/wp-content/uploads/Acondicionador-Plusbelle-x-1-Lt-240x240.jpg,,100
+Higiene Personal,Acondicionador Sedal – Balance x 190 cc.,Acondicionador Sedal – Balance x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Acondicionador-Sedal-Balance-x-190-cc-240x240.jpg,,100
+Higiene Personal,Acondicionador Sedal – Ceramidas x 190 cc.,Acondicionador Sedal – Ceramidas x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Acondicionador-Sedal-Ceramidas-x-190-Unid-240x240.jpg,,100
+Higiene Personal,Acondicionador Sedal – Colageno x 190 cc.,Acondicionador Sedal – Colageno x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/Acondicionador-Sedal-Colageno-x-190-cc-240x240.jpg,,100
+Higiene Personal,Acondicionador Sedal – Hialuronico x 190 cc.,Acondicionador Sedal – Hialuronico x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/Acondicionador-Sedal-Hialuronico-x-190-cc-240x240.jpg,,100
+Higiene Personal,Acondicionador Sedal – Liso perfecto x 190 cc.,Acondicionador Sedal – Liso perfecto x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/Acondicionador-Sedal-Liso-perfecto-x-190-cc-240x240.jpg,,100
+Higiene Personal,Acondicionador Sedal x 10 ml. – Ceramidas,Acondicionador Sedal x 10 ml. – Ceramidas,260.00,144,https://davelcor.com.ar/wp-content/uploads/Acondicionado-Sedal-x-10-ml.-Ceramidas-240x240.jpg,,100
+Bebidas sin alcohol,Agua Mineral Sierra de los Padres x 600 cc,Agua Mineral Sierra de los Padres x 600 cc,480.00,12,https://davelcor.com.ar/wp-content/uploads/Agua-Mineral-Sierra-de-los-Padres-x-500-cc-240x240.png,,100
+Bebidas sin alcohol,Agua Mineral Sierra del Norte (bidon) x 6 Lt.,Agua Mineral Sierra del Norte (bidon) x 6 Lt.,1590.00,1,https://davelcor.com.ar/wp-content/uploads/Agua-de-mesa-Sierra-del-Norte-bidon-x-6-Lt-240x240.jpg,,100
+Agua Saborizadas,Agua Sierra de los Padres x 1.5 Lt. – Manzana,Agua Sierra de los Padres x 1.5 Lt. – Manzana,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Agua-Sierras-de-los-Padres-x-1.5-Lt.-Manzana-240x240.jpg,,100
+Agua Saborizadas,Agua Sierra de los Padres x 1.5 Lt. – Naranja,Agua Sierra de los Padres x 1.5 Lt. – Naranja,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Agua-Sierras-de-los-Padres-x-1.5-Lt.-Naranja-240x240.jpg,,100
+Agua Saborizadas,Agua Sierra de los Padres x 1.5 Lt. – Pomelo,Agua Sierra de los Padres x 1.5 Lt. – Pomelo,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Agua-Sierras-de-los-Padres-x-1.5-Lt.-Pomelo-240x240.jpg,,100
+Agua Saborizadas,Agua Sierra de los Padres x 1.5 Lt. – Pomelo Rosado,Agua Sierra de los Padres x 1.5 Lt. – Pomelo Rosado,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Agua-Sierras-de-los-Padres-x-1.5-Lt.-Pomelo-Rosado-240x240.jpg,,100
+Agua Saborizadas,Agua Vida x 1.5 Lt. – Manzana,Agua Vida x 1.5 Lt. – Manzana,1300.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Agua-Vida-x-1.5-Lt.-Manzana--240x240.jpg,,100
+Agua Saborizadas,Agua Vida x 1.5 Lt. – MixFrutal,Agua Vida x 1.5 Lt. – MixFrutal,1300.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Agua-Vida-x-1.5-Lt.-MixFrutal-1-1-240x240.jpg,,100
+Agua Saborizadas,Agua Vida x 1.5 Lt. – Naranja,Agua Vida x 1.5 Lt. – Naranja,1300.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Agua-Vida-x-1.5-Lt.-Naranja-240x240.jpg,,100
+Aderezos y Condimentos Velez,Aji molido Velez x 25 gr.,Aji molido Velez x 25 gr.,530.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Aji-molido-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Ajo Desh. Velez x 25 gr.,Ajo Desh. Velez x 25 gr.,630.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Ajo-Desh.-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Albahaca Velez x 25 gr.,Albahaca Velez x 25 gr.,395.00,10,https://davelcor.com.ar/wp-content/uploads/Albahaca-Velez-x-25-gr-240x240.jpg,,100
+Limpieza y Desinfección,Alcohol desnaturalizado Frau x 1 Lt.,Alcohol desnaturalizado Frau x 1 Lt.,2646.00,8,https://davelcor.com.ar/wp-content/uploads/Alcohol-desnaturalizado-Frau-x-1-Lt-240x240.jpg,,100
+Limpieza y Desinfección,Alcohol Etilico Frau x 250 cc.,Alcohol Etilico Frau x 250 cc.,903.00,10,https://davelcor.com.ar/wp-content/uploads/Alcohol-Etilico-Frau-x-250-cc-240x240.jpg,,100
+Alfajores,Alfajor Cofler Block triple x 60 gr.,Alfajor Cofler Block triple x 60 gr.,1370.00,21,https://davelcor.com.ar/wp-content/uploads/Alfajor-Cofler-Block-triple-x-60-gr-240x240.jpg,,100
+Alfajores,Alfajor Fantoche triple Blanco x 85 gr.,Alfajor Fantoche triple Blanco x 85 gr.,875.00,12,https://davelcor.com.ar/wp-content/uploads/Alfajor-Fantoche-triple-Blanco-x-72-gr--240x240.jpg,,100
+Alfajores,Alfajor Fantoche triple Negro x 85 gr.,Alfajor Fantoche triple Negro x 85 gr.,875.00,12,https://davelcor.com.ar/wp-content/uploads/Alfajor-Fantoche-triple-Negro-x-72-gr--240x240.jpg,,100
+Alfajores,Alfajor Fulbito Black x 30 gr.,Alfajor Fulbito Black x 30 gr.,195.00,40,https://davelcor.com.ar/wp-content/uploads/Alfajor-Fulbito-Black-x-30-gr-240x240.jpg,,100
+Alfajores,Alfajor Fulbito de Chocolate x 30 gr.,Alfajor Fulbito de Chocolate x 30 gr.,195.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajor-Fulbito-de-Chocolate-x-30-gr-240x240.jpg,,100
+Alfajores,Alfajor Fulbito Mani x 30 gr.,Alfajor Fulbito Mani x 30 gr.,195.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajor-Fulbito-Mani-x-30-gr-240x240.jpg,,100
+Alfajores,Alfajor Genio Negro triple x 60 gr.,Alfajor Genio Negro triple x 60 gr.,370.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajor-Genio-Negro-triple-x-60-gr-240x240.jpg,,100
+Alfajores,Alfajor MOGY Blanco x 38 gr.,Alfajor MOGY Blanco x 38 gr.,285.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajor-Mogy-Blanco-38-gr-240x240.jpg,,100
+Alfajores,Alfajor MOGY negro x 38 gr.,Alfajor MOGY negro x 38 gr.,285.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajor-Mogy-Negro-38-gr-240x240.jpg,,100
+Alfajores,Alfajor Nevares x 45 gr. – Blanco,Alfajor Nevares x 45 gr. – Blanco,295.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajores-Blanco-Nevares-x-45-gr-240x240.jpg,,100
+Alfajores,Alfajor Nevares x 45 gr. – Negro,Alfajor Nevares x 45 gr. – Negro,295.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Alfajores-Negro-Nevares-x-45-gr-240x240.jpg,,100
+Alfajores,Alfajor Pamela x 35 gr. – Blanco,Alfajor Pamela x 35 gr. – Blanco,315.00,36,https://davelcor.com.ar/wp-content/uploads/Alfajor-Pamela-x-35-gr.-Blanco-240x240.jpg,,100
+Alfajores,Alfajor Pamela x 35 gr. – Negro,Alfajor Pamela x 35 gr. – Negro,315.00,36,https://davelcor.com.ar/wp-content/uploads/Alfajor-Pamela-x-35-gr-240x240.jpg,,100
+Alfajores,Alfajor Rasta Blanco x 70 gr.,Alfajor Rasta Blanco x 70 gr.,1100.00,18,https://davelcor.com.ar/wp-content/uploads/Alfajor-Rasta-Blanco-x-70-gr-copia-240x240.jpg,,100
+Alfajores,Alfajor Rasta Negro x 70 gr.,Alfajor Rasta Negro x 70 gr.,1100.00,18,https://davelcor.com.ar/wp-content/uploads/Alfajor-Rasta-Negro-x-70-gr-copia-240x240.jpg,,100
+Alfajores,Alfajor Rasta Trico x 100 gr.,Alfajor Rasta Trico x 100 gr.,1590.00,14,https://davelcor.com.ar/wp-content/uploads/Alfajor-Rasta-Trico-x-100-gr-240x240.jpg,,100
+Alfajores,Alfajor Smack x 60 gr. – Negro,Alfajor Smack x 60 gr. – Negro,310.00,24,https://davelcor.com.ar/wp-content/uploads/Alfajor-Smack-x-60-gr-240x240.jpg,,100
+Higiene Personal,Algodon Doncella x 70 gr.,Algodon Doncella x 70 gr.,690.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Algodon-Doncella-x-70-gr-240x240.jpg,,100
+Mascotas,Alimento Gatos Magnificos (pescado) x 8 Kg.,Alimento Gatos Magnificos (pescado) x 8 Kg.,17500.00,1,https://davelcor.com.ar/wp-content/uploads/2021/08/Alimento-para-gatos-Magnificos-pescado-x-8-Kg-240x240.jpg,,100
+Mascotas,Alimento Perros Magnificos (carne) x 10 Kg.,Alimento Perros Magnificos (carne) x 10 Kg.,13300.00,1,https://davelcor.com.ar/wp-content/uploads/Alimento-pperros-Magnificos-Adultoscarne-x-10-Kg-240x240.jpg,,100
+Reposteria y Postres,Almidon de maiz Velez x 250 gr.,Almidon de maiz Velez x 250 gr.,1100.00,10,https://davelcor.com.ar/wp-content/uploads/Almidon-de-maiz-Velez-x-250-gr-240x240.jpg,,100
+Legumbres / Cereales,Almohaditas Lasfor x 2.5 Kg. – Frutilla,Almohaditas Lasfor x 2.5 Kg. – Frutilla,17800.00,5,https://davelcor.com.ar/wp-content/uploads/Almohadita-Lasfor-x-2.5-Kg.-Chocolate-240x240.jpg,,100
+Bebidas sin alcohol,Amargo Terma x 1.35 Lt. – Cuyano,Amargo Terma x 1.35 Lt. – Cuyano,1990.00,12,https://davelcor.com.ar/wp-content/uploads/2021/06/Amargo-Terma-Cuyano-x-1.35-Lt--240x240.jpg,,100
+Bebidas sin alcohol,Amargo Terma x 1.35 Lt. – Serrano,Amargo Terma x 1.35 Lt. – Serrano,1990.00,12,https://davelcor.com.ar/wp-content/uploads/2021/06/Amargo-Terma-Serrano-x-1.35-Lt--240x240.jpg,,100
+Legumbres / Cereales,Anillos Frutados Lasfor x 2 Kg.,Anillos Frutados Lasfor x 2 Kg.,12200.00,5,https://davelcor.com.ar/wp-content/uploads/Anillos-Frutados-Lasfor-x-2-Kg-240x240.jpg,,100
+Aderezos y Condimentos Velez,Anis en grano Velez x 25 gr.,Anis en grano Velez x 25 gr.,570.00,10,https://davelcor.com.ar/wp-content/uploads/Anis-en-grano-Velez-x-25-gr-240x240.jpg,,100
+Bebidas con alcohol,Aperitivo Aperol x 750 cc.,Aperitivo Aperol x 750 cc.,8800.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Aperol-Spritz-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Aperitivo Cynar x 750 cc.,Aperitivo Cynar x 750 cc.,7800.00,6,https://davelcor.com.ar/wp-content/uploads/Cynar-aperitivo-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Aperitivo Gancia x 950 cc.,Aperitivo Gancia x 950 cc.,6500.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Americano-Gancia-x-950-cc-240x240.jpg,,100
+Bebidas con alcohol,Aperitivo Martini Bianco x 1 Lt.,Aperitivo Martini Bianco x 1 Lt.,6800.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Vermouth-Martini-Bianco-x-1-Lt-240x240.jpg,,100
+Arroz,Arroz Dos Hermanos Parborizado x 500 gr.,Arroz Dos Hermanos Parborizado x 500 gr.,920.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Dos-Hermanos-Parborizado-x-500-gr-240x240.jpg,,100
+Arroz,Arroz Dos Hermanos x 1 Kg.,Arroz Dos Hermanos x 1 Kg.,1430.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Dos-Hermano-x-1-Kg-240x240.jpg,,100
+Arroz,Arroz Dos Hermanos x 500 gr.,Arroz Dos Hermanos x 500 gr.,795.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Dos-Hermanos-x-500-gr-240x240.jpg,,100
+Arroz,Arroz Mandisovi Doble Carolina x 1 Kg.,Arroz Mandisovi Doble Carolina x 1 Kg.,1840.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Doble-Carolina-Mandisovi-x-1-Kg-240x240.jpg,,100
+Arroz,Arroz Mandisovi Doble Carolina x 500 gr.,Arroz Mandisovi Doble Carolina x 500 gr.,970.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Doble-Carolina-Mandisovi-x-500-gr-240x240.jpg,,100
+Arroz,Arroz Mandisovi x 1 Kg.,Arroz Mandisovi x 1 Kg.,1040.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Mandisovi-x-1-Kg-240x240.jpg,,100
+Arroz,Arroz Mandisovi x 500 gr.,Arroz Mandisovi x 500 gr.,560.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Arroz-Mandisovi-x-500-gr-2-240x240.jpg,,100
+Enlatados,Atun Desmenuzado al natural Bahia x 170 gr.,Atun Desmenuzado al natural Bahia x 170 gr.,1460.00,48,https://davelcor.com.ar/wp-content/uploads/Atun-Desmenuzado-al-natural-Bahia-x-170-gr-240x240.jpg,,100
+Enlatados,Atun Desmenuzado en Aceite Bahia x 170 gr.,Atun Desmenuzado en Aceite Bahia x 170 gr.,1460.00,48,https://davelcor.com.ar/wp-content/uploads/Atun-Desmenuzado-en-Aceite-Bahia-x-170-gr-240x240.jpg,,100
+Enlatados,Atun Lomito al natural Bahia x 170 gr.,Atun Lomito al natural Bahia x 170 gr.,2600.00,48,https://davelcor.com.ar/wp-content/uploads/Atun-Lomito-al-natural-Bahia-x-170-gr-240x240.jpg,,100
+Legumbres / Cereales,Avena Instantanea Trofy  x 300 gr.,Avena Instantanea Trofy  x 300 gr.,880.00,10,https://davelcor.com.ar/wp-content/uploads/Avena-Instantanea-Trofy-x-300-gr-240x240.jpg,,100
+Legumbres / Cereales,Avena Lista Menu Box – Con manzana y canela x 59 gr.,Avena Lista Menu Box – Con manzana y canela x 59 gr.,1630.00,6,https://davelcor.com.ar/wp-content/uploads/Avena-Lista-Menu-Box-Con-manzana-y-canela-x-59-gr-240x240.jpg,,100
+Legumbres / Cereales,Avena Sytari Instantanea x 300 gr.,Avena Sytari Instantanea x 300 gr.,980.00,10,https://davelcor.com.ar/wp-content/uploads/Avena-Sytari-Instantanea-x-300-gr-240x240.jpg,,100
+Reposteria y Postres,Azucar Impalpable Velez x 250 gr.,Azucar Impalpable Velez x 250 gr.,780.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Azucar-Impalpable-Velez-x-250-gr-240x240.jpg,,100
+Bebidas sin alcohol,Baggio Forza x 500 cc. – Blue Shot,Baggio Forza x 500 cc. – Blue Shot,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Baggio-Forza-x-500-cc.-Blue-Shot-240x240.jpg,,100
+Bebidas sin alcohol,Baggio Forza x 500 cc. – Frutos Rojos,Baggio Forza x 500 cc. – Frutos Rojos,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Baggio-Forza-x-500-cc.-Frutos-Rojos-240x240.jpg,,100
+Bebidas sin alcohol,Baggio Forza x 500 cc. – Manzana,Baggio Forza x 500 cc. – Manzana,1150.00,6,https://davelcor.com.ar/wp-content/uploads/Baggio-Forza-x-500-cc.-Manzana-240x240.jpg,,100
+Accesorios de Limpieza,Balde 10lt DEA x 1 Unid.,Balde 10lt DEA x 1 Unid.,4500.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Balde-10lt-DEA-x-1-Unid-240x240.jpg,,100
+Para Ropa,Barra Quitamanchas Gigante x 75 gr.,Barra Quitamanchas Gigante x 75 gr.,1225.00,48,https://davelcor.com.ar/wp-content/uploads/Barra-Quitamanchas-Gigante-x-75-gr-240x240.jpg,,100
+Golosinas,Barra Smack Bar rellena bañada x 35 gr.,Barra Smack Bar rellena bañada x 35 gr.,420.00,72,https://davelcor.com.ar/wp-content/uploads/Barra-Smack-Bar-rellena-banada-x-35-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Bicarbonato Velez x 50 gr.,Bicarbonato Velez x 50 gr.,462.17,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Bicarbonato-Velez-x-50-gr-240x240.jpg,,100
+Golosinas,Bocadito Nevares Relleno dulce de leche x 23 gr.,Bocadito Nevares Relleno dulce de leche x 23 gr.,190.00,90,https://davelcor.com.ar/wp-content/uploads/Bocadito-Nevares-Relleno-dulce-de-leche-x-23-gr-240x240.jpg,,100
+Accesorios de Limpieza,Bolsas Compactadoras Polibol 80x100cm x 10 unid.,Bolsas Compactadoras Polibol 80x100cm x 10 unid.,1500.00,50,https://davelcor.com.ar/wp-content/uploads/Bolsas-Compactadoras-Polibol-80x100cm-x-10-unid-240x240.jpg,,100
+Accesorios de Limpieza,Bolsas de Residuos Green Plast 45×60 x 30 Unid.,Bolsas de Residuos Green Plast 45×60 x 30 Unid.,950.00,30,https://davelcor.com.ar/wp-content/uploads/Bolsas-de-Residuos-45x60-x-30-Unid-1-240x240.jpg,,100
+Bazar y Hogar,Bombillas Cimarron x 1 Unid. – Plateada,Bombillas Cimarron x 1 Unid. – Plateada,650.00,96,https://davelcor.com.ar/wp-content/uploads/Bombillas-El-chucaro-x-1-Unid.-Plateada-240x240.jpg,,100
+Golosinas,Bombon Bonobon x 30 Unid. – Blanco,Bombon Bonobon x 30 Unid. – Blanco,12485.00,12,https://davelcor.com.ar/wp-content/uploads/Bombon-Bonobon-x-30-Unid.-Blanco-240x240.jpg,,100
+Golosinas,Bombon Bonobon x 30 Unid. – Negro,Bombon Bonobon x 30 Unid. – Negro,12485.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Bombon-Bonobon-x-30-Unid-240x240.jpg,,100
+Golosinas,Bombon Ducrem x 400 gr.,Bombon Ducrem x 400 gr.,5800.00,12,https://davelcor.com.ar/wp-content/uploads/Bombon-Ducrem-x-400-gr-240x240.jpg,,100
+Golosinas,Bombon Smack x 30 Unid.,Bombon Smack x 30 Unid.,6500.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Bombon-Smack-x-30-Unid-copia-240x240.jpg,,100
+Golosinas,Bombon Smack x 6 Unid.,Bombon Smack x 6 Unid.,1190.00,18,https://davelcor.com.ar/wp-content/uploads/Bombon-Smack-x-6-Unid-240x240.jpg,,100
+Librería y Cotillon,Bombuchas Dilax x 100 unid,Bombuchas Dilax x 100 unid,1250.00,300,https://davelcor.com.ar/wp-content/uploads/Bombucha-Dilax-x-100-unid-240x240.jpg,,100
+Accesorios de Limpieza,Broches de madera DEA x 12 Unid.,Broches de madera DEA x 12 Unid.,950.00,120,https://davelcor.com.ar/wp-content/uploads/2021/05/Broches-de-madera-DEA-x-12-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Broches de plastico DEA x 12 Unid.,Broches de plastico DEA x 12 Unid.,950.00,120,https://davelcor.com.ar/wp-content/uploads/2021/05/Broches-de-plastico-DEA-x-12-Unid--240x240.jpg,,100
+Enlatados,Caballa Pennisi x 380 gr. – al natural,Caballa Pennisi x 380 gr. – al natural,3190.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Caballa-al-Natural-Pennisi-x-380-gr-240x240.jpg,,100
+Accesorios de Limpieza,Cabo de Madera DEA x 1 Unid.,Cabo de Madera DEA x 1 Unid.,1590.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Cabo-madera-con-rosca-DEA-x-12-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Cabo de madera Forrado DEA x 1 Unid.,Cabo de madera Forrado DEA x 1 Unid.,1300.00,12,https://davelcor.com.ar/wp-content/uploads/Cabo-de-madera-Forrado-DEA-x-1-Unid-240x240.jpg,,100
+Infusiones,Cacao Dulce Speedy x 180 gr.,Cacao Dulce Speedy x 180 gr.,1315.85,10,https://davelcor.com.ar/wp-content/uploads/2021/05/cacao-speedy-x-180-gr-240x240.jpg,,100
+Infusiones,Cacao Nesquik x 180 gr.,Cacao Nesquik x 180 gr.,2150.00,18,https://davelcor.com.ar/wp-content/uploads/Cacao-Nesquik-x-180-gr-240x240.jpg,,100
+Infusiones,Cacao Toddy x 180 gr.,Cacao Toddy x 180 gr.,1695.00,12,https://davelcor.com.ar/wp-content/uploads/Cacao-Toddy-x-180-gr-240x240.jpg,,100
+Infusiones,Cafe ensobrado Velez x 100 Saq.,Cafe ensobrado Velez x 100 Saq.,14550.00,1,https://davelcor.com.ar/wp-content/uploads/2021/05/Cafe-ensobrado-x-100-saq-240x240.jpg,,100
+Infusiones,Cafe instant. Velez x 170 gr.,Cafe instant. Velez x 170 gr.,7388.09,6,https://davelcor.com.ar/wp-content/uploads/Cafe-instant.-Velez-x-170-gr-240x240.jpg,,100
+Infusiones,Cafe instantaneo Velez x 100 gr.,Cafe instantaneo Velez x 100 gr.,4882.59,6,https://davelcor.com.ar/wp-content/uploads/Cafe-instant.-Velez-x-100-gr-240x240.jpg,,100
+Infusiones,Cafe Torrado Molido Velez x 125 gr.,Cafe Torrado Molido Velez x 125 gr.,2800.00,20,https://davelcor.com.ar/wp-content/uploads/2021/05/Cafe-Torrado-Molido-Velez-x-125-gr-240x240.jpg,,100
+Infusiones,Cafe Torrado Molido Velez x 250 gr.,Cafe Torrado Molido Velez x 250 gr.,4985.00,20,https://davelcor.com.ar/wp-content/uploads/Cafe-Torrado-Molido-Velez-x-250-gr-240x240.jpg,,100
+Infusiones,Cafe Velez x 25 Saq.,Cafe Velez x 25 Saq.,2690.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Cafe-Velez-x-25-saq-240x240.jpg,,100
+Caldos y Sopas Knorr,Caldo Carne Knorr de 24 x 2cubos,Caldo Carne Knorr de 24 x 2cubos,12250.00,20,https://davelcor.com.ar/wp-content/uploads/2021/05/Caldo-Carne-Knorr-de-24-x-2cubos-240x240.jpg,,100
+Caldos y Sopas Knorr,Caldo Gallina Knorr de 24 x 2cubos,Caldo Gallina Knorr de 24 x 2cubos,12250.00,20,https://davelcor.com.ar/wp-content/uploads/2021/05/Caldo-Gallina-Knorr-de-24-x-2cubos-240x240.jpg,,100
+Caldos y Sopas Knorr,Caldo Verduras Knorr de 24 x 2cubos,Caldo Verduras Knorr de 24 x 2cubos,12250.00,20,https://davelcor.com.ar/wp-content/uploads/2021/11/Caldo-Verduras-Knorr-de-24-x-2-cubos-240x240.jpg,,100
+Caldos y Sopas Knorr,Caldo Verduras Knorr x 12 cubos,Caldo Verduras Knorr x 12 cubos,2415.00,80,https://davelcor.com.ar/wp-content/uploads/2021/05/Caldo-Verduras-Knorr-x-12-cubos-240x240.jpg,,100
+Aderezos y Condimentos Velez,Canela Molida Velez x 25 gr.,Canela Molida Velez x 25 gr.,780.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Canela-Molida-Velez-x-25-gr-240x240.jpg,,100
+Golosinas,Caramelos Alka x 800 gr. – Cherry,Caramelos Alka x 800 gr. – Cherry,11000.00,10,https://davelcor.com.ar/wp-content/uploads/Photoroom-20250730_120436_4-copia-240x240.jpg,,100
+Golosinas,Caramelos Alka x 800 gr. – Cremoso,Caramelos Alka x 800 gr. – Cremoso,11000.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Caramelos-Alka-x-800-gr.-Cremoso-240x240.jpg,,100
+Golosinas,Caramelos Alka x 800 gr. – Strong,Caramelos Alka x 800 gr. – Strong,11000.00,10,https://davelcor.com.ar/wp-content/uploads/Caramelos-Alka-x-800-gr.-Strong-240x240.jpg,,100
+Golosinas,Caramelos Cherry cristal Misky x 465 gr.,Caramelos Cherry cristal Misky x 465 gr.,4100.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Caramelos-Cherry-cristal-Misky-x-405-gr-240x240.jpg,,100
+Golosinas,Caramelos Menta cristal Misky x 800 gr.,Caramelos Menta cristal Misky x 800 gr.,9300.00,6,https://davelcor.com.ar/wp-content/uploads/Caramelos-Menta-cristal-Misky-x-800-gr-240x240.jpg,,100
+Golosinas,Caramelos Menthoplus x 1 unid – Miel,Caramelos Menthoplus x 1 unid – Miel,630.00,144,https://davelcor.com.ar/wp-content/uploads/Caramelos-Menthoplus-x-1-unid-Miel-1-240x240.jpg,,100
+Golosinas,Caramelos Menthoplus x 1 Unid. – Cherry,Caramelos Menthoplus x 1 Unid. – Cherry,630.00,144,https://davelcor.com.ar/wp-content/uploads/Caramelos-Menthoplus-x-1-Unid.-Cherry-240x240.jpg,,100
+Golosinas,Caramelos Menthoplus x 1 Unid. – Strong,Caramelos Menthoplus x 1 Unid. – Strong,630.00,144,https://davelcor.com.ar/wp-content/uploads/Caramelos-Menthoplus-x-1-Unid.-Strong-240x240.jpg,,100
+Golosinas,Caramelos Misky Toffees x 680 gr.,Caramelos Misky Toffees x 680 gr.,6350.00,8,https://davelcor.com.ar/wp-content/uploads/Caramelos-Misky-Toffees-x-680-gr.-Dulce-de-leche-240x240.jpg,,100
+Snacks,Cascarones Cops x 400 gr.,Cascarones Cops x 400 gr.,3890.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Cascarones-Cops-x-400-gr-240x240.jpg,,100
+Accesorios de Limpieza,Cesto de residuos 12lt DEA x 1 Unid.,Cesto de residuos 12lt DEA x 1 Unid.,2790.00,12,https://davelcor.com.ar/wp-content/uploads/Cesto-de-residuos-12lt-DEA-x-1-Unid-240x240.jpg,,100
+Bebidas con alcohol,Champan Bodega Privada Extra brut x 750 cc.,Champan Bodega Privada Extra brut x 750 cc.,8990.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Champan-Bodega-Priv.-x-750.-cc-240x240.jpg,,100
+Bebidas con alcohol,Champan Callia Extra brut x 750 cc.,Champan Callia Extra brut x 750 cc.,4980.00,6,https://davelcor.com.ar/wp-content/uploads/Champan-Callia-Extra-brut-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Champan Mumm lata x 269 cc.,Champan Mumm lata x 269 cc.,2580.00,24,https://davelcor.com.ar/wp-content/uploads/Champan-Mumm-lata-x-269-cc-240x240.jpg,,100
+Bebidas con alcohol,Champan Renaissance Extra brut x 750 cc.,Champan Renaissance Extra brut x 750 cc.,3500.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Champan-Extrabrut-Dulce-Renaissance-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Champan Ricordi x 750 cc.,Champan Ricordi x 750 cc.,8990.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Champan-Ricordi-x-750-cc-240x240.jpg,,100
+Enlatados,Champiñones Laminados Inalpa x 300 gr.,Champiñones Laminados Inalpa x 300 gr.,2250.00,24,https://davelcor.com.ar/wp-content/uploads/Champinones-Laminados-Inalpa-x-300-gr-240x240.jpg,,100
+Golosinas,Chicle Bubbaloo x 60 Unid – Tutti Frutti,Chicle Bubbaloo x 60 Unid – Tutti Frutti,5800.00,32,https://davelcor.com.ar/wp-content/uploads/Chicle-Bubbaloo-x-60-Unid-Tutti-Frutti-240x240.jpg,,100
+Golosinas,Chicle Fierita Mini Tutty x 30 gr.,Chicle Fierita Mini Tutty x 30 gr.,420.00,144,https://davelcor.com.ar/wp-content/uploads/Chicle-Fierita-Mini-Tutty-x-30-gr-240x240.jpg,,100
+Golosinas,Chicle Fierita Recargado Menta x 50 Unid.,Chicle Fierita Recargado Menta x 50 Unid.,3390.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Chicle-Fierita-Recargado-Menta-x-50-Unid-240x240.jpg,,100
+Golosinas,Chicle Fierita Recargado Tutty x 50 Unid.,Chicle Fierita Recargado Tutty x 50 Unid.,3390.00,18,https://davelcor.com.ar/wp-content/uploads/Chicle-Fierita-Recargado-Tutty-x-50-Unid-240x240.jpg,,100
+Golosinas,Chicles Top Line 7 x 1 Unid. – Menta,Chicles Top Line 7 x 1 Unid. – Menta,830.00,320,https://davelcor.com.ar/wp-content/uploads/Chicles-Top-Line-7-x-1-Unid.-Menta-240x240.jpg,,100
+Golosinas,Chicles Top Line 7 x 1 Unid. – Sandia Mania,Chicles Top Line 7 x 1 Unid. – Sandia Mania,830.00,576,https://davelcor.com.ar/wp-content/uploads/Chicles-Top-Line-7-x-1-Unid.-Sandia-Mania-240x240.jpg,,100
+Golosinas,Chicles Top Line x 1 Unid. – Fruta,Chicles Top Line x 1 Unid. – Fruta,430.00,480,https://davelcor.com.ar/wp-content/uploads/Chicles-Top-Line-x-1-Unid.-Fruta-240x240.jpg,,100
+Golosinas,Chicles Top Line x 1 Unid. – Menta,Chicles Top Line x 1 Unid. – Menta,430.00,600,https://davelcor.com.ar/wp-content/uploads/Chicles-Top-Line-x-1-Unid.-Menta-240x240.jpg,,100
+Aderezos y Condimentos Velez,Chimichurri Velez x 25 gr.,Chimichurri Velez x 25 gr.,590.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Chimichurri-Velez-x-25-gr-240x240.jpg,,100
+Snacks,Chizitos Cops x 700 gr.,Chizitos Cops x 700 gr.,3250.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Chizitos-Cops-x-700-gr-240x240.jpg,,100
+Snacks,Chizitos mega queso Quento x 110 gr.,Chizitos mega queso Quento x 110 gr.,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Chizitos-Quento-x-110-gr-240x240.jpg,,100
+Enlatados,Choclo Inalpa Crema A. x 300 gr.,Choclo Inalpa Crema A. x 300 gr.,690.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/choclo-crema-Amarillo-Inalpa-x-350-gr-240x240.jpg,,100
+Enlatados,Choclo Inalpa en Grano x 300 gr.,Choclo Inalpa en Grano x 300 gr.,1200.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Choclo-en-grano-Inalpa-x-350-gr-240x240.jpg,,100
+Golosinas,Chocolate Celofan Misky x 25 gr. – Blanco,Chocolate Celofan Misky x 25 gr. – Blanco,890.00,360,https://davelcor.com.ar/wp-content/uploads/Chocolate-Celofan-Misky-x-25-gr.-Blanco-240x240.jpg,,100
+Golosinas,Chocolate Celofan Misky x 25 gr. – Negro,Chocolate Celofan Misky x 25 gr. – Negro,890.00,360,https://davelcor.com.ar/wp-content/uploads/1000104735-240x240.jpg,,100
+Golosinas,Chocolate Cofler Block x 38 gr.,Chocolate Cofler Block x 38 gr.,1380.00,160,https://davelcor.com.ar/wp-content/uploads/2021/07/Chocolate-Cofler-Block-x-38-gr--240x240.jpg,,100
+Golosinas,Chocolate Hamlet x 43 gr. – Almendra y Mani,Chocolate Hamlet x 43 gr. – Almendra y Mani,825.00,168,https://davelcor.com.ar/wp-content/uploads/Chocolate-Hamlet-x-43-gr.-Almendra-y-Mani-240x240.jpg,,100
+Golosinas,Chocolate Hamlet x 43 gr. – Blanco y Cookies,Chocolate Hamlet x 43 gr. – Blanco y Cookies,825.00,168,https://davelcor.com.ar/wp-content/uploads/Chocolate-Hamlet-x-43-gr.-Blanco-240x240.jpg,,100
+Golosinas,Chocolate Hamlet x 43 gr. – Chocolataso,Chocolate Hamlet x 43 gr. – Chocolataso,825.00,168,https://davelcor.com.ar/wp-content/uploads/Chocolate-Hamlet-x-43-gr.-Chocolataso-240x240.jpg,,100
+Golosinas,Chocolate Hamlet x 43 gr. – Frutilla,Chocolate Hamlet x 43 gr. – Frutilla,825.00,168,https://davelcor.com.ar/wp-content/uploads/Chocolate-Hamlet-x-43-gr.-Frutilla-240x240.jpg,,100
+Golosinas,Chocolate Hamlet x 43 gr. – Leche y Cookies,Chocolate Hamlet x 43 gr. – Leche y Cookies,825.00,168,https://davelcor.com.ar/wp-content/uploads/Chocolate-Hamlet-x-43-gr.-con-cookies-240x240.jpg,,100
+Golosinas,Chocolate p/taza Alteza x 90 gr.,Chocolate p/taza Alteza x 90 gr.,1690.00,50,https://davelcor.com.ar/wp-content/uploads/2021/11/Chocolate-para-taza-Alteza-x-90-gr-240x240.jpg,,100
+Golosinas,Chocolate Sapito relleno x 1 Unid.,Chocolate Sapito relleno x 1 Unid.,260.00,192,https://davelcor.com.ar/wp-content/uploads/Chocolate-Sapito-relleno-x-1-Unid-240x240.jpg,,100
+Golosinas,Chocolatin Misky x 8 gr. – Blanco,Chocolatin Misky x 8 gr. – Blanco,330.00,800,https://davelcor.com.ar/wp-content/uploads/Chocolatin-Misky-x-8-gr.-Blanco-240x240.jpg,,100
+Golosinas,Chocolatin Misky x 8 gr. – Negro,Chocolatin Misky x 8 gr. – Negro,330.00,800,https://davelcor.com.ar/wp-content/uploads/Chocolatin-Misky-x-8-gr.-Negro-240x240.jpg,,100
+Golosinas,Chupetin Baby Doll x 4 Unid.,Chupetin Baby Doll x 4 Unid.,620.00,288,https://davelcor.com.ar/wp-content/uploads/Chupetin-Baby-Doll-x-4-Unid-240x240.jpg,,100
+Golosinas,Chupetin Bola Loca x 24 Unid. – Max (pote),Chupetin Bola Loca x 24 Unid. – Max (pote),3490.00,12,https://davelcor.com.ar/wp-content/uploads/Chupetin-Bola-Loca-x-24-Unid.-Max-pote-240x240.jpg,,100
+Golosinas,Chupetin Bull Dog Crazy x 1 Unid.,Chupetin Bull Dog Crazy x 1 Unid.,620.00,120,https://davelcor.com.ar/wp-content/uploads/Chupetin-Bull-Dog-Crazy-x-1-Unid-240x240.jpg,,100
+Golosinas,Chupetin Cebollitas x 40 Unid,Chupetin Cebollitas x 40 Unid,1780.00,24,https://davelcor.com.ar/wp-content/uploads/Chupetin-Cebollitas-x-40-Unid-240x240.jpg,,100
+Golosinas,Chupetin Fierita tatto x 1 Unid. – Tutty,Chupetin Fierita tatto x 1 Unid. – Tutty,140.00,600,https://davelcor.com.ar/wp-content/uploads/Chupetin-Fierita-tatto-x-1-Unid.-Tutty-240x240.jpg,,100
+Golosinas,Chupetin marengo doblete x 50 Unid.,Chupetin marengo doblete x 50 Unid.,2350.00,15,https://davelcor.com.ar/wp-content/uploads/Chupetin-marengo-doblete-x-50-Unid-240x240.jpg,,100
+Golosinas,Chupetin Mister Pops Evolution x 24 unid.- AZUL,Chupetin Mister Pops Evolution x 24 unid.- AZUL,5200.00,12,https://davelcor.com.ar/wp-content/uploads/Chupetin-Mister-Pops-Evolution-x-24-unid.-AZUL-240x240.jpg,,100
+Golosinas,Chupetin Mister Pops Evolution x 24 unid.- ROJO,Chupetin Mister Pops Evolution x 24 unid.- ROJO,5200.00,12,https://davelcor.com.ar/wp-content/uploads/Chupetin-Mister-Pops-Evolution-x-24-unid--240x240.jpg,,100
+Golosinas,Chupetin Pelotitas x 50 Unid. – Duo,Chupetin Pelotitas x 50 Unid. – Duo,2820.00,12,https://davelcor.com.ar/wp-content/uploads/Chupetin-Pelotitas-x-50-Unid.-Duo-240x240.jpg,,100
+Golosinas,Chupetin Pico Dulce pote x 48 Unid.,Chupetin Pico Dulce pote x 48 Unid.,9500.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Chupetin-Pico-Dulce-estuche-x-48-Unid-240x240.jpg,,100
+Golosinas,Chupetin Pito Pito x 24 Unid,Chupetin Pito Pito x 24 Unid,3300.00,12,https://davelcor.com.ar/wp-content/uploads/Chupetin-Pito-Pito-x-24-Unid-240x240.jpg,,100
+Golosinas,Chupetin Push Pop x 1 Unid.,Chupetin Push Pop x 1 Unid.,420.00,400,https://davelcor.com.ar/wp-content/uploads/Chupetin-Push-Pop-x-1-Unid-240x240.jpg,,100
+Golosinas,Chupetin Relleno Show Pop x 24 Unid. – Cereza,Chupetin Relleno Show Pop x 24 Unid. – Cereza,3530.00,18,https://davelcor.com.ar/wp-content/uploads/Chupetin-Relleno-Show-Pop-x-24-Unid.-Cereza-240x240.jpg,,100
+Golosinas,Chupetin Relleno Show Pop x 24 Unid. – Uva,Chupetin Relleno Show Pop x 24 Unid. – Uva,3530.00,18,https://davelcor.com.ar/wp-content/uploads/Chupetin-Relleno-Show-Pop-x-24-Unid.-Uva-240x240.jpg,,100
+Golosinas,Chupetin Ring Pop x 1 Unid,Chupetin Ring Pop x 1 Unid,330.00,432,https://davelcor.com.ar/wp-content/uploads/Chupetin-Ring-Pop-x-1-Unid.-Cereza-240x240.jpg,,100
+Golosinas,Chupetin Spring Pop x 1 Unid.,Chupetin Spring Pop x 1 Unid.,275.00,648,https://davelcor.com.ar/wp-content/uploads/Chupetin-Spring-Pop-x-1-Unid-240x240.jpg,,100
+Limpieza y Desinfección,Cif crema Original x 375 gr.,Cif crema Original x 375 gr.,2050.00,12,https://davelcor.com.ar/wp-content/uploads/2021/11/Cif-crema-Original-x-375-gr-240x240.jpg,,100
+Librería y Cotillon,Cinta Transparente Candela 48mm x 40 mt.,Cinta Transparente Candela 48mm x 40 mt.,0.00,36,https://davelcor.com.ar/wp-content/uploads/Cinta-Transparente-Candela-48mm-x-40-mt-240x240.jpg,,100
+Aderezos y Condimentos Velez,Clavo de olor entero Velez x 25 gr.,Clavo de olor entero Velez x 25 gr.,1650.00,10,https://davelcor.com.ar/wp-content/uploads/Clavo-de-olor-entero-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Coco rallado Velez x 25 gr.,Coco rallado Velez x 25 gr.,580.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Coco-rallado-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Comino Molido Velez x 25 gr.,Comino Molido Velez x 25 gr.,610.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Comino-Molido-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Condimento p/Arroz Velez x 25 gr.,Condimento p/Arroz Velez x 25 gr.,550.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Condimento-para-Arroz-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Condimento p/Pizza Velez x 25 gr.,Condimento p/Pizza Velez x 25 gr.,500.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Condimento-para-Pizza-Velez-x-25-gr-240x240.jpg,,100
+Snacks,Conitos Cops x 600 gr.,Conitos Cops x 600 gr.,7400.00,10,https://davelcor.com.ar/wp-content/uploads/Conitos-Cops-x-600-gr-240x240.jpg,,100
+Snacks,Conos Quento x 80 gr.,Conos Quento x 80 gr.,1890.00,24,https://davelcor.com.ar/wp-content/uploads/Conos-Quento-x-80-gr-240x240.jpg,,100
+Bazar y Hogar,Copon Gourmet Flint x 450 cc.,Copon Gourmet Flint x 450 cc.,2390.00,36,https://davelcor.com.ar/wp-content/uploads/Copon-Gourmet-x-450-cc-copia-240x240.jpg,,100
+Legumbres / Cereales,Copos azucarados Marcilli x 4 Kg.,Copos azucarados Marcilli x 4 Kg.,13500.00,100,https://davelcor.com.ar/wp-content/uploads/Copos-azucarados-Marcilli-x-4-Kg-240x240.jpg,,100
+Legumbres / Cereales,Copos naturales Marcilli x 3 kg.,Copos naturales Marcilli x 3 kg.,8650.00,100,https://davelcor.com.ar/wp-content/uploads/Copos-naturales-Marcilli-x-3-kg-240x240.jpg,,100
+Golosinas,Cubanito relleno Smack x 25 gr.,Cubanito relleno Smack x 25 gr.,260.00,48,https://davelcor.com.ar/wp-content/uploads/Cubanito-relleno-Smack-x-25-gr--240x240.jpg,,100
+Higiene Personal,Curitas Bandage x 100 Unid.,Curitas Bandage x 100 Unid.,4060.00,20000,https://davelcor.com.ar/wp-content/uploads/Curitas-Bandage-x-100-Unid-240x240.jpg,,100
+Higiene Personal,Dentifrico Colgate Triple Accion x 90 gr.,Dentifrico Colgate Triple Accion x 90 gr.,2150.00,144,https://davelcor.com.ar/wp-content/uploads/Dentifrico-Colgate-Triple-Accion-x-90-gr-240x240.jpg,,100
+Higiene Personal,Desodorante aerosol Rexona Odorono x 87 gr.,Desodorante aerosol Rexona Odorono x 87 gr.,3250.00,12,https://davelcor.com.ar/wp-content/uploads/Desodorante-aerosol-Rexona-Odorono-x-87-gr-1-240x240.jpg,,100
+Higiene Personal,Desodorante Axe Men x 90 gr.,Desodorante Axe Men x 90 gr.,3685.00,12,https://davelcor.com.ar/wp-content/uploads/Desodorante-Axe-Men-x-90-gr-1-240x240.jpg,,100
+Higiene Personal,Desodorante Crema Rexona Odorono x 60 gr.,Desodorante Crema Rexona Odorono x 60 gr.,2550.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Desodorante-Crema-Rexona-Odorono-x-60-gr-240x240.jpg,,100
+Higiene Personal,Desodorante Rexona Women x 90 gr.,Desodorante Rexona Women x 90 gr.,3950.00,12,https://davelcor.com.ar/wp-content/uploads/Desodorante-Rexona-Women-x-90-gr-240x240.jpg,,100
+Limpieza y Desinfección,Detergente Gigante Aloe x 750 cc.,Detergente Gigante Aloe x 750 cc.,1445.00,15,https://davelcor.com.ar/wp-content/uploads/2021/08/Detergente-Gigante-Aloe-x-750-cc-240x240.jpg,,100
+Limpieza y Desinfección,Detergente Gigante Limon x 750 cc.,Detergente Gigante Limon x 750 cc.,1445.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Detergente-Gigante-Limon-x-750-cc-240x240.jpg,,100
+Limpieza y Desinfección,Detergente Magistral x 225 cc.,Detergente Magistral x 225 cc.,1990.00,21,https://davelcor.com.ar/wp-content/uploads/Detergente-Magistral-x-225-cc-240x240.jpg,,100
+Gallletas - Discos de arroz y Tostadas,Discos de Arroz Rincon Integral con Sal x 100 gr.,Discos de Arroz Rincon Integral con Sal x 100 gr.,1065.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Discos-de-Arroz-Rincon-Integral-con-Sal-x-100-gr-240x240.jpg,,100
+Gallletas - Discos de arroz y Tostadas,Discos de Arroz Rincon Integral Dulce x 100 gr.,Discos de Arroz Rincon Integral Dulce x 100 gr.,1065.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Discos-de-Arroz-Rincon-Integral-Dulce-x-100-gr-240x240.jpg,,100
+Gallletas - Discos de arroz y Tostadas,Discos de Arroz Rincon Integral sin Sal  x 100 gr.,Discos de Arroz Rincon Integral sin Sal  x 100 gr.,1065.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Discos-de-Arroz-Rincon-Integral-sin-Sal-x-100-gr-240x240.jpg,,100
+Golosinas,Ducrem Avellana x 1 Unid.,Ducrem Avellana x 1 Unid.,160.00,864,https://davelcor.com.ar/wp-content/uploads/Ducrem-Vainilla-Chocolate-x-10-gr-240x240.jpg,,100
+Golosinas,Ducrem Ball Avellana x 1 Unid.,Ducrem Ball Avellana x 1 Unid.,435.00,324,https://davelcor.com.ar/wp-content/uploads/Ducrem-Ball-Avellana-x-1-Unid-240x240.jpg,,100
+Golosinas,Ducrem Dip con cereal x 1 Unid.,Ducrem Dip con cereal x 1 Unid.,435.00,324,https://davelcor.com.ar/wp-content/uploads/Ducrem-Dip-con-cereal-x-1-Unid-240x240.jpg,,100
+Golosinas,Ducrem Dip con Coloreti x 1 Unid.,Ducrem Dip con Coloreti x 1 Unid.,435.00,324,https://davelcor.com.ar/wp-content/uploads/Ducrem-Dip-con-Coloreti-x-1-Unid-240x240.jpg,,100
+Golosinas,Ducrem Napolitano x 1 Unid.,Ducrem Napolitano x 1 Unid.,160.00,864,https://davelcor.com.ar/wp-content/uploads/Ducrem-Napolitano-x-1-Unid-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Batata Orieta x 5 Kg.,Dulce de Batata Orieta x 5 Kg.,12165.00,1,https://davelcor.com.ar/wp-content/uploads/2021/05/Dulce-de-Batata-Orieta-x-5-Kg-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Batata Orieta x 500 gr.,Dulce de Batata Orieta x 500 gr.,1400.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Dulce-Batata-Orieta-x-500-gr-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de leche ILolay x 200 gr.,Dulce de leche ILolay x 200 gr.,1545.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Dulce-de-Leche-Ilolay-x-200-gr-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Leche Ilolay x 400 gr.,Dulce de Leche Ilolay x 400 gr.,2850.00,24,https://davelcor.com.ar/wp-content/uploads/Dulce-de-Leche-Ilolay-x-400-gr-2-1-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Membrillo 7 Dias x 2 Kg.,Dulce de Membrillo 7 Dias x 2 Kg.,5200.00,1,https://davelcor.com.ar/wp-content/uploads/Dulce-de-Membrillo-7-Dias-x-2-Kg-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Membrillo 7 Dias x 5 Kg.,Dulce de Membrillo 7 Dias x 5 Kg.,14500.00,1,https://davelcor.com.ar/wp-content/uploads/Dulce-de-Membrillo-7-Dias-x-5-Kg-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Membrillo De la Huerta x 2 Kg.,Dulce de Membrillo De la Huerta x 2 Kg.,5200.00,1,https://davelcor.com.ar/wp-content/uploads/Dulce-de-Membrillo-De-la-Huerta-x-2-Kg-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Membrillo De la Huerta x 5 Kg.,Dulce de Membrillo De la Huerta x 5 Kg.,14500.00,1,https://davelcor.com.ar/wp-content/uploads/Dulce-de-Membrillo-De-la-Huerta-x-5-Kg-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de membrillo orieta (Lata) x 5 kg.,Dulce de membrillo orieta (Lata) x 5 kg.,16480.00,2,https://davelcor.com.ar/wp-content/uploads/Dulce-de-membrillo-orieta-Lata-x-5-kg-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Membrillo Orieta x 500 gr.,Dulce de Membrillo Orieta x 500 gr.,1994.37,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Dulce-Membrillo-Orieta-x-500-gr-240x240.jpg,,100
+Snacks,Dulcitas de Frutilla Cops x 700 gr.,Dulcitas de Frutilla Cops x 700 gr.,3100.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Dulcitas-de-Frutilla-Cops-x-700-gr-240x240.jpg,,100
+Enlatados,Durazno en mitades Alcyone x 820 gr.,Durazno en mitades Alcyone x 820 gr.,2092.50,12,https://davelcor.com.ar/wp-content/uploads/Durazno-en-mitades-Alcyone-x-820-gr-240x240.jpg,,100
+Infusiones,Edulcorante Cañuelas x 500 cc. – Clasico,Edulcorante Cañuelas x 500 cc. – Clasico,1950.00,6,https://davelcor.com.ar/wp-content/uploads/Edulcorante-Canuelas-x-500-ml.-Clasico-240x240.jpg,,100
+Infusiones,Edulcorante Si Light x 500 cc.,Edulcorante Si Light x 500 cc.,1950.00,6,https://davelcor.com.ar/wp-content/uploads/Edulcorante-Si-Light-x-500-cc-240x240.jpg,,100
+Infusiones,Edulcorante Si Light x 500 cc. – Stevia,Edulcorante Si Light x 500 cc. – Stevia,2245.00,6,https://davelcor.com.ar/wp-content/uploads/Edulcorante-Si-Light-x-500-cc.-Stevia-240x240.jpg,,100
+Infusiones,Edulcorante Si Light x 600 cc.,Edulcorante Si Light x 600 cc.,2250.00,6,https://davelcor.com.ar/wp-content/uploads/Edulcorante-Si-Light-x-600-cc-240x240.jpg,,100
+Infusiones,Edulcorante Si Light x 600 cc. – Stevia,Edulcorante Si Light x 600 cc. – Stevia,2400.00,6,https://davelcor.com.ar/wp-content/uploads/Edulcorante-Si-Light-x-600-cc.-Stevia-240x240.jpg,,100
+Infusiones,Edulcorante Si-Diet x 200 cc.,Edulcorante Si-Diet x 200 cc.,1160.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Edulcorante-Si-Diet-x-200-cc-2-240x240.jpg,,100
+Infusiones,Edulcorante Si-Diet x 500 cc.,Edulcorante Si-Diet x 500 cc.,2180.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Edulcorante-Si-Diet-x-500-cc-240x240.jpg,,100
+Bazar y Hogar,Encendedor Cancun x 1 Unid.,Encendedor Cancun x 1 Unid.,210.00,1000,https://davelcor.com.ar/wp-content/uploads/Encendedor-Cancun-x-1-Unid-240x240.jpg,,100
+Bebidas sin alcohol,Energizante Monster x 500 cc. Negro,Energizante Monster x 500 cc. Negro,2650.00,6,https://davelcor.com.ar/wp-content/uploads/Energizante-Monster-x-500-cc.-Negro-240x240.jpg,,100
+Bebidas sin alcohol,Energizante Speed x 269 cc.,Energizante Speed x 269 cc.,1480.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Energizante-Speed-x-250-cc-240x240.jpg,,100
+Bazar y Hogar,Ensaladera Flint x 1605 cc.,Ensaladera Flint x 1605 cc.,3400.00,12,https://davelcor.com.ar/wp-content/uploads/Ensaladera-Flint-x-1605-cc-240x240.jpg,,100
+Bazar y Hogar,Escarbadientes Iberia x 1 Unid.,Escarbadientes Iberia x 1 Unid.,410.00,432,https://davelcor.com.ar/wp-content/uploads/Escarbadientes-Iberia-x-1-Unid-1-240x240.jpg,,100
+Accesorios de Limpieza,Escoba Jupiter DEA x 1 Unid.,Escoba Jupiter DEA x 1 Unid.,3100.00,12,https://davelcor.com.ar/wp-content/uploads/Escoba-Jupiter-DEA-x-1-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Escobillon Saturno DEA (6 hileras) x 1 Unid.,Escobillon Saturno DEA (6 hileras) x 1 Unid.,5100.00,12,https://davelcor.com.ar/wp-content/uploads/Escobillon-Saturno-DEA-6-hileras-x-1-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Escobillon Urano DEA (4 hileras) x 1 Unid.,Escobillon Urano DEA (4 hileras) x 1 Unid.,3100.00,12,https://davelcor.com.ar/wp-content/uploads/Escobillon-Urano-DEA-4-hileras-x-1-Unid-240x240.jpg,,100
+Aderezos y Condimentos Velez,Esencia de Vainilla Velez x 110 cc.,Esencia de Vainilla Velez x 110 cc.,1090.00,12,https://davelcor.com.ar/wp-content/uploads/Esencia-de-Vainilla-Velez-x-110-cc-240x240.jpg,,100
+Aderezos y Condimentos Velez,Esencia de vainilla Velez x 28 cc.,Esencia de vainilla Velez x 28 cc.,650.00,12,https://davelcor.com.ar/wp-content/uploads/Esencia-de-Vainilla-Velez-x-28-cc-240x240.jpg,,100
+Insecticidas,Espirales Eco x 10 Unid.,Espirales Eco x 10 Unid.,1690.00,60,https://davelcor.com.ar/wp-content/uploads/Espirales-Eco-x-10-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Esponja de Acero Gigante Seiko x 1 unid.,Esponja de Acero Gigante Seiko x 1 unid.,710.00,72,https://davelcor.com.ar/wp-content/uploads/Esponja-de-Acero-Gigante-Seiko-x-1-unid-240x240.jpg,,100
+Accesorios de Limpieza,Esponja de Acero Seiko x 1 Unid.,Esponja de Acero Seiko x 1 Unid.,350.00,480,https://davelcor.com.ar/wp-content/uploads/2021/05/Esponja-de-Acero-Seiko-x-1-Unid-1-240x240.jpg,,100
+Accesorios de Limpieza,Esponja de Bronce Seiko x 1 Unid.,Esponja de Bronce Seiko x 1 Unid.,510.00,480,https://davelcor.com.ar/wp-content/uploads/2021/05/Esponja-de-Bronce-Seiko-240x240.jpg,,100
+Accesorios de Limpieza,Esponja Fibro lisa Batuque x 1 Unid.,Esponja Fibro lisa Batuque x 1 Unid.,360.00,240,https://davelcor.com.ar/wp-content/uploads/2021/05/esponja-fibro-liso-batuque-240x240.jpg,,100
+Accesorios de Limpieza,Esponja salvauña Batuque x 1 Unid.,Esponja salvauña Batuque x 1 Unid.,450.00,240,https://davelcor.com.ar/wp-content/uploads/2021/05/Esponja-salvaunas-Batuque-x-1-Unid-240x240.jpg,,100
+Bebidas con alcohol,Espumante Dada 7 x 750 cc. – Blanco dulce,Espumante Dada 7 x 750 cc. – Blanco dulce,6500.00,6,https://davelcor.com.ar/wp-content/uploads/Espumante-Dada-7-x-750-cc.-Blanco-dulce-240x240.jpg,,100
+Bebidas con alcohol,Fernet Buhero Negro x 700 cc.,Fernet Buhero Negro x 700 cc.,9800.00,6,https://davelcor.com.ar/wp-content/uploads/Fernet-Buhero-Negro-x-700-cc-240x240.jpg,,100
+Fideos Baguel,Fideos Baguel Moños chico x 500 gr.,Fideos Baguel Moños chico x 500 gr.,1570.00,10,https://davelcor.com.ar/wp-content/uploads/Fideos-Baguel-Monos-chico-x-500-gr-240x240.jpg,,100
+Fideos San Agustin,Fideos San Agustin Ave María x 500 gr.,Fideos San Agustin Ave María x 500 gr.,630.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Fideos-San-Agustin-Ave-Maria-x-500-gr-240x240.jpg,,100
+Fideos San Agustin,Fideos San Agustin Municion x 500 gr.,Fideos San Agustin Municion x 500 gr.,630.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Fideos-San-Agustin-Municion-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Anillo x 500 gr.,Fideos Sbiroli Anillo x 500 gr.,995.00,12,https://davelcor.com.ar/wp-content/uploads/2021/06/woocommerce-placeholder-240x240.png,,100
+Fideos Sbiroli,Fideos Sbiroli Cabello de angel x 500 gr.,Fideos Sbiroli Cabello de angel x 500 gr.,1210.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Cabello-de-angel-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Entrefino x 500 gr.,Fideos Sbiroli Entrefino x 500 gr.,1125.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Entrefino-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Moñito Tricolor x 500 gr.,Fideos Sbiroli Moñito Tricolor x 500 gr.,1260.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Monito-Tricolor-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Moñito x 500 gr.,Fideos Sbiroli Moñito x 500 gr.,1210.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Monito-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Moño x 500 gr.,Fideos Sbiroli Moño x 500 gr.,1210.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Mono-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Mostachole rayado x 500 gr.,Fideos Sbiroli Mostachole rayado x 500 gr.,995.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Mostachole-rayado-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Nido Ancho x 500 gr.,Fideos Sbiroli Nido Ancho x 500 gr.,1125.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Nido-Ancho-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Nido Verde x 500 gr.,Fideos Sbiroli Nido Verde x 500 gr.,1125.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Nido-Verde-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Nidos Rojo x 500 gr.,Fideos Sbiroli Nidos Rojo x 500 gr.,1125.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Nidos-Rojo-x-500-gr-240x240.jpg,,100
+Fideos Sbiroli,Fideos Sbiroli Tallarines Laminados x 500 gr.,Fideos Sbiroli Tallarines Laminados x 500 gr.,1210.00,12,https://davelcor.com.ar/wp-content/uploads/2021/06/woocommerce-placeholder-240x240.png,,100
+Fideos Sbiroli,Fideos Sbiroli Tallarines Verdes x 500 gr.,Fideos Sbiroli Tallarines Verdes x 500 gr.,1210.00,12,https://davelcor.com.ar/wp-content/uploads/2021/06/woocommerce-placeholder-240x240.png,,100
+Fideos Sbiroli,Fideos Sbiroli Tirabuzon x 500 gr.,Fideos Sbiroli Tirabuzon x 500 gr.,995.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Sbiroli-Tirabuzon-x-500-gr-240x240.jpg,,100
+Fideos Verizzia,Fideos Verizzia Codo x 500 gr.,Fideos Verizzia Codo x 500 gr.,705.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Fideos-Verizzia-Codo-x-500-gr-240x240.jpg,,100
+Fideos Verizzia,Fideos Verizzia Mostachol x 500 gr.,Fideos Verizzia Mostachol x 500 gr.,705.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Fideos-Verizzia-Mostachol-x-500-gr--240x240.jpg,,100
+Fideos Verizzia,Fideos Verizzia Spaghetti x 500 gr.,Fideos Verizzia Spaghetti x 500 gr.,705.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/fideos-spaguetti-verizzia-x-500-gr-240x240.jpg,,100
+Fideos Verizzia,Fideos Verizzia Tallarin x 500 gr.,Fideos Verizzia Tallarin x 500 gr.,705.00,12,https://davelcor.com.ar/wp-content/uploads/Fideos-Verizzia-Tallarin-x-500-gr-1-240x240.jpg,,100
+Fideos Verizzia,Fideos Verizzia Tirabuzon x 500 gr.,Fideos Verizzia Tirabuzon x 500 gr.,705.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/fideos-tirabuson-verizzia-x-500-gr-240x240.jpg,,100
+Reposteria y Postres,Flan Vainilla Velez x 60 gr.,Flan Vainilla Velez x 60 gr.,650.00,8,https://davelcor.com.ar/wp-content/uploads/Flan-Vainilla-Velez-x-60-gr-240x240.jpg,,100
+Golosinas,Flynn Paff Tutti Frutti x 70 unid.,Flynn Paff Tutti Frutti x 70 unid.,6950.00,12,https://davelcor.com.ar/wp-content/uploads/2021/11/Flynn-Paff-Tutti-Frutti-x-70-unid-240x240.jpg,,100
+Bazar y Hogar,Fosforo de Bolsillo Fragata x 40 Unid.,Fosforo de Bolsillo Fragata x 40 Unid.,180.00,1000,https://davelcor.com.ar/wp-content/uploads/2021/05/Fosforo-de-Bolsillo-Fragata-x-40-Unid-240x240.jpg,,100
+Bazar y Hogar,Fuente oval apta horno x 1.5 Lt.,Fuente oval apta horno x 1.5 Lt.,7820.00,24,https://davelcor.com.ar/wp-content/uploads/Fuente-oval-apta-horno-x-1.5-Lt-240x240.jpg,,100
+Bazar y Hogar,Fuente redonda apta horno x 900 cc.,Fuente redonda apta horno x 900 cc.,7380.00,12,https://davelcor.com.ar/wp-content/uploads/Fuente-redonda-apta-horno-x-900-cc-240x240.jpg,,100
+Accesorios de Limpieza,Fuenton 11 Lt. DEA x 1 Unid.,Fuenton 11 Lt. DEA x 1 Unid.,2600.00,12,https://davelcor.com.ar/wp-content/uploads/Fuenton-11-Lt.-DEA-x-1-Unid-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de Oro Agridulce x 200 gr.,Galletas 9 de Oro Agridulce x 200 gr.,1160.00,20,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Agridulces-9-de-Oro-x-200-gr-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de Oro Azucarados x 210 gr.,Galletas 9 de Oro Azucarados x 210 gr.,1160.00,28,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-9-de-Oro-Azucarada-x-210-gr-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de Oro Canela x 160 gr.,Galletas 9 de Oro Canela x 160 gr.,990.00,10,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-Oro-Canela-x-160-gr-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de Oro Clasico x 200 gr.,Galletas 9 de Oro Clasico x 200 gr.,1160.00,24,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-Oro-Clasicas-x-200-gr-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de oro Crujitas x 120gr – Cebolla y Crema,Galletas 9 de oro Crujitas x 120gr – Cebolla y Crema,970.00,16,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-oro-Crujitas-x-120gr-Cebolla-y-Crema-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de oro Crujitas x 120gr – Clasica,Galletas 9 de oro Crujitas x 120gr – Clasica,970.00,16,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-oro-Crujitas-x-120gr-Clasica-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de oro Crujitas x 120gr – Hierbas,Galletas 9 de oro Crujitas x 120gr – Hierbas,970.00,16,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-oro-Crujitas-x-120gr-Hierbas-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de oro Crujitas x 120gr – Jamon Serrano,Galletas 9 de oro Crujitas x 120gr – Jamon Serrano,970.00,16,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-oro-Crujitas-x-120gr-Jamon-Serrano-240x240.jpg,,100
+Galletas 9 de Oro,Galletas 9 de oro Crujitas x 120gr – Queso,Galletas 9 de oro Crujitas x 120gr – Queso,970.00,16,https://davelcor.com.ar/wp-content/uploads/Galletas-9-de-oro-Crujitas-x-120gr-Queso-240x240.jpg,,100
+Galletas,Galletas con Chip de Chocolate Turimar x 400 gr.,Galletas con Chip de Chocolate Turimar x 400 gr.,1910.00,16,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-con-chips-Turimar-x-400-gr-240x240.jpg,,100
+Galletas,Galletas de hojaldre Mafalda Triangulitos x 150 gr.,Galletas de hojaldre Mafalda Triangulitos x 150 gr.,1010.00,18,https://davelcor.com.ar/wp-content/uploads/Galletas-Triangulitos-de-hojaldre-Mafalda-x-150-gr-2-240x240.jpg,,100
+Galletas,Galletas Fulbito Caramel x 120 gr.,Galletas Fulbito Caramel x 120 gr.,320.00,15,https://davelcor.com.ar/wp-content/uploads/Galletas-Fulbito-Caramel-x-120-gr-240x240.jpg,,100
+Galletas,Galletas Kukinas rellenas x 65 gr. – Chocolate,Galletas Kukinas rellenas x 65 gr. – Chocolate,320.00,58,https://davelcor.com.ar/wp-content/uploads/Galletas-Kukinas-rellenas-x-65-gr.-Chocolate-240x240.jpg,,100
+Galletas,Galletas Kukinas rellenas x 65 gr. – Frutilla,Galletas Kukinas rellenas x 65 gr. – Frutilla,320.00,58,https://davelcor.com.ar/wp-content/uploads/Galletas-Kukinas-rellenas-x-65-gr.-Vainilla-240x240.jpg,,100
+Galletas,Galletas Mauri Fauna x 400 gr.,Galletas Mauri Fauna x 400 gr.,1950.00,12,https://davelcor.com.ar/wp-content/uploads/Galletas-Mauri-Fauna-x-400-gr-240x240.jpg,,100
+Galletas,Galletas Media Tarde x 330 gr.,Galletas Media Tarde x 330 gr.,1430.00,14,https://davelcor.com.ar/wp-content/uploads/2021/05/galletas-de-agua-media-tarde-x300-gr-240x240.jpg,,100
+Galletas,Galletas mini Oreo x 50 gr.,Galletas mini Oreo x 50 gr.,900.00,54,https://davelcor.com.ar/wp-content/uploads/2021/08/Galletas-mini-Oreo-x-50-gr-240x240.jpg,,100
+Galletas,Galletas Oreo x 118 gr.,Galletas Oreo x 118 gr.,1520.00,36,https://davelcor.com.ar/wp-content/uploads/2021/07/Galletas-Oreo-x-118-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Choco x 220 gr.,Galletas Pamela Choco x 220 gr.,1350.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Choco-x-230-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Mini Chips x 180 gr.,Galletas Pamela Mini Chips x 180 gr.,1190.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Chips-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Mini Chocolate x 180 gr.,Galletas Pamela Mini Chocolate x 180 gr.,1040.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Chocolate-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Mini Coco x 180 gr.,Galletas Pamela Mini Coco x 180 gr.,1040.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Coco-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Mini Limon x 180 gr.,Galletas Pamela Mini Limon x 180 gr.,1040.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Limon-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Mini Manteca x 180 gr.,Galletas Pamela Mini Manteca x 180 gr.,1040.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Manteca-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pamela Mini Scones x 180 gr.,Galletas Pamela Mini Scones x 180 gr.,1040.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Pamela-Scones-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pepas Delicias de la Nona x 160 gr. – Bañadas,Galletas Pepas Delicias de la Nona x 160 gr. – Bañadas,690.00,30,https://davelcor.com.ar/wp-content/uploads/Galletas-Pepas-Delicias-de-la-Nona-x-160-gr.-Banadas-240x240.jpg,,100
+Galletas,Galletas Pepas Delicias de la Nona x 180 gr.,Galletas Pepas Delicias de la Nona x 180 gr.,690.00,24,https://davelcor.com.ar/wp-content/uploads/Pepas-Delicias-de-la-Nona-x-180-gr-240x240.jpg,,100
+Galletas,Galletas Pepas Delicias de la Nona x 180 gr. – Batata,Galletas Pepas Delicias de la Nona x 180 gr. – Batata,690.00,24,https://davelcor.com.ar/wp-content/uploads/Galletas-Pepas-Delicias-de-la-Nona-x-180-gr.-Batata-240x240.jpg,,100
+Galletas,Galletas Pepas Delicias de la Nona x 350 gr.,Galletas Pepas Delicias de la Nona x 350 gr.,1345.00,14,https://davelcor.com.ar/wp-content/uploads/Pepas-Delicias-de-la-Nona-x-350-gr-240x240.jpg,,100
+Galletas,Galletas Pepas Trio x 500 gr.,Galletas Pepas Trio x 500 gr.,2090.00,10,https://davelcor.com.ar/wp-content/uploads/Galletas-Pepas-Trio-x-500-gr-240x240.jpg,,100
+Galletas,Galletas Pepitos x 119 gr.,Galletas Pepitos x 119 gr.,1615.00,60,https://davelcor.com.ar/wp-content/uploads/Galletas-Pepitos-x-119-gr--240x240.jpg,,100
+Galletas,Galletas Polvorita x 80 gr. – Chocolate,Galletas Polvorita x 80 gr. – Chocolate,550.00,40,https://davelcor.com.ar/wp-content/uploads/Galletas-Polvorita-Chocolate-x-80-gr--240x240.jpg,,100
+Galletas,Galletas Polvorita x 80 gr. – Frutilla,Galletas Polvorita x 80 gr. – Frutilla,550.00,40,https://davelcor.com.ar/wp-content/uploads/Galletas-Polvorita-x-80-gr.-Frutilla-240x240.jpg,,100
+Galletas,Galletas Polvorita x 80 gr. – Vainilla,Galletas Polvorita x 80 gr. – Vainilla,550.00,40,https://davelcor.com.ar/wp-content/uploads/Galletas-Polvorita-Vainilla-x-80-gr.-Vainilla-240x240.jpg,,100
+Galletas,Galletas Salvado Mauri x 210 gr.,Galletas Salvado Mauri x 210 gr.,1340.00,20,https://davelcor.com.ar/wp-content/uploads/Galletas-Salvado-Mauri-x-210-gr-240x240.jpg,,100
+Galletas,Galletas Surtidas Edra x 300 gr.,Galletas Surtidas Edra x 300 gr.,999.99,15,https://davelcor.com.ar/wp-content/uploads/Galletas-Surtidas-Edra-x-300-gr-240x240.jpg,,100
+Galletas,Galletas Variette Trio x 500 gr.,Galletas Variette Trio x 500 gr.,2090.00,10,https://davelcor.com.ar/wp-content/uploads/Galletas-Variette-Trio-x-500-gr-240x240.jpg,,100
+Galletas,Galletas Vocacion clasica x 141 gr.,Galletas Vocacion clasica x 141 gr.,830.00,36,https://davelcor.com.ar/wp-content/uploads/2021/05/Galletas-Vocacion-x-141-gr-240x240.jpg,,100
+Enlatados,Garbanzo Inalpa x 300 gr.,Garbanzo Inalpa x 300 gr.,770.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Garbanzo-Inalpa-x-350-gr-240x240.jpg,,100
+Reposteria y Postres,Gelatina Cereza Velez x 40 gr.,Gelatina Cereza Velez x 40 gr.,820.00,48,https://davelcor.com.ar/wp-content/uploads/Gelatina-Cereza-Velez-x-40-gr-240x240.jpg,,100
+Reposteria y Postres,Gelatina Diet Cereza Velez x 25 gr.,Gelatina Diet Cereza Velez x 25 gr.,820.00,48,https://davelcor.com.ar/wp-content/uploads/Gelatina-Diet-Cereza-Velez-x-25-gr-240x240.jpg,,100
+Reposteria y Postres,Gelatina Diet Durazno Velez x 25 gr.,Gelatina Diet Durazno Velez x 25 gr.,820.00,48,https://davelcor.com.ar/wp-content/uploads/Gelatina-Diet-Durazno-Velez-x-25-gr-240x240.jpg,,100
+Reposteria y Postres,Gelatina Frutilla Velez x 40 gr.,Gelatina Frutilla Velez x 40 gr.,820.00,48,https://davelcor.com.ar/wp-content/uploads/Gelatina-Frutilla-Velez-x-40-gr-240x240.jpg,,100
+Reposteria y Postres,Gelatina Manzana verde Velez x 40 gr.,Gelatina Manzana verde Velez x 40 gr.,820.00,48,https://davelcor.com.ar/wp-content/uploads/Gelatina-Manzana-verde-Velez-x-40-gr-240x240.jpg,,100
+Reposteria y Postres,Gelatina Sin Sabor Velez x 42 gr.,Gelatina Sin Sabor Velez x 42 gr.,980.00,8,https://davelcor.com.ar/wp-content/uploads/Gelatina-Sin-Sabor-Velez-x-42-gr-240x240.jpg,,100
+Bebidas con alcohol,Gin Bulldog x 750 cc.,Gin Bulldog x 750 cc.,33800.00,6,https://davelcor.com.ar/wp-content/uploads/Gin-Bulldog-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Ginebra Llave x 700 cc.,Ginebra Llave x 700 cc.,6565.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Ginebra-Llave-x-750-cc-240x240.jpg,,100
+Golosinas,Gomas Confitadas Bolix x 500 gr.,Gomas Confitadas Bolix x 500 gr.,4700.00,1,https://davelcor.com.ar/wp-content/uploads/Gomas-Confitadas-Bolix-x-500-gr-240x240.jpg,,100
+Golosinas,Gomitas Fantasia Misky x 1 Kg.,Gomitas Fantasia Misky x 1 Kg.,9269.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Gomitas-Fantasia-Misky-x-1-Kg-240x240.jpg,,100
+Golosinas,Gomitas Jelly Roll Misky x 1 Kg.,Gomitas Jelly Roll Misky x 1 Kg.,9269.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Gomitas-Jelly-Roll-MIsky-x-1-Kg-240x240.jpg,,100
+Golosinas,Gomitas Piñata Anillos x 700 gr.,Gomitas Piñata Anillos x 700 gr.,5295.00,8,https://davelcor.com.ar/wp-content/uploads/2021/06/Gomitas-Pinata-Anillos-x-700-gr--240x240.jpg,,100
+Golosinas,Gomitas Piñata Eucalipto x 700 gr.,Gomitas Piñata Eucalipto x 700 gr.,5295.00,8,https://davelcor.com.ar/wp-content/uploads/Gomitas-Pinata-Eucalipto-x-700-gr-240x240.jpg,,100
+Golosinas,Gomitas Piñata Fantasia x 700 gr.,Gomitas Piñata Fantasia x 700 gr.,5295.00,8,https://davelcor.com.ar/wp-content/uploads/Gomitas-Pinata-Fantasia-x-700-gr-240x240.jpg,,100
+Golosinas,Gomitas Piñata Huesitos x 700 gr.,Gomitas Piñata Huesitos x 700 gr.,5295.00,8,https://davelcor.com.ar/wp-content/uploads/Gomitas-Pinata-Huesitos-x-700-gr-240x240.jpg,,100
+Golosinas,Gomitas Piñata Redondas x 700 gr.,Gomitas Piñata Redondas x 700 gr.,5295.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Gomitas-Pinata-Fantasia-x-700-gr--240x240.jpg,,100
+Golosinas,Gomitas Yummy x 30 gr. – Moritas,Gomitas Yummy x 30 gr. – Moritas,480.00,144,https://davelcor.com.ar/wp-content/uploads/Gomitas-Yummy-Moritas-x-30-gr-240x240.jpg,,100
+Golosinas,Gomitas Yummy x 30 gr. – Ositos,Gomitas Yummy x 30 gr. – Ositos,480.00,144,https://davelcor.com.ar/wp-content/uploads/Gomitas-Yummy-Ositos-x-30-gr-240x240.jpg,,100
+Golosinas,Gomitas Yummy x 500 gr. – Frutilla a la crema,Gomitas Yummy x 500 gr. – Frutilla a la crema,5300.00,6,https://davelcor.com.ar/wp-content/uploads/Gomitas-Yummy-x-500-gr.-Frutilla-a-la-crema-240x240.jpg,,100
+Golosinas,Gomitas Yummy x 500 gr. – Moritas,Gomitas Yummy x 500 gr. – Moritas,5300.00,6,https://davelcor.com.ar/wp-content/uploads/Gomitas-Yummy-x-500-gr.-Moritas-240x240.jpg,,100
+Golosinas,Gomitas Yummy x 500 gr. – Ositos,Gomitas Yummy x 500 gr. – Ositos,5300.00,6,https://davelcor.com.ar/wp-content/uploads/Gomitas-Yummy-Ositos-x-500-gr-240x240.jpg,,100
+Varios,Grasa Ultra x 500 gr.- Cerdo,Grasa Ultra x 500 gr.- Cerdo,3300.00,24,https://davelcor.com.ar/wp-content/uploads/Grasa-Ultra-x-500-gr.-Cerdo-240x240.jpg,,100
+Varios,Grasa Ultra x 500 gr.- Vacuna,Grasa Ultra x 500 gr.- Vacuna,2440.00,24,https://davelcor.com.ar/wp-content/uploads/Grasa-Ultra-x-500-gr.-Vacuna-240x240.jpg,,100
+Panificados,Grisines finos blanco Firenze x 200 gr.,Grisines finos blanco Firenze x 200 gr.,1690.00,25,https://davelcor.com.ar/wp-content/uploads/Grisines-finos-blanco-Firenze-x-200-gr--240x240.jpg,,100
+Accesorios de Limpieza,Guantes de latex afelpados Batuque x 1 Unid. – Chico,Guantes de latex afelpados Batuque x 1 Unid. – Chico,1850.00,144,https://davelcor.com.ar/wp-content/uploads/Guantes-de-latex-afelpados-Batuque-x-1-Unid.-Chico-240x240.jpg,,100
+Harinas,Harina 000 Cañuelas x 1 Kg.,Harina 000 Cañuelas x 1 Kg.,880.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Harina-000-Canuelas-x-1-Kg-240x240.jpg,,100
+Harinas,Harina 000 Graciela x 1 Kg.,Harina 000 Graciela x 1 Kg.,880.00,10,https://davelcor.com.ar/wp-content/uploads/Harina-000-Graciela-x-1-Kg-240x240.jpg,,100
+Harinas,Harina 000 Verizzia x 1 Kg.,Harina 000 Verizzia x 1 Kg.,810.00,10,https://davelcor.com.ar/wp-content/uploads/Harina-000-Verizzia-x-1-Kg-240x240.jpg,,100
+Harinas,Harina 0000 Pureza x 1 Kg.,Harina 0000 Pureza x 1 Kg.,1200.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Harina-0000-Pureza-x-1-Kg-240x240.jpg,,100
+Harinas,Harina Leudante Pureza x 1 Kg.,Harina Leudante Pureza x 1 Kg.,1450.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Harina-Leudante-Pureza-x-1-kg-240x240.jpg,,100
+Harinas,Harina para pizza Pureza x 1 Kg.,Harina para pizza Pureza x 1 Kg.,1710.00,10,https://davelcor.com.ar/wp-content/uploads/Harina-para-pizza-Pureza-x-1-Kg-240x240.jpg,,100
+Golosinas,Huevos Sapito x 28 gr.,Huevos Sapito x 28 gr.,870.00,96,https://davelcor.com.ar/wp-content/uploads/Huevos-Sapito-x-28-gr-240x240.jpg,,100
+Insecticidas,Insec Selton Rojo x 360 cc.,Insec Selton Rojo x 360 cc.,4160.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Insecticida-Selton-x-360-cc-240x240.jpg,,100
+Insecticidas,Insecticida Raid – Extermidor Cucarachas x 360 cc.,Insecticida Raid – Extermidor Cucarachas x 360 cc.,4580.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Raid-aero-Extermidor-Cucarachas-x-360-cc-240x240.jpg,,100
+Higiene Personal,Jabon Antibacterial Kenia x 80 gr.,Jabon Antibacterial Kenia x 80 gr.,650.00,64,https://davelcor.com.ar/wp-content/uploads/Jabon-Antibacterial-Kenia-x-80-gr-240x240.jpg,,100
+Para Ropa,Jabon Blanco Cosquin (en pan) x 200 gr.,Jabon Blanco Cosquin (en pan) x 200 gr.,800.00,48,https://davelcor.com.ar/wp-content/uploads/Jabon-Blanco-Cosquin-en-pan-x-200-gr-240x240.jpg,,100
+Para Ropa,Jabon Blanco Gigante (en pan) x 120 gr.,Jabon Blanco Gigante (en pan) x 120 gr.,655.00,64,https://davelcor.com.ar/wp-content/uploads/2021/05/Jabon-en-pan-Gigante-x-120-gr-240x240.jpg,,100
+Para Ropa,Jabon Blanco Gigante (en pan) x 150 gr.,Jabon Blanco Gigante (en pan) x 150 gr.,780.00,72,https://davelcor.com.ar/wp-content/uploads/2021/05/Jabon-en-pan-Gigante-x-150-gr-240x240.jpg,,100
+Para Ropa,Jabon Blanco Gigante (en pan) x 200 gr.,Jabon Blanco Gigante (en pan) x 200 gr.,1000.00,72,https://davelcor.com.ar/wp-content/uploads/2021/05/Jabon-Puro-Gigante-x-200-gr-240x240.jpg,,100
+Higiene Personal,Jabon colormix Kenia 3 x 80 gr.,Jabon colormix Kenia 3 x 80 gr.,1375.00,32,https://davelcor.com.ar/wp-content/uploads/Jabon-colormix-Kenia-3-x-80-gr-240x240.jpg,,100
+Higiene Personal,Jabon Duc x 15 gr.,Jabon Duc x 15 gr.,150.00,240,https://davelcor.com.ar/wp-content/uploads/Jabon-Duc-x-15-gr-240x240.jpg,,100
+Para Ropa,Jabon en polvo Matic Ala x 400 gr.,Jabon en polvo Matic Ala x 400 gr.,1300.00,24,https://davelcor.com.ar/wp-content/uploads/Jabon-en-polvo-Matic-Ala-x-400-gr-240x240.jpg,,100
+Para Ropa,Jabon Liquido Ala x 800 cc.,Jabon Liquido Ala x 800 cc.,2990.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Jabon-Liquido-Ala-x-800-cc-240x240.jpg,,100
+Para Ropa,Jabon Liquido p/ropa Gigante Bio x 900 cc.,Jabon Liquido p/ropa Gigante Bio x 900 cc.,2650.00,15,https://davelcor.com.ar/wp-content/uploads/Jabon-Liquido-para-ropa-Gigante-Bio-x-900-cc-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens 3 x 90 gr. – Citrica,Jabon tocador Qsens 3 x 90 gr. – Citrica,1100.00,40,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-3-x-90-gr.-Citrica-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens 3 x 90 gr. – Floral,Jabon tocador Qsens 3 x 90 gr. – Floral,1100.00,40,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-3-x-90-gr.-Floral-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens 3 x 90 gr. – Jardines Blancos,Jabon tocador Qsens 3 x 90 gr. – Jardines Blancos,1100.00,40,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-3-x-90-gr.-Jardines-Blancos-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens 3 x 90 gr. – Marina,Jabon tocador Qsens 3 x 90 gr. – Marina,1100.00,40,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-3-x-90-gr.-Marina-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens x 90 gr. – Citrica,Jabon tocador Qsens x 90 gr. – Citrica,380.00,120,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-x-90-gr.-Citrica-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens x 90 gr. – Floral,Jabon tocador Qsens x 90 gr. – Floral,380.00,120,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-x-90-gr.-Floral-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens x 90 gr. – Jardines Blancos,Jabon tocador Qsens x 90 gr. – Jardines Blancos,380.00,120,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-x-90-gr.-Jardines-Blancos-240x240.jpg,,100
+Higiene Personal,Jabon tocador Qsens x 90 gr. – Marina,Jabon tocador Qsens x 90 gr. – Marina,380.00,120,https://davelcor.com.ar/wp-content/uploads/Jabon-tocador-Qsens-x-90-gr.-Marina-240x240.jpg,,100
+Enlatados,Jardinera Inalpa x 300 gr.,Jardinera Inalpa x 300 gr.,770.00,24,https://davelcor.com.ar/wp-content/uploads/Jardinera-Inalpa-x-300-gr-240x240.jpg,,100
+Jugos,Jugo de Naranja 100% exprimido Baggio x 1 Lt.,Jugo de Naranja 100% exprimido Baggio x 1 Lt.,2710.00,12,https://davelcor.com.ar/wp-content/uploads/Jugo-Baggio-100-exprimido-x-1-Lt.-Naranja-240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 1 Lt. – Durazno,Jugo Pronto Baggio x 1 Lt. – Durazno,1650.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-1-Lt.-Durazno-240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 1 Lt. – Manzana,Jugo Pronto Baggio x 1 Lt. – Manzana,1650.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-1-Lt.-Manzana--240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 1 Lt. – Multifruta,Jugo Pronto Baggio x 1 Lt. – Multifruta,1650.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-1-Lt.-Multifruta--240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 1 Lt. – Naranja,Jugo Pronto Baggio x 1 Lt. – Naranja,1650.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-1-Lt.-Naranja--240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 125 cc. – Durazno,Jugo Pronto Baggio x 125 cc. – Durazno,340.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-125-cc.-Durazno-240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 125 cc. – Multifruta,Jugo Pronto Baggio x 125 cc. – Multifruta,340.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-125-cc.-Multifruta-240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 200 cc. – Durazno,Jugo Pronto Baggio x 200 cc. – Durazno,490.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-200-cc.-Durazno-240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 200 cc. – Manzana,Jugo Pronto Baggio x 200 cc. – Manzana,490.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-200-cc.-Manzana-240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 200 cc. – Multifruta,Jugo Pronto Baggio x 200 cc. – Multifruta,490.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-200-cc.-Multifruta--240x240.jpg,,100
+Jugos Pronto,Jugo Pronto Baggio x 200 cc. – Naranja,Jugo Pronto Baggio x 200 cc. – Naranja,490.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Jugo-Pronto-Baggio-x-200-cc.-Naranja-240x240.jpg,,100
+Jugos,Jugo Rinde Dos Anana-Piña x 18 gr. (10 sobres),Jugo Rinde Dos Anana-Piña x 18 gr. (10 sobres),495.00,240,https://davelcor.com.ar/wp-content/uploads/sobre_anana_AR-240x240.png,,100
+Jugos,Jugo Rinde Dos Frutilla x 18 gr. (10 sobre),Jugo Rinde Dos Frutilla x 18 gr. (10 sobre),495.00,240,https://davelcor.com.ar/wp-content/uploads/sobre_frutilla_AR-240x240.png,,100
+Jugos,Jugo Rinde Dos Limon x 18 gr. (10 sobres),Jugo Rinde Dos Limon x 18 gr. (10 sobres),495.00,240,https://davelcor.com.ar/wp-content/uploads/sobre_limon_AR-240x240.png,,100
+Jugos,Jugo Rinde Dos Manzana x 18 gr. (10 sobres),Jugo Rinde Dos Manzana x 18 gr. (10 sobres),495.00,240,https://davelcor.com.ar/wp-content/uploads/sobre_manzana_AR-240x240.png,,100
+Jugos,Jugo Rinde Dos Naranja x 18 gr. (10 sobres),Jugo Rinde Dos Naranja x 18 gr. (10 sobres),495.00,240,https://davelcor.com.ar/wp-content/uploads/sobre_naranja_AR-240x240.png,,100
+Jugos,Jugo Rinde Dos Pera x 18 gr. (10 sobres),Jugo Rinde Dos Pera x 18 gr. (10 sobres),495.00,240,https://davelcor.com.ar/wp-content/uploads/sobre_pera_AR-240x240.png,,100
+Jugos,Jugos Pepito x 160 cc. – Durazno,Jugos Pepito x 160 cc. – Durazno,440.00,18,https://davelcor.com.ar/wp-content/uploads/Jugos-Pepito-x-160-cc.-Durazno-240x240.jpg,,100
+Jugos,Jugos Pepito x 160 cc. – Multifruta,Jugos Pepito x 160 cc. – Multifruta,440.00,18,https://davelcor.com.ar/wp-content/uploads/Jugos-Pepito-x-160-cc.-Multifruta-240x240.jpg,,100
+Jugos,Jugos Tang Multifruta x 18 gr.,Jugos Tang Multifruta x 18 gr.,390.00,240,https://davelcor.com.ar/wp-content/uploads/Jugos-Tang-Multifruta-x-18-gr-240x240.jpg,,100
+Jugos,Jugos Tang Naranja Dulce x 18 gr.,Jugos Tang Naranja Dulce x 18 gr.,390.00,240,https://davelcor.com.ar/wp-content/uploads/Jugos-Tang-Naranja-Dulce-x-18-gr-240x240.jpg,,100
+Jugos,Jugos Tang Naranja-Banana x 18 gr.,Jugos Tang Naranja-Banana x 18 gr.,390.00,240,https://davelcor.com.ar/wp-content/uploads/Jugos-Tang-Naranja-Banana-x-18-gr-240x240.jpg,,100
+Jugos,Jugos Tang Naranja-Durazno x 18 gr.,Jugos Tang Naranja-Durazno x 18 gr.,390.00,240,https://davelcor.com.ar/wp-content/uploads/Jugos-Tang-Naranja-Durazno-x-18-gr-240x240.jpg,,100
+Electricidad e Iluminación,Lampara Led Fria Tacoma 12W,Lampara Led Fria Tacoma 12W,920.00,20,https://davelcor.com.ar/wp-content/uploads/Lampara-Led-Fria-Tacoma-12W-240x240.jpg,,100
+Electricidad e Iluminación,Lampara Led Fria Tacoma 15W,Lampara Led Fria Tacoma 15W,1090.00,20,https://davelcor.com.ar/wp-content/uploads/Lampara-Led-Fria-Tacoma-15W-240x240.jpg,,100
+Electricidad e Iluminación,Lampara Led Fria Tacoma 9W,Lampara Led Fria Tacoma 9W,750.00,20,https://davelcor.com.ar/wp-content/uploads/Lampara-Led-Fria-Tacoma-9W-240x240.jpg,,100
+Accesorios de Limpieza,Lana de acero Batuque x 10 Unid.,Lana de acero Batuque x 10 Unid.,650.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Lana-de-acero-Batuque-x-10-Unid-240x240.jpg,,100
+Librería y Cotillon,Lapicera Bic Cristal  x 1 Unid. – Negro,Lapicera Bic Cristal  x 1 Unid. – Negro,820.00,1200,https://davelcor.com.ar/wp-content/uploads/Lapiceras-Bic-Cristal-x-1-Unid.-Negro-240x240.jpg,,100
+Librería y Cotillon,Lapicera Bic x 1 Unid. – Negro,Lapicera Bic x 1 Unid. – Negro,680.00,1200,https://davelcor.com.ar/wp-content/uploads/Lapiceras-Bic-x-1-Unid.-Negro-240x240.jpg,,100
+Limpieza y Desinfección,Lavandina Ayudin x 1 Lt.,Lavandina Ayudin x 1 Lt.,1095.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/lavandina-ayudin-x-1-Lt.-240x240.jpg,,100
+Lacteos,Leche Chocolatada Ilolay x 1 Lt.,Leche Chocolatada Ilolay x 1 Lt.,2750.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Leche-Chocolatada-Ilolay-x-1000-cc-240x240.jpg,,100
+Lacteos,Leche Chocolatada Shake x 200 cc.,Leche Chocolatada Shake x 200 cc.,595.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/Leche-chocolatada-shake-x-200-cc-240x240.jpg,,100
+Lacteos,Leche en polvo Maxima x 800 gr.,Leche en polvo Maxima x 800 gr.,5300.00,16,https://davelcor.com.ar/wp-content/uploads/Leche-en-polvo-Maxima-x-800-gr-240x240.jpg,,100
+Lacteos,Leche Ilolay larga vida Descremada x 1 Lt.,Leche Ilolay larga vida Descremada x 1 Lt.,2250.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Leche-descr-larga-vida-Ilolay-x-1-Lt-240x240.jpg,,100
+Lacteos,Leche Ilolay larga vida Entera x 1 Lt.,Leche Ilolay larga vida Entera x 1 Lt.,2250.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Leche-entera-larga-vida-Ilolay-x-1-Lt-240x240.jpg,,100
+Lacteos,Leche larga vida Latte Baggio x 200 cc. – Entera,Leche larga vida Latte Baggio x 200 cc. – Entera,395.00,18,https://davelcor.com.ar/wp-content/uploads/Leche-Latte-Baggio-entera-x-200-cc-240x240.jpg,,100
+Golosinas,Lengüetazo Tutty-fruti x 1 Unid.,Lengüetazo Tutty-fruti x 1 Unid.,225.00,576,https://davelcor.com.ar/wp-content/uploads/Lenguetazo-Tutty-fruti-x-1-Unid-240x240.jpg,,100
+Enlatados,Lentejas en lata Inalpa x 300 gr.,Lentejas en lata Inalpa x 300 gr.,880.00,24,https://davelcor.com.ar/wp-content/uploads/Lenteja-en-lata-Inalpa-x-300-gr-240x240.jpg,,100
+Legumbres / Cereales,Lentejas Trofy x 400 gr.,Lentejas Trofy x 400 gr.,890.00,10,https://davelcor.com.ar/wp-content/uploads/Lenteja-Trofy-x-400-gr-240x240.jpg,,100
+Legumbres / Cereales,Lentejas Verizzia x 400 gr.,Lentejas Verizzia x 400 gr.,1050.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/lentejas-verizzia-x-400-gr-240x240.jpg,,100
+Reposteria y Postres,Levadura en polvo Levex x 10 gr.,Levadura en polvo Levex x 10 gr.,560.00,50,https://davelcor.com.ar/wp-content/uploads/2021/05/Levadura-en-polvo-Levex-x-10-gr-240x240.jpg,,100
+Bebidas con alcohol,Licor Cafe al Cogñac La Triestina x 750 cc.,Licor Cafe al Cogñac La Triestina x 750 cc.,4250.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-cafe-al-cognac-La-Triestina-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Licor Chocolate La Triestina x 750 cc.,Licor Chocolate La Triestina x 750 cc.,4875.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-Chocolate-La-Triestina-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Licor Dulce de leche La Triestina x 750 cc.,Licor Dulce de leche La Triestina x 750 cc.,4875.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-Dulce-de-leche-La-Triestina-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Licor Frutilla La Triestina x 750 cc.,Licor Frutilla La Triestina x 750 cc.,4250.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-Frutilla-La-Triestina-x-750-cc--240x240.jpg,,100
+Limpieza y Desinfección,Limpiador Cocina doy pack Ayudin x 450 cc.,Limpiador Cocina doy pack Ayudin x 450 cc.,1650.00,16,https://davelcor.com.ar/wp-content/uploads/Limpiador-Cocina-doy-pack-Ayudin-x-450-cc-240x240.jpg,,100
+Limpieza y Desinfección,Limpiador Liquido Gigante x 900 cc.,Limpiador Liquido Gigante x 900 cc.,1520.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/Limpiador-Liq.-Gigante-x-900-cc-240x240.jpg,,100
+Limpieza y Desinfección,Limpiador Liquido Poett x 900 cc.,Limpiador Liquido Poett x 900 cc.,1659.15,12,https://davelcor.com.ar/wp-content/uploads/Limpiador-Liquido-Poett-x-900-cc-240x240.jpg,,100
+Limpieza y Desinfección,Limpiador p/Baños doy pack Gigante x 500 cc.,Limpiador p/Baños doy pack Gigante x 500 cc.,1250.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Limpiador-para-Banos-doy-pack-Gigante-x-500-cc-240x240.jpg,,100
+Snacks,Lluvia de Papas Cops x 500 gr.,Lluvia de Papas Cops x 500 gr.,6020.00,15,https://davelcor.com.ar/wp-content/uploads/Lluvia-de-Papas-Cops-x-500-gr-240x240.jpg,,100
+Limpieza y Desinfección,Lustramueble Blem x 360 cc.,Lustramueble Blem x 360 cc.,4950.00,12,https://davelcor.com.ar/wp-content/uploads/Lustramueble-Blem-x-360-cc-240x240.jpg,,100
+Galletas,Madalenas Dulce Mama Dulce de Leche x 200 gr.,Madalenas Dulce Mama Dulce de Leche x 200 gr.,1290.00,10,https://davelcor.com.ar/wp-content/uploads/Madalenas-Dulce-Mama-Dulce-de-Leche-x-200-gr-240x240.jpg,,100
+Galletas,Madalenas Dulce Mama Vainilla x 200 gr.,Madalenas Dulce Mama Vainilla x 200 gr.,1290.00,10,https://davelcor.com.ar/wp-content/uploads/Madalenas-Dulce-Mama-Vainilla-x-200-gr.--240x240.jpg,,100
+Legumbres / Cereales,Maiz pisado Blanco Trofy x 400 gr.,Maiz pisado Blanco Trofy x 400 gr.,650.00,10,https://davelcor.com.ar/wp-content/uploads/Maiz-pisado-Blanco-Trofy-x-400-gr-240x240.jpg,,100
+Legumbres / Cereales,Maiz Pisingallo Sytari x 500 gr.,Maiz Pisingallo Sytari x 500 gr.,550.00,10,https://davelcor.com.ar/wp-content/uploads/Maiz-Pisingallo-Sytari-x-500-gr-240x240.jpg,,100
+Legumbres / Cereales,Maiz Pisingallo Verizzia x 400 gr.,Maiz Pisingallo Verizzia x 400 gr.,550.00,12,https://davelcor.com.ar/wp-content/uploads/Maiz-Pisingallo-Verizzia-x-400-gr-240x240.jpg,,100
+Snacks,Mani Saborizados Cops x 1 Kg.,Mani Saborizados Cops x 1 Kg.,5800.00,10,https://davelcor.com.ar/wp-content/uploads/Mani-Saborizados-Cops-x-1-Kg-240x240.jpg,,100
+Snacks,Mani salado Cops x 1 Kg.,Mani salado Cops x 1 Kg.,5900.00,10,https://davelcor.com.ar/wp-content/uploads/Mani-salado-Cops-x-1-Kg-2-240x240.jpg,,100
+Snacks,Mani Salado Mister Mani x 1 Kg.,Mani Salado Mister Mani x 1 Kg.,3000.00,20,https://davelcor.com.ar/wp-content/uploads/Mani-Salado-Mister-Mani-x-1-Kg-240x240.jpg,,100
+Golosinas,Marsmallows Gongys x 200 gr.,Marsmallows Gongys x 200 gr.,1990.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Marsmallows-Gongys-x-200-gr-240x240.jpg,,100
+Golosinas,Marsmallows Mini Gongys x 28 gr.,Marsmallows Mini Gongys x 28 gr.,350.00,48,https://davelcor.com.ar/wp-content/uploads/2021/05/Marsmallows-Mini-Gongys-x-28-gr-240x240.jpg,,100
+Golosinas,Masticables Animal Cremy x 500 gr.,Masticables Animal Cremy x 500 gr.,4950.00,12,https://davelcor.com.ar/wp-content/uploads/Masticables-Animal-Cremy-x-500-gr-240x240.jpg,,100
+Golosinas,Masticables Billiken x 600 gr.,Masticables Billiken x 600 gr.,4600.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Masticables-Billiken-x-200-unid-240x240.jpg,,100
+Golosinas,Masticables Bull Dog x 700 gr.,Masticables Bull Dog x 700 gr.,5100.00,12,https://davelcor.com.ar/wp-content/uploads/Masticable-Bull-Dog-x-700-gr-240x240.jpg,,100
+Golosinas,Masticables Circus Open x 100 Unid.,Masticables Circus Open x 100 Unid.,2230.00,30,https://davelcor.com.ar/wp-content/uploads/Masticables-Circus-Open-x-100-Unid-240x240.jpg,,100
+Golosinas,Masticables Misky x 800 gr.,Masticables Misky x 800 gr.,6160.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Masticables-Surtidos-Misky-x-800-gr-240x240.jpg,,100
+Infusiones,Mate cocido Velez x 25 Saq.,Mate cocido Velez x 25 Saq.,855.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Mate-cocido-Velez-x-25-saq-240x240.jpg,,100
+Aderezos y Condimentos,Mayonesa Hellmann´s x 125 cc.,Mayonesa Hellmann´s x 125 cc.,740.00,20,https://davelcor.com.ar/wp-content/uploads/2021/05/Mayonesa-Hellmann´s-x-125-gr-240x240.jpg,,100
+Aderezos y Condimentos,Mayonesa Hellmann´s x 250 cc.,Mayonesa Hellmann´s x 250 cc.,1420.00,24,https://davelcor.com.ar/wp-content/uploads/Mayonesa-Hellmann´s-x-250-cc-240x240.jpg,,100
+Golosinas,Mentitas Frutal x 26 gr.,Mentitas Frutal x 26 gr.,380.00,144,https://davelcor.com.ar/wp-content/uploads/Mentitas-Frutal-x-26-gr-240x240.jpg,,100
+Golosinas,Mentitas menta x 26 gr.,Mentitas menta x 26 gr.,380.00,144,https://davelcor.com.ar/wp-content/uploads/Mentitas-menta-x-26-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada De la Huerta Ciruela x 454 gr.,Mermelada De la Huerta Ciruela x 454 gr.,1895.00,6,https://davelcor.com.ar/wp-content/uploads/Mermelada-De-la-Huerta-Ciruela-x-454-gr.-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada De la Huerta Damasco x 454 gr.,Mermelada De la Huerta Damasco x 454 gr.,1250.00,6,https://davelcor.com.ar/wp-content/uploads/Mermelada-De-la-Huerta-Damasco-x-454-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada De la Huerta Durazno x 454 gr.,Mermelada De la Huerta Durazno x 454 gr.,1895.00,6,https://davelcor.com.ar/wp-content/uploads/2022/04/Mermelada-De-la-Huerta-Durazno-x-454-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada De La Huerta MixFrutal x 454 gr.,Mermelada De La Huerta MixFrutal x 454 gr.,1895.00,6,https://davelcor.com.ar/wp-content/uploads/2022/04/Mermelada-De-La-Huerta-MixFrutal-x-454-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada De La Huerta Multifrutal x 454 gr.,Mermelada De La Huerta Multifrutal x 454 gr.,1250.00,6,https://davelcor.com.ar/wp-content/uploads/Mermelada-De-La-Huerta-Multifrutal-x-454-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada De la Huerta Naranja x 454 gr.,Mermelada De la Huerta Naranja x 454 gr.,1895.00,6,https://davelcor.com.ar/wp-content/uploads/Mermelada-De-la-Huerta-Naranja-x-454-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada Orieta x 500 gr. – Ciruela,Mermelada Orieta x 500 gr. – Ciruela,1470.00,12,https://davelcor.com.ar/wp-content/uploads/2022/02/Mermelada-Orieta-x-500-gr.-Ciruela-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada Orieta x 500 gr. – Damasco,Mermelada Orieta x 500 gr. – Damasco,1470.00,12,https://davelcor.com.ar/wp-content/uploads/2022/02/Mermelada-Orieta-x-500-gr.-Damasco-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada Orieta x 500 gr. – Durazno,Mermelada Orieta x 500 gr. – Durazno,1470.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Mermelada-Durazno-Orieta-x-500-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada Orieta x 500 gr. – Frutilla,Mermelada Orieta x 500 gr. – Frutilla,1710.00,12,https://davelcor.com.ar/wp-content/uploads/Mermelada-Orieta-x-500-gr.-Frutilla--240x240.jpg,,100
+Mermeladas y Dulces,Mermelada Orieta x 500 gr. – Naranja,Mermelada Orieta x 500 gr. – Naranja,1470.00,12,https://davelcor.com.ar/wp-content/uploads/2022/02/Mermelada-Orieta-x-500-gr.-Naranja-240x240.jpg,,100
+Mermeladas y Dulces,Miel y jarabe de glucosa Orieta x 250 gr.,Miel y jarabe de glucosa Orieta x 250 gr.,1050.00,24,https://davelcor.com.ar/wp-content/uploads/Miel-y-jarabe-de-glucosa-Orieta-x-250-gr-240x240.jpg,,100
+Golosinas,Monedas Piratas FelFort x 1 Unid.,Monedas Piratas FelFort x 1 Unid.,430.00,1440,https://davelcor.com.ar/wp-content/uploads/Monedas-Piratas-FelFort-x-1-Unid-240x240.jpg,,100
+Aderezos y Condimentos,Mostaza Savora Original x 60 gr.,Mostaza Savora Original x 60 gr.,720.00,30,https://davelcor.com.ar/wp-content/uploads/Mostaza-Savora-Original-x-60-gr-240x240.jpg,,100
+Snacks,Nachos Quento x 90 gr. – Guacamole,Nachos Quento x 90 gr. – Guacamole,1890.00,22,https://davelcor.com.ar/wp-content/uploads/Nachos-Quento-x-90-gr.-Guacamole-240x240.jpg,,100
+Snacks,Nachos Quento x 90 gr. – Queso,Nachos Quento x 90 gr. – Queso,1890.00,22,https://davelcor.com.ar/wp-content/uploads/Nachos-Quento-x-90-gr.-Queso-240x240.jpg,,100
+Aderezos y Condimentos Velez,Nuez Moscada Ent. Velez x 2 Unid.,Nuez Moscada Ent. Velez x 2 Unid.,980.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Nuez-Moscada-Ent.-Velez-x-2-Unid-240x240.jpg,,100
+Aderezos y Condimentos Velez,Nuez Moscada molida Velez x 25 gr.,Nuez Moscada molida Velez x 25 gr.,1480.00,10,https://davelcor.com.ar/wp-content/uploads/2021/06/Nuez-Moscada-molida-Velez-x-25-gr-240x240.jpg,,100
+Golosinas,Oblea choco con mani Smack x 33 gr.,Oblea choco con mani Smack x 33 gr.,260.00,48,https://davelcor.com.ar/wp-content/uploads/2022/02/Oblea-choco-con-mani-Smack-x-33-gr-240x240.jpg,,100
+Galletas,Obleas Oblita x 50 gr. – Frutilla,Obleas Oblita x 50 gr. – Frutilla,370.00,48,https://davelcor.com.ar/wp-content/uploads/Obleas-Oblita-x-50-gr.-Frutilla-240x240.jpg,,100
+Galletas,Obleas Oblita x 50 gr. – Vainilla,Obleas Oblita x 50 gr. – Vainilla,370.00,48,https://davelcor.com.ar/wp-content/uploads/Obleas-Oblita-x-50-gr.-Vainilla-240x240.jpg,,100
+Aderezos y Condimentos Velez,Oregano Velez x 25 gr.,Oregano Velez x 25 gr.,761.20,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Oregano-Velez-x-25-gr-240x240.jpg,,100
+Legumbres / Cereales,Ositos de avena y miel Lasfor x 2 Kg.,Ositos de avena y miel Lasfor x 2 Kg.,10500.00,5,https://davelcor.com.ar/wp-content/uploads/Ositos-de-avena-y-miel-Lasfor-x-2-Kg-240x240.jpg,,100
+Snacks,Palitos Cops x 1 Kg.,Palitos Cops x 1 Kg.,4890.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Palitos-Cops-x-1-Kg-240x240.jpg,,100
+Enlatados,Palmito en trozos Bahia x 400 gr.,Palmito en trozos Bahia x 400 gr.,1890.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Palmito-en-trozos-Bahia-x-400-gr-2-240x240.jpg,,100
+Reposteria y Postres,Pan Rallado Integral Pureza x 350 gr.,Pan Rallado Integral Pureza x 350 gr.,1310.00,12,https://davelcor.com.ar/wp-content/uploads/Pan-Rallado-Integral-Pureza-x-350-gr-240x240.jpg,,100
+Higiene Personal,Pañales Huggies Classic x 8 unid. – G,Pañales Huggies Classic x 8 unid. – G,3100.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Panales-G-Huggies-x-8-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Paño multiuso Batuque x 1 Unid.,Paño multiuso Batuque x 1 Unid.,700.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Pano-multiuso-Batuque-x-1-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Paño para piso Batuque x 1 unid.,Paño para piso Batuque x 1 unid.,1330.00,25,https://davelcor.com.ar/wp-content/uploads/Pano-para-piso-Batuque-x-1-unid-240x240.jpg,,100
+Snacks,Papas Cops x 800 gr.,Papas Cops x 800 gr.,9200.00,10,https://davelcor.com.ar/wp-content/uploads/Papas-Cops-x-800-gr-240x240.jpg,,100
+Snacks,Papas Quento x 100 gr. – Clasicas,Papas Quento x 100 gr. – Clasicas,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-100-gr.-Clasicas-240x240.jpg,,100
+Snacks,Papas Quento x 100 gr. – Mix,Papas Quento x 100 gr. – Mix,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-100-gr.-Mix-240x240.jpg,,100
+Snacks,Papas Quento x 100 gr. – Ondulada,Papas Quento x 100 gr. – Ondulada,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-100-gr.-Ondulada-240x240.jpg,,100
+Snacks,Papas Quento x 110 gr. – Pay,Papas Quento x 110 gr. – Pay,1890.00,27,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-110-gr.-Pay-240x240.jpg,,100
+Snacks,Papas Quento x 45 gr. – Cheddar,Papas Quento x 45 gr. – Cheddar,1000.00,54,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-45-gr.-Cheddar-240x240.jpg,,100
+Snacks,Papas Quento x 45 gr. – Ciboulette,Papas Quento x 45 gr. – Ciboulette,1000.00,54,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-45-gr.-Ciboulette-240x240.jpg,,100
+Snacks,Papas Quento x 45 gr. – Jamon serrano,Papas Quento x 45 gr. – Jamon serrano,1000.00,54,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-45-gr.-Jamon-serrano-240x240.jpg,,100
+Snacks,Papas Quento x 45 gr. – Ketchup,Papas Quento x 45 gr. – Ketchup,1000.00,54,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-45-gr.-Ketchup-240x240.jpg,,100
+Snacks,Papas Quento x 70 gr. – Picantes,Papas Quento x 70 gr. – Picantes,1890.00,22,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-70-gr.-Picantes-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Asado,Papas Quento x 90 gr. – Asado,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Asado-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Barbacoa,Papas Quento x 90 gr. – Barbacoa,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Barbacoa-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Cheddar,Papas Quento x 90 gr. – Cheddar,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Cheddar-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Jamon Serrano,Papas Quento x 90 gr. – Jamon Serrano,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Jamon-Serrano-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Ketchup,Papas Quento x 90 gr. – Ketchup,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Ketchup-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Limon,Papas Quento x 90 gr. – Limon,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Limon-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Mostaza,Papas Quento x 90 gr. – Mostaza,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Mostaza-240x240.jpg,,100
+Snacks,Papas Quento x 90 gr. – Salame,Papas Quento x 90 gr. – Salame,1890.00,18,https://davelcor.com.ar/wp-content/uploads/Papas-Quento-x-90-gr.-Salame-240x240.jpg,,100
+Papeles y Rollos,Papel Higienico Campanita x 4 Unid.,Papel Higienico Campanita x 4 Unid.,920.00,12,https://davelcor.com.ar/wp-content/uploads/Papel-Higienico-Campanita-x-4-Unid-240x240.png,,100
+Papeles y Rollos,Papel Higienico Cautiva natural x 4 Unid.,Papel Higienico Cautiva natural x 4 Unid.,1065.00,12,https://davelcor.com.ar/wp-content/uploads/Papel-Higienico-Cautiva-natural-x-4-Unid-240x240.jpg,,100
+Papeles y Rollos,Papel Higienico Cautiva natural x 6 Unid.,Papel Higienico Cautiva natural x 6 Unid.,1650.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Papel-Higienico-Cautiva-Natural-x-6-Unid-240x240.jpg,,100
+Papeles y Rollos,Papel Higienico Felpita Doble hoja x 4 Unid.,Papel Higienico Felpita Doble hoja x 4 Unid.,2490.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/papel-higienico-Felpita-Infinity-x-4-240x240.jpg,,100
+Papeles y Rollos,Papel Higienico Felpita x 4 Unid.,Papel Higienico Felpita x 4 Unid.,1450.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/papel-higienico-Felpita-x-4-240x240.jpg,,100
+Papeles y Rollos,Papel Higienico Vual ecologico x 4 Unid.,Papel Higienico Vual ecologico x 4 Unid.,1350.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/papel-higienico-Vual-x-4-240x240.jpg,,100
+Papeles y Rollos,Papel Higienico Vual Ecologico x 6 Unid.,Papel Higienico Vual Ecologico x 6 Unid.,1950.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Papel-Higienico-Vual-Ecologico-x-6-Unid-240x240.jpg,,100
+Golosinas,Paraguitas Felfort x 1 Unid.,Paraguitas Felfort x 1 Unid.,850.00,960,https://davelcor.com.ar/wp-content/uploads/Paraguitas-Felfort-x-1-Unid-240x240.jpg,,100
+Golosinas,Pastillas Bull Dog x 30 gr. – Uva,Pastillas Bull Dog x 30 gr. – Uva,330.00,12,https://davelcor.com.ar/wp-content/uploads/Pastillas-Bull-Dog-x-30-gr.-Uva--240x240.jpg,,100
+Golosinas,Pastillas La Yapa x 1 Unid.,Pastillas La Yapa x 1 Unid.,250.00,648,https://davelcor.com.ar/wp-content/uploads/Pastillas-La-Yapa-x-1-Unid-240x240.jpg,,100
+Golosinas,Pastillas Latita de gaseosa x 1 Unid.,Pastillas Latita de gaseosa x 1 Unid.,360.00,576,https://davelcor.com.ar/wp-content/uploads/Pastillas-Latita-de-gaseosa-x-1-Unid-240x240.jpg,,100
+Aderezos y Condimentos Velez,Perejil Velez x 25 gr.,Perejil Velez x 25 gr.,780.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Perejil-Velez-x-25-gr-240x240.jpg,,100
+Bebidas con alcohol,Petaca Anis La Triestina x 200 cc.,Petaca Anis La Triestina x 200 cc.,1285.00,12,https://davelcor.com.ar/wp-content/uploads/Petaca-Anis-La-Triestina-x-200-cc-240x240.jpg,,100
+Bebidas con alcohol,Petaca Licor Cafe al cogñac La Triestina x 200 cc.,Petaca Licor Cafe al cogñac La Triestina x 200 cc.,1285.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-Cafe-al-cognac-Pet.-La-Triestina-x-200-cc-240x240.jpg,,100
+Bebidas con alcohol,Petaca Licor Chocolate La Triestina x 200 cc.,Petaca Licor Chocolate La Triestina x 200 cc.,1285.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-Chocolate-Pet.-La-Triestina-x-200-cc-240x240.jpg,,100
+Bebidas con alcohol,Petaca Licor Dulce de Leche La Triestina x 200 cc.,Petaca Licor Dulce de Leche La Triestina x 200 cc.,1285.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Licor-Dulce-de-Leche-pet.-La-Triestina-x-200-cc-240x240.jpg,,100
+Vodka,Petaca Vodka La Triestina x 200 cc.,Petaca Vodka La Triestina x 200 cc.,1285.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Vodka-Pet.-La-Triestina-x-200-cc-240x240.jpg,,100
+Bebidas con alcohol,Petaca Whisky Don John x 200 cc.,Petaca Whisky Don John x 200 cc.,1285.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Whisky-pet.-Don-John-x-200-cc-240x240.jpg,,100
+Enlatados,Picadillo Changuito x 90 gr.,Picadillo Changuito x 90 gr.,710.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Picadillo-Changuito-x-90-gr-240x240.jpg,,100
+Librería y Cotillon,Pilas AA Duracell x 2 Unid.,Pilas AA Duracell x 2 Unid.,2565.00,60,https://davelcor.com.ar/wp-content/uploads/Pilas-AA-Duracell-x-2-Unid-1-240x240.jpg,,100
+Librería y Cotillon,Pilas AAA Duracell x 2 Unid. (x6),Pilas AAA Duracell x 2 Unid. (x6),2565.00,60,https://davelcor.com.ar/wp-content/uploads/Pilas-AAA-Duracell-x-2-Unid-240x240.jpg,,100
+Aderezos y Condimentos Velez,Pimenton Extra Velez x 25 gr.,Pimenton Extra Velez x 25 gr.,610.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Pimenton-Extra-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Pimienta Blanca molida Velez x 25 gr.,Pimienta Blanca molida Velez x 25 gr.,1252.45,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Pimienta-Blanca-molida-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos Velez,Pimienta Negra molida Velez x 25 gr.,Pimienta Negra molida Velez x 25 gr.,852.69,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Pimienta-Negra-molida-Velez-x-25-gr-240x240.jpg,,100
+Aderezos y Condimentos,Pimientos Morrones Bordi x 330 gr.,Pimientos Morrones Bordi x 330 gr.,2900.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Pimientos-Morrones-Bordi-x-330-gr-240x240.jpg,,100
+Golosinas,Pipas de girasol x 18 gr.,Pipas de girasol x 18 gr.,280.00,360,https://davelcor.com.ar/wp-content/uploads/2021/05/Pipas-de-girasol-x-18-gr-240x240.jpg,,100
+Golosinas,Pipas Gigantes x 50 gr.,Pipas Gigantes x 50 gr.,690.00,144,https://davelcor.com.ar/wp-content/uploads/2021/05/Pipas-Gigantes-x-50-gr-240x240.jpg,,100
+Snacks,Pizzeta Cops x 600 gr.,Pizzeta Cops x 600 gr.,2390.00,10,https://davelcor.com.ar/wp-content/uploads/Pizzeta-Cops-x-600-gr-240x240.jpg,,100
+Bazar y Hogar,Platos hondo Antillas Flint x 1 Unid.,Platos hondo Antillas Flint x 1 Unid.,830.00,36,https://davelcor.com.ar/wp-content/uploads/Platos-hondo-Antillas-Flint-x-1-Unid-240x240.jpg,,100
+Legumbres / Cereales,Polenta instantanea Trofy x 500 gr.,Polenta instantanea Trofy x 500 gr.,450.00,10,https://davelcor.com.ar/wp-content/uploads/2021/07/Polenta-instantanea-Trofy-x-500-gr-2-240x240.jpg,,100
+Legumbres / Cereales,Polenta Instatanea Verizzia x 500 gr.,Polenta Instatanea Verizzia x 500 gr.,490.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Polenta-instantanea-verizzia-x-500-gr-240x240.jpg,,100
+Snacks,Popcorn Hanks x 112 gr. – Chocolate,Popcorn Hanks x 112 gr. – Chocolate,1969.99,10,https://davelcor.com.ar/wp-content/uploads/Popcorn-Hanks-x-112-gr.-Chocolate-240x240.jpg,,100
+Snacks,Popcorn Hanks x 112 gr. – Crema y Cookie,Popcorn Hanks x 112 gr. – Crema y Cookie,1969.99,10,https://davelcor.com.ar/wp-content/uploads/Popcorn-Hanks-x-112-gr.-Crema-y-Cookie-240x240.jpg,,100
+Enlatados,Porotos Inalpa x 300 gr.,Porotos Inalpa x 300 gr.,930.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Porotos-Inalpa-x-350-gr-240x240.jpg,,100
+Enlatados,Porotos Negros Inalpa x 300 gr.,Porotos Negros Inalpa x 300 gr.,770.00,24,https://davelcor.com.ar/wp-content/uploads/Porotos-Negros-Inalpa-x-300-gr-240x240.jpg,,100
+Higiene Personal,Prestobarba 2 filos Gillette x 1 Unid. (blister x 24),Prestobarba 2 filos Gillette x 1 Unid. (blister x 24),1050.00,576,https://davelcor.com.ar/wp-content/uploads/Prestobarba-2-filos-Gillette-x-1-Unid-240x240.jpg,,100
+Higiene Personal,Prestobarba 2 filos Minora x 1 Unid.,Prestobarba 2 filos Minora x 1 Unid.,880.00,640,https://davelcor.com.ar/wp-content/uploads/2021/05/prestobarba-minora-blister-x-24-240x240.jpg,,100
+Higiene Personal,Prestobarba 3 filos Gillette (gris) x 1 Unid.,Prestobarba 3 filos Gillette (gris) x 1 Unid.,1550.00,4,https://davelcor.com.ar/wp-content/uploads/2021/05/Prestobarba-3-filo-Gillette-240x240.jpg,,100
+Higiene Personal,Protector Diario Doncella x 20 Unid.,Protector Diario Doncella x 20 Unid.,870.00,30,https://davelcor.com.ar/wp-content/uploads/2021/05/Protector-Diario-Anatomico-Doncella-x-20-Unid-240x240.jpg,,100
+Aderezos y Condimentos Velez,Provenzal Velez x 25 gr.,Provenzal Velez x 25 gr.,660.00,10,https://davelcor.com.ar/wp-content/uploads/Provenzal-Velez-x-25-gr-1-240x240.jpg,,100
+Snacks,Puflitos Cops x 800 gr.,Puflitos Cops x 800 gr.,3590.00,10,https://davelcor.com.ar/wp-content/uploads/Puflitos-Cops-x-800-gr-240x240.jpg,,100
+Varios,Pure de Papas Mama Cocina x 125 gr.,Pure de Papas Mama Cocina x 125 gr.,1500.00,12,https://davelcor.com.ar/wp-content/uploads/Pure-de-Papas-Mama-Cocina-x-125-gr-240x240.jpg,,100
+Línea Roja,Pure de tomate 7 Dias x 530 gr.,Pure de tomate 7 Dias x 530 gr.,810.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Pure-de-Tomate-7-Dias-x-530-gr-240x240.jpg,,100
+Línea Roja,Pure de Tomate De La Huerta x 210 gr.,Pure de Tomate De La Huerta x 210 gr.,520.00,18,https://davelcor.com.ar/wp-content/uploads/2021/05/pure-de-tomate-de-la-huerta-x-210-gr-240x240.jpg,,100
+Línea Roja,Pure de Tomate De La Huerta x 530 gr.,Pure de Tomate De La Huerta x 530 gr.,840.00,12,https://davelcor.com.ar/wp-content/uploads/Pure-de-Tomate-La-Huerta-x-530-gr-240x240.jpg,,100
+Lacteos,Queso Rallado La Quesera x 40 gr.,Queso Rallado La Quesera x 40 gr.,670.00,120,https://davelcor.com.ar/wp-content/uploads/LAQUESERA_FlyerEcommerce_Rallado_40_b-240x240.jpg,,100
+Insecticidas,Raid Liquido electrico repuesto x 1 Unid.,Raid Liquido electrico repuesto x 1 Unid.,7230.00,12,https://davelcor.com.ar/wp-content/uploads/Raid-Liquido-electrico-repuesto-x-1-Unid-240x240.jpg,,100
+Insecticidas,Raid Liquido electrico repuesto x 1 Unid. – sin olor,Raid Liquido electrico repuesto x 1 Unid. – sin olor,7230.00,12,https://davelcor.com.ar/wp-content/uploads/Raid-Liquido-electrico-repuesto-x-1-Unid.-sin-olor-240x240.jpg,,100
+Golosinas,Regaliz Bull Dog x 18 gr.,Regaliz Bull Dog x 18 gr.,295.00,144,https://davelcor.com.ar/wp-content/uploads/Regaliz-Bull-Dog-Tutty-x-18-gr-240x240.jpg,,100
+Accesorios de Limpieza,Rejilla Americana DEA x 1 Unid.,Rejilla Americana DEA x 1 Unid.,875.00,120,https://davelcor.com.ar/wp-content/uploads/Rejilla-Americana-DEA-x-1-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Rejilla pabilo DEA x 1 Unid.,Rejilla pabilo DEA x 1 Unid.,770.00,240,https://davelcor.com.ar/wp-content/uploads/2021/05/Rejilla-pabilo-DEA-x-1-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Repasadores Estampado DEA x 1 Unid.,Repasadores Estampado DEA x 1 Unid.,2145.00,72,https://davelcor.com.ar/wp-content/uploads/Repasadores-Estampado-DEA-x-1-Unid-copia-240x240.jpg,,100
+Accesorios de Limpieza,Repasadores Individual DEA x 1 Unid.,Repasadores Individual DEA x 1 Unid.,1514.50,72,https://davelcor.com.ar/wp-content/uploads/Repasadores-Individual-DEA-x-1-Unid-copia-240x240.jpg,,100
+Insecticidas,Repelente 911 Aerosol x 150 cc.,Repelente 911 Aerosol x 150 cc.,2590.00,12,https://davelcor.com.ar/wp-content/uploads/Repelente-911-Aerosol-x-150-cc-240x240.jpg,,100
+Golosinas,Rhodesia Terrabusi x 22 gr.,Rhodesia Terrabusi x 22 gr.,795.00,432,https://davelcor.com.ar/wp-content/uploads/Rhodesia-Terrabusi-x-22-gr--240x240.jpg,,100
+Papeles y Rollos,Rollo de Cocina 40p Cartabella x 3 Unid.,Rollo de Cocina 40p Cartabella x 3 Unid.,1350.00,10,https://davelcor.com.ar/wp-content/uploads/Rollo-de-Cocina-40p-Cartabella-x-3-Unid-240x240.jpg,,100
+Papeles y Rollos,Rollo de Cocina 40p Cautiva x 3 Unid.,Rollo de Cocina 40p Cautiva x 3 Unid.,1150.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Rollo-de-Cocina-40p-Cautiva-x-3-Unid-240x240.jpg,,100
+Papeles y Rollos,Rollo de Cocina 40p Sol Mayor x 3 Unid.,Rollo de Cocina 40p Sol Mayor x 3 Unid.,975.00,12,https://davelcor.com.ar/wp-content/uploads/Rollo-de-Cocina-40p-Sol-Mayor-x-3-Unid-240x240.jpg,,100
+Papeles y Rollos,Rollo de Cocina 40p Vual x 3 Unid.,Rollo de Cocina 40p Vual x 3 Unid.,1400.00,8,https://davelcor.com.ar/wp-content/uploads/Rollo-de-Cocina-40p-Vual-x-3-Unid-240x240.jpg,,100
+Papeles y Rollos,Rollo de cocina Felpita 60 paños x 3 Unid.,Rollo de cocina Felpita 60 paños x 3 Unid.,1590.00,6,https://davelcor.com.ar/wp-content/uploads/Rollo-de-cocina-Felpita-60-panos-x-3-Unid-240x240.jpg,,100
+Papeles y Rollos,Rollo de Cocina Felpita Decorado x 3 Unid.,Rollo de Cocina Felpita Decorado x 3 Unid.,1690.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Rollo-de-Cocina-Felpita-Decorado-40p-x-3-unid-240x240.jpg,,100
+Bebidas con alcohol,Ron Cayman uva x 750 cc.,Ron Cayman uva x 750 cc.,2730.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Ron-Cayman-uva-x-750-cc-240x240.jpg,,100
+Bebidas con alcohol,Ron Malibu x 750 cc.,Ron Malibu x 750 cc.,13980.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Ron-Malibu-x-750-cc-240x240.jpg,,100
+Sal,Sal Entrefina Celusal x 500 gr.,Sal Entrefina Celusal x 500 gr.,1150.00,30,https://davelcor.com.ar/wp-content/uploads/2021/05/Sal-Entrefina-Celusal-x-500-gr-240x240.jpg,,100
+Sal,Sal Entrefina Doña Sal x 1 Kg.,Sal Entrefina Doña Sal x 1 Kg.,550.00,12,https://davelcor.com.ar/wp-content/uploads/Sal-Entrefina-Dona-Sal-x-1-Kg-240x240.jpg,,100
+Sal,Sal Fina Celusal x 500 gr.,Sal Fina Celusal x 500 gr.,1030.00,30,https://davelcor.com.ar/wp-content/uploads/2021/05/Sal-Fina-Celusal-x-500-gr-240x240.jpg,,100
+Sal,Sal Fina Doña Sal x 500 gr.,Sal Fina Doña Sal x 500 gr.,385.00,24,https://davelcor.com.ar/wp-content/uploads/Sal-Fina-Dona-Sal-x-500-gr-240x240.jpg,,100
+Sal,Sal Gruesa Celusal x 500 gr.,Sal Gruesa Celusal x 500 gr.,1100.00,30,https://davelcor.com.ar/wp-content/uploads/Sal-Gruesa-Celusal-x-500-gr-240x240.jpg,,100
+Sal,Sal Gruesa Doña Sal x 1 Kg.,Sal Gruesa Doña Sal x 1 Kg.,550.00,12,https://davelcor.com.ar/wp-content/uploads/Sal-Gruesa-Dona-Sal-x-1-Kg-1-240x240.jpg,,100
+Aderezos y Condimentos Velez,Salsa Blanca Velez x 45 gr.,Salsa Blanca Velez x 45 gr.,820.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Salsa-Blanca-Velez-x-45-gr--240x240.jpg,,100
+Línea Roja,Salsa Ciapil Pizza x 340 gr.,Salsa Ciapil Pizza x 340 gr.,950.00,24,https://davelcor.com.ar/wp-content/uploads/Salsa-para-pizza-Ciapil-x-340-gr-240x240.jpg,,100
+Limpieza y Desinfección,Sanitizante aerosol 911 x 360 cc.,Sanitizante aerosol 911 x 360 cc.,1650.00,12,https://davelcor.com.ar/wp-content/uploads/Sanitizante-aerosol-911-x-360-cc-240x240.jpg,,100
+Accesorios de Limpieza,Secador de goma 30cm x 1 Unid.,Secador de goma 30cm x 1 Unid.,900.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Secador-de-goma-Negro-La-Portena-x-30cm-240x240.jpg,,100
+Accesorios de Limpieza,Secador Duo Plastic House x 40cm x 1 Unid.,Secador Duo Plastic House x 40cm x 1 Unid.,1750.00,12,https://davelcor.com.ar/wp-content/uploads/Secador-Duo-Plastic-House-x-40cm-x-1-Unid-240x240.jpg,,100
+Accesorios de Limpieza,Secador negro DEA 40cm x 1 Unid.,Secador negro DEA 40cm x 1 Unid.,1450.00,12,https://davelcor.com.ar/wp-content/uploads/Secador-negro-DEA-40cm-x-1-Unid--240x240.jpg,,100
+Papeles y Rollos,Servilletas Felpita x 40 Unid.,Servilletas Felpita x 40 Unid.,610.00,42,https://davelcor.com.ar/wp-content/uploads/2021/05/Servilletas-Felpita-x-40-Unid-240x240.jpg,,100
+Bazar y Hogar,Set Contenedores Rio (2x275cc.+2x480cc.),Set Contenedores Rio (2x275cc.+2x480cc.),3250.00,70,https://davelcor.com.ar/wp-content/uploads/Set-Contenedores-Rio-2x275cc.2x480cc-240x240.jpg,,100
+Higiene Personal,Shampoo Head & Shoulders x 180 cc.,Shampoo Head & Shoulders x 180 cc.,4059.99,12,https://davelcor.com.ar/wp-content/uploads/Shampoo-Head-Shoulders-x-180-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Life+Quality x 950 cc.,Shampoo Life+Quality x 950 cc.,1750.00,12,https://davelcor.com.ar/wp-content/uploads/Shampoo-LifeQuality-x-950-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Plusbelle x 1 Lt.,Shampoo Plusbelle x 1 Lt.,2875.00,12,https://davelcor.com.ar/wp-content/uploads/Shampoo-Plusbelle-x-1-Lt-240x240.jpg,,100
+Higiene Personal,Shampoo Sedal – Balance x 190 cc.,Shampoo Sedal – Balance x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Shampoo-Sedal-Balance-x-190-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Sedal – Ceramidas x 190 cc.,Shampoo Sedal – Ceramidas x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Shampoo-Sedal-Ceramidas-x-190-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Sedal – Colageno x 190 cc.,Shampoo Sedal – Colageno x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Shampoo-Sedal-Colageno-x-190-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Sedal – Hialuronico  190 cc.,Shampoo Sedal – Hialuronico  190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/Shampoo-Sedal-Hialuronico-x-190-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Sedal – Liso perfecto x 190 cc.,Shampoo Sedal – Liso perfecto x 190 cc.,2700.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Shampoo-Sedal-Liso-perfecto-x-190-cc-240x240.jpg,,100
+Higiene Personal,Shampoo Sedal x 10 ml.  – Ceramidas,Shampoo Sedal x 10 ml.  – Ceramidas,260.00,144,https://davelcor.com.ar/wp-content/uploads/2021/05/Shampo-Sedal-x-24-x-10-ml-240x240.jpg,,100
+Bebidas sin alcohol,Soda (sifon) Nihuil x 1.75 Lt.,Soda (sifon) Nihuil x 1.75 Lt.,1100.00,6,https://davelcor.com.ar/wp-content/uploads/Soda-sifon-Nihuil-x-1.75-Lt-240x240.jpg,,100
+Enlatados,Soja Inalpa x 300 gr.,Soja Inalpa x 300 gr.,770.00,24,https://davelcor.com.ar/wp-content/uploads/Soja-Inalpa-x-300-gr-240x240.jpg,,100
+Para Ropa,Suavizante para ropa Clasico Gigante x 900 cc.,Suavizante para ropa Clasico Gigante x 900 cc.,1940.00,12,https://davelcor.com.ar/wp-content/uploads/Suavizante-para-ropa-Clasico-Gigante-x-900-cc-240x240.jpg,,100
+Para Ropa,Suavizante para ropa Gigante x 500 cc.,Suavizante para ropa Gigante x 500 cc.,1550.00,12,https://davelcor.com.ar/wp-content/uploads/Suavizante-Gigante-Gemas-Turquezas-x-500-cc-240x240.jpg,,100
+Insecticidas,Tabletas Fuyi x 24 Unid.,Tabletas Fuyi x 24 Unid.,3850.00,20,https://davelcor.com.ar/wp-content/uploads/Tabletas-Fuyi-x-24-Unid-240x240.jpg,,100
+Insecticidas,Tabletas Raid x 12 Unid.,Tabletas Raid x 12 Unid.,2990.00,20,https://davelcor.com.ar/wp-content/uploads/2021/11/Tabletas-Raid-x-12-Unid-240x240.jpg,,100
+Higiene Personal,Talco Rexona Efficient x 100 gr.,Talco Rexona Efficient x 100 gr.,2790.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Talco-Rexona-Efficient-x-100-gr-240x240.jpg,,100
+Bazar y Hogar,Taza Flint x 270 cc.,Taza Flint x 270 cc.,1400.00,36,https://davelcor.com.ar/wp-content/uploads/Taza-Flint-x-270-cc-1-240x240.jpg,,100
+Bazar y Hogar,Taza Flint x 270 cc. Ambar,Taza Flint x 270 cc. Ambar,1250.00,36,https://davelcor.com.ar/wp-content/uploads/Taza-Flint-x-270-cc-240x240.jpg,,100
+Infusiones,Te Tilo Velez x 25 Saq.,Te Tilo Velez x 25 Saq.,2170.00,8,https://davelcor.com.ar/wp-content/uploads/2021/05/Te-tilo-velez-x-25-saq-240x240.jpg,,100
+Infusiones,Te Velez x 25 Saq.,Te Velez x 25 Saq.,730.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Te-Velez-x-25-saq-240x240.jpg,,100
+Bebidas con alcohol,Tequila Cuernavaca x 1 Lt.,Tequila Cuernavaca x 1 Lt.,3990.00,6,https://davelcor.com.ar/wp-content/uploads/Tequila-Cuernavaca-x-1-Lt-240x240.jpg,,100
+Golosinas,TITA Terrabusi x 18 gr.,TITA Terrabusi x 18 gr.,725.00,432,https://davelcor.com.ar/wp-content/uploads/2021/05/TITA-Terrabusi-x-18-gr-240x240.jpg,,100
+Higiene Personal,Toallitas Doncella con alas x 8 Unid.,Toallitas Doncella con alas x 8 Unid.,765.00,50,https://davelcor.com.ar/wp-content/uploads/2021/05/Toallitas-con-alas-Doncella-x-8-Unid-240x240.jpg,,100
+Higiene Personal,Toallitas Doncella Nocturnas x 8 Unid.,Toallitas Doncella Nocturnas x 8 Unid.,1330.00,50,https://davelcor.com.ar/wp-content/uploads/2021/05/Toallitas-Noctunas-Doncella-x-8-Unid-240x240.jpg,,100
+Golosinas,Todo para tu Cumple Sugar Party x 1 Unid.,Todo para tu Cumple Sugar Party x 1 Unid.,11050.00,1,https://davelcor.com.ar/wp-content/uploads/Todo-para-tu-Cumple-Sugar-Party-x-1-Unid-240x240.jpg,,100
+Línea Roja,Tomate perita Agrosabor x 400 gr.,Tomate perita Agrosabor x 400 gr.,1050.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/Tomate-en-lata-Agrosabor-x-400-gr-240x240.jpg,,100
+Línea Roja,Tomate triturado de-mo x 950 gr.,Tomate triturado de-mo x 950 gr.,1400.00,8,https://davelcor.com.ar/wp-content/uploads/Tomate-triturado-de-mo-x-950-gr-240x240.jpg,,100
+Gallletas - Discos de arroz y Tostadas,Tostadas Firenze con Gluten x 920 gr.,Tostadas Firenze con Gluten x 920 gr.,6700.00,5,https://davelcor.com.ar/wp-content/uploads/Tostadas-Firenze-con-Gluten-x-920-gr-240x240.jpg,,100
+Gallletas - Discos de arroz y Tostadas,Tostadas Firenze Dulces x 920 gr.,Tostadas Firenze Dulces x 920 gr.,6700.00,5,https://davelcor.com.ar/wp-content/uploads/Tostadas-Firenze-Dulces-x-920-gr-240x240.jpg,,100
+Accesorios de Limpieza,Trapo de piso Gris DEA x 1 Unid.,Trapo de piso Gris DEA x 1 Unid.,1150.00,60,https://davelcor.com.ar/wp-content/uploads/2021/05/Trapo-de-piso-Gris-DEA-x-1-Unid-240x240.jpg,,100
+Golosinas,Turron con Mousse de chocolate Fulbito x 25 gr.,Turron con Mousse de chocolate Fulbito x 25 gr.,145.00,50,https://davelcor.com.ar/wp-content/uploads/2021/05/Turron-con-Mousse-de-chocolate-Fulbito-x-25-gr-240x240.jpg,,100
+Golosinas,Turron de mani Misky x 25 gr.,Turron de mani Misky x 25 gr.,215.00,50,https://davelcor.com.ar/wp-content/uploads/2021/05/Turron-de-mani-Misky-x-25-gr-240x240.jpg,,100
+Golosinas,Turron Postre de Mani Nucrem x 84 gr.,Turron Postre de Mani Nucrem x 84 gr.,690.00,40,https://davelcor.com.ar/wp-content/uploads/2021/09/Turron-Pasta-de-Mani-Nucrem-x-84-gr-2-240x240.jpg,,100
+Snacks,Tutucas Cops x 1 Kg.,Tutucas Cops x 1 Kg.,5800.00,10,https://davelcor.com.ar/wp-content/uploads/Tutucas-Cops-x-1-Kg-240x240.jpg,,100
+Galletas,Vainillas Mauri x 80 gr.,Vainillas Mauri x 80 gr.,555.00,36,https://davelcor.com.ar/wp-content/uploads/2021/05/vainillas-Mauri-x-80-gr-240x240.jpg,,100
+Bazar y Hogar,Vaso Amsterdan x 325 cc.,Vaso Amsterdan x 325 cc.,1990.00,48,https://davelcor.com.ar/wp-content/uploads/Vaso-Amsterdan-x-325-cc-240x240.jpg,,100
+Bazar y Hogar,Vaso Batidor estampado x 550 cc.,Vaso Batidor estampado x 550 cc.,2050.00,84,https://davelcor.com.ar/wp-content/uploads/Vaso-Batidor-estampado-x-550-cc-240x240.jpg,,100
+Bazar y Hogar,Vaso Chopp Escudo x 350 cc.,Vaso Chopp Escudo x 350 cc.,2390.00,24,https://davelcor.com.ar/wp-content/uploads/Vaso-Chopp-Escudo-x-350-cc-240x240.jpg,,100
+Bazar y Hogar,Vaso Chopp Pinta x 540 cc.,Vaso Chopp Pinta x 540 cc.,2390.00,36,https://davelcor.com.ar/wp-content/uploads/Vaso-Chopp-Pinta-x-540-cc-copia-240x240.jpg,,100
+Bazar y Hogar,Vaso Chopp Praga x 360 cc.,Vaso Chopp Praga x 360 cc.,2390.00,24,https://davelcor.com.ar/wp-content/uploads/2021/05/chop-praga-240x240.jpg,,100
+Bazar y Hogar,Vaso Pub x 300 cc.,Vaso Pub x 300 cc.,450.00,20,https://davelcor.com.ar/wp-content/uploads/2021/05/vaso-pub-flint-x-300-ml-240x240.jpg,,100
+Bazar y Hogar,Vaso Spa x 425 cc.,Vaso Spa x 425 cc.,1990.00,36,https://davelcor.com.ar/wp-content/uploads/Vaso-Spa-x-425-cc-240x240.jpg,,100
+Electricidad e Iluminación,Velas Golondrina grandes x 4 Unid.,Velas Golondrina grandes x 4 Unid.,1885.00,25,https://davelcor.com.ar/wp-content/uploads/Velas-Golondrina-grandes-x-4-Unid-240x240.jpg,,100
+Electricidad e Iluminación,Velas Jacaranda x 4 Unid. – Corta,Velas Jacaranda x 4 Unid. – Corta,540.00,50,https://davelcor.com.ar/wp-content/uploads/2021/05/Velas-Jacaranda-x-4-Unid.-Corta-240x240.jpg,,100
+Bazar y Hogar,Vertedor Doble Materisimo,Vertedor Doble Materisimo,3780.00,96,https://davelcor.com.ar/wp-content/uploads/Vertedor-Doble-Materisimo-240x240.jpg,,100
+Aderezos y Condimentos,Vinagre de alcohol Frau x 500 cc.,Vinagre de alcohol Frau x 500 cc.,792.40,12,https://davelcor.com.ar/wp-content/uploads/Alcohol-Etilico-Frau-x-500-cc-240x240.jpg,,100
+Vinos,Vino Alma Mora malbec x 750 cc.,Vino Alma Mora malbec x 750 cc.,5350.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Vino-Alma-Mora-malbec-x-750-cc-240x240.jpg,,100
+Vinos,Vino Bodega Priv. Epico Malbec x 750 cc.,Vino Bodega Priv. Epico Malbec x 750 cc.,7100.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Bodega-Privada-Epico-Malbec-x-750-cc-240x240.jpg,,100
+Vinos,Vino Bodega Privada Coleccion Malbec x 750 cc.,Vino Bodega Privada Coleccion Malbec x 750 cc.,3130.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Vino-Bodega-Priv.-coleccion-Malbec-x-750-cc-240x240.jpg,,100
+Vinos,Vino Cordero con Piel de Lobo malbec x 750 cc.,Vino Cordero con Piel de Lobo malbec x 750 cc.,4400.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Vino-Cordero-con-Piel-de-Lobo-malbec-x-750-cc-240x240.jpg,,100
+Vinos,Vino Dada 1 x 750 cc.,Vino Dada 1 x 750 cc.,5700.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Dada-1-x-750-cc-240x240.jpg,,100
+Vinos,Vino Dilema Blanco dulce x 750 cc.,Vino Dilema Blanco dulce x 750 cc.,3350.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Dilema-Blanco-dulce-x-750-cc-240x240.jpg,,100
+Vinos,Vino Estancia Mendoza Malbec-Cabernet x 750 cc.,Vino Estancia Mendoza Malbec-Cabernet x 750 cc.,2850.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Estancia-Mendoza-Malbec-Cabernet-x-750-cc-240x240.jpg,,100
+Vinos,Vino Las Perdices Malbec Estuche + Copa x 1 Unid.,Vino Las Perdices Malbec Estuche + Copa x 1 Unid.,32500.00,1,https://davelcor.com.ar/wp-content/uploads/Vino-Las-Perdices-Malbec-Estuche-mas-Copa-x-1-Unid-240x240.jpg,,100
+Vinos,Vino Mandamas Blanco x 1 Lt.,Vino Mandamas Blanco x 1 Lt.,1334.69,12,https://davelcor.com.ar/wp-content/uploads/Vino-Mandamas-Blanco-x-1-Lt-240x240.jpg,,100
+Vinos,Vino Mandamas Botellon Tinto x 1125 cc.,Vino Mandamas Botellon Tinto x 1125 cc.,2155.80,6,https://davelcor.com.ar/wp-content/uploads/Vino-Mandamas-Botellon-Tinto-x-1125-cc-240x240.jpg,,100
+Vinos,Vino Mandamas Tinto x 1 Lt.,Vino Mandamas Tinto x 1 Lt.,1486.00,12,https://davelcor.com.ar/wp-content/uploads/Vino-Mandamas-Tinto-x-1-Lt-240x240.jpg,,100
+Vinos,Vino Portillo Suavignon Blanc x 750 cc.,Vino Portillo Suavignon Blanc x 750 cc.,5000.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Portillo-Suavignon-Blanc-x-750-cc-240x240.jpg,,100
+Vinos,Vino Quara Malbec x 750 cc.,Vino Quara Malbec x 750 cc.,2450.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Vino-Quara-Malbec-x-750-cc-240x240.jpg,,100
+Vinos,Vino Quara Torronte x 750 cc.,Vino Quara Torronte x 750 cc.,2450.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Vino-Quara-torrontes-x-750-cc-240x240.jpg,,100
+Vinos,Vino Ricordi Malbec x 750 cc,Vino Ricordi Malbec x 750 cc,4200.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Ricordi-Malbec-Roble-x-750-cc-240x240.jpg,,100
+Vinos,Vino Santa Julia Malbec x 750 cc.,Vino Santa Julia Malbec x 750 cc.,4900.00,6,https://davelcor.com.ar/wp-content/uploads/Vino-Santa-Julia-Malbec-x-750-cc-240x240.jpg,,100
+Vinos,Vino Uvita Tinto x 1125 cc.,Vino Uvita Tinto x 1125 cc.,2199.99,6,https://davelcor.com.ar/wp-content/uploads/Vino-Uvita-Tinto-x-1125-cc-240x240.jpg,,100
+Vinos,Vino Viña Mayor Blend x 700 cc.,Vino Viña Mayor Blend x 700 cc.,1820.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Vino-Vina-Mayor-tinto-x-700-cc-240x240.jpg,,100
+Bebidas con alcohol,Whisky Don John x 1 Lt.,Whisky Don John x 1 Lt.,3390.00,6,https://davelcor.com.ar/wp-content/uploads/2021/05/Whisky-Don-John-x-1-Lt-240x240.jpg,,100
+Bebidas con alcohol,Whisky Vat 69 x 750 cc.,Whisky Vat 69 x 750 cc.,8900.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Whisky-Vat-69-x-750-cc-240x240.jpg,,100
+Yerba Mate,Yerba Don Arregui Boldo y Poleo x 500 gr.,Yerba Don Arregui Boldo y Poleo x 500 gr.,1295.00,12,https://davelcor.com.ar/wp-content/uploads/Yerba-Don-Arregui-Boldo-y-Poleo-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Don Arregui Burrito x 500 gr.,Yerba Don Arregui Burrito x 500 gr.,1295.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/yerba-don-arregui-burrito-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Don Arregui Cedron x 500 gr.,Yerba Don Arregui Cedron x 500 gr.,1295.00,12,https://davelcor.com.ar/wp-content/uploads/Yerba-Don-Arregui-Cedron-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Don Arregui Compuesta x 500 gr.,Yerba Don Arregui Compuesta x 500 gr.,1295.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/yerba-don-arregui-compuesta-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Don Arregui Peperina x 500 gr.,Yerba Don Arregui Peperina x 500 gr.,1295.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/yerba-don-arregui-peperina-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba La Hoja con palos x 500 gr.,Yerba La Hoja con palos x 500 gr.,1200.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-La-Hoja-x-500-gr-2-240x240.jpg,,100
+Yerba Mate,Yerba Nuñez Compuesta x 500 gr.,Yerba Nuñez Compuesta x 500 gr.,880.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Nunez-Compuesta-x-500-gr-2-240x240.jpg,,100
+Yerba Mate,Yerba Nuñez Tradicional x 500 gr.,Yerba Nuñez Tradicional x 500 gr.,1150.94,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Tradicional-Nunez-x-500-gr-2-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Blend Armonico x 500 gr.,Yerba Verdeflor Blend Armonico x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/Yerba-Verdeflor-Blend-Armonico-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Blend Equilibrado x 500 gr.,Yerba Verdeflor Blend Equilibrado x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/Yerba-Verdeflor-Blend-Equilibrado-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Blend Sereno x 500 gr.,Yerba Verdeflor Blend Sereno x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/Yerba-Verdeflor-Blend-Sereno-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Blend Vital x 500 gr.,Yerba Verdeflor Blend Vital x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/Yerba-Verdeflor-Blend-Vital-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Cedron x 500 gr.,Yerba Verdeflor Cedron x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Cedron-Verdeflor-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Compuesta x 500 gr.,Yerba Verdeflor Compuesta x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Verdeflor-x-500-gr-2-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Menta x 500 gr.,Yerba Verdeflor Menta x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Menta-Verdeflor-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Naranja x 500 gr.,Yerba Verdeflor Naranja x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Naranja-Verdeflor-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Peperina x 500 gr.,Yerba Verdeflor Peperina x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/2021/10/Yerba-Verdeflor-Peperina-x-500-gr-240x240.jpg,,100
+Yerba Mate,Yerba Verdeflor Tradicional c/palo x 500 gr.,Yerba Verdeflor Tradicional c/palo x 500 gr.,1670.00,12,https://davelcor.com.ar/wp-content/uploads/2021/07/Yerba-Verdeflor-Tradicional-con-palo-x-500-gr-240x240.jpg,,100
+Limpieza y Desinfección,Alcohol Etilico Frau x 500 cc.,Alcohol Etilico Frau x 500 cc.,1617.00,10,https://davelcor.com.ar/wp-content/uploads/Alcohol-Etilico-Frau-x-500-cc-1-240x240.jpg,,100
+Legumbres / Cereales,Avena Lista Menu Box – Con Arandanos x 59 gr.,Avena Lista Menu Box – Con Arandanos x 59 gr.,1630.00,6,https://davelcor.com.ar/wp-content/uploads/Avena-Lista-Menu-Box-Con-Arandonos-x-59-gr-240x240.jpg,,100
+Enlatados,Choclo Inalpa Crema B. x 300 gr.,Choclo Inalpa Crema B. x 300 gr.,690.00,24,https://davelcor.com.ar/wp-content/uploads/Choclo-Inalpa-Crema-B.-x-300-gr-240x240.jpg,,100
+Mermeladas y Dulces,Dulce de Leche Creser x 380 gr.,Dulce de Leche Creser x 380 gr.,1495.00,12,https://davelcor.com.ar/wp-content/uploads/Dulce-de-Leche-Creser-x-380-gr-240x240.jpg,,100
+Fideos Verizzia,Fideos Verizzia Dedalitos  x 500 gr.,Fideos Verizzia Dedalitos  x 500 gr.,705.00,15,https://davelcor.com.ar/wp-content/uploads/2021/05/fideos-dedalito-verizzia-x-500-gr-240x240.jpg,,100
+Galletas,Galletas Surtidas Diversion x 390 gr.,Galletas Surtidas Diversion x 390 gr.,2250.00,21,https://davelcor.com.ar/wp-content/uploads/2021/09/Galletas-Surtidas-Diversion-x-390-gr-240x240.jpg,,100
+Bebidas con alcohol,Gin New Style x 1 Lt.,Gin New Style x 1 Lt.,3700.00,6,https://davelcor.com.ar/wp-content/uploads/Gin-New-Style-x-1-Lt-240x240.jpg,,100
+Hogar y Limpieza,Lavandina Gel Ayudin x 700 cc.,Lavandina Gel Ayudin x 700 cc.,3390.00,15,https://davelcor.com.ar/wp-content/uploads/Lavandina-Gel-Ayudin-x-700-cc-240x240.jpg,,100
+Lacteos,Leche en polvo Mundo Lacteo x 800 gr.,Leche en polvo Mundo Lacteo x 800 gr.,4900.00,18,https://davelcor.com.ar/wp-content/uploads/Leche-en-polvo-Mundo-Lacteo-x-800-gr--240x240.jpg,,100
+Golosinas,Merendina Aires de Lujan x 30 gr.,Merendina Aires de Lujan x 30 gr.,220.00,40,https://davelcor.com.ar/wp-content/uploads/2021/05/Merendina-Aires-de-Lujan-x-30-gr-240x240.jpg,,100
+Mermeladas y Dulces,Mermelada Light Orieta x 420 gr. – Durazno,Mermelada Light Orieta x 420 gr. – Durazno,1420.00,12,https://davelcor.com.ar/wp-content/uploads/Mermelada-Light-Orieta-x-420-gr.-Durazno-1-240x240.jpg,,100
+Aderezos y Condimentos,Mostaza Savora x 250 gr.,Mostaza Savora x 250 gr.,1480.00,24,https://davelcor.com.ar/wp-content/uploads/Mostaza-Savora-x-250-gr-240x240.jpg,,100
+Legumbres / Cereales,Poroto Alubia Sytari x 400 gr.,Poroto Alubia Sytari x 400 gr.,1240.00,10,https://davelcor.com.ar/wp-content/uploads/Poroto-Alubia-Sytari-x-400-gr-240x240.jpg,,100
+Harinas,Premezcla Sin Tacc Pureza x 250 gr. – Chipa,Premezcla Sin Tacc Pureza x 250 gr. – Chipa,2700.00,16,https://davelcor.com.ar/wp-content/uploads/Premezcla-Sin-Tacc-Pureza-x-250-gr.-Chipa-240x240.jpg,,100
+Sal,Sal Entrefina Celusal x 1 Kg. – Parrillera,Sal Entrefina Celusal x 1 Kg. – Parrillera,1715.73,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Sal-Entrefina-Celusal-x-1-Kg-240x240.jpg,,100
+Limpieza y Desinfección,Sanitizante aerosol Lysoform x 420 cc.,Sanitizante aerosol Lysoform x 420 cc.,3250.00,12,https://davelcor.com.ar/wp-content/uploads/2021/05/Desinfectante-Lysoform-x-360-cc-240x240.jpg,,100
+Bebidas con alcohol,Whisky Blender x 1 Lt.,Whisky Blender x 1 Lt.,9900.00,6,https://davelcor.com.ar/wp-content/uploads/2021/06/Whisky-Blender-x-1-Lt-240x240.jpg,,100
+Yerba Mate,Yerba Playadito x 500 gr.,Yerba Playadito x 500 gr.,2250.00,10,https://davelcor.com.ar/wp-content/uploads/2021/05/Yerba-Playadito-x-500-gr-240x240.jpg,,100

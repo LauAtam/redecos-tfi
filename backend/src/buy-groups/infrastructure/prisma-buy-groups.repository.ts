@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, BadRequestException, ForbiddenException, Logger } from '@nestjs/common';
 import { BuyGroupsRepository } from '../interfaces/buy-groups-repository.interface';
 import { PrismaService } from '../../prisma/prisma.service';
 import { JoinGroupDto } from '../dto/join-group.dto';
@@ -9,6 +9,8 @@ import * as crypto from 'crypto';
 
 @Injectable()
 export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
+  private readonly logger = new Logger(PrismaBuyGroupsRepository.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly mercadoPago: MercadoPagoService,
@@ -119,6 +121,21 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
 
         // 3. Si no existe, crear el grupo
         if (!activeGroup) {
+          // Robustez: Si hay grupos OPEN pero expirados, cambiarlos a CANCELLED transaccionalmente
+          // para evitar violar el índice único condicional 'idx_unique_open_group'
+          await tx.buy_groups.updateMany({
+            where: {
+              product_id: dto.productId,
+              node_id: dto.nodeId,
+              status: 'OPEN',
+              expires_at: { lte: new Date() },
+            },
+            data: {
+              status: 'CANCELLED',
+              closed_at: new Date(),
+            },
+          });
+
           const nowBaires = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
           const expiresAtBaires = new Date(nowBaires);
           expiresAtBaires.setHours(23, 59, 59, 999);
@@ -200,6 +217,9 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
       await this.prisma.group_orders.delete({
         where: { id: tempOrderId },
       });
+      // Limpiar el grupo si quedó vacío (por si fue el primer intento fallido de iniciar el grupo)
+      await this.cleanupEmptyGroup(groupId);
+
       throw MercadoPagoErrorMapper.map(paymentError.raw || paymentError);
     }
 
@@ -211,6 +231,9 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
       await this.prisma.group_orders.delete({
         where: { id: tempOrderId },
       });
+      // Limpiar el grupo si quedó vacío
+      await this.cleanupEmptyGroup(groupId);
+
       throw new BadRequestException(
         `El pago fue rechazado o no pudo ser procesado por Mercado Pago. Estado: ${paymentResult?.status || 'desconocido'}.`,
       );
@@ -318,6 +341,22 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
     }
 
     return newOrder;
+  }
+
+  private async cleanupEmptyGroup(groupId: string): Promise<void> {
+    try {
+      const activeOrdersCount = await this.prisma.group_orders.count({
+        where: { group_id: groupId },
+      });
+      if (activeOrdersCount === 0) {
+        await this.prisma.buy_groups.delete({
+          where: { id: groupId },
+        });
+        this.logger.log(`🧹 Grupo de compra vacío ${groupId} eliminado correctamente.`);
+      }
+    } catch (cleanupError: any) {
+      this.logger.error(`❌ Fallo al limpiar grupo de compra vacío ${groupId}: ${cleanupError.message}`);
+    }
   }
 
   async getMyOrders(userId: string): Promise<any> {

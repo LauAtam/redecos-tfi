@@ -1,31 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonMenuButton,
+import {
+  IonContent,
   IonButton,
-  IonIcon,
-  IonText,
-  IonFooter,
-  IonTabBar,
-  IonTabButton,
-  IonLabel
+  IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { 
-  menuOutline, 
-  cartOutline, 
+import {
   lockClosed,
   storefrontOutline,
-  peopleOutline,
-  personOutline,
-  helpCircleOutline
+  personOutline
 } from 'ionicons/icons';
+import { HeaderComponent } from '../../core/components/header/header.component';
 
 @Component({
   selector: 'app-restricted',
@@ -33,34 +20,20 @@ import {
   styleUrls: ['./restricted.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterModule,
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
-    IonButtons, 
-    IonMenuButton,
+    HeaderComponent,
+    IonContent,
     IonButton,
-    IonIcon,
-    IonFooter,
-    IonTabBar,
-    IonTabButton,
-    IonLabel
+    IonIcon
   ]
 })
 export class RestrictedPage {
-
   constructor() {
-    addIcons({ 
-      menuOutline, 
-      cartOutline, 
+    addIcons({
       lockClosed,
       storefrontOutline,
-      peopleOutline,
-      personOutline,
-      helpCircleOutline
+      personOutline
     });
   }
-
 }

@@ -1,11 +1,12 @@
-import { Component, OnInit, OnChanges, SimpleChanges, Input, inject } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { Component, OnInit, OnChanges, SimpleChanges, Input, inject, signal } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { IonButton, IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { swapHorizontalOutline, chevronForwardOutline } from 'ionicons/icons';
 import { AppFacadeService } from '../../../app-facade.service';
 import { Nodo, Producto, BuyGroup } from '../../../core/models/auth.models';
+import { ProductModalComponent } from '../../../core/components/product-modal/product-modal.component';
 
 @Component({
   selector: 'app-groups-tab',
@@ -13,15 +14,35 @@ import { Nodo, Producto, BuyGroup } from '../../../core/models/auth.models';
   styleUrls: ['./groups-tab.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     CurrencyPipe,
     RouterModule,
     IonButton,
     IonIcon,
-    IonSpinner
+    IonSpinner,
+    ProductModalComponent
   ],
   providers: [CurrencyPipe]
 })
 export class GroupsTabComponent implements OnInit, OnChanges {
+  isProductModalOpen = signal<boolean>(false);
+  selectedProduct = signal<Producto | null>(null);
+
+  openProductModal(product: Producto) {
+    this.selectedProduct.set(product);
+    this.isProductModalOpen.set(true);
+  }
+
+  closeProductModal() {
+    this.isProductModalOpen.set(false);
+    this.selectedProduct.set(null);
+  }
+
+  getGroupForProduct(productId: string | undefined): BuyGroup | null {
+    if (!productId) return null;
+    return this.activeGroups.find(g => g.productId === productId) || null;
+  }
+
   blurActiveElement() {
     (document.activeElement as HTMLElement)?.blur();
   }

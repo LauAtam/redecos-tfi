@@ -94,6 +94,10 @@ export class AppFacadeService {
     return this.productService.deleteProducto(id);
   }
 
+  importCatalog(file: File) {
+    return this.productService.importCatalog(file);
+  }
+
   // Delegación de Compras Colectivas y Pedidos
   getActiveBuyGroups(nodeId: string) {
     return this.buyGroupService.getActiveBuyGroups(nodeId);

@@ -8,23 +8,29 @@ import {
   Delete,
   UseGuards,
   Query,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiTags,
   ApiResponse,
+  ApiConsumes,
+  ApiBody,
 } from '@nestjs/swagger';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Get()
   @ApiOperation({ summary: 'Get all products' })
@@ -32,17 +38,20 @@ export class ProductsController {
   findAll(
     @Query('search') search?: string,
     @Query('categoryId') categoryId?: string,
-    @Query('page') page?: number,
-    @Query('limit') limit?: number,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
     @Query('onlyWithStock') onlyWithStock?: string,
   ) {
     const filterStock = onlyWithStock !== 'false';
-    return this.productsService.findAll({ 
-      search, 
-      categoryId, 
-      page, 
-      limit, 
-      onlyWithStock: filterStock 
+    const pageNum = page ? parseInt(page, 10) : undefined;
+    const limitNum = limit ? parseInt(limit, 10) : undefined;
+
+    return this.productsService.findAll({
+      search,
+      categoryId,
+      page: pageNum,
+      limit: limitNum,
+      onlyWithStock: filterStock
     });
   }
 
@@ -90,5 +99,30 @@ export class ProductsController {
   @ApiOperation({ summary: 'Delete a product (Admin only)' })
   remove(@Param('id') id: string) {
     return this.productsService.remove(id);
+  }
+
+  @Post('import')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Import products from a CSV file (Admin only)' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  async importProducts(@UploadedFile() file: any) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+    return this.productsService.importFromCsv(file.buffer);
   }
 }

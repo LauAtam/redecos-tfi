@@ -7,8 +7,12 @@
       <ion-icon name="person-outline"></ion-icon>
     </div>
   </div>
-  <h2 class="font-bold text-base text-[#002d4b] m-0 mb-0.5" *ngIf="userName">{{ userName }}</h2>
-  <p class="text-xs text-slate-500 m-0" *ngIf="userEmail">{{ userEmail }}</p>
+  @if (userName) {
+  <h2 class="font-bold text-base text-[#002d4b] m-0 mb-0.5">{{ userName }}</h2>
+  }
+  @if (userEmail) {
+  <p class="text-xs text-slate-500 m-0">{{ userEmail }}</p>
+  }
 </section>
 
 <!-- Preference Node Card -->
@@ -20,18 +24,23 @@
       <span class="text-[9px] font-bold text-slate-400 mb-1 uppercase tracking-wider block">Punto de Retiro de
         Preferencia</span>
 
-      <div *ngIf="activeNode" class="flex items-center gap-1.5 text-[#006b4d] mt-1">
+      @if (activeNode) {
+      <div class="flex items-center gap-1.5 text-[#006b4d] mt-1">
         <ion-icon name="business-outline" class="text-base"></ion-icon>
         <p class="text-xs font-bold m-0">{{ activeNode.name }}</p>
       </div>
-      <div *ngIf="!activeNode" class="flex items-center gap-1.5 text-red-600 mt-1">
+      } @else {
+      <div class="flex items-center gap-1.5 text-red-600 mt-1">
         <ion-icon name="help-circle-outline" class="text-base"></ion-icon>
         <p class="text-xs font-bold m-0">No seleccionado</p>
       </div>
+      }
     </div>
   </div>
 
-  <p class="text-xs text-slate-500 m-0" *ngIf="activeNode">{{ activeNode.address }}</p>
+  @if (activeNode) {
+  <p class="text-xs text-slate-500 m-0">{{ activeNode.address }}</p>
+  }
 
   <ion-button expand="block" fill="outline" routerLink="/pages/select-node"
     class="[--color:#006b4d] [--border-color:#e2e8f0] font-bold text-xs h-9 m-0 mt-1">
@@ -42,17 +51,20 @@
 
 <!-- Cards Management Section -->
 <section class="flex flex-col gap-2 mt-4">
-  <span class="text-[9px] font-bold text-slate-400 px-1 uppercase tracking-wider mb-1 block">Tarjetas Guardadas</span>
+  <span class="text-[9px] font-bold text-slate-400 px-1 uppercase tracking-wider block mb-1">Tarjetas Guardadas</span>
 
   <!-- Loader -->
-  <div *ngIf="isLoadingCards()" class="flex justify-center py-4">
+  @if (isLoadingCards()) {
+  <div class="flex justify-center py-4">
     <ion-spinner name="crescent" class="text-[#006b4d]"></ion-spinner>
   </div>
+  }
 
   <!-- Cards List -->
-  <div *ngIf="!isLoadingCards() && savedCards().length > 0" class="flex flex-col gap-2">
-    <div *ngFor="let card of savedCards()"
-      class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100">
+  @if (!isLoadingCards() && savedCards().length > 0) {
+  <div class="flex flex-col gap-2">
+    @for (card of savedCards(); track card.id) {
+    <div class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 rounded-full bg-emerald-50 text-[#006b4d] flex items-center justify-center text-base">
           <ion-icon name="card-outline"></ion-icon>
@@ -68,14 +80,18 @@
         <ion-icon name="trash-outline" class="text-base"></ion-icon>
       </button>
     </div>
+    }
   </div>
+  }
 
   <!-- Empty state -->
-  <div *ngIf="!isLoadingCards() && savedCards().length === 0"
+  @if (!isLoadingCards() && savedCards().length === 0) {
+  <div
     class="p-4 bg-white rounded-xl shadow-sm border border-slate-100 text-center flex flex-col items-center justify-center gap-1.5">
     <ion-icon name="card-outline" class="text-slate-300 text-2xl"></ion-icon>
     <p class="text-xs text-slate-500 font-medium m-0">No tenés tarjetas guardadas para tus compras rápidas.</p>
   </div>
+  }
 
   <!-- Add Card Button -->
   <ion-button expand="block" fill="outline" (click)="openAddCardModal()"
@@ -87,7 +103,7 @@
 
 <!-- Account Options List -->
 <section class="flex flex-col gap-2 mt-4">
-  <span class="text-[9px] font-bold text-slate-400 px-1 uppercase tracking-wider mb-1 block">Opciones de Cuenta</span>
+  <span class="text-[9px] font-bold text-slate-400 px-1 uppercase tracking-wider block mb-1">Opciones de Cuenta</span>
 
   <div
     class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer"
@@ -101,7 +117,8 @@
     <ion-icon name="chevron-forward-outline" class="text-slate-400 text-sm"></ion-icon>
   </div>
 
-  <div *ngIf="userRole() === 'NODO' || userRole() === 'ADMIN'"
+  @if (userRole() === 'NODO' || userRole() === 'ADMIN') {
+  <div
     class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer"
     (click)="goToConsolidacion()">
     <div class="flex items-center gap-3">
@@ -112,6 +129,7 @@
     </div>
     <ion-icon name="chevron-forward-outline" class="text-slate-400 text-sm"></ion-icon>
   </div>
+  }
 
   <a class="flex items-center justify-between p-3 bg-white rounded-xl shadow-sm border border-slate-100 hover:bg-slate-50 active:scale-[0.98] transition-all"
     href="#">
@@ -149,106 +167,7 @@
     </ion-header>
 
     <ion-content class="ion-padding [--background:#f8fafc]">
-      <div class="flex flex-col gap-4 max-w-[450px] mx-auto pb-6">
-
-        <!-- Tarjeta Virtual Estética -->
-        <div
-          class="bg-gradient-to-br from-[#002d4b] to-[#006b4d] rounded-2xl p-4 text-white shadow-sm flex flex-col justify-between h-36 relative overflow-hidden mb-1 select-none">
-          <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-white/5 rounded-full"></div>
-          <div class="flex justify-between items-start">
-            <span class="text-xs font-extrabold tracking-widest text-emerald-300">Redecos Pay</span>
-            <ion-icon name="card-outline" class="text-xl opacity-80"></ion-icon>
-          </div>
-          <div class="text-sm font-semibold tracking-[0.15em] font-mono my-2">
-            {{ cardNumber || '•••• •••• •••• ••••' }}
-          </div>
-          <div class="flex justify-between items-end text-[10px] uppercase">
-            <div class="flex flex-col min-w-0">
-              <span class="text-[8px] text-slate-300 tracking-wider">Titular</span>
-              <span class="font-bold truncate max-w-[150px]">{{ cardholderName || 'Nombre Titular' }}</span>
-            </div>
-            <div class="flex flex-col text-right">
-              <span class="text-[8px] text-slate-300 tracking-wider">Vence</span>
-              <span class="font-bold">{{ cardExpiration || 'MM/AA' }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Formulario -->
-        <div class="flex flex-col gap-3">
-          <div>
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nombre en la
-              tarjeta</label>
-            <input type="text" [(ngModel)]="cardholderName"
-              class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
-              placeholder="Juan Pérez" />
-          </div>
-
-          <div>
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Número de
-              tarjeta</label>
-            <input type="text" [(ngModel)]="cardNumber" (input)="onCardNumberInput($event)" maxlength="19"
-              inputmode="numeric"
-              class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
-              placeholder="4517 6000 0000 0000" />
-          </div>
-
-          <div class="grid grid-cols-3 gap-2">
-            <div class="col-span-2">
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Vencimiento</label>
-              <input type="text" [(ngModel)]="cardExpiration" (input)="onCardExpirationInput($event)" maxlength="5"
-                placeholder="MM/AA" inputmode="numeric"
-                class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
-            </div>
-            <div>
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">CVV</label>
-              <input type="password" [(ngModel)]="securityCode" (input)="onCvvInput($event)" maxlength="4" placeholder="123"
-                inputmode="numeric"
-                class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
-            </div>
-          </div>
-
-          <div class="grid grid-cols-3 gap-2">
-            <div class="col-span-1">
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Doc. Tipo</label>
-              <select [(ngModel)]="docType"
-                class="w-full h-10 px-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all">
-                <option value="DNI">DNI</option>
-                <option value="CI">CI</option>
-                <option value="LC">LC</option>
-                <option value="LE">LE</option>
-              </select>
-            </div>
-            <div class="col-span-2">
-              <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nro de
-                Documento</label>
-              <input type="text" [(ngModel)]="docNumber" (input)="onDocNumberInput($event)" inputmode="numeric"
-                class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
-                placeholder="35123456" />
-            </div>
-          </div>
-
-          <div>
-            <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Email del
-              pagador</label>
-            <input type="email" [(ngModel)]="cardholderEmail"
-              class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
-              placeholder="juan@ejemplo.com" />
-          </div>
-
-          <div class="text-red-500 text-[10px] font-bold mt-1" *ngIf="saveCardError">
-            {{ saveCardError }}
-          </div>
-        </div>
-
-        <ion-button expand="block" [disabled]="isSavingCard()"
-          class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl mt-2"
-          (click)="saveNewCard()">
-          <span *ngIf="!isSavingCard()">Guardar Tarjeta</span>
-          <ion-spinner name="crescent" *ngIf="isSavingCard()"></ion-spinner>
-        </ion-button>
-
-      </div>
+      <app-add-card-form (cardSaved)="onCardSaved($event)"></app-add-card-form>
     </ion-content>
   </ng-template>
 </ion-modal>

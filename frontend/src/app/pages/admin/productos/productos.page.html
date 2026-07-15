@@ -10,6 +10,42 @@
     @if (!showForm) {
     <div class="flex flex-col h-full overflow-hidden">
 
+      <!-- Input de archivo oculto para disparar la carga nativa -->
+      <input type="file" #csvFileInput accept=".csv" (change)="onCsvFileSelected($event)" style="display: none;" />
+
+      <!-- Barra de Acciones del Catálogo -->
+      <div class="flex justify-between items-center gap-2 mb-3 mt-1">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Acciones del Catálogo</span>
+        <ion-button fill="clear" size="small" class="[--color:#006b4d] font-bold text-xs m-0"
+          (click)="triggerCsvUpload()">
+          <ion-icon name="reader-outline" slot="start"></ion-icon>
+          Importar CSV
+        </ion-button>
+      </div>
+
+      <!-- Buscador con Debounce -->
+      <ion-searchbar placeholder="Buscar por nombre o descripción..." [value]="searchQuery" debounce="300"
+        (ionInput)="onSearch($event)" class="[--background:#f1f5f9] [--border-radius:12px] p-0 mb-3 text-sm">
+      </ion-searchbar>
+
+      <!-- Selector Horizontal de Categorías (Scrollable) -->
+      <div class="flex gap-1.5 overflow-x-auto pb-3 mb-2 -mx-2 px-2 scrollbar-none">
+        <ion-chip
+          [class]="selectedCategoryId === null ? '[--background:#006b4d] [--color:#ffffff]' : '[--background:#f1f5f9] [--color:#475569]'"
+          (click)="selectCategory(null)"
+          class="m-0 text-xs font-semibold rounded-full py-1 px-3.5 transition-all shrink-0 whitespace-nowrap">
+          Todos
+        </ion-chip>
+        @for (cat of categorias; track cat.id) {
+        <ion-chip
+          [class]="selectedCategoryId === cat.id ? '[--background:#006b4d] [--color:#ffffff]' : '[--background:#f1f5f9] [--color:#475569]'"
+          (click)="selectCategory(cat.id)"
+          class="m-0 text-xs font-semibold rounded-full py-1 px-3.5 transition-all shrink-0 whitespace-nowrap">
+          {{ cat.name }}
+        </ion-chip>
+        }
+      </div>
+
       @if (isLoading) {
       <div class="py-12 ion-text-center">
         <ion-spinner name="crescent"></ion-spinner>
@@ -37,7 +73,8 @@
             class="[--background:transparent] [--padding-start:16px] [--padding-end:16px] [--inner-padding-end:0] py-2">
             @if (prod.image_url) {
             <ion-thumbnail slot="start" class="w-12 h-12 m-0 [--border-radius:8px]">
-              <img [src]="prod.image_url" alt="Product Image" class="object-cover rounded-[8px] w-full h-full" />
+              <img [src]="prod.image_url" referrerpolicy="no-referrer" alt="Product Image"
+                class="object-cover rounded-[8px] w-full h-full" />
             </ion-thumbnail>
             }
             @if (!prod.image_url) {
@@ -74,6 +111,14 @@
             </ion-label>
           </ion-item>
         </ion-card>
+        }
+
+        <!-- Scroll Infinito de Productos -->
+        @if (hasMoreProducts) {
+        <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+          <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más productos...">
+          </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
         }
       </div>
       }
@@ -205,7 +250,7 @@
           <div
             class="w-full max-h-[180px] aspect-video rounded-[20px] overflow-hidden bg-gradient-to-b from-[#f8fafc] to-[#eef4f7] border border-[#e2e8f0] shadow-[inset_0_2px_8px_rgba(0,0,0,0.04)] flex items-center justify-center p-2 max-[480px]:max-h-[140px] max-[480px]:p-1.5">
             @if (selectedProduct.image_url) {
-            <img [src]="selectedProduct.image_url" alt="Imagen del producto"
+            <img [src]="selectedProduct.image_url" referrerpolicy="no-referrer" alt="Imagen del producto"
               class="w-full h-full max-h-[180px] object-contain max-[480px]:max-h-[140px]" />
             }
             @if (!selectedProduct.image_url) {

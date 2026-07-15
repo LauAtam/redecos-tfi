@@ -1,0 +1,102 @@
+<div class="flex flex-col gap-4 max-w-[450px] mx-auto pb-6">
+
+  <!-- Tarjeta Virtual Estética -->
+  <div
+    class="bg-gradient-to-br from-[#002d4b] to-[#006b4d] rounded-2xl p-4 text-white shadow-sm flex flex-col justify-between h-36 relative overflow-hidden mb-1 select-none">
+    <div class="absolute -right-8 -bottom-8 w-24 h-24 bg-white/5 rounded-full"></div>
+    <div class="flex justify-between items-start">
+      <span class="text-xs font-extrabold tracking-widest text-emerald-300">Redecos Pay</span>
+      <ion-icon name="card-outline" class="text-xl opacity-80"></ion-icon>
+    </div>
+    <div class="text-sm font-semibold tracking-[0.15em] font-mono my-2">
+      {{ cardNumber || '•••• •••• •••• ••••' }}
+    </div>
+    <div class="flex justify-between items-end text-[10px] uppercase">
+      <div class="flex flex-col min-w-0">
+        <span class="text-[8px] text-slate-300 tracking-wider">Titular</span>
+        <span class="font-bold truncate max-w-[150px]">{{ cardholderName || 'Nombre Titular' }}</span>
+      </div>
+      <div class="flex flex-col text-right">
+        <span class="text-[8px] text-slate-300 tracking-wider">Vence</span>
+        <span class="font-bold">{{ cardExpiration || 'MM/AA' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div class="flex flex-col gap-3">
+    <div>
+      <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nombre en la tarjeta</label>
+      <input type="text" [(ngModel)]="cardholderName"
+        class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
+        placeholder="Juan Pérez" />
+    </div>
+
+    <div>
+      <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Número de tarjeta</label>
+      <input type="text" [(ngModel)]="cardNumber" (input)="onCardNumberInput($event)" maxlength="19"
+        inputmode="numeric"
+        class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
+        placeholder="4517 6000 0000 0000" />
+    </div>
+
+    <div class="grid grid-cols-3 gap-2">
+      <div class="col-span-2">
+        <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Vencimiento</label>
+        <input type="text" [(ngModel)]="cardExpiration" (input)="onCardExpirationInput($event)" maxlength="5"
+          placeholder="MM/AA" inputmode="numeric"
+          class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
+      </div>
+      <div>
+        <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">CVV</label>
+        <input type="password" [(ngModel)]="securityCode" (input)="onCvvInput($event)" maxlength="4" placeholder="123"
+          inputmode="numeric"
+          class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs text-center focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all" />
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-2">
+      <div class="col-span-1">
+        <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Doc. Tipo</label>
+        <select [(ngModel)]="docType"
+          class="w-full h-10 px-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all">
+          <option value="DNI">DNI</option>
+          <option value="CI">CI</option>
+          <option value="LC">LC</option>
+          <option value="LE">LE</option>
+        </select>
+      </div>
+      <div class="col-span-2">
+        <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Nro de Documento</label>
+        <input type="text" [(ngModel)]="docNumber" (input)="onDocNumberInput($event)" inputmode="numeric"
+          class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
+          placeholder="35123456" />
+      </div>
+    </div>
+
+    <div>
+      <label class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Email del pagador</label>
+      <input type="email" [(ngModel)]="cardholderEmail"
+        class="w-full h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#006b4d] focus:border-transparent transition-all"
+        placeholder="juan@ejemplo.com" />
+    </div>
+
+    @if (saveCardError) {
+    <div class="text-red-500 text-[10px] font-bold mt-1">
+      {{ saveCardError }}
+    </div>
+    }
+  </div>
+
+  <ion-button expand="block" [disabled]="isSavingCard()"
+    class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl mt-2"
+    (click)="saveNewCard()">
+    @if (!isSavingCard()) {
+    <span>Guardar Tarjeta</span>
+    }
+    @if (isSavingCard()) {
+    <ion-spinner name="crescent"></ion-spinner>
+    }
+  </ion-button>
+
+</div>

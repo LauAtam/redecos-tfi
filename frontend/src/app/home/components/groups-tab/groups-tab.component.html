@@ -43,7 +43,7 @@
 <!-- Lista de Grupos Activos -->
 <div class="flex flex-col gap-3">
   @for (group of activeGroups; track group.id) {
-  <div routerLink="/home" [queryParams]="{ tab: 'products', productId: group.productId, nodeId: activeNode?.id }"
+  <div (click)="group.product ? openProductModal(group.product) : null"
     class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden flex flex-col pt-2.5 pb-3 px-3.5 active:bg-slate-50 hover:shadow-md transition-all cursor-pointer relative">
 
     <div class="flex flex-col w-full gap-2">
@@ -98,3 +98,8 @@
   }
 </div>
 }
+
+<app-product-modal [isOpen]="isProductModalOpen()" [product]="selectedProduct()" [nodeId]="activeNode?.id"
+  [activeGroup]="selectedProduct() ? getGroupForProduct(selectedProduct()!.id) : null" (closed)="closeProductModal()"
+  (purchaseSuccess)="loadActiveGroups()">
+</app-product-modal>
