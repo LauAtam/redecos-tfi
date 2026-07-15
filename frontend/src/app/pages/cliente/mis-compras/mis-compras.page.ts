@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { NgClass, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
@@ -14,7 +14,9 @@ import {
   IonToolbar,
   IonButtons,
   IonTitle,
-  IonPopover
+  IonPopover,
+  IonSegment,
+  IonSegmentButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -54,16 +56,37 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonToolbar,
     IonButtons,
     IonTitle,
-    IonPopover
+    IonPopover,
+    IonSegment,
+    IonSegmentButton
   ],
   providers: [CurrencyPipe],
 })
 export class MisComprasPage implements OnInit {
-  orders: GroupOrder[] = [];
+  orders = signal<GroupOrder[]>([]);
   isLoading = false;
   errorMessage: string | null = null;
   selectedOrderForQr: GroupOrder | null = null;
   qrModalOpen = false;
+
+  selectedSegment = signal<'active' | 'history'>('active');
+
+  filteredOrders = computed(() => {
+    const list = this.orders();
+    const segment = this.selectedSegment();
+    return list.filter(order => {
+      if (segment === 'active') {
+        return (
+          order.status === 'PAYMENT_HELD' ||
+          (order.status === 'CONFIRMED' && order.group?.status !== 'COMPLETED')
+        );
+      }
+      return (
+        order.status === 'CANCELLED' ||
+        (order.status === 'CONFIRMED' && order.group?.status === 'COMPLETED')
+      );
+    });
+  });
 
   private appFacadeService = inject(AppFacadeService);
 
@@ -95,8 +118,12 @@ export class MisComprasPage implements OnInit {
     if (error) {
       this.errorMessage = (error as any).message || 'Error al cargar tus compras.';
     } else {
-      this.orders = data || [];
+      this.orders.set(data || []);
     }
+  }
+
+  onSegmentChanged(event: any) {
+    this.selectedSegment.set(event.detail.value as 'active' | 'history');
   }
 
   formatProductName(name: string | undefined): string {

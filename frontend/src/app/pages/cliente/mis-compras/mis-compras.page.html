@@ -24,29 +24,51 @@
     </div>
     }
 
+    <!-- Segmented Control para Filtros -->
+    @if (!isLoading && !errorMessage) {
+    <ion-segment [value]="selectedSegment()" (ionChange)="onSegmentChanged($event)" mode="ios"
+      class="bg-slate-100 rounded-xl p-1 border border-slate-200/40">
+      <ion-segment-button value="active"
+        class="font-bold text-xs [--color:#64748b] [--color-checked:#006b4d] [--background-checked:#ffffff] rounded-lg">
+        En Curso
+      </ion-segment-button>
+      <ion-segment-button value="history"
+        class="font-bold text-xs [--color:#64748b] [--color-checked:#006b4d] [--background-checked:#ffffff] rounded-lg">
+        Historial
+      </ion-segment-button>
+    </ion-segment>
+    }
+
     <!-- Lista de compras vacía -->
-    @if (!isLoading && !errorMessage && orders.length === 0) {
+    @if (!isLoading && !errorMessage && filteredOrders().length === 0) {
     <div
       class="text-center py-16 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm flex flex-col items-center gap-3">
       <div
         class="w-14 h-14 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center text-2xl border border-slate-100">
         <ion-icon name="card-outline"></ion-icon>
       </div>
-      <div class="text-sm font-bold text-[#002d4b]">Todavía no realizaste compras</div>
+      @if (selectedSegment() === 'active') {
+      <div class="text-sm font-bold text-[#002d4b]">No tenés compras en curso</div>
       <div class="text-xs text-slate-500 leading-normal max-w-[280px] mx-auto">
-        Sumate a un grupo de compra colectiva en el catálogo para empezar a ahorrar junto a tus vecinos.
+        Sumate a un grupo de compra colectiva activo en el catálogo para empezar a ahorrar con tus vecinos.
       </div>
       <ion-button routerLink="/home" [queryParams]="{tab: 'products'}"
         class="[--background:#006b4d] [--color:white] text-xs font-bold mt-2 h-10 px-4 rounded-xl m-0 shadow-sm">
         Explorar Catálogo
       </ion-button>
+      } @else {
+      <div class="text-sm font-bold text-[#002d4b]">Historial vacío</div>
+      <div class="text-xs text-slate-500 leading-normal max-w-[280px] mx-auto">
+        Aquí verás tus compras finalizadas, entregadas o canceladas.
+      </div>
+      }
     </div>
     }
 
     <!-- Listado de Órdenes -->
-    @if (!isLoading && !errorMessage && orders.length > 0) {
+    @if (!isLoading && !errorMessage && filteredOrders().length > 0) {
     <div class="flex flex-col gap-3.5">
-      @for (order of orders; track order.id) {
+      @for (order of filteredOrders(); track order.id) {
       <ion-card
         class="m-0 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow">
         <ion-card-content class="p-4 flex flex-col gap-3">
@@ -97,7 +119,8 @@
                   <ng-template>
                     <div class="p-3 text-[11px] text-[#002d4b] leading-normal max-w-[240px]">
                       @if (order.status === 'PAYMENT_HELD') {
-                      <strong>Pre-autorización activa</strong>: El dinero está retenido en tu tarjeta. Solo se cobrará si
+                      <strong>Pre-autorización activa</strong>: El dinero está retenido en tu tarjeta. Solo se cobrará
+                      si
                       el grupo se consolida hoy. Si no, se libera automáticamente.
                       } @else if (order.status === 'CONFIRMED') {
                       <strong>Compra confirmada</strong>: El grupo se consolidó con éxito. El dinero fue cobrado y el
