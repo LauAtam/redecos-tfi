@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { NgClass, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import {
   IonContent,
@@ -13,7 +13,8 @@ import {
   IonHeader,
   IonToolbar,
   IonButtons,
-  IonTitle
+  IonTitle,
+  IonPopover
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -24,7 +25,8 @@ import {
   cubeOutline,
   arrowBackOutline,
   qrCodeOutline,
-  closeOutline
+  closeOutline,
+  helpCircleOutline
 } from 'ionicons/icons';
 import { AppFacadeService } from '../../../app-facade.service';
 import { GroupOrder } from '../../../core/models/auth.models';
@@ -36,7 +38,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
   styleUrls: ['./mis-compras.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
+    NgClass,
+    CurrencyPipe,
     RouterModule,
     HeaderComponent,
     IonContent,
@@ -50,7 +53,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonHeader,
     IonToolbar,
     IonButtons,
-    IonTitle
+    IonTitle,
+    IonPopover
   ],
   providers: [CurrencyPipe],
 })
@@ -72,7 +76,8 @@ export class MisComprasPage implements OnInit {
       cubeOutline,
       arrowBackOutline,
       qrCodeOutline,
-      closeOutline
+      closeOutline,
+      helpCircleOutline
     });
   }
 

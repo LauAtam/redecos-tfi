@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, SimpleChanges, Input, inject, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { IonButton, IonIcon, IonSpinner } from '@ionic/angular/standalone';
+import { IonIcon, IonSpinner } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { swapHorizontalOutline, chevronForwardOutline } from 'ionicons/icons';
 import { AppFacadeService } from '../../../app-facade.service';
@@ -17,7 +17,6 @@ import { ProductModalComponent } from '../../../core/components/product-modal/pr
     CommonModule,
     CurrencyPipe,
     RouterModule,
-    IonButton,
     IonIcon,
     IonSpinner,
     ProductModalComponent
