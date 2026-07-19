@@ -335,7 +335,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
       this.errorMessage = error.message;
     } else if (user) {
       this.currentSelectedNodeId = user.default_node_id || null;
-      this.router.navigate(['/home'], { queryParams: { tab: 'products' } });
+      this.router.navigate(['/cliente/home'], { queryParams: { tab: 'products' } });
     }
   }
 
@@ -347,7 +347,7 @@ export class SelectNodePage implements OnInit, OnDestroy {
   async showHelp() {
     const alert = await this.alertController.create({
       header: '¿Qué es un Punto de Retiro?',
-      message: 'Un Punto de Retiro (o Nodo de distribución) es un espacio físico gestionado por la comunidad (vecinos, cooperativas, etc.) donde se reciben y entregan los productos de la red de consumo soberano.\n\nAl elegir uno, tus compras se enviarán allí para que las retires en los días y horarios coordinados por ese nodo.',
+      message: 'Un Punto de Retiro (o Nodo de distribución) es un espacio físico gestionado por la comunidad (vecinos, cooperativas, etc.) donde se reciben y entregan los productos de la red de compras comunitarias.\n\nAl elegir uno, tus compras se enviarán allí para que las retires en los días y horarios coordinados por ese nodo.',
       buttons: ['Entendido']
     });
     await alert.present();

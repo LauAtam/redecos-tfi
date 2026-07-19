@@ -1,5 +1,4 @@
-<app-header title="Mi Historial de Compras" [showCustomBack]="false" [showAdminAvatar]="false"
-  defaultHref="/home?tab=config">
+<app-header title="Mi Historial de Compras" [showCustomBack]="true" [showAdminAvatar]="false" (customBack)="goBack()">
 </app-header>
 
 <ion-content class="[--background:#f8fafc]">
@@ -37,6 +36,16 @@
         Historial
       </ion-segment-button>
     </ion-segment>
+    }
+
+    <!-- Botón Global de Retiro Unificado (Si tiene pedidos listos) -->
+    @if (!isLoading && !errorMessage && hasOrdersReadyForPickup() && selectedSegment() === 'active') {
+    <ion-button expand="block" fill="solid"
+      class="[--background:#006b4d] [--background-hover:#00523b] [--color:#ffffff] font-bold text-xs h-11 m-0 rounded-xl shadow-sm"
+      (click)="openWithdrawalModal()">
+      <ion-icon name="qr-code-outline" slot="start" class="mr-1.5 text-sm"></ion-icon>
+      Retirar mis compras
+    </ion-button>
     }
 
     <!-- Lista de compras vacía -->
@@ -97,15 +106,9 @@
               <div class="flex items-center gap-1.5 self-start">
                 <span
                   class="px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase border select-none tracking-wider flex items-center gap-1"
-                  [ngClass]="getStatusColor(order.status)">
-                  @if (order.status === 'PAYMENT_HELD') {
-                  <ion-icon name="time-outline" class="text-[10px]"></ion-icon>
-                  } @else if (order.status === 'CONFIRMED') {
-                  <ion-icon name="checkmark-circle-outline" class="text-[10px]"></ion-icon>
-                  } @else if (order.status === 'CANCELLED') {
-                  <ion-icon name="close-circle-outline" class="text-[10px]"></ion-icon>
-                  }
-                  {{ getStatusLabel(order.status) }}
+                  [ngClass]="order.uiState.colorClass">
+                  <ion-icon [name]="order.uiState.icon" class="text-[10px]"></ion-icon>
+                  {{ order.uiState.label }}
                 </span>
 
                 <!-- Icono de ayuda interactivo -->
@@ -118,17 +121,7 @@
                   class="[--background:#ffffff] [--box-shadow:0_4px_16px_rgba(0,0,0,0.08)] [--border-radius:12px]">
                   <ng-template>
                     <div class="p-3 text-[11px] text-[#002d4b] leading-normal max-w-[240px]">
-                      @if (order.status === 'PAYMENT_HELD') {
-                      <strong>Pre-autorización activa</strong>: El dinero está retenido en tu tarjeta. Solo se cobrará
-                      si
-                      el grupo se consolida hoy. Si no, se libera automáticamente.
-                      } @else if (order.status === 'CONFIRMED') {
-                      <strong>Compra confirmada</strong>: El grupo se consolidó con éxito. El dinero fue cobrado y el
-                      pedido está en preparación en el Nodo <strong>{{ order.group?.node?.name }}</strong>.
-                      } @else if (order.status === 'CANCELLED') {
-                      <strong>Compra anulada</strong>: El grupo no alcanzó el mínimo o fue cancelado. Tu dinero ya fue
-                      liberado.
-                      }
+                      <strong>{{ order.uiState.popoverTitle }}</strong>: {{ order.uiState.popoverText }}
                     </div>
                   </ng-template>
                 </ion-popover>
@@ -148,15 +141,6 @@
             </div>
           </div>
 
-          <!-- Botón QR para Retiro (Solo para confirmadas) -->
-          @if (order.status === 'CONFIRMED') {
-          <ion-button expand="block" fill="solid"
-            class="[--background:#006b4d] [--background-hover:#00523b] [--color:#ffffff] font-bold text-xs h-10 m-0 mt-1 rounded-xl shadow-sm"
-            (click)="openQrModal(order)">
-            <ion-icon name="qr-code-outline" slot="start" class="mr-1.5 text-sm"></ion-icon>
-            Ver Credencial de Retiro
-          </ion-button>
-          }
 
         </ion-card-content>
       </ion-card>
@@ -167,7 +151,7 @@
   </div>
 
   <!-- Modal de Credencial QR de Retiro (Premium Sheet Layout) -->
-  <ion-modal [isOpen]="qrModalOpen" (didDismiss)="closeQrModal()" [initialBreakpoint]="0.8" [breakpoints]="[0, 0.8]"
+  <ion-modal [isOpen]="qrModalOpen" (didDismiss)="closeQrModal()" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85]"
     [handle]="true" class="[--border-radius:24px]">
     <ng-template>
       <ion-header class="ion-no-border">
@@ -183,53 +167,49 @@
       </ion-header>
 
       <ion-content class="ion-padding [--background:#ffffff]">
-        @if (selectedOrderForQr) {
+        @if (withdrawalSession()) {
         <div class="max-w-[450px] mx-auto py-2 px-1 flex flex-col items-center gap-4 text-center">
 
-          <!-- Info del Producto -->
-          <div class="flex flex-col items-center gap-1.5">
-            <span
-              class="text-[9px] font-bold text-[#64748b] bg-slate-100 border border-slate-200/60 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-              Código: {{ selectedOrderForQr.id.substring(0, 8).toUpperCase() }}
-            </span>
-            <div class="mt-2 text-base font-extrabold text-[#002d4b] leading-tight max-w-[280px]">
-              {{ formatProductName(selectedOrderForQr.group?.product?.name) }}
+          <!-- PIN OTP en Grande -->
+          <div class="flex flex-col items-center gap-1">
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">PIN de Retiro Cruzado</div>
+            <div
+              class="text-4xl font-black text-[#006b4d] tracking-widest bg-slate-50 border border-slate-100 rounded-2xl px-5 py-2 mt-1 shadow-inner select-all">
+              {{ withdrawalSession().otp }}
             </div>
-            <div class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">
-              Cantidad: <span class="text-[#006b4d] font-black">{{ selectedOrderForQr.quantity }}</span> unidades
+            <div class="text-[9px] text-slate-400 font-medium mt-1">Válido por 10 minutos. Dictalo al gestor del nodo.
             </div>
           </div>
 
-          <!-- Código QR -->
+          <!-- Código QR Generado Localmente -->
           <div
-            class="w-[200px] h-[200px] bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-center p-3.5 shadow-sm mt-1">
-            <img [src]="getQrCodeUrl(selectedOrderForQr)" alt="QR Code"
-              class="w-full h-full object-contain rounded-xl" />
+            class="w-[200px] h-[200px] bg-white border border-slate-200/60 rounded-3xl flex items-center justify-center p-3.5 shadow-sm">
+            <qrcode [qrdata]="qrPayload()" [width]="180" [errorCorrectionLevel]="'M'"></qrcode>
+          </div>
+
+          <!-- Listado de Productos Consolidado -->
+          <div class="w-full max-w-[320px] text-left">
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Productos a retirar:</div>
+            <div
+              class="flex flex-col gap-2 bg-slate-50 border border-slate-100 rounded-2xl p-3 max-h-[150px] overflow-y-auto">
+              @for (item of withdrawalSession().orders; track item.id) {
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-semibold text-[#002d4b] truncate max-w-[200px]">{{ formatProductName(item.productName)
+                  }}</span>
+                <span class="text-[#006b4d] font-bold">x{{ item.quantity }}</span>
+              </div>
+              }
+            </div>
           </div>
 
           <!-- Indicaciones de Retiro -->
           <div
-            class="bg-emerald-50 text-[#15803d] rounded-2xl p-3.5 border border-emerald-100/80 text-xs leading-relaxed max-w-[320px] w-full text-center mt-1">
-            <div class="font-bold mb-1">Presentá este código QR en tu punto de retiro:</div>
+            class="bg-emerald-50 text-[#15803d] rounded-2xl p-3 border border-emerald-100/80 text-xs leading-relaxed max-w-[320px] w-full text-center">
+            <div class="font-bold mb-1">Presentá el QR o dictá el PIN en tu Nodo:</div>
             <div
-              class="font-medium text-[11px] text-[#166534] bg-white/60 p-2 rounded-xl mt-2 border border-emerald-100/30">
-              Nodo: <strong>{{ selectedOrderForQr.group?.node?.name }}</strong><br>
-              Dirección: <strong>{{ selectedOrderForQr.group?.node?.address }}</strong>
+              class="font-medium text-[11px] text-[#166534] bg-white/60 p-2 rounded-xl mt-1.5 border border-emerald-100/30">
+              Nodo: <strong>{{ withdrawalSession().orders[0]?.nodeName }}</strong>
             </div>
-          </div>
-
-          <!-- Estado del Bulto Informativo -->
-          <div class="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-wider flex items-center gap-1">
-            Estado del bulto:
-            @if (selectedOrderForQr.group?.status === 'READY_FOR_PICKUP') {
-            <span class="text-[#006b4d] font-black">¡Listo para retirar!</span>
-            } @else if (selectedOrderForQr.group?.status === 'PROCESSING_ORDER') {
-            <span class="text-[#004b7c] font-black">En preparación</span>
-            } @else if (selectedOrderForQr.group?.status === 'SHIPPED') {
-            <span class="text-[#e67e22] font-black">En viaje al nodo</span>
-            } @else if (selectedOrderForQr.group?.status === 'COMPLETED') {
-            <span class="text-slate-400 font-black">Aguardando consolidación</span>
-            }
           </div>
         </div>
         }

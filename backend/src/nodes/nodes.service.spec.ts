@@ -13,6 +13,9 @@ describe('NodesService', () => {
     create: jest.fn(),
     update: jest.fn(),
     remove: jest.fn(),
+    generateWithdrawalOtp: jest.fn(),
+    getClientPendingOrders: jest.fn(),
+    confirmDelivery: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -78,6 +81,36 @@ describe('NodesService', () => {
 
       expect(await service.create(dto)).toBe(result);
       expect(mockNodesRepository.create).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('generateWithdrawalOtp', () => {
+    it('should generate withdrawal otp', async () => {
+      const result = { otp: '1234', expiresAt: 'date', orders: [] };
+      mockNodesRepository.generateWithdrawalOtp.mockResolvedValueOnce(result);
+
+      expect(await service.generateWithdrawalOtp('client-id')).toBe(result);
+      expect(mockNodesRepository.generateWithdrawalOtp).toHaveBeenCalledWith('client-id');
+    });
+  });
+
+  describe('getClientPendingOrders', () => {
+    it('should return pending orders of client in node', async () => {
+      const result = [{ id: '1', productName: 'Prod 1', quantity: 2 }];
+      mockNodesRepository.getClientPendingOrders.mockResolvedValueOnce(result);
+
+      expect(await service.getClientPendingOrders('client-id', 'node-id')).toBe(result);
+      expect(mockNodesRepository.getClientPendingOrders).toHaveBeenCalledWith('client-id', 'node-id');
+    });
+  });
+
+  describe('confirmDelivery', () => {
+    it('should confirm delivery and update orders', async () => {
+      const result = { success: true };
+      mockNodesRepository.confirmDelivery.mockResolvedValueOnce(result);
+
+      expect(await service.confirmDelivery('client-id', '1234', ['order-id'], 'mgr-id')).toBe(result);
+      expect(mockNodesRepository.confirmDelivery).toHaveBeenCalledWith('client-id', '1234', ['order-id'], 'mgr-id');
     });
   });
 });

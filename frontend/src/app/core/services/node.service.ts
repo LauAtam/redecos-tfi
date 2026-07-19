@@ -85,4 +85,62 @@ export class NodeService {
       return { success: false, error: { code: 'api/unexpected', message: 'Error de red al eliminar el nodo.', originalError: err } };
     }
   }
+
+  async generateWithdrawalOtp(): Promise<{ data: any | null, error: AppError | null }> {
+    try {
+      const response = await fetch(`${environment.apiUrl}/nodes/generate-withdrawal-otp`, {
+        method: 'POST',
+        headers: await this.authService.getHeaders(),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al generar código de retiro.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al generar código de retiro.', originalError: err } };
+    }
+  }
+
+  async getClientPendingOrders(profileId: string): Promise<{ data: any[] | null, error: AppError | null }> {
+    try {
+      const response = await fetch(`${environment.apiUrl}/nodes/client-orders/${profileId}`, {
+        method: 'GET',
+        headers: await this.authService.getHeaders(),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener pedidos del cliente.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener pedidos del cliente.', originalError: err } };
+    }
+  }
+
+  async confirmDelivery(dto: { profileId: string, otp: string, orderIds: string[] }): Promise<{ data: any | null, error: AppError | null }> {
+    try {
+      const response = await fetch(`${environment.apiUrl}/nodes/confirm-delivery`, {
+        method: 'POST',
+        headers: await this.authService.getHeaders(),
+        body: JSON.stringify(dto),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json();
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al confirmar entrega.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al confirmar entrega.', originalError: err } };
+    }
+  }
 }

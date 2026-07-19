@@ -1,7 +1,8 @@
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { NgClass, DecimalPipe } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { NavController } from '@ionic/angular/standalone';
 import {
   IonContent,
   IonHeader,
@@ -15,8 +16,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonSpinner,
-  IonModal,
-  IonBadge
+  IonModal
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -36,11 +36,12 @@ import { AppFacadeService } from '../../../../app-facade.service';
 import { ToastService } from '../../../../core/services/toast.service';
 import { BuyGroup, Nodo } from '../../../../core/models/auth.models';
 import { HeaderComponent } from '../../../../core/components/header/header.component';
+import { BultoCardComponent, BultoAction } from '../../../../core/components/bulto-card/bulto-card.component';
 
 @Component({
-  selector: 'app-consolidacion',
-  templateUrl: './consolidacion.page.html',
-  styleUrls: ['./consolidacion.page.scss'],
+  selector: 'app-admin-logistica',
+  templateUrl: './admin-logistica.page.html',
+  styleUrls: ['./admin-logistica.page.scss'],
   standalone: true,
   imports: [
     NgClass,
@@ -48,6 +49,7 @@ import { HeaderComponent } from '../../../../core/components/header/header.compo
     RouterModule,
     FormsModule,
     HeaderComponent,
+    BultoCardComponent,
     IonContent,
     IonHeader,
     IonToolbar,
@@ -60,13 +62,12 @@ import { HeaderComponent } from '../../../../core/components/header/header.compo
     IonSegment,
     IonSegmentButton,
     IonSpinner,
-    IonModal,
-    IonBadge
+    IonModal
   ]
 })
-export class ConsolidacionPage implements OnInit {
+export class AdminLogisticaPage implements OnInit {
   private appFacadeService = inject(AppFacadeService);
-  private router = inject(Router);
+  private navCtrl = inject(NavController);
   private toastService = inject(ToastService);
 
   // States
@@ -76,14 +77,12 @@ export class ConsolidacionPage implements OnInit {
   activeTab = signal<'order' | 'shipping' | 'pickup' | 'finalized'>('order');
   buyGroups = signal<BuyGroup[]>([]);
 
-  // User Profile
-  userRole = this.appFacadeService.userRole;
-  currentUser = this.appFacadeService.currentUser;
-
+  // Modals state
   // Modals state
   selectedGroupForModal = signal<BuyGroup | null>(null);
   isConsolidarModalOpen = signal<boolean>(false);
   isDeliveryModalOpen = signal<boolean>(false);
+  isDetailModalOpen = signal<boolean>(false);
 
   // Mock delivery order selection
   manualOrderCode = '';
@@ -108,28 +107,19 @@ export class ConsolidacionPage implements OnInit {
   async ngOnInit() {
     this.isLoading.set(true);
 
-    // 1. Cargar nodos si es ADMIN
-    if (this.userRole() === 'ADMIN') {
-      const { data, error } = await this.appFacadeService.getNodos();
-      if (!error && data) {
-        this.nodos.set(data);
-        if (data.length > 0) {
-          // Seleccionar el primero por defecto
-          this.selectedNodeId.set(data[0].id || '');
-        }
+    // Cargar todos los nodos para el Admin
+    const { data, error } = await this.appFacadeService.getNodos();
+    if (!error && data) {
+      this.nodos.set(data);
+      if (data.length > 0) {
+        this.selectedNodeId.set(data[0].id || '');
       }
-    } else if (this.userRole() === 'NODO') {
-      // Si es NODO, fijar a su default_node_id
-      const defaultNodeId = this.currentUser()?.default_node_id || '';
-      this.selectedNodeId.set(defaultNodeId);
     }
 
-    // 2. Cargar grupos filtrados
     await this.fetchGroups();
     this.isLoading.set(false);
   }
 
-  // Filtrar grupos en memoria para el tab seleccionado
   filteredBuyGroups = computed(() => {
     const tab = this.activeTab();
     const groups = this.buyGroups();
@@ -176,14 +166,90 @@ export class ConsolidacionPage implements OnInit {
   }
 
   goBack() {
-    if (this.userRole() === 'ADMIN') {
-      this.router.navigate(['/admin/gestiones']);
-    } else {
-      this.router.navigate(['/home'], { queryParams: { tab: 'config' } });
+    this.navCtrl.navigateBack('/admin/gestiones');
+  }
+
+  // Mapeador de acciones disponibles según el estado del bulto
+  getBultoActions(group: BuyGroup): BultoAction[] {
+    const actions: BultoAction[] = [];
+
+    if (group.status === 'COMPLETED') {
+      actions.push({
+        type: 'cancel',
+        label: 'Cancelar',
+        colorClass: '[--color:#dc2626]',
+        fill: 'clear'
+      });
+      actions.push({
+        type: 'consolidate',
+        label: 'Consolidar y Pedir',
+        colorClass: '[--background:#006b4d] [--color:#ffffff]'
+      });
+    } else if (group.status === 'PROCESSING_ORDER') {
+      actions.push({
+        type: 'cancel',
+        label: 'Cancelar',
+        colorClass: '[--color:#dc2626]',
+        fill: 'clear'
+      });
+      actions.push({
+        type: 'ship',
+        label: 'Marcar Enviado',
+        icon: 'car-outline',
+        colorClass: '[--background:#004b7c] [--color:#ffffff]'
+      });
+    } else if (group.status === 'SHIPPED') {
+      actions.push({
+        type: 'receive',
+        label: 'Recibir en Nodo',
+        icon: 'cube-outline',
+        colorClass: '[--background:#e67e22] [--color:#ffffff]'
+      });
+    } else if (group.status === 'READY_FOR_PICKUP') {
+      actions.push({
+        type: 'deliver',
+        label: 'Entregar Pedidos',
+        icon: 'qr-code-outline',
+        colorClass: '[--background:#6b21a8] [--color:#ffffff]'
+      });
+    }
+
+    return actions;
+  }
+
+  handleBultoAction(event: { type: string; group: BuyGroup }) {
+    const { type, group } = event;
+    switch (type) {
+      case 'view_detail':
+        this.openDetailModal(group);
+        break;
+      case 'consolidate':
+        this.openConsolidarModal(group);
+        break;
+      case 'cancel':
+        this.cancelGroup(group);
+        break;
+      case 'ship':
+        this.markAsShipped(group);
+        break;
+      case 'receive':
+        this.markAsReceived(group);
+        break;
+      case 'deliver':
+        this.openDeliveryModal(group);
+        break;
     }
   }
 
-  // --- LOGÍSTICA & ACCIONES DE ESTADOS ---
+  openDetailModal(group: BuyGroup) {
+    this.selectedGroupForModal.set(group);
+    this.isDetailModalOpen.set(true);
+  }
+
+  closeDetailModal() {
+    this.isDetailModalOpen.set(false);
+    this.selectedGroupForModal.set(null);
+  }
 
   openConsolidarModal(group: BuyGroup) {
     this.selectedGroupForModal.set(group);
@@ -202,7 +268,7 @@ export class ConsolidacionPage implements OnInit {
     this.closeConsolidarModal();
     this.isLoading.set(true);
 
-    const { data, error } = await this.appFacadeService.consolidateBuyGroups({
+    const { error } = await this.appFacadeService.consolidateBuyGroups({
       nodeId: this.selectedNodeId(),
       groupIds: [group.id],
     });
@@ -212,7 +278,7 @@ export class ConsolidacionPage implements OnInit {
       this.isLoading.set(false);
     } else {
       this.toastService.showSuccess('Pedido consolidado y ordenado al mayorista.');
-      await this.fetchGroups(); // Recargar lista de bultos
+      await this.fetchGroups();
     }
   }
 
@@ -240,14 +306,10 @@ export class ConsolidacionPage implements OnInit {
     if (!group) return;
 
     this.isDeliveringOrder.set(true);
-
-    // Simular procesamiento del código u orden
     await new Promise((resolve) => setTimeout(resolve, 1000));
-
     this.isDeliveringOrder.set(false);
     this.closeDeliveryModal();
 
-    // Transicionar el grupo a FINALIZED (Hito #4: marca todo el bulto como entregado)
     await this.updateStatus(group.id, 'FINALIZED', 'Todos los pedidos de este bulto fueron entregados exitosamente.');
   }
 
@@ -257,7 +319,6 @@ export class ConsolidacionPage implements OnInit {
     }
   }
 
-  // Helper centralizado para actualizar estado
   private async updateStatus(id: string, status: string, successMessage: string) {
     this.isLoading.set(true);
     const { error } = await this.appFacadeService.updateBuyGroupStatus(id, status);
@@ -267,7 +328,7 @@ export class ConsolidacionPage implements OnInit {
       this.isLoading.set(false);
     } else {
       this.toastService.showSuccess(successMessage);
-      await this.fetchGroups(); // Recargar lista
+      await this.fetchGroups();
     }
   }
 }

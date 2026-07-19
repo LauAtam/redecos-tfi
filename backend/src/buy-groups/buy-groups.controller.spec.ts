@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
 import { BuyGroupsController } from './buy-groups.controller';
 import { BuyGroupsService } from './buy-groups.service';
+import { BuyGroupsCronService } from './buy-groups-cron.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { RolesGuard } from '../auth/roles.guard';
 import { Reflector } from '@nestjs/core';
 
@@ -25,6 +27,17 @@ describe('BuyGroupsController', () => {
       providers: [
         { provide: BuyGroupsService, useValue: mockBuyGroupsService },
         { provide: Reflector, useValue: new Reflector() },
+        {
+          provide: BuyGroupsCronService,
+          useValue: { handleExpiration: jest.fn() },
+        },
+        {
+          provide: PrismaService,
+          useValue: {
+            profiles: { findUnique: jest.fn() },
+            buy_groups: { findUnique: jest.fn() },
+          },
+        },
       ],
     })
       .overrideGuard(RolesGuard)

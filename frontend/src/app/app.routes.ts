@@ -11,12 +11,12 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'home',
+    path: 'cliente/home',
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
     canActivate: [authGuard, nodeGuard],
   },
   {
-    path: 'mis-compras',
+    path: 'cliente/mis-compras',
     loadComponent: () =>
       import('./pages/cliente/mis-compras/mis-compras.page').then(
         (m) => m.MisComprasPage,
@@ -24,7 +24,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'pages/select-node',
+    path: 'cliente/seleccionar-nodo',
     loadComponent: () =>
       import('./pages/select-node/select-node.page').then(
         (m) => m.SelectNodePage,
@@ -81,23 +81,36 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'productos',
-        loadComponent: () =>
-          import('./pages/admin/productos/productos.page').then(
-            (m) => m.ProductosPage,
-          ),
-      },
-      {
-        path: 'nodos',
-        loadComponent: () =>
-          import('./pages/admin/nodos/nodos.page').then((m) => m.NodosPage),
-      },
-      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
     ],
+  },
+  {
+    path: 'admin/productos',
+    loadComponent: () =>
+      import('./pages/admin/productos/productos.page').then(
+        (m) => m.ProductosPage,
+      ),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRoles: ['ADMIN'] },
+  },
+  {
+    path: 'admin/nodos',
+    loadComponent: () =>
+      import('./pages/admin/nodos/nodos.page').then((m) => m.NodosPage),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRoles: ['ADMIN'] },
+  },
+  {
+    path: 'admin/logistica',
+    loadComponent: () =>
+      import('./pages/admin/gestiones/logistica/admin-logistica.page').then(
+        (m) => m.AdminLogisticaPage,
+      ),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRoles: ['ADMIN'] },
   },
   {
     path: 'nodo/dashboard',
@@ -109,17 +122,17 @@ export const routes: Routes = [
     data: { expectedRoles: ['NODO'] },
   },
   {
+    path: 'nodo/logistica',
+    loadComponent: () =>
+      import('./pages/nodo/logistica/nodo-logistica.page').then(
+        (m) => m.NodoLogisticaPage,
+      ),
+    canActivate: [authGuard, roleGuard],
+    data: { expectedRoles: ['NODO'] },
+  },
+  {
     path: 'nodo',
     redirectTo: 'nodo/dashboard',
     pathMatch: 'full',
-  },
-  {
-    path: 'consolidacion',
-    loadComponent: () =>
-      import('./pages/admin/gestiones/consolidacion/consolidacion.page').then(
-        (m) => m.ConsolidacionPage,
-      ),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['NODO', 'ADMIN'] },
   },
 ];

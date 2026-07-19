@@ -268,16 +268,17 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         group_id: groupId,
         status: { in: ['PAYMENT_HELD', 'CONFIRMED'] },
       },
-      select: { id: true, quantity: true, payment_intent_id: true },
+      select: { id: true, quantity: true, payment_intent_id: true, status: true },
     });
 
     const totalGathered = activeOrders.reduce((sum, o) => sum + (o.quantity || 0), 0);
 
     if (totalGathered >= product.bulk_size) {
       // El grupo alcanzó el tamaño objetivo. Capturar de forma diferida todos los fondos en paralelo
+      // Filtrar únicamente los pagos que estén retenidos (PAYMENT_HELD) y evitar duplicar la captura de pagos ya confirmados (CONFIRMED)
       const captureResults = await Promise.allSettled(
         activeOrders
-          .filter((o) => o.payment_intent_id)
+          .filter((o) => o.payment_intent_id && o.status === 'PAYMENT_HELD')
           .map(async (o) => {
             const success = await this.mercadoPago.capturePayment(o.payment_intent_id!);
             return { orderId: o.id, success };
@@ -297,16 +298,31 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         }
       });
 
-      // Transaccionalmente: cerrar grupo, actualizar órdenes cobradas y descontar stock
+      // Transaccionalmente: cerrar grupo o reabrirlo, actualizar órdenes cobradas y descontar stock si corresponde
       try {
+        const allCapturesSuccessful = failedOrderIds.length === 0;
+
         await this.prisma.$transaction(async (tx) => {
-          await tx.buy_groups.update({
-            where: { id: groupId },
-            data: {
-              status: 'COMPLETED',
-              closed_at: new Date(),
-            },
-          });
+          if (allCapturesSuccessful) {
+            // Caso feliz: cerrar grupo como COMPLETED
+            await tx.buy_groups.update({
+              where: { id: groupId },
+              data: {
+                status: 'COMPLETED',
+                closed_at: new Date(),
+              },
+            });
+
+            // Restar 1 unidad del stock
+            await tx.productos.update({
+              where: { id: dto.productId },
+              data: { stock: { decrement: 1 } },
+            });
+          } else {
+            this.logger.warn(
+              `⚠️ Falla parcial de cobros en grupo ${groupId}. Exitosas: ${successfulOrderIds.length}, Fallidas: ${failedOrderIds.length}. El grupo permanece OPEN para buscar reemplazos.`,
+            );
+          }
 
           if (successfulOrderIds.length > 0) {
             await tx.group_orders.updateMany({
@@ -321,12 +337,6 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
               data: { status: 'CANCELLED' },
             });
           }
-
-          // Restar 1 unidad del stock
-          await tx.productos.update({
-            where: { id: dto.productId },
-            data: { stock: { decrement: 1 } },
-          });
         });
 
         // Actualizar estado en el objeto de respuesta local para el usuario que cerró el grupo
@@ -423,8 +433,16 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         nodos: true,
         group_orders: {
           select: {
+            id: true,
             quantity: true,
             status: true,
+            profiles: {
+              select: {
+                first_name: true,
+                last_name: true,
+                email: true,
+              },
+            },
           },
         },
       },
@@ -468,6 +486,13 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         unitsLeft: unitsLeft,
         progress:
           group.target_size > 0 ? (gathered / group.target_size) * 100 : 0,
+        orders: activeOrders.map(o => ({
+          id: o.id,
+          quantity: o.quantity,
+          status: o.status,
+          buyerName: `${o.profiles?.first_name || ''} ${o.profiles?.last_name || ''}`.trim() || 'Vecino',
+          buyerEmail: o.profiles?.email || '',
+        })),
       };
     });
   }
@@ -497,6 +522,14 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         select: { id: true, payment_intent_id: true },
       });
 
+      const confirmedOrders = await this.prisma.group_orders.findMany({
+        where: {
+          group_id: id,
+          status: 'CONFIRMED',
+        },
+        select: { id: true, payment_intent_id: true },
+      });
+
       if (pendingOrders.length > 0) {
         const cancelResults = await Promise.allSettled(
           pendingOrders
@@ -508,6 +541,23 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         );
 
         cancelResults.forEach((result) => {
+          if (result.status === 'fulfilled' && result.value.success) {
+            successfulOrderIds.push(result.value.orderId);
+          }
+        });
+      }
+
+      if (confirmedOrders.length > 0) {
+        const refundResults = await Promise.allSettled(
+          confirmedOrders
+            .filter((o) => o.payment_intent_id)
+            .map(async (o) => {
+              const success = await this.mercadoPago.refundPayment(o.payment_intent_id!);
+              return { orderId: o.id, success };
+            }),
+        );
+
+        refundResults.forEach((result) => {
           if (result.status === 'fulfilled' && result.value.success) {
             successfulOrderIds.push(result.value.orderId);
           }
@@ -537,7 +587,7 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
           await tx.group_orders.updateMany({
             where: {
               group_id: id,
-              status: { in: ['PENDING', 'PAYMENT_HELD'] },
+              status: { in: ['PENDING', 'PAYMENT_HELD', 'CONFIRMED'] },
               id: { notIn: successfulOrderIds },
             },
             data: { status: 'CANCELLED' },
@@ -546,7 +596,7 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
           await tx.group_orders.updateMany({
             where: {
               group_id: id,
-              status: { in: ['PENDING', 'PAYMENT_HELD'] },
+              status: { in: ['PENDING', 'PAYMENT_HELD', 'CONFIRMED'] },
             },
             data: { status: 'CANCELLED' },
           });

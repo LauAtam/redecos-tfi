@@ -151,4 +151,16 @@ export class AppFacadeService {
   getAdminDashboardStats() {
     return this.statsService.getAdminDashboardStats();
   }
+
+  generateWithdrawalOtp() {
+    return this.nodeService.generateWithdrawalOtp();
+  }
+
+  getClientPendingOrders(profileId: string) {
+    return this.nodeService.getClientPendingOrders(profileId);
+  }
+
+  confirmDelivery(dto: { profileId: string, otp: string, orderIds: string[] }) {
+    return this.nodeService.confirmDelivery(dto);
+  }
 }

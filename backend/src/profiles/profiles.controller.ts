@@ -97,4 +97,19 @@ export class ProfilesController {
   ) {
     return this.profilesService.deleteCard(req.user.id, cardId);
   }
+
+  @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'NODO')
+  @ApiOperation({ summary: "Get profile by ID (Admin or Node only)" })
+  @ApiResponse({
+    status: 200,
+    description: 'The profile has been successfully retrieved by ID.',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  async getProfileById(@Param('id') id: string) {
+    return this.profilesService.getProfile(id);
+  }
 }

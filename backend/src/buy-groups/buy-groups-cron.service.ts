@@ -44,12 +44,31 @@ export class BuyGroupsCronService {
         select: { id: true, payment_intent_id: true },
       });
 
+      // 2b. Buscar órdenes cobradas (CONFIRMED) de esos grupos para reembolsar fondos
+      const confirmedOrders = await this.prisma.group_orders.findMany({
+        where: {
+          group_id: { in: expiredIds },
+          status: 'CONFIRMED',
+        },
+        select: { id: true, payment_intent_id: true },
+      });
+
       // 3. Liberar dinero de las pre-autorizaciones en Mercado Pago de forma controlada
       const cancelResults = await Promise.allSettled(
         pendingOrders
           .filter((o) => o.payment_intent_id)
           .map(async (o) => {
             const success = await this.mercadoPago.cancelPayment(o.payment_intent_id!);
+            return { orderId: o.id, success };
+          }),
+      );
+
+      // 3b. Reembolsar dinero de las capturas cobradas (CONFIRMED) en Mercado Pago de forma controlada
+      const refundResults = await Promise.allSettled(
+        confirmedOrders
+          .filter((o) => o.payment_intent_id)
+          .map(async (o) => {
+            const success = await this.mercadoPago.refundPayment(o.payment_intent_id!);
             return { orderId: o.id, success };
           }),
       );
@@ -67,13 +86,23 @@ export class BuyGroupsCronService {
         }
       });
 
+      refundResults.forEach((result) => {
+        if (result.status === 'fulfilled') {
+          if (result.value.success) {
+            successfulOrderIds.push(result.value.orderId);
+          } else {
+            failedOrderIds.push(result.value.orderId);
+          }
+        }
+      });
+
       if (failedOrderIds.length > 0) {
         this.logger.error(
-          `No se pudieron liberar fondos en Mercado Pago para ${failedOrderIds.length} órdenes. IDs: ${failedOrderIds.join(', ')}`,
+          `No se pudieron liberar/reembolsar fondos en Mercado Pago para ${failedOrderIds.length} órdenes. IDs: ${failedOrderIds.join(', ')}`,
         );
       }
 
-      // 4. Transaccionalmente marcar grupos como CANCELLED y sólo las órdenes liberadas con éxito
+      // 4. Transaccionalmente marcar grupos como CANCELLED y sólo las órdenes liberadas/reembolsadas con éxito
       await this.prisma.$transaction(async (tx) => {
         await tx.buy_groups.updateMany({
           where: {
@@ -96,9 +125,32 @@ export class BuyGroupsCronService {
         }
       });
 
-      this.logger.log('Proceso de expiración y liberación de fondos completado.');
+      this.logger.log('Proceso de expiración, liberación y reembolso de fondos completado.');
     } catch (error: any) {
       this.logger.error(`Error al expirar grupos de compra: ${error.message}`);
+    }
+  }
+
+  @Cron(CronExpression.EVERY_10_MINUTES)
+  async handleCleanupPendingOrders() {
+    this.logger.log('Iniciando limpieza de órdenes en estado PENDING colgadas...');
+    const threshold = new Date(Date.now() - 1 * 60 * 1000); // 1 minuto atrás
+
+    try {
+      const deleted = await this.prisma.group_orders.deleteMany({
+        where: {
+          status: 'PENDING',
+          created_at: { lte: threshold },
+        },
+      });
+
+      if (deleted.count > 0) {
+        this.logger.log(`🧹 Limpieza completada: se eliminaron ${deleted.count} órdenes huérfanas en PENDING.`);
+      } else {
+        this.logger.log('No se encontraron órdenes PENDING colgadas para limpiar.');
+      }
+    } catch (error: any) {
+      this.logger.error(`Error al limpiar órdenes PENDING colgadas: ${error.message}`);
     }
   }
 }

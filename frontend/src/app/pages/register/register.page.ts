@@ -153,7 +153,7 @@ export class RegisterPage {
     if (error) {
       this.errorMessage = error.message;
     } else {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/cliente/home']);
     }
   }
 

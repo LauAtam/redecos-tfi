@@ -19,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:seed": "prisma db seed"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -55,6 +56,7 @@
     "jest": "^30.0.0",
     "prettier": "^3.4.2",
     "prisma": "^6.0.0",
+    "selfsigned": "^5.5.0",
     "source-map-support": "^0.5.21",
     "supabase": "^2.107.0",
     "supertest": "^7.0.0",
@@ -84,5 +86,8 @@
     "transformIgnorePatterns": [
       "/node_modules/(?!(jose|jwks-rsa)/)"
     ]
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed-nodos.ts"
   }
 }

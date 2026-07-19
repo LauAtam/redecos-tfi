@@ -251,7 +251,10 @@ export class AuthService {
         };
       }
 
-      const response = await fetch(`${environment.apiUrl}/profiles/me`, {
+      const isCurrentUser = userId === this.currentUserSubject.value?.id;
+      const url = userId && !isCurrentUser ? `${environment.apiUrl}/profiles/${userId}` : `${environment.apiUrl}/profiles/me`;
+
+      const response = await fetch(url, {
         method: 'GET',
         headers: await this.getHeaders(),
       });

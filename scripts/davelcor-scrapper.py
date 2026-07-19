@@ -1,6 +1,6 @@
 """
 Script de scraping para extraer productos, precios, tamaños de bulto y categorías del catálogo mayorista de Davelcor (https://davelcor.com.ar).
-Genera un archivo CSV limpio y formateado listo para ser importado en la base de datos de Redecos.
+Genera un archivo CSV limpio y formateado listo para ser importado en la base de datos de Redeco.
 """
 import csv
 import requests

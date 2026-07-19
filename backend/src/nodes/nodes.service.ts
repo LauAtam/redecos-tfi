@@ -30,4 +30,17 @@ export class NodesService {
   async getDashboardStats(id: string) {
     return this.nodesRepository.getDashboardStats(id);
   }
+
+  async generateWithdrawalOtp(profileId: string) {
+    return this.nodesRepository.generateWithdrawalOtp(profileId);
+  }
+
+  async getClientPendingOrders(profileId: string, nodeId: string) {
+    return this.nodesRepository.getClientPendingOrders(profileId, nodeId);
+  }
+
+  async confirmDelivery(profileId: string, otp: string, orderIds: string[], nodeManagerProfileId: string) {
+    return this.nodesRepository.confirmDelivery(profileId, otp, orderIds, nodeManagerProfileId);
+  }
 }
+

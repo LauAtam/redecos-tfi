@@ -1,6 +1,6 @@
-# Arquitectura y Flujo de Compras Grupales: Redecos
+# Arquitectura y Flujo de Compras Grupales: Redeco
 
-Este documento detalla el diseño de arquitectura, la máquina de estados y el flujo de transacciones financieras para los **Grupos de Compra Colectiva** en Redecos, adaptados a las reglas de negocio específicas del proyecto.
+Este documento detalla el diseño de arquitectura, la máquina de estados y el flujo de transacciones financieras para los **Grupos de Compra Colectiva** en Redeco, adaptados a las reglas de negocio específicas del proyecto.
 
 ---
 
@@ -21,8 +21,9 @@ El ciclo de vida del grupo de compra colectiva refleja las automatizaciones y re
 stateDiagram-v2
     [*] --> OPEN : El Cliente inicia la compra de un producto sin grupo activo en su Nodo
     
-    OPEN --> COMPLETED : Se alcanza la cantidad objetivo (Target Size) antes de la medianoche
-    OPEN --> CANCELLED : Llega la medianoche sin alcanzar el Target (Cron Job automatico)
+    OPEN --> COMPLETED : Se alcanza la cantidad objetivo Target Size y todas las capturas de pago son exitosas
+    OPEN --> OPEN : Falla parcial de capturas en consolidación Auto-reapertura por orden cancelada
+    OPEN --> CANCELLED : Llega la medianoche sin alcanzar el Target Cron Job automático
     
     COMPLETED --> PROCESSING_ORDER : El Administrador consolida el pedido y genera la OC para el mayorista
     
@@ -32,8 +33,9 @@ stateDiagram-v2
     
     READY_FOR_PICKUP --> FINALIZED : Todos los usuarios retiran sus compras físicas en el Nodo
     
-    CANCELLED --> [*] : Pre-autorizaciones liberadas automaticamente
+    CANCELLED --> [*] : Pre-autorizaciones liberadas automáticamente Held y Confirmed reembolsados
     FINALIZED --> [*] : Liquidaciones y comisiones del Nodo liquidadas
+
 ```
 
 ---
@@ -44,23 +46,27 @@ Para garantizar la consistencia, el ciclo de vida del grupo de compra (`buy_grou
 
 | Fase Logística | Estado del Grupo (`buy_groups.status`) | Estado de las Órdenes del Cliente (`group_orders.status`) | Comportamiento / Acción Disparadora |
 | :--- | :--- | :--- | :--- |
-| **1. Compra Activa** | `OPEN` | `PAYMENT_HELD` | El cliente se une al grupo. Se pre-autoriza y retiene el dinero en Mercado Pago. |
-| **2. Bulto Cerrado** | `COMPLETED` | `CONFIRMED` | Se alcanza el `target_size`. Se capturan en paralelo los pagos pre-autorizados y se reduce el stock. |
+| **1. Compra Activa** | `OPEN` | `PAYMENT_HELD` / `PENDING` | El cliente se une al grupo. Se reserva stock temporal (`PENDING`) y al autorizarse el pago en MP pasa a `PAYMENT_HELD`. |
+| **2. Bulto Cerrado** | `COMPLETED` | `CONFIRMED` / `CANCELLED` | Se alcanza el `target_size`. Se capturan los fondos en MP de forma diferida. Las órdenes capturadas pasan a `CONFIRMED`. **Si la captura del pago falla, la orden pasa a `CANCELLED`**. |
 | **3. Pedido al Mayorista** | `PROCESSING_ORDER` | `CONFIRMED` | El Administrador consolida los bultos y procesa la compra física con el proveedor. |
 | **4. En Tránsito** | `SHIPPED` | `CONFIRMED` | El proveedor despacha la mercadería consolidada hacia el Nodo. |
 | **5. Recepción en Nodo** | `READY_FOR_PICKUP` | `CONFIRMED` | El Coordinador del Nodo recibe y fracciona los productos. Los clientes son notificados. |
 | **6. Entrega al Cliente** | `FINALIZED` | `FINALIZED` | Retiro físico de la mercadería por parte del usuario. |
+| **—** | `CANCELLED` | `CANCELLED` | El grupo expira o es cancelado por el administrador. Se liberan los fondos de pre-autorización en Mercado Pago. |
 
 ### Flujo de Cancelación y Reembolsos
 
-Si ocurre una cancelación, el comportamiento varía según el punto en el que se encuentre el flujo:
+Si ocurre una cancelación o falla de cobro, el comportamiento varía según el punto en el que se encuentre el flujo:
 
+* **Falla de Captura en Consolidación (Fase 2 - Cierre de Bulto):**
+  * **Comportamiento lógico:** Al cerrarse el grupo, el backend intenta capturar los fondos retenidos de todas las órdenes asociadas. Si el banco o Mercado Pago rechazan la captura del pago de un cliente (ej. por fondos insuficientes, sospecha de fraude o límite excedido), la orden pasa automáticamente al estado `CANCELLED`.
+  * **Impacto financiero:** El dinero retenido en pre-autorización se libera automáticamente en la tarjeta del cliente y este no ve impactado su saldo, al tiempo que su reserva se anula en la base de datos.
 * **Cancelación en Paso 1 (Grupo `OPEN` / Órdenes en `PAYMENT_HELD`):**
   * **Comportamiento lógico:** El grupo y sus órdenes pasan al estado `CANCELLED`.
   * **Impacto financiero:** El backend anula automáticamente la pre-autorización en Mercado Pago (`cancelPayment`). Los fondos del cliente se liberan de inmediato sin haber impactado su saldo o resumen de tarjeta. Ocurre automáticamente mediante el Cron Job a medianoche o si el administrador cancela el grupo de forma manual.
 * **Cancelación en Paso 2 (Grupo `COMPLETED` / Órdenes en `CONFIRMED`):**
   * **Comportamiento lógico:** El grupo se marca como `CANCELLED`. Las órdenes en `CONFIRMED` no se modifican automáticamente a nivel de base de datos ni de Mercado Pago para evitar inconsistencias de caja.
-  * **Impacto financiero:** Dado que los pagos de las órdenes en `CONFIRMED` ya fueron capturados y acreditados en la cuenta de Redecos, **cualquier cancelación posterior requiere un reembolso (Refund) manual** en la consola de Mercado Pago o la implementación futura de un flujo de devolución automatizado.
+  * **Impacto financiero:** Dado que los pagos de las órdenes en `CONFIRMED` ya fueron capturados y acreditados en la cuenta de Redeco, **cualquier cancelación posterior requiere un reembolso (Refund) manual** en la consola de Mercado Pago o la implementación futura de un flujo de devolución automatizado.
 
 ---
 
@@ -100,13 +106,22 @@ sequenceDiagram
     Note over B, DB: FASE 2: Completitud del Grupo (Dentro del dia)
     alt Se alcanza el Target Size
         DB->>B: Trigger: Suma de unidades = Target Size
-        B->>DB: Actualizar public.buy_groups (status='COMPLETED')
-        loop Para cada comprador del grupo
+        loop Para cada comprador del grupo (solo en PAYMENT_HELD)
             B->>P: Capturar Pago (efectivizar cobro retenido)
-            P-->>B: Transaccion Aprobada (Estado: PAID)
-            B->>DB: Actualizar public.group_orders (status='CONFIRMED')
+            alt Captura Exitosa
+                P-->>B: Transaccion Aprobada
+                B->>DB: Actualizar public.group_orders (status='CONFIRMED')
+            else Captura Fallida
+                P-->>B: Transaccion Rechazada
+                B->>DB: Actualizar public.group_orders (status='CANCELLED')
+            end
         end
-        B-->>A: Notificar grupo completado y cobrado en el Dashboard
+        alt Todas las capturas exitosas
+            B->>DB: Actualizar public.buy_groups (status='COMPLETED')
+            B-->>A: Notificar grupo completado en el Dashboard
+        else Al menos una captura falló
+            B->>DB: Grupo permanece en status='OPEN' (Auto-reapertura para nuevos compradores)
+        end
     end
 
     %% FASE 3: EXPIRACIÓN AUTOMÁTICA A LAS 24:00 HS (Medianoche)
@@ -114,10 +129,16 @@ sequenceDiagram
     loop Todos los dias a las 00.00 hs
         B->>DB: Buscar grupos en estado 'OPEN' con vencimiento cumplido
         B->>DB: Actualizar estado de los grupos a 'CANCELLED'
-        loop Para cada orden en estado 'PAYMENT_HELD' de esos grupos
-            B->>P: Anular Pre-Autorizacion (Liberar fondos)
-            P-->>B: Retencion Liberada (Sin impacto en el limite del cliente)
-            B->>DB: Actualizar public.group_orders (status='CANCELLED')
+        loop Para cada orden de esos grupos
+            alt Orden en status='PAYMENT_HELD'
+                B->>P: Anular Pre-Autorizacion (Liberar fondos)
+                P-->>B: Retencion Liberada (Sin impacto en resumen del cliente)
+                B->>DB: Actualizar public.group_orders (status='CANCELLED')
+            else Orden en status='CONFIRMED'
+                B->>P: Reembolsar Pago (Refund)
+                P-->>B: Dinero devuelto a la cuenta/tarjeta del cliente
+                B->>DB: Actualizar public.group_orders (status='CANCELLED')
+            end
         end
     end
 

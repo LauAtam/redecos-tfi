@@ -1,0 +1,82 @@
+<div (click)="onCardClick()" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative flex flex-col transition-all active:bg-slate-50/50 cursor-pointer">
+  <!-- Indicador de color lateral por estado -->
+  <div class="absolute left-0 top-0 bottom-0 w-1.5" [ngClass]="{
+         'bg-emerald-500': group.status === 'COMPLETED',
+         'bg-blue-500': group.status === 'PROCESSING_ORDER',
+         'bg-orange-500': group.status === 'SHIPPED',
+         'bg-purple-500': group.status === 'READY_FOR_PICKUP',
+         'bg-slate-300': group.status === 'FINALIZED',
+         'bg-red-400': group.status === 'CANCELLED'
+       }">
+  </div>
+
+  <div class="pt-3 pb-2.5 pr-[14px] pl-[18px] flex flex-col gap-2">
+
+    <!-- Encabezado de la Tarjeta (Fila superior con ID y Estado) -->
+    <div class="flex justify-between items-center w-full">
+      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">ID Bulto: {{
+        group.id.substring(0, 8) }}</span>
+
+      <!-- Badge de Estado NATIVO de Ionic compactado -->
+      <ion-badge class="font-extrabold text-[8px] px-1.5 py-0.5 rounded-full shrink-0" [ngClass]="{
+          '[--background:#e6f4f0] [--color:#006b4d]': group.status === 'COMPLETED',
+          '[--background:#e6f2f7] [--color:#004b7c]': group.status === 'PROCESSING_ORDER',
+          '[--background:#fef3e7] [--color:#b25e00]': group.status === 'SHIPPED',
+          '[--background:#f3e8ff] [--color:#6b21a8]': group.status === 'READY_FOR_PICKUP',
+          '[--background:#f1f5f9] [--color:#475569]': group.status === 'FINALIZED',
+          '[--background:#fef2f2] [--color:#991b1b]': group.status === 'CANCELLED'
+        }">
+        @switch (group.status) {
+          @case ('COMPLETED') { <span>Completado</span> }
+          @case ('PROCESSING_ORDER') { <span>Pedido</span> }
+          @case ('SHIPPED') { <span>En Camino</span> }
+          @case ('READY_FOR_PICKUP') { <span>En Nodo</span> }
+          @case ('FINALIZED') { <span>Entregado</span> }
+          @case ('CANCELLED') { <span>Cancelado</span> }
+        }
+      </ion-badge>
+    </div>
+
+    <!-- Nombre del Producto (Fila inferior que ocupa todo el ancho) -->
+    <div class="text-[#002d4b] m-0 w-full"
+      style="font-size: 12px !important; font-weight: 700 !important; line-height: 1.25 !important;">
+      {{ group.product?.name }}
+    </div>
+
+    <!-- Barra de Progreso y Cantidad (Solo se muestra en COMPLETED, que es previo al pedido al mayorista) -->
+    @if (group.status === 'COMPLETED') {
+      <div class="bg-slate-50 border border-slate-100 rounded-xl p-2.5 flex flex-col gap-1.5">
+        <div class="flex justify-between items-center text-[10px] font-bold text-[#002d4b]">
+          <span class="flex items-center gap-1">
+            <ion-icon name="people-outline" class="text-slate-500"></ion-icon>
+            Cantidad Agrupada
+          </span>
+          <span>{{ group.unitsBought }} / {{ group.targetSize }} Unidades</span>
+        </div>
+
+        <!-- Barra estética -->
+        <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+          <div class="bg-[#006b4d] h-full rounded-full transition-all duration-300"
+            [style.width.%]="(group.unitsBought / group.targetSize) * 100">
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- BOTONES DE ACCIÓN LOGÍSTICOS COMPACTOS DINÁMICOS -->
+    @if (actions.length > 0) {
+      <div class="flex gap-1.5 justify-end mt-1 items-center">
+        @for (act of actions; track act.type) {
+          <ion-button [fill]="act.fill || 'solid'" size="small" (click)="onActionClick(act.type, $event)"
+            [class]="act.colorClass + ' font-extrabold m-0 rounded-xl'"
+            style="font-size: 10px !important; --font-size: 10px !important; height: 30px !important; --height: 30px !important;">
+            @if (act.icon) {
+              <ion-icon [name]="act.icon" slot="start" class="mr-1"></ion-icon>
+            }
+            {{ act.label }}
+          </ion-button>
+        }
+      </div>
+    }
+  </div>
+</div>

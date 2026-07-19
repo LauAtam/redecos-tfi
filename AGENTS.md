@@ -1,6 +1,6 @@
-# Reglas y Convenciones del Proyecto: Redecos
+# Reglas y Convenciones del Proyecto: Redeco
 
-Este documento contiene las reglas de desarrollo, arquitectura y convenciones establecidas para el Trabajo Final Integrador (TFI) **Redecos (Red de Consumo Soberano)**.
+Este documento contiene las reglas de desarrollo, arquitectura y convenciones establecidas para el Trabajo Final Integrador (TFI) **Redeco (Red de compras comunitarias.)**.
 
 ---
 
@@ -72,3 +72,8 @@ Adoptamos el estándar de **Conventional Commits** en español con prefijos téc
 * **TDD Estricto (`strict_tdd: true`)**: Al existir configuraciones de pruebas en ambos proyectos, se requiere escribir pruebas automatizadas para cualquier nueva lógica de negocio implementada.
   * **Backend**: Jest
   * **Frontend**: Jasmine / Karma
+
+---
+
+## 6. Integración con Mercado Pago
+* **Entorno de Producción Directo**: Queda estrictamente establecido que **NUNCA** se utiliza el entorno Sandbox de Mercado Pago en este proyecto debido a fallos estructurales e inestabilidad del servicio de pruebas de MP. En su lugar, se opera directamente con credenciales de producción para realizar las validaciones y mutaciones de pago reales.

@@ -1,4 +1,4 @@
-# Redecos: Red de Consumo Soberano
+# Redeco: Red de compras comunitarias.
 
 Trabajo Final Integrador - Tecnicatura Universitaria en Programación (UTN FRC).
 

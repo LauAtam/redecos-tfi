@@ -16,7 +16,8 @@ import {
   IonTitle,
   IonPopover,
   IonSegment,
-  IonSegmentButton
+  IonSegmentButton,
+  NavController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -28,11 +29,25 @@ import {
   arrowBackOutline,
   qrCodeOutline,
   closeOutline,
-  helpCircleOutline
+  helpCircleOutline,
+  giftOutline
 } from 'ionicons/icons';
 import { AppFacadeService } from '../../../app-facade.service';
 import { GroupOrder } from '../../../core/models/auth.models';
 import { HeaderComponent } from '../../../core/components/header/header.component';
+import { QRCodeComponent } from 'angularx-qrcode';
+
+export interface OrderUiState {
+  label: string;
+  colorClass: string;
+  icon: string;
+  popoverTitle: string;
+  popoverText: string;
+}
+
+export interface GroupOrderWithUi extends GroupOrder {
+  uiState: OrderUiState;
+}
 
 @Component({
   selector: 'app-mis-compras',
@@ -44,6 +59,7 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     CurrencyPipe,
     RouterModule,
     HeaderComponent,
+    QRCodeComponent,
     IonContent,
     IonButton,
     IonCard,
@@ -63,32 +79,48 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
   providers: [CurrencyPipe],
 })
 export class MisComprasPage implements OnInit {
-  orders = signal<GroupOrder[]>([]);
+  orders = signal<GroupOrderWithUi[]>([]);
   isLoading = false;
   errorMessage: string | null = null;
-  selectedOrderForQr: GroupOrder | null = null;
+  withdrawalSession = signal<any | null>(null);
   qrModalOpen = false;
 
   selectedSegment = signal<'active' | 'history'>('active');
+
+  hasOrdersReadyForPickup = computed(() => {
+    return this.orders().some(order => order.status === 'CONFIRMED' && order.group?.status === 'READY_FOR_PICKUP');
+  });
+
+  qrPayload = computed(() => {
+    const session = this.withdrawalSession();
+    if (!session) return '';
+    return JSON.stringify({
+      profileId: this.appFacadeService.currentUserValue?.id || '',
+      otp: session.otp
+    });
+  });
 
   filteredOrders = computed(() => {
     const list = this.orders();
     const segment = this.selectedSegment();
     return list.filter(order => {
+      const isGroupFinalizedOrCancelled = ['FINALIZED', 'CANCELLED'].includes(order.group?.status || '');
+
       if (segment === 'active') {
         return (
           order.status === 'PAYMENT_HELD' ||
-          (order.status === 'CONFIRMED' && order.group?.status !== 'COMPLETED')
+          (order.status === 'CONFIRMED' && !isGroupFinalizedOrCancelled)
         );
       }
       return (
         order.status === 'CANCELLED' ||
-        (order.status === 'CONFIRMED' && order.group?.status === 'COMPLETED')
+        (order.status === 'CONFIRMED' && isGroupFinalizedOrCancelled)
       );
     });
   });
 
   private appFacadeService = inject(AppFacadeService);
+  private navCtrl = inject(NavController);
 
   constructor() {
     addIcons({
@@ -100,7 +132,8 @@ export class MisComprasPage implements OnInit {
       arrowBackOutline,
       qrCodeOutline,
       closeOutline,
-      helpCircleOutline
+      helpCircleOutline,
+      giftOutline
     });
   }
 
@@ -118,12 +151,20 @@ export class MisComprasPage implements OnInit {
     if (error) {
       this.errorMessage = (error as any).message || 'Error al cargar tus compras.';
     } else {
-      this.orders.set(data || []);
+      const mapped = (data || []).map(order => ({
+        ...order,
+        uiState: this.calculateOrderUiState(order)
+      }));
+      this.orders.set(mapped);
     }
   }
 
   onSegmentChanged(event: any) {
     this.selectedSegment.set(event.detail.value as 'active' | 'history');
+  }
+
+  goBack() {
+    this.navCtrl.navigateBack('/cliente/home', { queryParams: { tab: 'config' } });
   }
 
   formatProductName(name: string | undefined): string {
@@ -132,51 +173,85 @@ export class MisComprasPage implements OnInit {
     return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
   }
 
-  getStatusLabel(status: string): string {
-    switch (status) {
-      case 'PAYMENT_HELD':
-        return 'Pago Retenido';
-      case 'CONFIRMED':
-        return 'Confirmada';
-      case 'CANCELLED':
-        return 'Cancelada';
-      case 'PENDING':
-        return 'Pendiente';
-      default:
-        return status;
+  calculateOrderUiState(order: GroupOrder): OrderUiState {
+    const status = order.status;
+    const groupStatus = order.group?.status;
+    const nodeName = order.group?.node?.name || 'tu Nodo';
+
+    if (groupStatus === 'FINALIZED' || status === 'FINALIZED') {
+      return {
+        label: 'Entregada',
+        colorClass: 'bg-slate-100 text-slate-600 border-slate-200',
+        icon: 'checkmark-circle-outline',
+        popoverTitle: 'Compra entregada',
+        popoverText: 'Ya retiraste este pedido en tu Nodo de distribución. ¡Gracias por comprar en comunidad!'
+      };
     }
+
+    if (groupStatus === 'READY_FOR_PICKUP') {
+      return {
+        label: 'Listo para retirar',
+        colorClass: 'bg-[#006b4d]/10 text-[#006b4d] border-[#006b4d]/20',
+        icon: 'gift-outline',
+        popoverTitle: 'Listo para retirar',
+        popoverText: `Tu pedido ya está disponible en el Nodo ${nodeName}. Presentá tu código QR de retiro al coordinador para recibir tus productos.`
+      };
+    }
+
+    if (status === 'CANCELLED') {
+      return {
+        label: 'Cancelada',
+        colorClass: 'bg-rose-100 text-rose-800 border-rose-200',
+        icon: 'close-circle-outline',
+        popoverTitle: 'Compra anulada',
+        popoverText: 'El grupo no alcanzó el mínimo o fue cancelado. Tu dinero ya fue liberado.'
+      };
+    }
+
+    if (status === 'CONFIRMED') {
+      return {
+        label: 'Confirmada',
+        colorClass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+        icon: 'checkmark-circle-outline',
+        popoverTitle: 'Compra confirmada',
+        popoverText: `El grupo se consolidó con éxito. El dinero fue cobrado y el pedido está en preparación o en camino al Nodo ${nodeName}.`
+      };
+    }
+
+    if (status === 'PAYMENT_HELD') {
+      return {
+        label: 'Pago Retenido',
+        colorClass: 'bg-amber-100 text-amber-800 border-amber-200',
+        icon: 'time-outline',
+        popoverTitle: 'Pre-autorización activa',
+        popoverText: 'El dinero está retenido en tu tarjeta. Solo se cobrará si el grupo se consolida hoy. Si no, se libera automáticamente.'
+      };
+    }
+
+    return {
+      label: 'Pendiente',
+      colorClass: 'bg-blue-100 text-blue-800 border-blue-200',
+      icon: 'time-outline',
+      popoverTitle: 'Pago pendiente',
+      popoverText: 'Estamos esperando la confirmación de pago de Mercado Pago.'
+    };
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'PAYMENT_HELD':
-        return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'CONFIRMED':
-        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
-      case 'CANCELLED':
-        return 'bg-rose-100 text-rose-800 border-rose-200';
-      case 'PENDING':
-      default:
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+  async openWithdrawalModal() {
+    this.isLoading = true;
+    this.errorMessage = null;
+    const { data, error } = await this.appFacadeService.generateWithdrawalOtp();
+    this.isLoading = false;
+    if (error) {
+      this.errorMessage = error.message;
+    } else if (data) {
+      this.withdrawalSession.set(data);
+      this.qrModalOpen = true;
     }
-  }
-
-  openQrModal(order: GroupOrder) {
-    this.selectedOrderForQr = order;
-    this.qrModalOpen = true;
   }
 
   closeQrModal() {
-    this.selectedOrderForQr = null;
+    this.withdrawalSession.set(null);
     this.qrModalOpen = false;
-  }
-
-  getQrCodeUrl(order: GroupOrder): string {
-    const payload = JSON.stringify({
-      orderId: order.id,
-      quantity: order.quantity,
-      buyerEmail: this.appFacadeService.currentUserValue?.email || 'N/A'
-    });
-    return `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(payload)}&color=002d4b&bgcolor=ffffff`;
   }
 }

@@ -60,9 +60,17 @@ export interface BuyGroup {
   closedAt?: string | null;
   expires_at?: string;
   product?: Producto;
+  node?: Nodo;
   unitsBought: number;
   unitsLeft: number;
   progress: number;
+  orders?: {
+    id: string;
+    quantity: number;
+    status: string;
+    buyerName: string;
+    buyerEmail: string;
+  }[];
 }
 
 export interface GroupOrder {
@@ -71,7 +79,7 @@ export interface GroupOrder {
   profile_id: string;
   quantity: number;
   unit_price: number;
-  status: 'PAYMENT_HELD' | 'CONFIRMED' | 'CANCELLED' | 'PENDING';
+  status: 'PAYMENT_HELD' | 'CONFIRMED' | 'CANCELLED' | 'PENDING' | 'FINALIZED';
   payment_intent_id?: string;
   created_at: string;
   group?: {

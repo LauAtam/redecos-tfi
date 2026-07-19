@@ -1,14 +1,34 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
+import * as path from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  let httpsOptions: any = undefined;
+  try {
+    const keyPath = path.join(process.cwd(), 'ssl', 'key.pem');
+    const certPath = path.join(process.cwd(), 'ssl', 'cert.pem');
+    if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+      httpsOptions = {
+        key: fs.readFileSync(keyPath),
+        cert: fs.readFileSync(certPath),
+      };
+      console.log('🔒 HTTPS habilitado en el servidor de NestJS');
+    }
+  } catch (error) {
+    console.warn('⚠️ No se pudieron cargar los certificados SSL, iniciando en HTTP', error);
+  }
+
+  const app = await NestFactory.create(AppModule, {
+    ...(httpsOptions ? { httpsOptions } : {}),
+  });
+
   app.enableCors();
 
   const config = new DocumentBuilder()
-    .setTitle('Redecos API')
-    .setDescription('Core operation backend for Redecos project')
+    .setTitle('Redeco API')
+    .setDescription('Core operation backend for Redeco project')
     .setVersion('1.0')
     .addTag('nodes', 'Withdrawal nodes management')
     .addTag('products', 'Product catalog management')
@@ -18,6 +38,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 bootstrap();

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonContent, IonSpinner } from '@ionic/angular/standalone';
+import { IonButton, IonIcon, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonContent, IonSpinner, NavController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   personOutline,
@@ -49,7 +49,7 @@ export class AccountTabComponent implements OnInit {
   @Input() userEmail: string = '';
   @Input() userName: string = '';
 
-  private router = inject(Router);
+  private navCtrl = inject(NavController);
   private appFacadeService = inject(AppFacadeService);
   private toastService = inject(ToastService);
 
@@ -118,11 +118,16 @@ export class AccountTabComponent implements OnInit {
   }
 
   goToMisCompras() {
-    this.router.navigate(['/mis-compras']);
+    this.navCtrl.navigateForward('/cliente/mis-compras');
   }
 
   goToConsolidacion() {
-    this.router.navigate(['/consolidacion']);
+    const role = this.userRole();
+    if (role === 'ADMIN') {
+      this.navCtrl.navigateForward('/admin/logistica');
+    } else if (role === 'NODO') {
+      this.navCtrl.navigateForward('/nodo/logistica');
+    }
   }
 
   onLogout() {

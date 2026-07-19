@@ -1,4 +1,4 @@
-# Backlog del Sprint Actual: Redecos TFI (Actualizado)
+# Backlog del Sprint Actual: Redeco TFI (Actualizado)
 
 Este archivo detalla las prioridades redefinidas para los últimos 10 días de desarrollo del TFI, priorizando funcionalidad y robustez del flujo logístico.
 

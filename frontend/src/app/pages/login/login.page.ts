@@ -102,7 +102,7 @@ export class LoginPage {
           break;
         case 'CLIENTE':
         default:
-          this.router.navigate(['/home']);
+          this.router.navigate(['/cliente/home']);
           break;
       }
     }

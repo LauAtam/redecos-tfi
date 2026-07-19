@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular/standalone';
 import {
   IonContent,
   IonCard,
@@ -26,13 +26,13 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
   ],
 })
 export class GestionesPage {
-  private router = inject(Router);
+  private navCtrl = inject(NavController);
 
   constructor() {
     addIcons({ businessOutline, cubeOutline, chevronForwardOutline, clipboardOutline });
   }
 
   navegarA(ruta: string) {
-    this.router.navigate([ruta]);
+    this.navCtrl.navigateForward(ruta);
   }
 }

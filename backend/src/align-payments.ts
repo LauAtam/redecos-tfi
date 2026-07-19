@@ -53,7 +53,7 @@ async function bootstrap() {
         const errData = await response.json() as any;
         const errMsg = errData.message || JSON.stringify(errData);
         console.error(`    ❌ Error al consultar MP para pago ${paymentId}:`, errMsg);
-        
+
         if (response.status === 404 || errMsg.toLowerCase().includes('not found')) {
           console.log(`    ⚠️ El pago no existe en Mercado Pago. Sincronizando la orden a CANCELLED de forma lógica...`);
           await prisma.group_orders.update({
@@ -87,8 +87,8 @@ async function bootstrap() {
           });
           console.log(`    ✅ Fondos liberados y orden marcada como CANCELLED en DB.`);
         }
-      } else if (order.buy_groups.status === 'COMPLETED') {
-        console.log(`    ⚠️ El grupo está COMPLETADO. Capturando fondos en MP...`);
+      } else if (['COMPLETED', 'PROCESSING_ORDER', 'SHIPPED', 'READY_FOR_PICKUP', 'FINALIZED'].includes(order.buy_groups.status)) {
+        console.log(`    ⚠️ El grupo está en estado consolidado o finalizado (${order.buy_groups.status}). Capturando fondos en MP...`);
         const ok = await mpService.capturePayment(paymentId);
         if (ok) {
           await prisma.group_orders.update({
@@ -98,9 +98,9 @@ async function bootstrap() {
           console.log(`    ✅ Fondos capturados y orden marcada como CONFIRMED en DB.`);
         }
       } else {
-        console.log(`    [-] El grupo está OPEN. Es normal que el pago esté pre-autorizado. No se requiere acción.`);
+        console.log(`    [-] El grupo está en estado ${order.buy_groups.status}. Es normal que el pago esté pre-autorizado.`);
       }
-    } 
+    }
     else if (mpStatus === 'approved') {
       if (order.buy_groups.status === 'COMPLETED') {
         console.log(`    ⚠️ El pago ya está capturado en MP pero figuraba como PAYMENT_HELD en DB. Sincronizando a CONFIRMED...`);
@@ -135,15 +135,15 @@ async function bootstrap() {
       } else {
         console.log(`    [-] Advertencia: El pago está aprobado en MP pero el grupo está en estado: ${order.buy_groups.status}.`);
       }
-    } 
-    else if (mpStatus === 'cancelled' || mpStatus === 'refunded') {
-      console.log(`    ⚠️ El pago ya está cancelado/reembolsado en MP. Sincronizando orden a CANCELLED en DB...`);
+    }
+    else if (mpStatus === 'cancelled' || mpStatus === 'refunded' || mpStatus === 'rejected') {
+      console.log(`    ⚠️ El pago ya está cancelado/reembolsado/rechazado en MP (Estado: ${mpStatus}). Sincronizando orden a CANCELLED en DB...`);
       await prisma.group_orders.update({
         where: { id: order.id },
         data: { status: 'CANCELLED' },
       });
       console.log(`    ✅ Estado de orden sincronizado a CANCELLED en DB.`);
-    } 
+    }
     else {
       console.log(`    [-] Pago en estado: ${mpStatus}. No se aplica regla de reconciliación.`);
     }

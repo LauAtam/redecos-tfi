@@ -24,7 +24,7 @@ export const guestGuard: CanActivateFn = (route, state) => {
           return router.parseUrl('/nodo');
         case 'CLIENTE':
         default:
-          return router.parseUrl('/home');
+          return router.parseUrl('/cliente/home');
       }
     })
   );

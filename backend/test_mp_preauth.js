@@ -39,7 +39,7 @@ async function createPreauthPayment(token) {
   const body = {
     transaction_amount: 1.00,
     token: token,
-    description: 'Redecos Test Production Pre-Auth',
+    description: 'Redeco Test Production Pre-Auth',
     installments: 1,
     payment_method_id: 'master', // Red mastercard
     payer: {

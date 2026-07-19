@@ -23,7 +23,7 @@ export const nodeGuard: CanActivateFn = (route, state) => {
 
       // Forzar a los usuarios CLIENTE a seleccionar un nodo si no tienen default_node_id
       if (user.role === 'CLIENTE' && !user.default_node_id) {
-        return router.parseUrl('/pages/select-node');
+        return router.parseUrl('/cliente/seleccionar-nodo');
       }
 
       return true;

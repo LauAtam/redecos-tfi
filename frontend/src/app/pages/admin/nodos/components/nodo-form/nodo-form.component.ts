@@ -229,9 +229,17 @@ export class NodoFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateMarkerPosition(lat: number, lng: number, triggerReverseGeocoding: boolean) {
-    const roundedLat = parseFloat(lat.toFixed(6));
-    const roundedLng = parseFloat(lng.toFixed(6));
+  updateMarkerPosition(lat: any, lng: any, triggerReverseGeocoding: boolean) {
+    const numLat = typeof lat === 'number' ? lat : parseFloat(lat);
+    const numLng = typeof lng === 'number' ? lng : parseFloat(lng);
+
+    if (isNaN(numLat) || isNaN(numLng)) {
+      console.warn('Coordenadas inválidas en updateMarkerPosition:', lat, lng);
+      return;
+    }
+
+    const roundedLat = parseFloat(numLat.toFixed(6));
+    const roundedLng = parseFloat(numLng.toFixed(6));
 
     if (this.marker) {
       this.marker.setLatLng([roundedLat, roundedLng]);
@@ -253,7 +261,7 @@ export class NodoFormComponent implements OnInit, OnDestroy {
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'Redecos-TFI-Geocoding-Agent/1.0 (contact@redecos.com)'
+          'User-Agent': 'Redeco-TFI-Geocoding-Agent/1.0 (contact@redeco.com)'
         }
       });
       const data = await response.json();
@@ -272,7 +280,7 @@ export class NodoFormComponent implements OnInit, OnDestroy {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'Redecos-TFI-Geocoding-Agent/1.0 (contact@redecos.com)'
+          'User-Agent': 'Redeco-TFI-Geocoding-Agent/1.0 (contact@redeco.com)'
         }
       });
       const data = await response.json();

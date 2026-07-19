@@ -7,13 +7,15 @@ export class MercadoPagoService {
   private readonly logger = new Logger(MercadoPagoService.name);
   private readonly accessToken: string;
   private readonly isProduction: boolean;
+  private readonly bypassPayments: boolean;
 
   constructor(private readonly config: ConfigService) {
     this.accessToken = this.config.get<string>('MERCADO_PAGO_ACCESS_TOKEN') || '';
     this.isProduction = this.config.get<string>('NODE_ENV') === 'production';
+    this.bypassPayments = this.config.get<string>('BYPASS_PAYMENTS') === 'true';
     // Log de arranque: mostrar prefijo de credencial para diagnóstico (nunca el token completo)
     const tokenPrefix = this.accessToken ? this.accessToken.substring(0, 20) + '...' : '(vacío)';
-    this.logger.log(`🔑 Access Token cargado: ${tokenPrefix} | Producción: ${this.isProduction}`);
+    this.logger.log(`🔑 Access Token cargado: ${tokenPrefix} | Producción: ${this.isProduction} | Bypass MP: ${this.bypassPayments}`);
   }
 
 
@@ -24,9 +26,9 @@ export class MercadoPagoService {
     paymentMethodId: string,
     customerId?: string,
   ): Promise<{ id: string; status: string }> {
-    // Si no hay credencial configurada, usar simulación en modo dev
-    if (!this.accessToken || this.accessToken.startsWith('MOCK_') || this.accessToken === '') {
-      this.logger.warn('Mercado Pago Access Token no configurado o mock. Simulando pre-autorización.');
+    // Si el bypass está activo o no hay credencial configurada, usar simulación
+    if (this.bypassPayments || !this.accessToken || this.accessToken.startsWith('MOCK_') || this.accessToken === '') {
+      this.logger.warn('Simulando pre-autorización de Mercado Pago (Bypass activo o sin credencial).');
       return { id: `mp_hold_mock_${crypto.randomUUID()}`, status: 'authorized' };
     }
 
@@ -41,7 +43,7 @@ export class MercadoPagoService {
       const requestBody = {
         transaction_amount: amount,
         token,
-        description: 'Redecos - Reserva de Compra Colectiva',
+        description: 'Redeco - Reserva de Compra Colectiva',
         installments: 1,
         payment_method_id: paymentMethodId,
         payer,
@@ -88,7 +90,7 @@ export class MercadoPagoService {
   }
 
   async capturePayment(paymentId: string): Promise<boolean> {
-    if (paymentId.includes('mock') || !this.accessToken || this.accessToken === '') {
+    if (this.bypassPayments || paymentId.includes('mock') || !this.accessToken || this.accessToken === '') {
       this.logger.log(`Capturando pago simulado: ${paymentId}`);
       return true;
     }
@@ -121,7 +123,7 @@ export class MercadoPagoService {
   }
 
   async cancelPayment(paymentId: string): Promise<boolean> {
-    if (paymentId.includes('mock') || !this.accessToken || this.accessToken === '') {
+    if (this.bypassPayments || paymentId.includes('mock') || !this.accessToken || this.accessToken === '') {
       this.logger.log(`Cancelando pago simulado: ${paymentId}`);
       return true;
     }
@@ -153,9 +155,39 @@ export class MercadoPagoService {
     }
   }
 
+  async refundPayment(paymentId: string): Promise<boolean> {
+    if (this.bypassPayments || paymentId.includes('mock') || !this.accessToken || this.accessToken === '') {
+      this.logger.log(`Reembolsando pago simulado: ${paymentId}`);
+      return true;
+    }
+
+    try {
+      const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}/refunds`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${this.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json() as any;
+
+      if (!response.ok) {
+        this.logger.error(`Error al reembolsar pago ${paymentId}: ${JSON.stringify(data)}`);
+        return false;
+      }
+
+      this.logger.log(`Pago ${paymentId} reembolsado con éxito.`);
+      return true;
+    } catch (error: any) {
+      this.logger.error(`Excepción en refundPayment: ${error.message}`);
+      return false;
+    }
+  }
+
   async getOrCreateCustomer(email: string): Promise<string> {
-    if (!this.accessToken || this.accessToken.startsWith('MOCK_') || this.accessToken === '') {
-      this.logger.warn('Mercado Pago Access Token no configurado o mock. Simulando creación de cliente.');
+    if (this.bypassPayments || !this.accessToken || this.accessToken.startsWith('MOCK_') || this.accessToken === '') {
+      this.logger.warn('Simulando creación de cliente en Mercado Pago (Bypass activo o sin credencial).');
       return `mp_cust_mock_${crypto.randomUUID().substring(0, 8)}`;
     }
 
@@ -207,8 +239,8 @@ export class MercadoPagoService {
     customerId: string,
     token: string,
   ): Promise<{ id: string; last_four: string; brand: string; expiration_mo: number; expiration_yr: number }> {
-    if (customerId.includes('mock') || !this.accessToken || this.accessToken === '') {
-      this.logger.warn('Simulando guardado de tarjeta en Mercado Pago.');
+    if (this.bypassPayments || customerId.includes('mock') || !this.accessToken || this.accessToken === '') {
+      this.logger.warn('Simulando guardado de tarjeta en Mercado Pago (Bypass activo o sin credencial).');
       return {
         id: `mp_card_mock_${crypto.randomUUID().substring(0, 8)}`,
         last_four: '1234',
@@ -252,8 +284,8 @@ export class MercadoPagoService {
   }
 
   async deleteCard(customerId: string, cardId: string): Promise<boolean> {
-    if (customerId.includes('mock') || cardId.includes('mock') || !this.accessToken || this.accessToken === '') {
-      this.logger.warn(`Simulando eliminación de tarjeta ${cardId} en Mercado Pago.`);
+    if (this.bypassPayments || customerId.includes('mock') || cardId.includes('mock') || !this.accessToken || this.accessToken === '') {
+      this.logger.warn(`Simulando eliminación de tarjeta ${cardId} en Mercado Pago (Bypass activo o sin credencial).`);
       return true;
     }
 
