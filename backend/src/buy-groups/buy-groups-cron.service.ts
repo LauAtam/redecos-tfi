@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PrismaService } from '../prisma/prisma.service';
 import { MercadoPagoService } from './infrastructure/mercado-pago.service';
 
@@ -10,6 +11,7 @@ export class BuyGroupsCronService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mercadoPago: MercadoPagoService,
+    private readonly eventEmitter: EventEmitter2,
   ) { }
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
@@ -34,6 +36,24 @@ export class BuyGroupsCronService {
 
       const expiredIds = expiredGroups.map((g) => g.id);
       this.logger.log(`Encontrados ${expiredIds.length} grupos vencidos. Cancelando...`);
+
+      // Obtener detalles de los grupos expirados para notificar a los clientes
+      const groupsToNotify = await this.prisma.buy_groups.findMany({
+        where: {
+          id: { in: expiredIds },
+        },
+        include: {
+          productos: true,
+          group_orders: {
+            where: {
+              status: { in: ['PAYMENT_HELD', 'CONFIRMED'] },
+            },
+            include: {
+              profiles: true,
+            },
+          },
+        },
+      });
 
       // 2. Buscar todas las órdenes de esos grupos con status PAYMENT_HELD para liberar fondos
       const pendingOrders = await this.prisma.group_orders.findMany({
@@ -124,6 +144,19 @@ export class BuyGroupsCronService {
           });
         }
       });
+
+      // Emitir eventos de cancelación para cada grupo expirado con compradores
+      for (const group of groupsToNotify) {
+        const emails = group.group_orders
+          .map((o) => o.profiles?.email)
+          .filter((e): e is string => !!e);
+        if (emails.length > 0) {
+          this.eventEmitter.emit('buyGroup.cancelled', {
+            emails,
+            groupName: group.productos.name,
+          });
+        }
+      }
 
       this.logger.log('Proceso de expiración, liberación y reembolso de fondos completado.');
     } catch (error: any) {

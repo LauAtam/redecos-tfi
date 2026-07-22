@@ -1,13 +1,17 @@
-<app-header title="Mi Perfil" defaultHref="/admin/dashboard"></app-header>
+<ion-header class="ion-no-border">
+  <app-header title="Mi Perfil" defaultHref="/admin/dashboard"></app-header>
+</ion-header>
 
 <ion-content class="[--background:#f8fafc] ion-padding">
   <div class="max-w-[600px] mx-auto py-4 px-2">
 
     <!-- Tarjeta de Perfil -->
-    <ion-card class="m-0 p-6 rounded-[20px] bg-white border border-[#e8e8e8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] flex flex-col items-center gap-5">
-      
+    <ion-card
+      class="m-0 p-6 rounded-[20px] bg-white border border-[#e8e8e8] shadow-[0_4px_16px_rgba(0,0,0,0.02)] flex flex-col items-center gap-5">
+
       <!-- Avatar circular -->
-      <div class="flex items-center justify-center w-24 h-24 rounded-full bg-[#f1f5f9] text-[#002d4b] border-2 border-[#006b4d] shadow-sm">
+      <div
+        class="flex items-center justify-center w-24 h-24 rounded-full bg-[#f1f5f9] text-[#002d4b] border-2 border-[#006b4d] shadow-sm">
         <ion-icon name="person-outline" class="text-[3rem]"></ion-icon>
       </div>
 
@@ -20,7 +24,8 @@
 
       <div class="w-full border-t border-[#f1f5f9] pt-4 flex flex-col gap-3">
         <ion-item lines="none" class="[--background:transparent] [--padding-start:0] [--inner-padding-end:0]">
-          <div slot="start" class="flex items-center justify-center w-10 h-10 rounded-[8px] bg-[#f8fafc] text-[#64748b] mr-2">
+          <div slot="start"
+            class="flex items-center justify-center w-10 h-10 rounded-[8px] bg-[#f8fafc] text-[#64748b] mr-2">
             <ion-icon name="mail-outline" class="text-[1.2rem]"></ion-icon>
           </div>
           <ion-label>
@@ -30,7 +35,8 @@
         </ion-item>
 
         <ion-item lines="none" class="[--background:transparent] [--padding-start:0] [--inner-padding-end:0]">
-          <div slot="start" class="flex items-center justify-center w-10 h-10 rounded-[8px] bg-[#f8fafc] text-[#64748b] mr-2">
+          <div slot="start"
+            class="flex items-center justify-center w-10 h-10 rounded-[8px] bg-[#f8fafc] text-[#64748b] mr-2">
             <ion-icon name="shield-checkmark-outline" class="text-[1.2rem]"></ion-icon>
           </div>
           <ion-label>
@@ -40,7 +46,8 @@
         </ion-item>
       </div>
 
-      <ion-button expand="block" color="danger" class="[--border-radius:12px] h-12 w-full font-bold mt-4" (click)="logout()">
+      <ion-button expand="block" color="danger" class="[--border-radius:12px] h-12 w-full font-bold mt-4"
+        (click)="logout()">
         <ion-icon slot="start" name="log-out-outline"></ion-icon>
         Cerrar Sesión
       </ion-button>

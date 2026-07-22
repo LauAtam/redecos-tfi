@@ -15,6 +15,33 @@
   }
 </section>
 
+<!-- Ahorro Acumulado Section -->
+<section class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col gap-3 relative overflow-hidden mb-4">
+  <div class="absolute top-0 right-0 w-32 h-32 bg-[#006b4d]/5 rounded-bl-full -z-10"></div>
+  
+  <div class="flex items-center gap-3">
+    <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#e6f4f0] text-[#006b4d] shrink-0">
+      <ion-icon name="wallet-outline" class="text-xl"></ion-icon>
+    </div>
+    <div>
+      <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Mi Ahorro Acumulado</span>
+      <div class="text-xl font-extrabold text-[#006b4d] mt-0.5">
+        {{ totalSavings() | currency:'ARS':'symbol-narrow':'1.2-2' }}
+      </div>
+    </div>
+  </div>
+  
+  <p class="text-[10px] text-slate-500 m-0 leading-relaxed">
+    Esto es lo que ahorraste comprando en conjunto con tus vecinos en comparación con los precios minoristas de góndola.
+  </p>
+
+  <button (click)="openStatsModal()"
+    class="w-full bg-[#006b4d] text-white font-extrabold text-xs uppercase tracking-wider py-2.5 rounded-xl transition-all shadow-sm active:scale-[0.98] flex items-center justify-center gap-1.5 mt-1">
+    <ion-icon name="stats-chart-outline" class="text-sm"></ion-icon>
+    Ver mis Estadísticas
+  </button>
+</section>
+
 <!-- Preference Node Card -->
 <section class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col gap-3 relative overflow-hidden">
   <div class="absolute top-0 right-0 w-32 h-32 bg-[#006b4d]/5 rounded-bl-full -z-10"></div>
@@ -168,6 +195,51 @@
 
     <ion-content class="ion-padding [--background:#f8fafc]">
       <app-add-card-form (cardSaved)="onCardSaved($event)"></app-add-card-form>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Modal de Estadísticas del Cliente -->
+<ion-modal [isOpen]="isStatsModalOpen" (willDismiss)="closeStatsModal()">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="[--background:#ffffff] border-b border-slate-100 px-2">
+        <ion-title class="font-extrabold text-[#002d4b] text-base">Mis Estadísticas</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeStatsModal()" class="[--color:#002d4b]">
+            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="[--background:#f8fafc] ion-padding">
+      <div class="flex flex-col gap-5 py-2">
+        
+        <!-- Gráfico Ahorro -->
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4 flex flex-col gap-2">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">1. Evolución del Ahorro Personal</span>
+          <div class="h-[140px] w-full relative">
+            <canvas #savingsCanvas></canvas>
+          </div>
+        </ion-card>
+
+        <!-- Gráfico Categorías -->
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4 flex flex-col gap-2">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">2. Gastos por Categoría de Producto</span>
+          <div class="h-[180px] w-full relative">
+            <canvas #categoriesCanvas></canvas>
+          </div>
+        </ion-card>
+
+        <!-- Gráfico Estados -->
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4 flex flex-col gap-2">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">3. Distribución de Estados de Pedido</span>
+          <div class="h-[180px] w-full relative">
+            <canvas #ordersStatusCanvas></canvas>
+          </div>
+        </ion-card>
+
+      </div>
     </ion-content>
   </ng-template>
 </ion-modal>

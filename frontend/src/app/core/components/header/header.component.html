@@ -1,27 +1,31 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] [--border-width:0] font-bold relative">
-    <ion-buttons slot="start" class="relative z-10">
-      @if (showCustomBack || defaultHref) {
-        <ion-button (click)="onBackClick()" class="[--color:#002d4b]" aria-label="Volver atrás">
-          <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
-        </ion-button>
-      }
-    </ion-buttons>
+<ion-toolbar class="[--background:#ffffff] [--color:#002d4b] [--border-width:0] font-bold relative">
+  <ion-buttons slot="start" class="relative z-10">
+    @if (showCustomBack) {
+    <ion-button (click)="onBackClick()" class="[--color:#002d4b]" aria-label="Volver atrás">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    } @else if (defaultHref) {
+    <ion-back-button [defaultHref]="defaultHref" class="[--color:#002d4b]" text=""></ion-back-button>
+    }
+  </ion-buttons>
 
-    <ion-title class="text-[1.2rem] text-[#002d4b] font-bold absolute left-0 right-0 top-0 bottom-0 text-center flex items-center justify-center px-[54px] z-0 pointer-events-none">{{ title }}</ion-title>
+  <ion-title
+    class="text-[1.2rem] text-[#002d4b] font-bold absolute left-0 right-0 top-0 bottom-0 text-center flex items-center justify-center px-[54px] z-0 pointer-events-none">{{
+    title }}</ion-title>
 
-    <ion-buttons slot="end" class="relative z-10">
-      @if (showAdminAvatar) {
-        <ion-button (click)="onAvatarClick()" class="[--color:#002d4b] mr-1 flex items-center justify-center" aria-label="Ver Perfil">
-          <div class="w-8 h-8 rounded-full border border-[#006b4d] flex items-center justify-center bg-[#f1f5f9] text-[#002d4b] active:scale-95 transition-all">
-            <ion-icon name="person-outline" class="text-[1.15rem]"></ion-icon>
-          </div>
-        </ion-button>
-      } @else if (showLogout) {
-        <ion-button (click)="onLogout()" class="[--color:#dc2626]" aria-label="Cerrar sesión">
-          <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
-        </ion-button>
-      }
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
+  <ion-buttons slot="end" class="relative z-10">
+    @if (showAdminAvatar) {
+    <ion-button (click)="onAvatarClick()" class="[--color:#002d4b] mr-1 flex items-center justify-center"
+      aria-label="Ver Perfil">
+      <div
+        class="w-8 h-8 rounded-full border border-[#006b4d] flex items-center justify-center bg-[#f1f5f9] text-[#002d4b] active:scale-95 transition-all">
+        <ion-icon name="person-outline" class="text-[1.15rem]"></ion-icon>
+      </div>
+    </ion-button>
+    } @else if (showLogout) {
+    <ion-button (click)="onLogout()" class="[--color:#dc2626]" aria-label="Cerrar sesión">
+      <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+    </ion-button>
+    }
+  </ion-buttons>
+</ion-toolbar>

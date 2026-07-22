@@ -6,7 +6,9 @@ import {
   IonTitle,
   IonButtons,
   IonButton,
-  IonIcon
+  IonIcon,
+  IonBackButton,
+  NavController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, logOutOutline, personOutline } from 'ionicons/icons';
@@ -22,7 +24,8 @@ import { arrowBackOutline, logOutOutline, personOutline } from 'ionicons/icons';
     IonTitle,
     IonButtons,
     IonButton,
-    IonIcon
+    IonIcon,
+    IonBackButton
   ]
 })
 export class HeaderComponent {
@@ -36,6 +39,7 @@ export class HeaderComponent {
   @Output() logout = new EventEmitter<void>();
 
   private router = inject(Router);
+  private navCtrl = inject(NavController);
 
   constructor() {
     addIcons({
@@ -49,7 +53,7 @@ export class HeaderComponent {
     if (this.showCustomBack) {
       this.customBack.emit();
     } else if (this.defaultHref) {
-      this.router.navigateByUrl(this.defaultHref);
+      this.navCtrl.navigateBack(this.defaultHref);
     }
   }
 
@@ -58,6 +62,6 @@ export class HeaderComponent {
   }
 
   onAvatarClick() {
-    this.router.navigateByUrl('/admin/perfil');
+    this.navCtrl.navigateForward('/admin/perfil');
   }
 }

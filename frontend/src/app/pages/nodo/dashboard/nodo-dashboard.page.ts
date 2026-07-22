@@ -7,6 +7,7 @@ import {
   IonSpinner,
   IonItem,
   IonLabel,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -19,6 +20,8 @@ import {
   businessOutline,
   peopleOutline,
   alertCircleOutline,
+  cashOutline,
+  statsChartOutline,
 } from 'ionicons/icons';
 import { AppFacadeService } from '../../../app-facade.service';
 import { HeaderComponent } from '../../../core/components/header/header.component';
@@ -36,6 +39,7 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonSpinner,
     IonItem,
     IonLabel,
+    IonHeader,
     HeaderComponent,
   ],
 })
@@ -47,6 +51,9 @@ export class NodoDashboardPage implements OnInit {
   processingOrderCount = 0;
   shippedCount = 0;
   readyForPickupCount = 0;
+
+  totalSales = 0;
+  totalEarnings = 0;
 
   isLoading = false;
   errorMessage: string | null = null;
@@ -65,6 +72,8 @@ export class NodoDashboardPage implements OnInit {
       businessOutline,
       peopleOutline,
       alertCircleOutline,
+      cashOutline,
+      statsChartOutline,
     });
   }
 
@@ -97,6 +106,9 @@ export class NodoDashboardPage implements OnInit {
       this.processingOrderCount = data.stats.processingOrderCount;
       this.shippedCount = data.stats.shippedCount;
       this.readyForPickupCount = data.stats.readyForPickupCount;
+
+      this.totalSales = data.stats.totalSales;
+      this.totalEarnings = data.stats.totalEarnings;
     }
   }
 
@@ -108,3 +120,4 @@ export class NodoDashboardPage implements OnInit {
     this.router.navigate([route]);
   }
 }
+

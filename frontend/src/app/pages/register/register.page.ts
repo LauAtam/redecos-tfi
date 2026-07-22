@@ -16,6 +16,7 @@ import {
   IonIcon,
   IonText,
   IonSpinner,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -43,6 +44,7 @@ import { HeaderComponent } from '../../core/components/header/header.component';
     IonIcon,
     IonText,
     IonSpinner,
+    IonHeader,
     HeaderComponent
   ],
 })

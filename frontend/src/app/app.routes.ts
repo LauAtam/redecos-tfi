@@ -1,9 +1,4 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
-import { guestGuard } from './core/guards/guest.guard';
-import { nodeGuard } from './core/guards/node.guard';
-
 export const routes: Routes = [
   {
     path: '',
@@ -11,128 +6,23 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'cliente/home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-    canActivate: [authGuard, nodeGuard],
+    path: '',
+    loadChildren: () => import('./auth.routes').then(m => m.authRoutes),
   },
   {
-    path: 'cliente/mis-compras',
-    loadComponent: () =>
-      import('./pages/cliente/mis-compras/mis-compras.page').then(
-        (m) => m.MisComprasPage,
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'cliente/seleccionar-nodo',
-    loadComponent: () =>
-      import('./pages/select-node/select-node.page').then(
-        (m) => m.SelectNodePage,
-      ),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./pages/login/login.page').then((m) => m.LoginPage),
-    canActivate: [guestGuard],
-  },
-  {
-    path: 'register',
-    loadComponent: () =>
-      import('./pages/register/register.page').then((m) => m.RegisterPage),
-    canActivate: [guestGuard],
-  },
-  {
-    path: 'restricted',
-    loadComponent: () =>
-      import('./pages/restricted/restricted.page').then(
-        (m) => m.RestrictedPage,
-      ),
+    path: 'cliente',
+    loadChildren: () => import('./cliente.routes').then(m => m.clienteRoutes),
   },
   {
     path: 'admin',
-    loadComponent: () =>
-      import('./pages/admin/admin-layout/admin-layout.page').then(
-        (m) => m.AdminLayoutPage,
-      ),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['ADMIN'] },
-    children: [
-      {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./pages/admin/dashboard/dashboard.page').then(
-            (m) => m.DashboardPage,
-          ),
-      },
-      {
-        path: 'gestiones',
-        loadComponent: () =>
-          import('./pages/admin/gestiones/gestiones.page').then(
-            (m) => m.GestionesPage,
-          ),
-      },
-      {
-        path: 'perfil',
-        loadComponent: () =>
-          import('./pages/admin/perfil/perfil.page').then(
-            (m) => m.PerfilPage,
-          ),
-      },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-    ],
-  },
-  {
-    path: 'admin/productos',
-    loadComponent: () =>
-      import('./pages/admin/productos/productos.page').then(
-        (m) => m.ProductosPage,
-      ),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['ADMIN'] },
-  },
-  {
-    path: 'admin/nodos',
-    loadComponent: () =>
-      import('./pages/admin/nodos/nodos.page').then((m) => m.NodosPage),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['ADMIN'] },
-  },
-  {
-    path: 'admin/logistica',
-    loadComponent: () =>
-      import('./pages/admin/gestiones/logistica/admin-logistica.page').then(
-        (m) => m.AdminLogisticaPage,
-      ),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['ADMIN'] },
-  },
-  {
-    path: 'nodo/dashboard',
-    loadComponent: () =>
-      import('./pages/nodo/dashboard/nodo-dashboard.page').then(
-        (m) => m.NodoDashboardPage,
-      ),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['NODO'] },
-  },
-  {
-    path: 'nodo/logistica',
-    loadComponent: () =>
-      import('./pages/nodo/logistica/nodo-logistica.page').then(
-        (m) => m.NodoLogisticaPage,
-      ),
-    canActivate: [authGuard, roleGuard],
-    data: { expectedRoles: ['NODO'] },
+    loadChildren: () => import('./admin.routes').then(m => m.adminRoutes),
   },
   {
     path: 'nodo',
-    redirectTo: 'nodo/dashboard',
-    pathMatch: 'full',
+    loadChildren: () => import('./nodo.routes').then(m => m.nodoRoutes),
+  },
+  {
+    path: 'restricted',
+    loadComponent: () => import('./pages/restricted/restricted.page').then((m) => m.RestrictedPage),
   },
 ];

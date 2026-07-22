@@ -1,0 +1,119 @@
+<ion-header class="ion-no-border">
+  <app-header title="Reportes del Nodo" defaultHref="/nodo/dashboard"></app-header>
+</ion-header>
+
+<ion-content class="[--background:#f8fafc] ion-padding">
+  <div class="max-w-[600px] mx-auto py-4 px-2 flex flex-col gap-5">
+
+    <!-- LOADER -->
+    @if (isLoading) {
+    <div class="flex justify-center items-center py-12">
+      <ion-spinner name="crescent" class="text-[#006b4d]"></ion-spinner>
+    </div>
+    }
+
+    <!-- ERROR STATE -->
+    @else if (errorMessage) {
+    <div
+      class="bg-white rounded-2xl border border-slate-200 p-8 text-center flex flex-col items-center justify-center gap-3 shadow-sm">
+      <div class="w-12 h-12 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center">
+        <ion-icon name="alert-circle-outline" class="text-2xl"></ion-icon>
+      </div>
+      <div>
+        <div class="font-bold text-base text-[#002d4b]">Error al cargar reportes</div>
+        <div class="text-sm text-slate-500 mt-1">{{ errorMessage }}</div>
+      </div>
+      <button (click)="loadStats()"
+        class="bg-[#006b4d] text-white font-extrabold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl transition-all flex items-center gap-1.5">
+        <ion-icon name="refresh-outline" class="text-sm"></ion-icon>
+        Reintentar
+      </button>
+    </div>
+    }
+
+    <!-- CONTENT -->
+    @else {
+    <div class="flex flex-col gap-5">
+
+      <!-- Ficha de mi nodo -->
+      <div>
+        <div class="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1">
+          Nodo de Retiro
+        </div>
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4 flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-[#e6f4f0] text-[#006b4d] shrink-0">
+            <ion-icon name="business-outline" class="text-lg"></ion-icon>
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-extrabold text-[#002d4b] leading-tight truncate">
+              {{ nodeName }}
+            </div>
+            <div class="text-xs text-slate-400 mt-1 font-semibold leading-normal truncate">
+              {{ nodeAddress }}
+            </div>
+          </div>
+        </ion-card>
+      </div>
+
+      <!-- Resumen Financiero -->
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Comisiones Acumuladas -->
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4 flex flex-col gap-1">
+          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Mis Ganancias (10%)</span>
+          <div class="text-lg font-extrabold text-[#006b4d] mt-1">
+            {{ totalEarnings | currency:'ARS':'symbol-narrow':'1.2-2' }}
+          </div>
+          <span class="text-[9px] text-slate-400 mt-0.5 leading-tight">Ganado por comisiones</span>
+        </ion-card>
+
+        <!-- Ventas del Nodo -->
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4 flex flex-col gap-1">
+          <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Venta de la Red</span>
+          <div class="text-lg font-extrabold text-[#002d4b] mt-1">
+            {{ totalSales | currency:'ARS':'symbol-narrow':'1.2-2' }}
+          </div>
+          <span class="text-[9px] text-slate-400 mt-0.5 leading-tight">Monto total facturado</span>
+        </ion-card>
+      </div>
+
+      <!-- GRÁFICO 1: Historial de Ventas y Comisiones -->
+      <div>
+        <div class="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1">
+          1. Rendimiento y Comisiones Semestrales
+        </div>
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4">
+          <div class="h-[200px] w-full relative">
+            <canvas #earningsCanvas></canvas>
+          </div>
+        </ion-card>
+      </div>
+
+      <!-- GRÁFICO 2: Ocupación de Stock / Carga Logística -->
+      <div>
+        <div class="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1">
+          2. Carga Logística (Bultos en Nodo)
+        </div>
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4">
+          <div class="h-[180px] w-full relative">
+            <canvas #logisticsCanvas></canvas>
+          </div>
+        </ion-card>
+      </div>
+
+      <!-- GRÁFICO 3: Top Productos -->
+      <div>
+        <div class="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1">
+          3. Top 5 Productos con Mayor Rotación
+        </div>
+        <ion-card class="m-0 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm p-4">
+          <div class="h-[180px] w-full relative">
+            <canvas #topProductsCanvas></canvas>
+          </div>
+        </ion-card>
+      </div>
+
+    </div>
+    }
+
+  </div>
+</ion-content>

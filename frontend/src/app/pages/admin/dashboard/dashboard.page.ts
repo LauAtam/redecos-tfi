@@ -6,6 +6,7 @@ import {
   IonCard,
   IonIcon,
   IonSpinner,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -35,13 +36,14 @@ import { Chart } from 'chart.js/auto';
     IonSpinner,
     HeaderComponent,
     CurrencyPipe,
-    DecimalPipe
+    DecimalPipe,
+    IonHeader
   ],
 })
 export class DashboardPage implements OnInit {
   @ViewChild('earningsCanvas') earningsCanvas!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('savingsCanvas') savingsCanvas!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('pickupsCanvas') pickupsCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('nodeRankingCanvas') nodeRankingCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('consolidationSuccessCanvas') consolidationSuccessCanvas!: ElementRef<HTMLCanvasElement>;
 
   adminEmail: string = '';
   totalProductos: number = 0;
@@ -55,8 +57,8 @@ export class DashboardPage implements OnInit {
   upcomingDeliveries: any[] = [];
 
   private earningsChart: Chart | undefined;
-  private savingsChart: Chart | undefined;
-  private pickupsChart: Chart | undefined;
+  private nodeRankingChart: Chart | undefined;
+  private consolidationSuccessChart: Chart | undefined;
 
   private appFacadeService = inject(AppFacadeService);
 
@@ -100,7 +102,7 @@ export class DashboardPage implements OnInit {
         // Renderizar gráficos con delay corto para asegurar que el DOM cargó
         setTimeout(() => {
           this.createCharts(stats.charts);
-        }, 100);
+        }, 150);
       }
 
       if (groupsRes.data) {
@@ -122,99 +124,113 @@ export class DashboardPage implements OnInit {
   createCharts(chartsData: any) {
     if (!chartsData) return;
 
-    // 1. Gráfico de Ganancias
-    if (this.earningsCanvas) {
-      if (this.earningsChart) this.earningsChart.destroy();
-      this.earningsChart = new Chart(this.earningsCanvas.nativeElement, {
-        type: 'bar',
-        data: {
-          labels: chartsData.earnings.labels,
-          datasets: [{
-            label: 'Ventas en la Red ($)',
-            data: chartsData.earnings.data,
-            backgroundColor: '#006b4d',
-            borderRadius: 6,
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
+    // 1. Gráfico de Ganancias y Ventas Globales (Líneas + Barras)
+    if (this.earningsCanvas && this.earningsCanvas.nativeElement && chartsData.earnings) {
+      try {
+        if (this.earningsChart) this.earningsChart.destroy();
+        this.earningsChart = new Chart(this.earningsCanvas.nativeElement, {
+          type: 'bar',
+          data: {
+            labels: chartsData.earnings.labels,
+            datasets: [
+              {
+                label: 'Comisiones Globales ($)',
+                data: chartsData.earnings.commissionData,
+                backgroundColor: '#006b4d',
+                borderRadius: 6,
+              },
+              {
+                label: 'Ventas Totales ($)',
+                data: chartsData.earnings.salesData,
+                backgroundColor: '#002d4b',
+                borderRadius: 6,
+              }
+            ]
           },
-          scales: {
-            y: { beginAtZero: true }
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: { boxWidth: 12, font: { size: 9, weight: 'bold' } }
+              }
+            },
+            scales: {
+              y: { beginAtZero: true, ticks: { font: { size: 9 } } },
+              x: { ticks: { font: { size: 9 } } }
+            }
           }
-        }
-      });
+        });
+      } catch (e) {
+        console.error('[AdminDashboard] Error drawing earningsChart:', e);
+      }
     }
 
-    // 2. Gráfico de Ahorro Colectivo
-    if (this.savingsCanvas) {
-      if (this.savingsChart) this.savingsChart.destroy();
-      this.savingsChart = new Chart(this.savingsCanvas.nativeElement, {
-        type: 'line',
-        data: {
-          labels: chartsData.savings.labels,
-          datasets: [{
-            label: 'Ahorro Colectivo ($)',
-            data: chartsData.savings.data,
-            borderColor: '#006b4d',
-            backgroundColor: 'rgba(0, 107, 77, 0.05)',
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#002d4b',
-            pointRadius: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false }
+    // 2. Gráfico de Ranking de Nodos (Barras Horizontales)
+    if (this.nodeRankingCanvas && this.nodeRankingCanvas.nativeElement && chartsData.nodeRanking) {
+      try {
+        if (this.nodeRankingChart) this.nodeRankingChart.destroy();
+        this.nodeRankingChart = new Chart(this.nodeRankingCanvas.nativeElement, {
+          type: 'bar',
+          data: {
+            labels: chartsData.nodeRanking.labels,
+            datasets: [{
+              label: 'Ventas por Nodo ($)',
+              data: chartsData.nodeRanking.data,
+              backgroundColor: '#3b82f6',
+              borderRadius: 4,
+            }]
           },
-          scales: {
-            y: { beginAtZero: true }
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            },
+            scales: {
+              x: { beginAtZero: true, ticks: { font: { size: 9 } } },
+              y: { ticks: { font: { size: 8 } } }
+            }
           }
-        }
-      });
+        });
+      } catch (e) {
+        console.error('[AdminDashboard] Error drawing nodeRankingChart:', e);
+      }
     }
 
-    // 3. Gráfico de Retiros / Logística
-    if (this.pickupsCanvas) {
-      if (this.pickupsChart) this.pickupsChart.destroy();
-      this.pickupsChart = new Chart(this.pickupsCanvas.nativeElement, {
-        type: 'doughnut',
-        data: {
-          labels: chartsData.pickups.labels,
-          datasets: [{
-            data: chartsData.pickups.data,
-            backgroundColor: [
-              '#38bdf8', // Abiertos (OPEN)
-              '#34d399', // Completados (COMPLETED)
-              '#818cf8', // En Mayorista (PROCESSING_ORDER)
-              '#f59e0b', // Enviados (SHIPPED)
-              '#10b981', // En Nodo (READY_FOR_PICKUP)
-              '#0f172a', // Finalizados (FINALIZED)
-              '#ef4444'  // Cancelados (CANCELLED)
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                boxWidth: 10,
-                font: { size: 9 }
+    // 3. Gráfico de Tasa de Consolidación (Doughnut)
+    if (this.consolidationSuccessCanvas && this.consolidationSuccessCanvas.nativeElement && chartsData.consolidationSuccess) {
+      try {
+        if (this.consolidationSuccessChart) this.consolidationSuccessChart.destroy();
+        this.consolidationSuccessChart = new Chart(this.consolidationSuccessCanvas.nativeElement, {
+          type: 'doughnut',
+          data: {
+            labels: chartsData.consolidationSuccess.labels,
+            datasets: [{
+              data: chartsData.consolidationSuccess.data,
+              backgroundColor: ['#38bdf8', '#34d399', '#ef4444'],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 10,
+                  font: { size: 9 }
+                }
               }
             }
           }
-        }
-      });
+        });
+      } catch (e) {
+        console.error('[AdminDashboard] Error drawing consolidationSuccessChart:', e);
+      }
     }
   }
 

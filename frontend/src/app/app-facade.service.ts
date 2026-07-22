@@ -152,6 +152,10 @@ export class AppFacadeService {
     return this.statsService.getAdminDashboardStats();
   }
 
+  getClientSavingsStats() {
+    return this.statsService.getClientSavingsStats();
+  }
+
   generateWithdrawalOtp() {
     return this.nodeService.generateWithdrawalOtp();
   }

@@ -13,7 +13,8 @@ import {
   IonCard,
   IonFab,
   IonFabButton,
-  IonSearchbar
+  IonSearchbar,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { AlertController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
@@ -66,7 +67,8 @@ const customMarkerIcon = L.divIcon({
     IonSearchbar,
     NodoDetailModalComponent,
     NodoFormComponent,
-    HeaderComponent
+    HeaderComponent,
+    IonHeader
   ],
 })
 export class NodosPage implements OnInit, OnDestroy {

@@ -98,6 +98,20 @@ export class ProfilesController {
     return this.profilesService.deleteCard(req.user.id, cardId);
   }
 
+  @Get('me/savings-stats')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'CLIENTE')
+  @ApiOperation({ summary: "Get current user's collective purchase savings stats" })
+  @ApiResponse({
+    status: 200,
+    description: 'The savings stats have been successfully calculated.',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  async getSavingsStats(@Req() req: any) {
+    return this.profilesService.getSavingsStats(req.user.id);
+  }
+
   @Get(':id')
   @ApiBearerAuth()
   @UseGuards(RolesGuard)

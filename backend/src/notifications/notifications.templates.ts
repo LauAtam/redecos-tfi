@@ -1,0 +1,659 @@
+export const getBuyGroupConsolidatedTemplate = (productName: string) => `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compra Colectiva Completada</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    body {
+      font-family: 'Inter', Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 40px 20px;
+      color: #334155;
+      -webkit-font-smoothing: antialiased;
+    }
+    .email-wrapper {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border-top: 6px solid #006b4d;
+    }
+    .email-header {
+      padding: 30px 40px 15px;
+      text-align: center;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 24px;
+      color: #002d4b;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+    .logo span {
+      color: #006b4d;
+    }
+    .email-body {
+      padding: 20px 40px 40px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #002d4b;
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px 0;
+    }
+    .product-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .product-box-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .product-box-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #006b4d;
+      margin: 0;
+    }
+    .footer {
+      background-color: #f8fafc;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #f1f5f9;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-header">
+      <h1 class="logo">REDE<span>COS</span></h1>
+    </div>
+    <div class="email-body">
+      <h2 class="title">¡Compra colectiva completada! 🎉</h2>
+      <p class="text">
+        El grupo de compra al que te sumaste ha alcanzado el 100% del cupo. Hemos procesado los pagos exitosamente y ya comenzamos a gestionar el pedido con el mayorista.
+      </p>
+      
+      <div class="product-box">
+        <div class="product-box-label">Grupo de compra para</div>
+        <div class="product-box-name">${productName}</div>
+      </div>
+      
+      <p class="text">
+        Te enviaremos una nueva notificación en cuanto tus productos sean despachados hacia tu nodo asignado.
+      </p>
+    </div>
+    <div class="footer">
+      <p class="footer-text">
+        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        © 2026 Red de Compras Comunitarias.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+export const getBuyGroupShippedTemplate = (productName: string) => `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Producto en camino</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    body {
+      font-family: 'Inter', Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 40px 20px;
+      color: #334155;
+      -webkit-font-smoothing: antialiased;
+    }
+    .email-wrapper {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border-top: 6px solid #006b4d;
+    }
+    .email-header {
+      padding: 30px 40px 15px;
+      text-align: center;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 24px;
+      color: #002d4b;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+    .logo span {
+      color: #006b4d;
+    }
+    .email-body {
+      padding: 20px 40px 40px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #002d4b;
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px 0;
+      text-align: left;
+    }
+    .product-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .product-box-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .product-box-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #006b4d;
+      margin: 0;
+    }
+    .footer {
+      background-color: #f8fafc;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #f1f5f9;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-header">
+      <h1 class="logo">REDE<span>COS</span></h1>
+    </div>
+    <div class="email-body">
+      <h2 class="title">¡Tu compra está en camino! 🚚</h2>
+      <p class="text">
+        El proveedor ha despachado la mercadería y ya se encuentra viajando hacia el nodo de entrega de tu zona.
+      </p>
+      
+      <div class="product-box">
+        <div class="product-box-label">Compra en tránsito</div>
+        <div class="product-box-name">${productName}</div>
+      </div>
+      
+      <p class="text">
+        Estimamos que llegará entre hoy y mañana. Te avisaremos apenas el Gestor del Nodo recepcione los productos para que puedas acercarte a retirar.
+      </p>
+    </div>
+    <div class="footer">
+      <p class="footer-text">
+        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        © 2026 Red de Compras Comunitarias.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+export const getBuyGroupReadyForPickupTemplate = (productName: string) => `
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listo para retirar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+    body {
+      font-family: 'Inter', Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 40px 20px;
+      color: #334155;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .email-wrapper {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border-top: 6px solid #006b4d;
+    }
+
+    .email-header {
+      padding: 30px 40px 15px;
+      text-align: center;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 24px;
+      color: #002d4b;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .logo span {
+      color: #006b4d;
+    }
+
+    .email-body {
+      padding: 20px 40px 40px;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #002d4b;
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px 0;
+      text-align: left;
+    }
+
+    .product-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .product-box-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .product-box-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #006b4d;
+      margin: 0;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin: 32px 0 16px;
+    }
+
+    .btn {
+      background-color: #002d4b;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-block;
+      transition: background-color 0.2s;
+    }
+
+    .footer {
+      background-color: #f8fafc;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="email-wrapper">
+    <div class="email-header">
+      <h1 class="logo">REDE<span>COS</span></h1>
+    </div>
+    <div class="email-body">
+      <h2 class="title">¡Tu producto llegó al nodo! 📍</h2>
+      <p class="text">
+        Excelente noticia: el Gestor de tu Nodo ya recepcionó la mercadería y tu compra está lista para ser retirada.
+      </p>
+
+      <div class="product-box">
+        <div class="product-box-label">Listo para retirar</div>
+        <div class="product-box-name">${productName}</div>
+      </div>
+
+      <p class="text">
+        Para retirar tu compra, recordá llevar tu celular y abrir la aplicación para mostrarle tu <strong>Código
+          QR</strong> al Gestor del Nodo. Luego, el gestor te solicitará tu <strong>PIN de seguridad de 4
+          dígitos</strong> para confirmar la entrega de tus productos.
+      </p>
+    </div>
+    <div class="footer">
+      <p class="footer-text">
+        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        © 2026 Red de Compras Comunitarias.
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>
+`;
+
+export const getBuyGroupRetrievedTemplate = (productName: string) => `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrega Exitosa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    body {
+      font-family: 'Inter', Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 40px 20px;
+      color: #334155;
+      -webkit-font-smoothing: antialiased;
+    }
+    .email-wrapper {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border-top: 6px solid #006b4d;
+    }
+    .email-header {
+      padding: 30px 40px 15px;
+      text-align: center;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 24px;
+      color: #002d4b;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+    .logo span {
+      color: #006b4d;
+    }
+    .email-body {
+      padding: 20px 40px 40px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #002d4b;
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px 0;
+      text-align: left;
+    }
+    .product-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .product-box-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .product-box-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #006b4d;
+      margin: 0;
+    }
+    .footer {
+      background-color: #f8fafc;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #f1f5f9;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-header">
+      <h1 class="logo">REDE<span>COS</span></h1>
+    </div>
+    <div class="email-body">
+      <h2 class="title">¡Entrega exitosa! ✅</h2>
+      
+      <p class="text">
+        Hemos registrado exitosamente el retiro físico de tu compra en el nodo barrial. Esperamos que disfrutes de tu compra colectiva.
+      </p>
+      
+      <div class="product-box">
+        <div class="product-box-label">Compra retirada</div>
+        <div class="product-box-name">${productName}</div>
+      </div>
+      
+      <p class="text">
+        Gracias por apostar por este modelo de economía colaborativa. ¡Te esperamos en tu próxima compra comunitaria para seguir ahorrando juntos!
+      </p>
+    </div>
+    <div class="footer">
+      <p class="footer-text">
+        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        © 2026 Red de Compras Comunitarias.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+`;
+
+export const getBuyGroupCancelledTemplate = (productName: string) => `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compra Colectiva Cancelada</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+    body {
+      font-family: 'Inter', Helvetica, Arial, sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 40px 20px;
+      color: #334155;
+      -webkit-font-smoothing: antialiased;
+    }
+    .email-wrapper {
+      max-width: 500px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border-top: 6px solid #006b4d;
+    }
+    .email-header {
+      padding: 30px 40px 15px;
+      text-align: center;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 24px;
+      color: #002d4b;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+    .logo span {
+      color: #006b4d;
+    }
+    .email-body {
+      padding: 20px 40px 40px;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #002d4b;
+      margin-top: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #475569;
+      margin: 0 0 20px 0;
+      text-align: left;
+    }
+    .product-box {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .product-box-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .product-box-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #006b4d;
+      margin: 0;
+    }
+    .footer {
+      background-color: #f8fafc;
+      padding: 24px 40px;
+      text-align: center;
+      border-top: 1px solid #f1f5f9;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 0;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="email-header">
+      <h1 class="logo">REDE<span>COS</span></h1>
+    </div>
+    <div class="email-body">
+      <h2 class="title">Compra colectiva no completada ❌</h2>
+      <p class="text">
+        Queremos informarte que el grupo de compra al que te habías sumado no alcanzó a completar el bulto mínimo antes de su fecha de vencimiento.
+      </p>
+      
+      <div class="product-box">
+        <div class="product-box-label">Compra cancelada</div>
+        <div class="product-box-name">\${productName}</div>
+      </div>
+      
+      <p class="text">
+        No te preocupes: <strong>no se ha realizado ningún cargo en tu tarjeta</strong>. La pre-autorización de pago ha sido liberada (o reembolsada según el caso) automáticamente. ¡Te esperamos en una próxima compra comunitaria!
+      </p>
+    </div>
+    <div class="footer">
+      <p class="footer-text">
+        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        © 2026 Red de Compras Comunitarias.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+`;

@@ -4,7 +4,8 @@ import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import {
   IonContent,
   IonIcon,
-  IonFooter
+  IonFooter,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -34,7 +35,8 @@ import { AccountTabComponent } from './components/account-tab/account-tab.compon
     AccountTabComponent,
     IonContent,
     IonIcon,
-    IonFooter
+    IonFooter,
+    IonHeader
   ]
 })
 export class HomePage implements OnInit, OnDestroy {

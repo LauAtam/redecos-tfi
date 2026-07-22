@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BuyGroupsCronService } from './buy-groups-cron.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { MercadoPagoService } from './infrastructure/mercado-pago.service';
@@ -24,6 +25,10 @@ describe('BuyGroupsCronService', () => {
     refundPayment: jest.fn().mockResolvedValue(true),
   };
 
+  const mockEventEmitter = {
+    emit: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -35,6 +40,10 @@ describe('BuyGroupsCronService', () => {
         {
           provide: MercadoPagoService,
           useValue: mockMercadoPagoService,
+        },
+        {
+          provide: EventEmitter2,
+          useValue: mockEventEmitter,
         },
       ],
     }).compile();
@@ -64,7 +73,9 @@ describe('BuyGroupsCronService', () => {
 
     it('should cancel expired groups and their HELD orders inside a transaction', async () => {
       const mockExpiredGroups = [{ id: 'group-1' }, { id: 'group-2' }];
-      mockPrismaService.buy_groups.findMany.mockResolvedValueOnce(mockExpiredGroups);
+      mockPrismaService.buy_groups.findMany
+        .mockResolvedValueOnce(mockExpiredGroups)
+        .mockResolvedValueOnce([]);
 
       const mockPendingOrders = [
         { id: 'order-1', payment_intent_id: 'payment-1' },
@@ -97,7 +108,9 @@ describe('BuyGroupsCronService', () => {
 
     it('should cancel expired groups, release HELD orders and refund CONFIRMED orders', async () => {
       const mockExpiredGroups = [{ id: 'group-1' }];
-      mockPrismaService.buy_groups.findMany.mockResolvedValueOnce(mockExpiredGroups);
+      mockPrismaService.buy_groups.findMany
+        .mockResolvedValueOnce(mockExpiredGroups)
+        .mockResolvedValueOnce([]);
 
       const mockPendingOrders = [
         { id: 'order-held', payment_intent_id: 'payment-held-id' },

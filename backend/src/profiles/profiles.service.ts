@@ -92,4 +92,12 @@ export class ProfilesService {
     await this.profilesRepository.deleteCard(userId, cardId);
     return true;
   }
+
+  async getSavingsStats(userId: string) {
+    const profile = await this.profilesRepository.findProfileById(userId);
+    if (!profile) {
+      throw new NotFoundException('El perfil de usuario no existe.');
+    }
+    return this.profilesRepository.getSavingsStats(userId);
+  }
 }

@@ -18,4 +18,6 @@ export abstract class ProfilesRepository {
   abstract deleteCard(userId: string, cardId: string): Promise<any>;
 
   abstract findCardById(cardId: string): Promise<any>;
+
+  abstract getSavingsStats(userId: string): Promise<any>;
 }

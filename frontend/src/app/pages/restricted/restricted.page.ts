@@ -4,7 +4,8 @@ import { RouterModule } from '@angular/router';
 import {
   IonContent,
   IonButton,
-  IonIcon
+  IonIcon,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -25,7 +26,8 @@ import { HeaderComponent } from '../../core/components/header/header.component';
     HeaderComponent,
     IonContent,
     IonButton,
-    IonIcon
+    IonIcon,
+    IonHeader
   ]
 })
 export class RestrictedPage {

@@ -1,4 +1,6 @@
-<app-header title="Administración" [showAdminAvatar]="true"></app-header>
+<ion-header class="ion-no-border">
+  <app-header title="Administración" [showAdminAvatar]="true"></app-header>
+</ion-header>
 
 <ion-content class="[--background:#f8fafc] ion-padding">
   <div class="max-w-[600px] mx-auto py-4 px-2">
@@ -182,40 +184,39 @@
       <h2 class="m-0 text-lg font-bold">Gráficos de Rendimiento</h2>
     </div>
 
-    <!-- Gráfico 1: Ganancias -->
+    <!-- Gráfico 1: Ganancias Globales -->
     <ion-card
       class="m-0 mb-4 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex flex-col gap-2">
       <div class="flex items-center gap-2 mb-2">
         <div class="w-2.5 h-2.5 rounded-full bg-[#006b4d]"></div>
-        <span class="text-xs font-bold text-[#002d4b] uppercase tracking-wider">Historial de Ventas (Ganancias)</span>
+        <span class="text-xs font-bold text-[#002d4b] uppercase tracking-wider">1. Ventas y Comisiones de la Red</span>
       </div>
       <div class="relative h-[220px] w-full">
         <canvas #earningsCanvas></canvas>
       </div>
     </ion-card>
 
-    <!-- Gráfico 2: Ahorro Colectivo -->
+    <!-- Gráfico 2: Ranking de Nodos -->
     <ion-card
       class="m-0 mb-4 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex flex-col gap-2">
       <div class="flex items-center gap-2 mb-2">
-        <div class="w-2.5 h-2.5 rounded-full bg-[#006b4d]"></div>
-        <span class="text-xs font-bold text-[#002d4b] uppercase tracking-wider">Ahorro Mensual Generado</span>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#002d4b]"></div>
+        <span class="text-xs font-bold text-[#002d4b] uppercase tracking-wider">2. Ranking de Nodos más Activos</span>
       </div>
       <div class="relative h-[220px] w-full">
-        <canvas #savingsCanvas></canvas>
+        <canvas #nodeRankingCanvas></canvas>
       </div>
     </ion-card>
 
-    <!-- Gráfico 3: Retiros y Logística -->
+    <!-- Gráfico 3: Tasa de Consolidación -->
     <ion-card
       class="m-0 mb-6 rounded-[18px] bg-white border border-[#e8e8e8] shadow-[0_4px_12px_rgba(0,0,0,0.02)] p-4 flex flex-col gap-2">
       <div class="flex items-center gap-2 mb-2">
-        <div class="w-2.5 h-2.5 rounded-full bg-[#006b4d]"></div>
-        <span class="text-xs font-bold text-[#002d4b] uppercase tracking-wider">Estados de Grupos de Compra
-          (Retiros)</span>
+        <div class="w-2.5 h-2.5 rounded-full bg-[#38bdf8]"></div>
+        <span class="text-xs font-bold text-[#002d4b] uppercase tracking-wider">3. Tasa de Éxito de Consolidación</span>
       </div>
-      <div class="relative h-[240px] w-full">
-        <canvas #pickupsCanvas></canvas>
+      <div class="relative h-[220px] w-full">
+        <canvas #consolidationSuccessCanvas></canvas>
       </div>
     </ion-card>
 

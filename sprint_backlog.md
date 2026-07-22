@@ -18,6 +18,10 @@ Este archivo detalla las prioridades redefinidas para los últimos 10 días de d
 * **Estado**: 🟢 **Listo (Done)**
 * **Acción**: Implementada la pantalla de consolidación y logística en `src/app/pages/admin/gestiones/consolidacion`. Permite filtrar y listar los grupos de compra del nodo, consolidar las unidades acumuladas de productos para comprar al mayorista, y avanzar el estado del bulto mediante botones de acción simples que sincronizan la base de datos y notifican el flujo al cliente. Totalmente migrado a Angular 17+ Control Flow.
 
+### 4. `WB407926-59` — Implementar servicio de notificaciones simuladas por email en NestJS
+* **Estado**: 🟢 **Listo (Done)**
+* **Acción**: Diseñados y maquetados con HTML/CSS inline los 5 correos transaccionales (Consolidated, Shipped, Ready for Pickup, Retrieved, Cancelled por cron). Implementado el módulo de notificaciones y despachador dinámico SMTP en NestJS con fallback seguro.
+
 ---
 
 ## 📅 Backlog de Cierre (Prioridad Baja / Postergado)

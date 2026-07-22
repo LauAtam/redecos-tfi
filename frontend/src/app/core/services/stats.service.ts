@@ -46,4 +46,23 @@ export class StatsService {
       return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener estadísticas del administrador.', originalError: err } };
     }
   }
+
+  async getClientSavingsStats(): Promise<{ data: any | null, error: AppError | null }> {
+    try {
+      const response = await fetch(`${environment.apiUrl}/profiles/me/savings-stats`, {
+        method: 'GET',
+        headers: await this.authService.getHeaders(),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        return { data: null, error: { code: 'api/error', message: errData.message || 'Error al obtener estadísticas de ahorro.' } };
+      }
+
+      const data = await response.json();
+      return { data, error: null };
+    } catch (err) {
+      return { data: null, error: { code: 'api/unexpected', message: 'Error de red al obtener estadísticas de ahorro.', originalError: err } };
+    }
+  }
 }

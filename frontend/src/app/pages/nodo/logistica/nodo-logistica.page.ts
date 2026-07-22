@@ -172,10 +172,6 @@ export class NodoLogisticaPage implements OnInit {
     this.activeTab.set(event.detail.value);
   }
 
-  goBack() {
-    this.navCtrl.navigateBack(['/cliente/home'], { queryParams: { tab: 'config' } });
-  }
-
   getBultoActions(group: BuyGroup): BultoAction[] {
     const actions: BultoAction[] = [];
 

@@ -1,7 +1,9 @@
-<app-header [title]="showForm ? (isEditing ? 'Editar Nodo' : 'Nuevo Nodo') : 'Nodos de Retiro'"
+<ion-header class="ion-no-border">
+  <app-header [title]="showForm ? (isEditing ? 'Editar Nodo' : 'Nuevo Nodo') : 'Nodos de Retiro'"
   [showCustomBack]="showForm" [showAdminAvatar]="!showForm" [defaultHref]="!showForm ? '/admin/gestiones' : null"
   (customBack)="toggleForm(false)">
 </app-header>
+</ion-header>
 
 <ion-content>
   <div class="max-w-[600px] mx-auto pt-0 pb-3 px-2">

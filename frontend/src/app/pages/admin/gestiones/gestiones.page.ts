@@ -6,6 +6,7 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { businessOutline, cubeOutline, chevronForwardOutline, clipboardOutline } from 'ionicons/icons';
@@ -23,6 +24,7 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonItem,
     IonLabel,
     HeaderComponent,
+    IonHeader
   ],
 })
 export class GestionesPage {

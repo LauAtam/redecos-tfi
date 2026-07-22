@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NodesRepository } from '../interfaces/nodes-repository.interface';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateNodeDto } from '../dto/create-node.dto';
@@ -6,7 +7,10 @@ import { UpdateNodeDto } from '../dto/update-node.dto';
 
 @Injectable()
 export class PrismaNodesRepository implements NodesRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
+  ) { }
 
   async findAll(): Promise<any[]> {
     const nodes = await this.prisma.nodos.findMany({
@@ -85,6 +89,66 @@ export class PrismaNodesRepository implements NodesRepository {
       this.prisma.buy_groups.count({ where: { node_id: id, status: 'FINALIZED' } }),
     ]);
 
+    // Obtener órdenes de compra consolidadas de este nodo con sus productos
+    const orders = await this.prisma.group_orders.findMany({
+      where: {
+        status: { in: ['CONFIRMED', 'FINALIZED'] },
+        buy_groups: {
+          node_id: id,
+        },
+      },
+      include: {
+        buy_groups: {
+          include: {
+            productos: true,
+          },
+        },
+      },
+    });
+
+    const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const last6Months: { name: string; year: number; month: number; sales: number; commission: number }[] = [];
+    const today = new Date();
+
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      last6Months.push({
+        name: `${monthNames[d.getMonth()]} ${d.getFullYear().toString().substring(2)}`,
+        year: d.getFullYear(),
+        month: d.getMonth(),
+        sales: 0,
+        commission: 0,
+      });
+    }
+
+    let totalSales = 0;
+    const productQuantities: { [key: string]: { name: string; qty: number } } = {};
+
+    for (const order of orders) {
+      const salesAmount = Number(order.quantity) * Number(order.unit_price);
+      totalSales += salesAmount;
+
+      const orderDate = new Date(order.created_at);
+      const bucket = last6Months.find(b => b.year === orderDate.getFullYear() && b.month === orderDate.getMonth());
+      if (bucket) {
+        bucket.sales += salesAmount;
+        bucket.commission += salesAmount * 0.10;
+      }
+
+      // Agrupar para top productos
+      const prod = order.buy_groups?.productos;
+      if (prod) {
+        if (!productQuantities[prod.id]) {
+          productQuantities[prod.id] = { name: prod.name, qty: 0 };
+        }
+        productQuantities[prod.id].qty += order.quantity;
+      }
+    }
+
+    const sortedProducts = Object.values(productQuantities)
+      .sort((a, b) => b.qty - a.qty)
+      .slice(0, 5);
+
     return {
       node: {
         id: node.id,
@@ -98,6 +162,23 @@ export class PrismaNodesRepository implements NodesRepository {
         readyForPickupCount,
         completedCount,
         finalizedCount,
+        totalSales,
+        totalEarnings: totalSales * 0.10,
+      },
+      charts: {
+        earnings: {
+          labels: last6Months.map(b => b.name),
+          salesData: last6Months.map(b => b.sales),
+          commissionData: last6Months.map(b => b.commission),
+        },
+        logistics: {
+          labels: ["En Preparación", "En Camino", "Para Retirar", "Finalizados"],
+          data: [processingOrderCount, shippedCount, readyForPickupCount, finalizedCount],
+        },
+        topProducts: {
+          labels: sortedProducts.map(p => p.name),
+          data: sortedProducts.map(p => p.qty),
+        },
       },
     };
   }
@@ -210,16 +291,22 @@ export class PrismaNodesRepository implements NodesRepository {
       throw new UnauthorizedException('Código PIN expirado.');
     }
 
-    // Buscar las órdenes afectadas para conocer a qué bultos pertenecen
+    // Buscar las órdenes afectadas para conocer a qué bultos pertenecen y sus productos
     const affectedOrders = await this.prisma.group_orders.findMany({
       where: { id: { in: orderIds } },
-      select: { group_id: true },
+      include: {
+        buy_groups: {
+          include: {
+            productos: true,
+          },
+        },
+      },
     });
 
     const uniqueGroupIds = [...new Set(affectedOrders.map((o) => o.group_id))];
 
     // Ejecutar transacción ACID de base de datos
-    return await this.prisma.$transaction(async (tx) => {
+    const transactionResult = await this.prisma.$transaction(async (tx) => {
       // 1. Marcar órdenes individuales como FINALIZED
       await tx.group_orders.updateMany({
         where: { id: { in: orderIds } },
@@ -259,6 +346,19 @@ export class PrismaNodesRepository implements NodesRepository {
 
       return { success: true, message: 'Entrega confirmada exitosamente.' };
     });
+
+    // Enviar notificaciones de entrega exitosa por email fuera de la transacción para cada producto retirado
+    const uniqueProducts = [...new Set(affectedOrders.map(o => o.buy_groups?.productos?.name).filter(Boolean))];
+    for (const productName of uniqueProducts) {
+      if (client.email) {
+        this.eventEmitter.emit('buyGroup.retrieved', {
+          email: client.email,
+          groupName: productName,
+        });
+      }
+    }
+
+    return transactionResult;
   }
 }
 

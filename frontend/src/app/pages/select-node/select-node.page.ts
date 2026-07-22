@@ -10,7 +10,8 @@ import {
   IonSegment,
   IonSegmentButton,
   IonButton,
-  AlertController
+  AlertController,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { locateOutline, peopleOutline, pinOutline, helpCircleOutline, checkmarkOutline } from 'ionicons/icons';
@@ -35,7 +36,8 @@ import { HeaderComponent } from '../../core/components/header/header.component';
     IonSpinner,
     IonSegment,
     IonSegmentButton,
-    IonButton
+    IonButton,
+    IonHeader
   ]
 })
 export class SelectNodePage implements OnInit, OnDestroy {

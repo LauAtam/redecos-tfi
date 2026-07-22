@@ -23,6 +23,7 @@ export class AppService {
         buy_groups: {
           include: {
             productos: true,
+            nodos: true,
           },
         },
       },
@@ -46,6 +47,8 @@ export class AppService {
       });
     }
 
+    const nodeSales: { [key: string]: { name: string; sales: number } } = {};
+
     for (const order of orders) {
       const salesAmount = Number(order.quantity) * Number(order.unit_price);
       totalSales += salesAmount;
@@ -61,6 +64,15 @@ export class AppService {
       if (bucket) {
         bucket.sales += salesAmount;
         bucket.savings += savingsAmount;
+      }
+
+      // Agrupar ventas por nodo
+      const node = order.buy_groups?.nodos;
+      if (node) {
+        if (!nodeSales[node.id]) {
+          nodeSales[node.id] = { name: node.name, sales: 0 };
+        }
+        nodeSales[node.id].sales += salesAmount;
       }
     }
 
@@ -81,6 +93,10 @@ export class AppService {
       }
     }
 
+    // Ordenar ranking de nodos
+    const sortedNodeSales = Object.values(nodeSales)
+      .sort((a, b) => b.sales - a.sales);
+
     return {
       totalProductos,
       totalNodos,
@@ -90,21 +106,18 @@ export class AppService {
       charts: {
         earnings: {
           labels: last6Months.map(b => b.name),
-          data: last6Months.map(b => b.sales),
+          salesData: last6Months.map(b => b.sales),
+          commissionData: last6Months.map(b => b.sales * 0.10),
         },
-        savings: {
-          labels: last6Months.map(b => b.name),
-          data: last6Months.map(b => b.savings),
+        nodeRanking: {
+          labels: sortedNodeSales.map(n => n.name),
+          data: sortedNodeSales.map(n => n.sales),
         },
-        pickups: {
-          labels: ["Abiertos", "Completados", "En Mayorista", "Enviados", "En Nodo", "Finalizados", "Cancelados"],
+        consolidationSuccess: {
+          labels: ["Abiertos", "Consolidados", "Cancelados"],
           data: [
             statusCounts.OPEN,
-            statusCounts.COMPLETED,
-            statusCounts.PROCESSING_ORDER,
-            statusCounts.SHIPPED,
-            statusCounts.READY_FOR_PICKUP,
-            statusCounts.FINALIZED,
+            statusCounts.COMPLETED + statusCounts.PROCESSING_ORDER + statusCounts.SHIPPED + statusCounts.READY_FOR_PICKUP + statusCounts.FINALIZED,
             statusCounts.CANCELLED,
           ],
         },

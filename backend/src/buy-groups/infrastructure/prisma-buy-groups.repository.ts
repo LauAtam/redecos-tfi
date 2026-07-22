@@ -5,6 +5,7 @@ import { JoinGroupDto } from '../dto/join-group.dto';
 import { ConsolidateGroupsDto } from '../dto/consolidate-groups.dto';
 import { MercadoPagoService } from './mercado-pago.service';
 import { MercadoPagoErrorMapper } from './mercado-pago-error.mapper';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mercadoPago: MercadoPagoService,
+    private readonly eventEmitter: EventEmitter2,
   ) { }
 
   async getActiveGroups(nodeId: string): Promise<any> {
@@ -345,12 +347,40 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
         } else if (failedOrderIds.includes(newOrder.id)) {
           newOrder.status = 'CANCELLED';
         }
+
+        if (allCapturesSuccessful) {
+          this.emitGroupEvent(groupId, 'buyGroup.consolidated');
+        }
       } catch (updateError: any) {
         throw new BadRequestException(`No se pudo consolidar el grupo y capturar los pagos: ${updateError.message}`);
       }
     }
 
     return newOrder;
+  }
+
+  private async emitGroupEvent(groupId: string, eventName: string) {
+    try {
+      const group = await this.prisma.buy_groups.findUnique({
+        where: { id: groupId },
+        include: {
+          productos: true,
+          group_orders: {
+            where: { status: { not: 'CANCELLED' } },
+            include: { profiles: true }
+          }
+        }
+      });
+
+      if (group) {
+        const emails = group.group_orders.map(o => o.profiles?.email).filter(e => e);
+        if (emails.length > 0) {
+          this.eventEmitter.emit(eventName, { emails, groupName: group.productos.name });
+        }
+      }
+    } catch (err) {
+      this.logger.error(`Error emitting event ${eventName} for group ${groupId}`, err);
+    }
   }
 
   private async cleanupEmptyGroup(groupId: string): Promise<void> {
@@ -507,6 +537,22 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
       throw new BadRequestException('El grupo de compra especificado no existe.');
     }
 
+    if (status === 'COMPLETED' || status === 'PROCESSING_ORDER') {
+      const activeOrders = await this.prisma.group_orders.findMany({
+        where: {
+          group_id: id,
+          status: { in: ['CONFIRMED', 'PAYMENT_HELD'] },
+        },
+        select: { quantity: true },
+      });
+      const gathered = activeOrders.reduce((sum, o) => sum + (o.quantity || 0), 0);
+      if (gathered < group.target_size) {
+        throw new BadRequestException(
+          `No se puede cambiar el estado a ${status} porque el grupo de compra no ha alcanzado las unidades del bulto (${gathered}/${group.target_size}).`,
+        );
+      }
+    }
+
     const updateData: any = { status };
     if (status === 'COMPLETED' || status === 'FINALIZED' || status === 'CANCELLED') {
       updateData.closed_at = new Date();
@@ -604,6 +650,11 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
       }
 
       return updatedGroup;
+    }).then(result => {
+      if (status === 'SHIPPED') this.emitGroupEvent(id, 'buyGroup.shipped');
+      if (status === 'READY_FOR_PICKUP') this.emitGroupEvent(id, 'buyGroup.readyForPickup');
+      if (status === 'FINALIZED') this.emitGroupEvent(id, 'buyGroup.retrieved');
+      return result;
     });
   }
 
@@ -651,6 +702,15 @@ export class PrismaBuyGroupsRepository implements BuyGroupsRepository {
 
     if (groupsToConsolidate.length === 0) {
       throw new BadRequestException('No se encontraron grupos en estado COMPLETED para consolidar.');
+    }
+
+    for (const group of groupsToConsolidate) {
+      const totalQuantity = group.group_orders.reduce((sum, order) => sum + order.quantity, 0);
+      if (totalQuantity < group.target_size) {
+        throw new BadRequestException(
+          `El grupo de compra para ${group.productos.name} (${group.id.substring(0, 8)}) no puede ser consolidado porque no ha alcanzado las unidades del bulto (${totalQuantity}/${group.target_size}).`,
+        );
+      }
     }
 
     const actualGroupIds = groupsToConsolidate.map((g) => g.id);

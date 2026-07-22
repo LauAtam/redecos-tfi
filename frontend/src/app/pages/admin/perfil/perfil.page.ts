@@ -7,6 +7,7 @@ import {
   IonItem,
   IonLabel,
   IonButton,
+  IonHeader
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -30,7 +31,8 @@ import { HeaderComponent } from '../../../core/components/header/header.componen
     IonItem,
     IonLabel,
     IonButton,
-    HeaderComponent
+    HeaderComponent,
+    IonHeader
   ],
 })
 export class PerfilPage implements OnInit {

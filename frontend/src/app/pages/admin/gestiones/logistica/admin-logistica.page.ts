@@ -16,7 +16,11 @@ import {
   IonSegment,
   IonSegmentButton,
   IonSpinner,
-  IonModal
+  IonModal,
+  IonCheckbox,
+  IonList,
+  IonItem,
+  IonLabel
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
@@ -37,7 +41,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { BuyGroup, Nodo } from '../../../../core/models/auth.models';
 import { HeaderComponent } from '../../../../core/components/header/header.component';
 import { BultoCardComponent, BultoAction } from '../../../../core/components/bulto-card/bulto-card.component';
-
+import { Html5Qrcode } from 'html5-qrcode';
 @Component({
   selector: 'app-admin-logistica',
   templateUrl: './admin-logistica.page.html',
@@ -62,7 +66,11 @@ import { BultoCardComponent, BultoAction } from '../../../../core/components/bul
     IonSegment,
     IonSegmentButton,
     IonSpinner,
-    IonModal
+    IonModal,
+    IonCheckbox,
+    IonList,
+    IonItem,
+    IonLabel
   ]
 })
 export class AdminLogisticaPage implements OnInit {
@@ -81,12 +89,16 @@ export class AdminLogisticaPage implements OnInit {
   // Modals state
   selectedGroupForModal = signal<BuyGroup | null>(null);
   isConsolidarModalOpen = signal<boolean>(false);
-  isDeliveryModalOpen = signal<boolean>(false);
   isDetailModalOpen = signal<boolean>(false);
 
-  // Mock delivery order selection
-  manualOrderCode = '';
-  isDeliveringOrder = signal<boolean>(false);
+  // Scanner & Delivery flow state signals
+  scannerModalOpen = signal<boolean>(false);
+  scannedClientProfile = signal<any | null>(null);
+  scannedOrders = signal<any[]>([]);
+  selectedOrderIds = signal<string[]>([]);
+  deliveryStep = signal<'scan' | 'checklist' | 'pin' | 'loading'>('scan');
+  enteredPin = signal<string>('');
+  private html5QrcodeScanner: any = null;
 
   constructor() {
     addIcons({
@@ -180,11 +192,13 @@ export class AdminLogisticaPage implements OnInit {
         colorClass: '[--color:#dc2626]',
         fill: 'clear'
       });
-      actions.push({
-        type: 'consolidate',
-        label: 'Consolidar y Pedir',
-        colorClass: '[--background:#006b4d] [--color:#ffffff]'
-      });
+      if (group.unitsBought >= group.targetSize) {
+        actions.push({
+          type: 'consolidate',
+          label: 'Pedir a mayorista',
+          colorClass: '[--background:#006b4d] [--color:#ffffff]'
+        });
+      }
     } else if (group.status === 'PROCESSING_ORDER') {
       actions.push({
         type: 'cancel',
@@ -236,7 +250,7 @@ export class AdminLogisticaPage implements OnInit {
         this.markAsReceived(group);
         break;
       case 'deliver':
-        this.openDeliveryModal(group);
+        this.startScanner();
         break;
     }
   }
@@ -290,29 +304,6 @@ export class AdminLogisticaPage implements OnInit {
     await this.updateStatus(group.id, 'READY_FOR_PICKUP', 'Bulto recibido en nodo. Clientes notificados para retiro.');
   }
 
-  openDeliveryModal(group: BuyGroup) {
-    this.selectedGroupForModal.set(group);
-    this.manualOrderCode = '';
-    this.isDeliveryModalOpen.set(true);
-  }
-
-  closeDeliveryModal() {
-    this.isDeliveryModalOpen.set(false);
-    this.selectedGroupForModal.set(null);
-  }
-
-  async confirmManualDelivery() {
-    const group = this.selectedGroupForModal();
-    if (!group) return;
-
-    this.isDeliveringOrder.set(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    this.isDeliveringOrder.set(false);
-    this.closeDeliveryModal();
-
-    await this.updateStatus(group.id, 'FINALIZED', 'Todos los pedidos de este bulto fueron entregados exitosamente.');
-  }
-
   async cancelGroup(group: BuyGroup) {
     if (confirm('¿Estás seguro de cancelar este grupo de compra? Se liberarán y reembolsarán automáticamente los fondos autorizados a los clientes en Mercado Pago.')) {
       await this.updateStatus(group.id, 'CANCELLED', 'Grupo cancelado y fondos liberados en Mercado Pago.');
@@ -328,6 +319,145 @@ export class AdminLogisticaPage implements OnInit {
       this.isLoading.set(false);
     } else {
       this.toastService.showSuccess(successMessage);
+      await this.fetchGroups();
+    }
+  }
+
+  // --- FLUJO DE ESCANEO DE QR Y ENTREGA REAL ---
+  startScanner() {
+    this.deliveryStep.set('scan');
+    this.scannerModalOpen.set(true);
+  }
+
+  onScannerModalPresented() {
+    this.html5QrcodeScanner = new Html5Qrcode('admin-reader');
+
+    // Función dinámica para asegurar que el área sea cuadrada y adaptada
+    const qrboxFunction = (viewfinderWidth: number, viewfinderHeight: number) => {
+      const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+      const qrboxSize = Math.floor(minEdge * 0.7); // 70% de la dimensión menor
+      return {
+        width: qrboxSize,
+        height: qrboxSize
+      };
+    };
+
+    this.html5QrcodeScanner.start(
+      { facingMode: 'environment' },
+      {
+        fps: 10,
+        qrbox: qrboxFunction,
+      },
+      async (decodedText: string) => {
+        await this.stopScanner();
+        this.handleScannedQr(decodedText);
+      }
+    ).catch((err: any) => {
+      console.error('Error al iniciar cámara:', err);
+      this.toastService.showError('No se pudo acceder a la cámara. Verificá los permisos.');
+    });
+  }
+
+  async stopScanner() {
+    if (this.html5QrcodeScanner && this.html5QrcodeScanner.isScanning) {
+      try {
+        await this.html5QrcodeScanner.stop();
+      } catch (err) {
+        console.error('Error al detener cámara:', err);
+      }
+    }
+  }
+
+  async closeScannerModal() {
+    await this.stopScanner();
+    this.scannerModalOpen.set(false);
+    this.scannedClientProfile.set(null);
+    this.scannedOrders.set([]);
+    this.selectedOrderIds.set([]);
+    this.enteredPin.set('');
+  }
+
+  async handleScannedQr(decodedText: string) {
+    try {
+      const payload = JSON.parse(decodedText);
+      if (!payload.profileId) {
+        this.toastService.showError('Código QR no válido.');
+        this.closeScannerModal();
+        return;
+      }
+
+      this.deliveryStep.set('loading');
+
+      // Consultar pedidos listos para retirar de este cliente en este nodo (el admin necesita un node_id? el servicio getClientPendingOrders usa solo el ID)
+      const { data, error } = await this.appFacadeService.getClientPendingOrders(payload.profileId);
+      if (error) {
+        this.toastService.showError(error.message);
+        this.closeScannerModal();
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        this.toastService.showError('El cliente no tiene pedidos listos para retirar.');
+        this.closeScannerModal();
+        return;
+      }
+
+      // Buscar perfil para info estética
+      const profileRes = await this.appFacadeService.getUserProfile(payload.profileId);
+      if (profileRes.user) {
+        this.scannedClientProfile.set(profileRes.user);
+      }
+
+      this.scannedOrders.set(data);
+      // Seleccionar todos por defecto
+      this.selectedOrderIds.set(data.map((o: any) => o.id));
+      this.deliveryStep.set('checklist');
+    } catch (err) {
+      this.toastService.showError('Error al parsear el código QR.');
+      this.closeScannerModal();
+    }
+  }
+
+  toggleOrderSelection(orderId: string) {
+    const current = this.selectedOrderIds();
+    if (current.includes(orderId)) {
+      this.selectedOrderIds.set(current.filter((id) => id !== orderId));
+    } else {
+      this.selectedOrderIds.set([...current, orderId]);
+    }
+  }
+
+  goToPinStep() {
+    if (this.selectedOrderIds().length === 0) {
+      this.toastService.showError('Seleccioná al menos un producto para entregar.');
+      return;
+    }
+    this.deliveryStep.set('pin');
+  }
+
+  async submitPin() {
+    const pin = this.enteredPin().trim();
+    if (!pin || pin.length !== 4) {
+      this.toastService.showError('Ingresá el PIN de 4 dígitos del cliente.');
+      return;
+    }
+
+    const profile = this.scannedClientProfile();
+    if (!profile) return;
+
+    this.deliveryStep.set('loading');
+    const { error } = await this.appFacadeService.confirmDelivery({
+      profileId: profile.id,
+      otp: pin,
+      orderIds: this.selectedOrderIds(),
+    });
+
+    if (error) {
+      this.toastService.showError(error.message);
+      this.deliveryStep.set('pin');
+    } else {
+      this.toastService.showSuccess('¡Pedidos entregados con éxito!');
+      await this.closeScannerModal();
       await this.fetchGroups();
     }
   }
