@@ -23,34 +23,41 @@
     </div>
 
     <!-- TABS LOGÍSTICOS -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-1 shrink-0">
-      <ion-segment [value]="activeTab()" (ionChange)="onTabChange($event)" mode="md"
-        class="bg-transparent [--background:transparent]">
-        <ion-segment-button value="order" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-1 shrink-0 overflow-hidden">
+      <ion-segment [value]="activeTab()" (ionChange)="onTabChange($event)" mode="md" [scrollable]="true"
+        class="bg-transparent [--background:transparent] w-full">
+        <ion-segment-button value="open" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2 px-1 min-w-[68px]">
+          <div class="flex flex-col items-center gap-1">
+            <ion-icon name="time-outline" class="text-base"></ion-icon>
+            <span class="text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">En Curso</span>
+          </div>
+        </ion-segment-button>
+
+        <ion-segment-button value="order" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2 px-1 min-w-[68px]">
           <div class="flex flex-col items-center gap-1">
             <ion-icon name="clipboard-outline" class="text-base"></ion-icon>
-            <span class="text-[9px] font-bold uppercase tracking-wider">Pedir</span>
+            <span class="text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">Pedir</span>
           </div>
         </ion-segment-button>
 
-        <ion-segment-button value="shipping" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+        <ion-segment-button value="shipping" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2 px-1 min-w-[68px]">
           <div class="flex flex-col items-center gap-1">
             <ion-icon name="car-outline" class="text-base"></ion-icon>
-            <span class="text-[9px] font-bold uppercase tracking-wider">En Camino</span>
+            <span class="text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">En Camino</span>
           </div>
         </ion-segment-button>
 
-        <ion-segment-button value="pickup" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+        <ion-segment-button value="pickup" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2 px-1 min-w-[68px]">
           <div class="flex flex-col items-center gap-1">
             <ion-icon name="cube-outline" class="text-base"></ion-icon>
-            <span class="text-[9px] font-bold uppercase tracking-wider">Entregar</span>
+            <span class="text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">Entregar</span>
           </div>
         </ion-segment-button>
 
-        <ion-segment-button value="finalized" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2">
+        <ion-segment-button value="finalized" class="[--color-checked:#006b4d] [--indicator-color:#006b4d] py-2 px-1 min-w-[68px]">
           <div class="flex flex-col items-center gap-1">
             <ion-icon name="checkmark-circle-outline" class="text-base"></ion-icon>
-            <span class="text-[9px] font-bold uppercase tracking-wider">Historial</span>
+            <span class="text-[9px] font-bold uppercase tracking-wider whitespace-nowrap">Historial</span>
           </div>
         </ion-segment-button>
       </ion-segment>

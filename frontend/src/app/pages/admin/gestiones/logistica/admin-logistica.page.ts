@@ -34,7 +34,8 @@ import {
   qrCodeOutline,
   closeOutline,
   refreshOutline,
-  peopleOutline
+  peopleOutline,
+  timeOutline
 } from 'ionicons/icons';
 import { AppFacadeService } from '../../../../app-facade.service';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -42,6 +43,7 @@ import { BuyGroup, Nodo } from '../../../../core/models/auth.models';
 import { HeaderComponent } from '../../../../core/components/header/header.component';
 import { BultoCardComponent, BultoAction } from '../../../../core/components/bulto-card/bulto-card.component';
 import { Html5Qrcode } from 'html5-qrcode';
+
 @Component({
   selector: 'app-admin-logistica',
   templateUrl: './admin-logistica.page.html',
@@ -82,7 +84,7 @@ export class AdminLogisticaPage implements OnInit {
   isLoading = signal<boolean>(false);
   nodos = signal<Nodo[]>([]);
   selectedNodeId = signal<string>('');
-  activeTab = signal<'order' | 'shipping' | 'pickup' | 'finalized'>('order');
+  activeTab = signal<'open' | 'order' | 'shipping' | 'pickup' | 'finalized'>('open');
   buyGroups = signal<BuyGroup[]>([]);
 
   // Modals state
@@ -112,7 +114,8 @@ export class AdminLogisticaPage implements OnInit {
       qrCodeOutline,
       closeOutline,
       refreshOutline,
-      peopleOutline
+      peopleOutline,
+      timeOutline
     });
   }
 
@@ -138,6 +141,8 @@ export class AdminLogisticaPage implements OnInit {
 
     return groups.filter(g => {
       switch (tab) {
+        case 'open':
+          return g.status === 'OPEN';
         case 'order':
           return g.status === 'COMPLETED';
         case 'shipping':
@@ -218,13 +223,6 @@ export class AdminLogisticaPage implements OnInit {
         label: 'Recibir en Nodo',
         icon: 'cube-outline',
         colorClass: '[--background:#e67e22] [--color:#ffffff]'
-      });
-    } else if (group.status === 'READY_FOR_PICKUP') {
-      actions.push({
-        type: 'deliver',
-        label: 'Entregar Pedidos',
-        icon: 'qr-code-outline',
-        colorClass: '[--background:#6b21a8] [--color:#ffffff]'
       });
     }
 

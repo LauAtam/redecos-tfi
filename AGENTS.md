@@ -77,3 +77,10 @@ Adoptamos el estándar de **Conventional Commits** en español con prefijos téc
 
 ## 6. Integración con Mercado Pago
 * **Entorno de Producción Directo**: Queda estrictamente establecido que **NUNCA** se utiliza el entorno Sandbox de Mercado Pago en este proyecto debido a fallos estructurales e inestabilidad del servicio de pruebas de MP. En su lugar, se opera directamente con credenciales de producción para realizar las validaciones y mutaciones de pago reales.
+
+---
+
+## 7. Nomenclatura y Marca (Branding)
+* **Nombre Oficial**: El nombre exclusivo de la plataforma y del proyecto es **Redeco** (en singular, sin 's' final).
+* **Significado y Concepto**: **Redeco – Red de compras comunitarias**. La palabra *comunitarias* explica que los usuarios se unen con vecinos de su zona para consolidar el bulto mayorista.
+* **Regla Estricta**: Queda estrictamente prohibido utilizar el término "Redecos" (con 's') en cualquier parte del proyecto (código, interfaz de usuario, títulos, meta-etiquetas, comentarios, correos o documentación). Se debe usar siempre **Redeco**.

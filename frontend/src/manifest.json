@@ -1,0 +1,25 @@
+{
+  "name": "Redeco — Red de Compras Comunitarias",
+  "short_name": "Redeco",
+  "description": "Plataforma comunitaria de compras colaborativas directas a mayoristas.",
+  "scope": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#006b4d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/assets/icon/pwa_icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon/pwa_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

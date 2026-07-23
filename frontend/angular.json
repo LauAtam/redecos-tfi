@@ -33,7 +33,10 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
-              }
+              },
+              "src/manifest.json",
+              "src/apple-touch-icon.png",
+              "src/apple-touch-icon-precomposed.png"
             ],
             "styles": [
               "node_modules/leaflet/dist/leaflet.css",

@@ -182,13 +182,6 @@ export class NodoLogisticaPage implements OnInit {
         icon: 'cube-outline',
         colorClass: '[--background:#e67e22] [--color:#ffffff]'
       });
-    } else if (group.status === 'READY_FOR_PICKUP') {
-      actions.push({
-        type: 'deliver',
-        label: 'Entregar Pedidos',
-        icon: 'qr-code-outline',
-        colorClass: '[--background:#6b21a8] [--color:#ffffff]'
-      });
     }
 
     return actions;

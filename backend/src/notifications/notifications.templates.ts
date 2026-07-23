@@ -113,7 +113,7 @@ export const getBuyGroupConsolidatedTemplate = (productName: string) => `
     </div>
     <div class="footer">
       <p class="footer-text">
-        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        Estás recibiendo este correo porque realizaste una compra en Redeco.<br>
         © 2026 Red de Compras Comunitarias.
       </p>
     </div>
@@ -238,7 +238,7 @@ export const getBuyGroupShippedTemplate = (productName: string) => `
     </div>
     <div class="footer">
       <p class="footer-text">
-        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        Estás recibiendo este correo porque realizaste una compra en Redeco.<br>
         © 2026 Red de Compras Comunitarias.
       </p>
     </div>
@@ -397,7 +397,7 @@ export const getBuyGroupReadyForPickupTemplate = (productName: string) => `
     </div>
     <div class="footer">
       <p class="footer-text">
-        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        Estás recibiendo este correo porque realizaste una compra en Redeco.<br>
         © 2026 Red de Compras Comunitarias.
       </p>
     </div>
@@ -524,7 +524,7 @@ export const getBuyGroupRetrievedTemplate = (productName: string) => `
     </div>
     <div class="footer">
       <p class="footer-text">
-        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        Estás recibiendo este correo porque realizaste una compra en Redeco.<br>
         © 2026 Red de Compras Comunitarias.
       </p>
     </div>
@@ -649,7 +649,7 @@ export const getBuyGroupCancelledTemplate = (productName: string) => `
     </div>
     <div class="footer">
       <p class="footer-text">
-        Estás recibiendo este correo porque realizaste una compra en Redecos.<br>
+        Estás recibiendo este correo porque realizaste una compra en Redeco.<br>
         © 2026 Red de Compras Comunitarias.
       </p>
     </div>
