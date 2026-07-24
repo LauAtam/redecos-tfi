@@ -113,6 +113,7 @@ export class MisComprasPage implements OnInit {
         );
       }
       return (
+        order.status === 'FINALIZED' ||
         order.status === 'CANCELLED' ||
         (order.status === 'CONFIRMED' && isGroupFinalizedOrCancelled)
       );
