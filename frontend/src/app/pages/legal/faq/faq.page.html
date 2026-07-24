@@ -1,0 +1,51 @@
+<ion-header class="ion-no-border">
+  <app-header title="Preguntas Frecuentes" defaultHref="/login"></app-header>
+</ion-header>
+
+<ion-content class="bg-slate-50">
+  <div class="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
+
+    <!-- Logo Redeco -->
+    <div class="w-full mb-6 mt-2 md:mb-10 md:mt-4 flex flex-col justify-center items-center">
+      <span class="text-5xl sm:text-6xl m-0 text-[#006b4d] tracking-tight drop-shadow-sm"
+        style="font-family: 'Righteous', sans-serif;">Redeco</span>
+      <div class="text-sm text-slate-500 mt-2">Encontrá respuestas rápidas a tus dudas.</div>
+    </div>
+
+    <!-- Acordeón de FAQs -->
+    <div class="space-y-6">
+      @for (category of faqs; track category.category; let cIndex = $index) {
+      <div>
+        <div class="text-[1.1rem] font-bold text-[#002d4b] mb-2 px-1">{{ category.category }}</div>
+        <ion-accordion-group class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          @for (item of category.questions; track item.q; let qIndex = $index) {
+          <ion-accordion [value]="cIndex + '-' + qIndex" class="bg-white">
+            <ion-item slot="header" color="light"
+              class="[--background:#ffffff] [--color:#334155] font-semibold text-[0.95rem]">
+              <ion-label class="whitespace-normal leading-snug py-2">{{ item.q }}</ion-label>
+            </ion-item>
+            <div class="p-4 md:p-5 text-[0.9rem] text-slate-600 leading-relaxed bg-white" slot="content">
+              {{ item.a }}
+            </div>
+          </ion-accordion>
+          }
+        </ion-accordion-group>
+      </div>
+      }
+    </div>
+
+    <!-- Contáctanos -->
+    <div class="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-100 text-center">
+      <ion-icon name="chatbubbles-outline" class="text-4xl text-blue-500 mb-2"></ion-icon>
+      <div class="text-lg font-bold text-slate-800">¿Aún tenés dudas?</div>
+      <div class="text-sm text-slate-600 mt-1 mb-4 leading-relaxed">
+        Nuestro equipo de soporte está listo para ayudarte.
+      </div>
+      <a href="mailto:lautaroatampiz@gmail.com?subject=Soporte%20Redeco%20-%20Consulta%20desde%20FAQ&body=Hola%20equipo%20de%20Redeco,%0A%0ATengo%20la%20siguiente%20consulta:%0A%0A"
+        class="inline-block bg-[#002d4b] hover:bg-slate-800 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+        Contactar Soporte
+      </a>
+    </div>
+
+  </div>
+</ion-content>

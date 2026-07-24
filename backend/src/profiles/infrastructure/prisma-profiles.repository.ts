@@ -79,6 +79,16 @@ export class PrismaProfilesRepository implements ProfilesRepository {
     });
   }
 
+  async requestAccountDeletion(userId: string, reason: string | null): Promise<any> {
+    return this.prisma.account_deletion_requests.create({
+      data: {
+        profile_id: userId,
+        reason: reason,
+        status: 'PENDING',
+      },
+    });
+  }
+
   async getSavingsStats(userId: string): Promise<any> {
     const orders = await this.prisma.group_orders.findMany({
       where: {

@@ -163,9 +163,7 @@ export class MisComprasPage implements OnInit {
     this.selectedSegment.set(event.detail.value as 'active' | 'history');
   }
 
-  goBack() {
-    this.navCtrl.navigateBack('/cliente/home', { queryParams: { tab: 'config' } });
-  }
+
 
   formatProductName(name: string | undefined): string {
     if (!name) return '';

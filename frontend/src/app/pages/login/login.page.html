@@ -1,87 +1,77 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] [--border-width:0] font-bold">
-    <ion-title class="text-[1.2rem] text-center text-[#002d4b]">Iniciar Sesión</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="[--background:#ffffff] ion-padding">
   <div class="max-w-[450px] mx-auto bg-white">
-    
-    <!-- Imagen del Mockup (Misma estética que registro) -->
-    <div class="w-full mb-8 flex justify-center">
-      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuClpJ6EDOIbviyWnhjVCsJQmwF1jbtZWy4bqW_FXKrsJ1BNhkRxVFgO_41OpNUIdbWe0GVRzMyo97xzXy5od1f18uqIR71hrx-qdekDJCNlfeuKUV4JXo2FJnr4brWLel64e0UEn2N9tMP6VSa1mD3VXiN_XRzDkXWLrvhJ_27XDLjcTuKKp06dKGtTtQLnzlJX8XTYHZBeMmiJmW4fdIsYSwLb1EAXLK4OPcsPvoku7FVNU_CEfSNx9T66bJE60FYdI3DoP2OnDq4Y" alt="Vegetables" class="w-full max-w-full h-[180px] object-cover rounded-[16px]">
+
+    <!-- Logo Redeco -->
+    <div class="w-full mb-6 mt-2 md:mb-10 md:mt-4 flex justify-center items-center">
+      <span class="text-5xl sm:text-6xl m-0 text-[#006b4d] tracking-tight drop-shadow-sm"
+        style="font-family: 'Righteous', sans-serif;">Redeco</span>
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      
+
       <!-- Correo -->
       <div class="mb-6">
         <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Correo electrónico</label>
-        <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
           [class.border-[#eb445a]]="f['email'].touched && f['email'].invalid">
           <ion-icon name="mail-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-          <ion-input 
-            formControlName="email" 
-            placeholder="ejemplo@correo.com"
-            type="email"
+          <ion-input formControlName="email" placeholder="ejemplo@correo.com" type="email"
             class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
           </ion-input>
         </div>
         @if (f['email'].touched && f['email'].invalid) {
-          <ion-text color="danger" class="block mt-1 pl-1"> 
-            @if (f['email'].errors?.['required']) {
-              <small>El correo es obligatorio.</small>
-            }
-            @if (f['email'].errors?.['email']) {
-              <small>Ingresá un correo válido.</small>
-            }
-          </ion-text>
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['email'].errors?.['required']) {
+          <small>El correo es obligatorio.</small>
+          }
+          @if (f['email'].errors?.['email']) {
+          <small>Ingresá un correo válido.</small>
+          }
+        </ion-text>
         }
       </div>
 
       <!-- Contraseña -->
       <div class="mb-6">
         <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Contraseña</label>
-        <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
           [class.border-[#eb445a]]="f['password'].touched && f['password'].invalid">
           <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-          <ion-input 
-            formControlName="password" 
-            placeholder="Tu contraseña"
-            [type]="showPassword ? 'text' : 'password'"
+          <ion-input formControlName="password" placeholder="Tu contraseña" [type]="showPassword ? 'text' : 'password'"
             class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
           </ion-input>
-          <ion-button fill="clear" (click)="togglePassword()" class="[--padding-start:8px] [--padding-end:8px] m-0 h-8 [--color:#666666]">  
+          <ion-button fill="clear" (click)="togglePassword()"
+            class="[--padding-start:8px] [--padding-end:8px] m-0 h-8 [--color:#666666]">
             <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="m-0 text-[1.2rem]"></ion-icon>
           </ion-button>
         </div>
         @if (f['password'].touched && f['password'].invalid) {
-          <ion-text color="danger" class="block mt-1 pl-1">
-            @if (f['password'].errors?.['required']) {
-              <small>La contraseña es obligatoria.</small>
-            }
-          </ion-text>
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['password'].errors?.['required']) {
+          <small>La contraseña es obligatoria.</small>
+          }
+        </ion-text>
         }
       </div>
 
       <!-- Mensaje de Error General -->
       @if (errorMessage) {
-        <ion-text color="danger" class="ion-text-center">       
-          <p class="block mt-1 pl-1">{{ errorMessage }}</p>
-        </ion-text>
+      <ion-text color="danger" class="ion-text-center">
+        <p class="block mt-1 pl-1">{{ errorMessage }}</p>
+      </ion-text>
       }
 
       <!-- Botón Ingresar -->
-      <ion-button 
-        expand="block" 
-        type="submit" 
+      <ion-button expand="block" type="submit"
         class="[--background:#006b4d] [--color:#ffffff] [--border-radius:12px] mt-10 h-14 text-[1.1rem] font-bold normal-case"
         [disabled]="isLoading">
         @if (!isLoading) {
-          <span>Ingresar</span>
+        <span>Ingresar</span>
         }
         @if (isLoading) {
-          <ion-spinner name="crescent"></ion-spinner>
+        <ion-spinner name="crescent"></ion-spinner>
         }
       </ion-button>
 
@@ -89,7 +79,13 @@
 
     <!-- Footer Link -->
     <div class="mt-8 mb-6 ion-text-center">
-      <p class="text-[#666666] text-[1rem]">¿No tenés cuenta? <a routerLink="/register" class="text-[#006b4d] underline font-bold cursor-pointer">Registrate acá</a></p>
+      <p class="text-[#666666] text-[1rem]">¿No tenés cuenta? <a routerLink="/register"
+          class="text-[#006b4d] underline font-bold cursor-pointer">Registrate acá</a></p>
+      <div class="flex justify-center gap-4 text-sm text-[#006b4d] mt-6">
+        <a routerLink="/terminos-condiciones" class="hover:underline">Términos y condiciones</a>
+        <span>|</span>
+        <a routerLink="/faq" class="hover:underline">Ayuda (FAQ)</a>
+      </div>
     </div>
 
   </div>

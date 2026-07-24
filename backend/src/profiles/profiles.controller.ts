@@ -2,6 +2,7 @@ import { Controller, Patch, Body, Req, UseGuards, Get, Post, Delete, Param } fro
 import { ProfilesService } from './profiles.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { AddCardDto } from './dto/add-card.dto';
+import { DeleteAccountRequestDto } from './dto/delete-account-request.dto';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import {
@@ -46,6 +47,24 @@ export class ProfilesController {
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
     return this.profilesService.updateProfile(req.user.id, updateProfileDto);
+  }
+
+  @Post('me/delete-account')
+  @ApiBearerAuth()
+  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'CLIENTE', 'NODO')
+  @ApiOperation({ summary: "Request account deletion (Ley 25.326)" })
+  @ApiResponse({
+    status: 200,
+    description: 'The account deletion request has been successfully processed.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  async requestAccountDeletion(
+    @Req() req: any,
+    @Body() dto: DeleteAccountRequestDto,
+  ) {
+    return this.profilesService.requestAccountDeletion(req.user.id, dto);
   }
 
   @Get('cards')

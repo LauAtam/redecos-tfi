@@ -20,4 +20,6 @@ export abstract class ProfilesRepository {
   abstract findCardById(cardId: string): Promise<any>;
 
   abstract getSavingsStats(userId: string): Promise<any>;
+
+  abstract requestAccountDeletion(userId: string, reason: string | null): Promise<any>;
 }

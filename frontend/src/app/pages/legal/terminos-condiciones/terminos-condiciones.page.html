@@ -1,0 +1,120 @@
+<ion-header class="ion-no-border">
+  <app-header title="Términos y condiciones" defaultHref="/login"></app-header>
+</ion-header>
+
+<ion-content class="bg-slate-50">
+  <div class="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
+
+    <!-- Introducción -->
+    <div class="text-center mb-8">
+      <span class="text-[3.5rem] m-0 text-[#006b4d] tracking-tight drop-shadow-sm" style="font-family: 'Righteous', sans-serif;">Redeco</span>
+      <div class="text-sm text-slate-500 mt-2">Última actualización: 23 de Julio de 2026</div>
+    </div>
+
+    <!-- T&C Section -->
+    <ion-card class="m-0 shadow-sm border border-slate-100 rounded-xl">
+      <ion-card-header>
+        <span class="text-lg font-bold text-slate-800">1. Términos de Servicio</span>
+      </ion-card-header>
+      <ion-card-content class="space-y-4 text-sm text-slate-600">
+        <div class="text-sm leading-relaxed">
+          Bienvenido a <strong>Redeco</strong> (Red de compras comunitarias). Al acceder y utilizar nuestra plataforma,
+          aceptas estar sujeto a los siguientes términos y condiciones. Si no estás de acuerdo con alguna parte de estos
+          términos, no debes usar nuestro servicio.
+        </div>
+        <div class="space-y-2">
+          <span class="block font-semibold text-slate-700">1.1. Operaciones Habilitadas y Transacciones</span>
+          <div class="text-sm leading-relaxed">
+            Redeco facilita la compra comunitaria por bulto cerrado. Los pagos realizados mediante Mercado Pago generan
+            una pre-autorización. El cobro final se efectiviza únicamente si el bulto se completa con éxito antes del
+            tiempo límite.
+          </div>
+        </div>
+        <div class="space-y-2">
+          <span class="block font-semibold text-slate-700">1.2. Nodos de Retiro</span>
+          <div class="text-sm leading-relaxed">
+            Los productos deberán ser retirados en el nodo seleccionado por el usuario al momento de la compra. Es
+            responsabilidad del usuario presentar su credencial QR o PIN para validar el retiro.
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Propiedad Intelectual -->
+    <ion-card class="m-0 shadow-sm border border-slate-100 rounded-xl">
+      <ion-card-header>
+        <span class="text-lg font-bold text-slate-800">2. Propiedad Intelectual</span>
+      </ion-card-header>
+      <ion-card-content class="text-sm text-slate-600">
+        <div class="text-sm leading-relaxed">
+          Todo el contenido incluido en esta plataforma (textos, gráficos, logotipos, iconos de botones, imágenes,
+          compilaciones de datos y software) es propiedad de Redeco o de sus proveedores de contenido y está protegido
+          por la <strong>Ley 11.723 de Propiedad Intelectual</strong> de la República Argentina y las leyes
+          internacionales de derechos de autor.
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Protección de Datos Personales (Ley 25.326) -->
+    <ion-card class="m-0 shadow-sm border border-slate-100 rounded-xl">
+      <ion-card-header>
+        <span class="text-lg font-bold text-slate-800">3. Protección de Datos (Ley 25.326)</span>
+      </ion-card-header>
+      <ion-card-content class="space-y-4 text-sm text-slate-600">
+        <div class="text-sm leading-relaxed">
+          De conformidad con la <strong>Ley N° 25.326 de Protección de los Datos Personales</strong>, te informamos que
+          los datos recabados en Redeco serán tratados con estricta confidencialidad.
+        </div>
+        <div class="text-sm leading-relaxed">
+          El titular de los datos personales tiene la facultad de ejercer el derecho de acceso, rectificación,
+          actualización o supresión de los mismos en forma gratuita a intervalos no inferiores a seis meses.
+        </div>
+
+        <!-- Formulario de Eliminación de Datos (Solo para usuarios logueados) -->
+        @if (isLoggedIn()) {
+        <div class="mt-8 border-t border-slate-100 pt-6">
+          <div class="mb-4">
+            <span class="block font-extrabold text-[#002d4b] text-base mb-1">Solicitud de Supresión de Datos</span>
+            <div class="text-xs text-slate-500 leading-relaxed">
+              Utilizá este formulario para ejercer tu derecho al olvido y solicitar la eliminación definitiva de tu cuenta
+              y todos tus datos personales asociados a Redeco.
+            </div>
+          </div>
+
+          <form [formGroup]="deleteForm" (ngSubmit)="requestDeletion()">
+            <div class="mb-5">
+              <div
+                class="flex items-start bg-white border border-[#e8e8e8] rounded-[16px] px-4 py-3 transition-all duration-200 focus-within:border-[#006b4d]"
+                [class.border-[#eb445a]]="deleteForm.get('reason')?.touched && deleteForm.get('reason')?.invalid">
+                <ion-icon name="document-text-outline" class="text-[1.4rem] text-[#666666] mr-3 mt-1"></ion-icon>
+                <ion-textarea formControlName="reason" rows="3"
+                  placeholder="Explicá brevemente por qué deseás eliminar tus datos (opcional pero recomendado)..."
+                  class="[--padding-top:0] [--padding-bottom:0] [--padding-start:0] [--color:#333333] text-[0.95rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+                </ion-textarea>
+              </div>
+              @if (deleteForm.get('reason')?.invalid && deleteForm.get('reason')?.touched) {
+              <ion-text color="danger" class="block mt-1 pl-1">
+                <small>La razón es requerida (máx 500 caract.).</small>
+              </ion-text>
+              }
+            </div>
+
+            <ion-button expand="block" type="submit"
+              class="[--background:#dc2626] [--background-hover:#b91c1c] [--color:#ffffff] [--border-radius:12px] h-12 text-[1rem] font-bold normal-case m-0"
+              [disabled]="isSubmitting">
+              @if (!isSubmitting) {
+              <ion-icon slot="start" name="trash-outline" class="text-lg"></ion-icon>
+              <span>Solicitar Eliminación Definitiva</span>
+              }
+              @if (isSubmitting) {
+              <ion-spinner name="crescent"></ion-spinner>
+              }
+            </ion-button>
+          </form>
+        </div>
+        }
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

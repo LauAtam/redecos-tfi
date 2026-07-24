@@ -640,7 +640,7 @@ export const getBuyGroupCancelledTemplate = (productName: string) => `
       
       <div class="product-box">
         <div class="product-box-label">Compra cancelada</div>
-        <div class="product-box-name">\${productName}</div>
+        <div class="product-box-name">${productName}</div>
       </div>
       
       <p class="text">

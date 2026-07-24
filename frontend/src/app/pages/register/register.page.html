@@ -1,231 +1,232 @@
 <ion-header class="ion-no-border">
-  <app-header title="Crear tu cuenta" defaultHref="/login"></app-header>
+  <app-header title="" defaultHref="/login"></app-header>
 </ion-header>
 
 <ion-content class="[--background:#ffffff] ion-padding">
   <div class="max-w-[450px] mx-auto bg-white">
 
+    <!-- Logo Redeco -->
+    <div class="w-full mb-6 mt-2 md:mb-10 md:mt-4 flex justify-center items-center">
+      <span class="text-5xl sm:text-6xl m-0 text-[#006b4d] tracking-tight drop-shadow-sm"
+        style="font-family: 'Righteous', sans-serif;">Redeco</span>
+    </div>
+
     <!-- PASO 1: Formulario de Registro -->
     @if (step === 'form') {
-      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
-        <!-- Nombre -->
-        <div class="mb-5">
-          <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Nombre</label>
-          <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
-            [class.border-[#eb445a]]="f['firstName'].touched && f['firstName'].invalid">
-            <ion-icon name="person-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-            <ion-input
-              formControlName="firstName"
-              placeholder="Ingresá tu nombre"
-              type="text"
-              class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
-            </ion-input>
-          </div>
-          @if (f['firstName'].touched && f['firstName'].invalid) {
-            <ion-text color="danger" class="block mt-1 pl-1">
-              @if (f['firstName'].errors?.['required']) {
-                <small>El nombre es obligatorio.</small>
-              }
-              @if (f['firstName'].errors?.['minlength']) {
-                <small>Mínimo 2 caracteres.</small>
-              }
-            </ion-text>
-          }
+      <!-- Nombre -->
+      <div class="mb-5">
+        <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Nombre</label>
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+          [class.border-[#eb445a]]="f['firstName'].touched && f['firstName'].invalid">
+          <ion-icon name="person-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
+          <ion-input formControlName="firstName" placeholder="Ingresá tu nombre" type="text"
+            class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+          </ion-input>
         </div>
-
-        <!-- Apellido -->
-        <div class="mb-5">
-          <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Apellido</label>
-          <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
-            [class.border-[#eb445a]]="f['lastName'].touched && f['lastName'].invalid">
-            <ion-icon name="id-card-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-            <ion-input
-              formControlName="lastName"
-              placeholder="Ingresá tu apellido"
-              type="text"
-              class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
-            </ion-input>
-          </div>
-          @if (f['lastName'].touched && f['lastName'].invalid) {
-            <ion-text color="danger" class="block mt-1 pl-1">
-              @if (f['lastName'].errors?.['required']) {
-                <small>El apellido es obligatorio.</small>
-              }
-              @if (f['lastName'].errors?.['minlength']) {
-                <small>Mínimo 2 caracteres.</small>
-              }
-            </ion-text>
+        @if (f['firstName'].touched && f['firstName'].invalid) {
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['firstName'].errors?.['required']) {
+          <small>El nombre es obligatorio.</small>
           }
-        </div>
-
-        <!-- Correo -->
-        <div class="mb-5">
-          <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Correo electrónico</label>
-          <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
-            [class.border-[#eb445a]]="f['email'].touched && f['email'].invalid">
-            <ion-icon name="mail-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-            <ion-input
-              formControlName="email"
-              placeholder="ejemplo@correo.com"
-              type="email"
-              class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
-            </ion-input>
-          </div>
-          @if (f['email'].touched && f['email'].invalid) {
-            <ion-text color="danger" class="block mt-1 pl-1">
-              @if (f['email'].errors?.['required']) {
-                <small>El correo es obligatorio.</small>
-              }
-              @if (f['email'].errors?.['email']) {
-                <small>Ingresá un correo válido.</small>
-              }
-            </ion-text>
+          @if (f['firstName'].errors?.['minlength']) {
+          <small>Mínimo 2 caracteres.</small>
           }
-        </div>
-
-        <!-- Contraseña -->
-        <div class="mb-5">
-          <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Contraseña</label>
-          <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
-            [class.border-[#eb445a]]="f['password'].touched && f['password'].invalid">
-            <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-            <ion-input
-              formControlName="password"
-              placeholder="Mínimo 8 caracteres"
-              [type]="showPassword ? 'text' : 'password'"
-              class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
-            </ion-input>
-            <ion-button fill="clear" (click)="togglePassword()" class="[--padding-start:8px] [--padding-end:8px] m-0 h-8 [--color:#666666]">
-              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="m-0 text-[1.2rem]"></ion-icon>
-            </ion-button>
-          </div>
-          @if (f['password'].touched && f['password'].invalid) {
-            <ion-text color="danger" class="block mt-1 pl-1">
-              @if (f['password'].errors?.['required']) {
-                <small>La contraseña es obligatoria.</small>
-              }
-              @if (f['password'].errors?.['minlength']) {
-                <small>Mínimo 8 caracteres.</small>
-              }
-            </ion-text>
-          }
-        </div>
-
-        <!-- Confirmar Contraseña -->
-        <div class="mb-5">
-          <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Repetir Contraseña</label>
-          <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
-            [class.border-[#eb445a]]="f['confirmPassword'].touched && f['confirmPassword'].invalid">
-            <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-            <ion-input
-              formControlName="confirmPassword"
-              placeholder="Confirmá tu contraseña"
-              [type]="showConfirmPassword ? 'text' : 'password'"
-              class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
-            </ion-input>
-            <ion-button fill="clear" (click)="toggleConfirmPassword()" class="[--padding-start:8px] [--padding-end:8px] m-0 h-8 [--color:#666666]">
-              <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'" class="m-0 text-[1.2rem]"></ion-icon>
-            </ion-button>
-          </div>
-          @if (f['confirmPassword'].touched && f['confirmPassword'].invalid) {
-            <ion-text color="danger" class="block mt-1 pl-1">
-              @if (f['confirmPassword'].errors?.['required']) {
-                <small>Confirmar la contraseña es obligatorio.</small>
-              }
-              @if (f['confirmPassword'].errors?.['passwordMismatch']) {
-                <small>Las contraseñas no coinciden.</small>
-              }
-            </ion-text>
-          }
-        </div>
-
-        <!-- Mensaje de Error General -->
-        @if (errorMessage) {
-          <ion-text color="danger" class="ion-text-center">
-            <p class="block mt-1 pl-1">{{ errorMessage }}</p>
-          </ion-text>
+        </ion-text>
         }
+      </div>
 
-        <!-- Botón Registrarme -->
-        <ion-button
-          expand="block"
-          type="submit"
-          class="[--background:#006b4d] [--color:#ffffff] [--border-radius:12px] mt-8 h-14 text-[1.1rem] font-bold normal-case"
-          [disabled]="isLoading">
-          @if (!isLoading) {
-            <span>Registrarme</span>
-          }
-          @if (isLoading) {
-            <ion-spinner name="crescent"></ion-spinner>
-          }
-        </ion-button>
-
-        <!-- Footer Link -->
-        <div class="mt-8 mb-6 ion-text-center">
-          <p class="text-[#666666] text-[1rem]">¿Ya tenés cuenta? <a routerLink="/login" class="text-[#006b4d] underline font-bold cursor-pointer">Iniciá sesión</a></p>
+      <!-- Apellido -->
+      <div class="mb-5">
+        <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Apellido</label>
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+          [class.border-[#eb445a]]="f['lastName'].touched && f['lastName'].invalid">
+          <ion-icon name="id-card-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
+          <ion-input formControlName="lastName" placeholder="Ingresá tu apellido" type="text"
+            class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+          </ion-input>
         </div>
-      </form>
+        @if (f['lastName'].touched && f['lastName'].invalid) {
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['lastName'].errors?.['required']) {
+          <small>El apellido es obligatorio.</small>
+          }
+          @if (f['lastName'].errors?.['minlength']) {
+          <small>Mínimo 2 caracteres.</small>
+          }
+        </ion-text>
+        }
+      </div>
+
+      <!-- Correo -->
+      <div class="mb-5">
+        <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Correo electrónico</label>
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+          [class.border-[#eb445a]]="f['email'].touched && f['email'].invalid">
+          <ion-icon name="mail-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
+          <ion-input formControlName="email" placeholder="ejemplo@correo.com" type="email"
+            class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+          </ion-input>
+        </div>
+        @if (f['email'].touched && f['email'].invalid) {
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['email'].errors?.['required']) {
+          <small>El correo es obligatorio.</small>
+          }
+          @if (f['email'].errors?.['email']) {
+          <small>Ingresá un correo válido.</small>
+          }
+        </ion-text>
+        }
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-5">
+        <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Contraseña</label>
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+          [class.border-[#eb445a]]="f['password'].touched && f['password'].invalid">
+          <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
+          <ion-input formControlName="password" placeholder="Mínimo 8 caracteres"
+            [type]="showPassword ? 'text' : 'password'"
+            class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+          </ion-input>
+          <ion-button fill="clear" (click)="togglePassword()"
+            class="[--padding-start:8px] [--padding-end:8px] m-0 h-8 [--color:#666666]">
+            <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'" class="m-0 text-[1.2rem]"></ion-icon>
+          </ion-button>
+        </div>
+        @if (f['password'].touched && f['password'].invalid) {
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['password'].errors?.['required']) {
+          <small>La contraseña es obligatoria.</small>
+          }
+          @if (f['password'].errors?.['minlength']) {
+          <small>Mínimo 8 caracteres.</small>
+          }
+        </ion-text>
+        }
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div class="mb-5">
+        <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Repetir Contraseña</label>
+        <div
+          class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+          [class.border-[#eb445a]]="f['confirmPassword'].touched && f['confirmPassword'].invalid">
+          <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
+          <ion-input formControlName="confirmPassword" placeholder="Confirmá tu contraseña"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+          </ion-input>
+          <ion-button fill="clear" (click)="toggleConfirmPassword()"
+            class="[--padding-start:8px] [--padding-end:8px] m-0 h-8 [--color:#666666]">
+            <ion-icon [name]="showConfirmPassword ? 'eye-off-outline' : 'eye-outline'"
+              class="m-0 text-[1.2rem]"></ion-icon>
+          </ion-button>
+        </div>
+        @if (f['confirmPassword'].touched && f['confirmPassword'].invalid) {
+        <ion-text color="danger" class="block mt-1 pl-1">
+          @if (f['confirmPassword'].errors?.['required']) {
+          <small>Confirmar la contraseña es obligatorio.</small>
+          }
+          @if (f['confirmPassword'].errors?.['passwordMismatch']) {
+          <small>Las contraseñas no coinciden.</small>
+          }
+        </ion-text>
+        }
+      </div>
+
+      <!-- Mensaje de Error General -->
+      @if (errorMessage) {
+      <ion-text color="danger" class="ion-text-center">
+        <p class="block mt-1 pl-1">{{ errorMessage }}</p>
+      </ion-text>
+      }
+
+      <!-- Botón Registrarme -->
+      <ion-button expand="block" type="submit"
+        class="[--background:#006b4d] [--color:#ffffff] [--border-radius:12px] mt-8 h-14 text-[1.1rem] font-bold normal-case"
+        [disabled]="isLoading">
+        @if (!isLoading) {
+        <span>Registrarme</span>
+        }
+        @if (isLoading) {
+        <ion-spinner name="crescent"></ion-spinner>
+        }
+      </ion-button>
+
+      <!-- Footer Link -->
+      <div class="mt-8 mb-6 ion-text-center">
+        <p class="text-[0.8rem] text-slate-500 mb-4 leading-tight px-4">
+          Al registrarte, aceptás nuestros <a routerLink="/terminos-condiciones"
+            class="text-[#006b4d] hover:underline">Términos y condiciones</a>.
+        </p>
+        <p class="text-[#666666] text-[1rem]">¿Ya tenés cuenta? <a routerLink="/login"
+            class="text-[#006b4d] underline font-bold cursor-pointer">Iniciá sesión</a></p>
+      </div>
+    </form>
     }
 
     <!-- PASO 2: Verificación OTP -->
     @if (step === 'verification') {
-      <div class="flex flex-col gap-6">
-        <div class="ion-text-center">
-          <h2 class="text-xl font-extrabold text-[#002d4b] mb-2">¡Casi listo!</h2>
-          <p class="text-[#666666] text-[0.95rem]">Te enviamos un código de verificación a: <br><strong class="text-[#002d4b]">{{ registeredEmail }}</strong></p>
+    <div class="flex flex-col gap-6">
+      <div class="ion-text-center">
+        <h2 class="text-xl font-extrabold text-[#002d4b] mb-2">¡Casi listo!</h2>
+        <p class="text-[#666666] text-[0.95rem]">Te enviamos un código de verificación a: <br><strong
+            class="text-[#002d4b]">{{ registeredEmail }}</strong></p>
+      </div>
+
+      <form [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
+        <div class="mb-5">
+          <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Código de verificación (OTP)</label>
+          <div
+            class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
+            [class.border-[#eb445a]]="otpF['token'].touched && otpF['token'].invalid">
+            <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
+            <ion-input formControlName="token" placeholder="000000" type="text" inputmode="numeric"
+              class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
+            </ion-input>
+          </div>
+          @if (otpF['token'].touched && otpF['token'].invalid) {
+          <ion-text color="danger" class="block mt-1 pl-1">
+            @if (otpF['token'].errors?.['required']) {
+            <small>El código es obligatorio.</small>
+            }
+            @if (otpF['token'].errors?.['minlength'] || otpF['token'].errors?.['maxlength']) {
+            <small>Debe ser de 6 dígitos.</small>
+            }
+          </ion-text>
+          }
         </div>
 
-        <form [formGroup]="otpForm" (ngSubmit)="onVerifyOtp()">
-          <div class="mb-5">
-            <label class="block text-[0.9rem] font-semibold text-[#333333] mb-2">Código de verificación (OTP)</label>
-            <div class="flex items-center bg-white border border-[#e8e8e8] rounded-[16px] px-4 h-14 transition-all duration-200 focus-within:border-[#006b4d]"
-              [class.border-[#eb445a]]="otpF['token'].touched && otpF['token'].invalid">
-              <ion-icon name="lock-closed-outline" class="text-[1.4rem] text-[#666666] mr-3"></ion-icon>
-              <ion-input
-                formControlName="token"
-                placeholder="000000"
-                type="text"
-                inputmode="numeric"
-                class="[--padding-start:0] [--color:#333333] text-[1rem] [--placeholder-color:#bbbbbb] [--placeholder-opacity:1] font-medium w-full">
-              </ion-input>
-            </div>
-            @if (otpF['token'].touched && otpF['token'].invalid) {
-              <ion-text color="danger" class="block mt-1 pl-1">
-                @if (otpF['token'].errors?.['required']) {
-                  <small>El código es obligatorio.</small>
-                }
-                @if (otpF['token'].errors?.['minlength'] || otpF['token'].errors?.['maxlength']) {
-                  <small>Debe ser de 6 dígitos.</small>
-                }
-              </ion-text>
-            }
-          </div>
+        @if (errorMessage) {
+        <ion-text color="danger" class="ion-text-center">
+          <p class="block mt-1 pl-1">{{ errorMessage }}</p>
+        </ion-text>
+        }
 
-          @if (errorMessage) {
-            <ion-text color="danger" class="ion-text-center">
-              <p class="block mt-1 pl-1">{{ errorMessage }}</p>
-            </ion-text>
+        <ion-button expand="block" type="submit"
+          class="[--background:#006b4d] [--color:#ffffff] [--border-radius:12px] mt-8 h-14 text-[1.1rem] font-bold normal-case"
+          [disabled]="isLoading">
+          @if (!isLoading) {
+          <span>Verificar y Entrar</span>
           }
+          @if (isLoading) {
+          <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
 
-          <ion-button
-            expand="block"
-            type="submit"
-            class="[--background:#006b4d] [--color:#ffffff] [--border-radius:12px] mt-8 h-14 text-[1.1rem] font-bold normal-case"
-            [disabled]="isLoading">
-            @if (!isLoading) {
-              <span>Verificar y Entrar</span>
-            }
-            @if (isLoading) {
-              <ion-spinner name="crescent"></ion-spinner>
-            }
-          </ion-button>
-
-          <div class="mt-8 mb-6 ion-text-center">
-            <p class="text-[#666666] text-[1rem]"><a (click)="step = 'form'" class="text-[#006b4d] underline font-bold cursor-pointer">Volver al formulario</a></p>
-          </div>
-        </form>
-      </div>
+        <div class="mt-8 mb-6 ion-text-center">
+          <p class="text-[#666666] text-[1rem]"><a (click)="step = 'form'"
+              class="text-[#006b4d] underline font-bold cursor-pointer">Volver al formulario</a></p>
+        </div>
+      </form>
+    </div>
     }
 
   </div>

@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { ProfilesRepository } from './interfaces/profiles-repository.interface';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { DeleteAccountRequestDto } from './dto/delete-account-request.dto';
 import { MercadoPagoService } from '../buy-groups/infrastructure/mercado-pago.service';
 import { MercadoPagoErrorMapper } from '../buy-groups/infrastructure/mercado-pago-error.mapper';
 
@@ -13,6 +14,22 @@ export class ProfilesService {
 
   async updateProfile(userId: string, dto: UpdateProfileDto) {
     return await this.profilesRepository.updateProfile(userId, dto);
+  }
+
+  async requestAccountDeletion(userId: string, dto: DeleteAccountRequestDto) {
+    const profile = await this.profilesRepository.findProfileById(userId);
+    if (!profile) {
+      throw new NotFoundException('El perfil de usuario no existe.');
+    }
+
+    // Registramos la intención de borrar la cuenta. 
+    await this.profilesRepository.requestAccountDeletion(userId, dto.reason ?? null);
+    
+    console.log(`[LEY 25.326] User ${profile.email} (${userId}) requested account deletion. Reason: ${dto.reason}`);
+    
+    return {
+      message: 'Solicitud de eliminación de datos personales recibida. Nos contactaremos en las próximas 48hs para confirmar la supresión definitiva de su cuenta y datos asociados según la Ley 25.326.'
+    };
   }
 
   async getProfile(userId: string) {

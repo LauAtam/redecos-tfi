@@ -1,9 +1,10 @@
-<ion-modal [isOpen]="isOpen" (didDismiss)="closeDetailModal()" [initialBreakpoint]="0.85"
-  [breakpoints]="[0, 0.85, 1]" [handle]="true">
+<ion-modal [isOpen]="isOpen" (didDismiss)="closeDetailModal()" [initialBreakpoint]="0.85" [breakpoints]="[0, 0.85, 1]"
+  [handle]="true">
   <ng-template>
     <ion-header class="ion-no-border">
-      <ion-toolbar class="[--background:#ffffff] [--color:#002d4b] font-bold">
-        <ion-title class="text-[#002d4b]">Detalle del producto</ion-title>
+      <ion-toolbar class="[--background:#ffffff] border-b border-slate-100 px-2">
+        <ion-title class="text-[1.3rem] text-[#006b4d] tracking-tight drop-shadow-sm"
+          style="font-family: 'Righteous', sans-serif;">Detalle del producto</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="closeDetailModal()">
             <ion-icon slot="icon-only" name="close-outline"></ion-icon>
@@ -20,8 +21,8 @@
         <div class="flex gap-3 items-center">
           <div
             class="w-24 h-24 bg-slate-50 rounded-2xl flex-shrink-0 flex items-center justify-center overflow-hidden border border-slate-100 p-2">
-            <img [src]="product.image_url || 'assets/placeholder-product.png'"
-              [alt]="product.name || 'Producto'" class="max-w-full max-h-full object-contain"
+            <img [src]="product.image_url || 'assets/placeholder-product.png'" [alt]="product.name || 'Producto'"
+              class="max-w-full max-h-full object-contain"
               onerror="this.src='https://placehold.co/150x150?text=Prod'" />
           </div>
           <div class="min-w-0 flex-1">
@@ -175,7 +176,7 @@
           }
 
           <!-- Botón de Pago -->
-          <ion-button expand="block" [disabled]="isProcessingPayment() || savedCards().length === 0"
+          <ion-button expand="block" [disabled]="isProcessingPayment() || savedCards().length === 0 || !isCvvValid()"
             class="[--background:#006b4d] [--background-hover:#00543c] [--color:#ffffff] font-bold text-xs h-12 m-0 rounded-xl mt-1"
             (click)="confirmAndPay()">
             @if (!isProcessingPayment()) {
@@ -198,7 +199,8 @@
   <ng-template>
     <ion-header class="ion-no-border">
       <ion-toolbar class="[--background:#ffffff] border-b border-slate-100 px-2">
-        <ion-title class="font-extrabold text-[#002d4b] text-sm">Nueva Tarjeta</ion-title>
+        <ion-title class="text-[1.3rem] text-[#006b4d] tracking-tight drop-shadow-sm"
+          style="font-family: 'Righteous', sans-serif;">Nueva Tarjeta</ion-title>
         <ion-buttons slot="end">
           <button (click)="closeAddCardModal()"
             class="text-slate-400 hover:text-slate-600 bg-transparent border-0 outline-none p-1">

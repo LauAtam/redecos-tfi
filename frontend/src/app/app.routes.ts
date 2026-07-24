@@ -25,4 +25,12 @@ export const routes: Routes = [
     path: 'restricted',
     loadComponent: () => import('./pages/restricted/restricted.page').then((m) => m.RestrictedPage),
   },
+  {
+    path: 'terminos-condiciones',
+    loadComponent: () => import('./pages/legal/terminos-condiciones/terminos-condiciones.page').then(m => m.TerminosCondicionesPage),
+  },
+  {
+    path: 'faq',
+    loadComponent: () => import('./pages/legal/faq/faq.page').then(m => m.FaqPage),
+  },
 ];

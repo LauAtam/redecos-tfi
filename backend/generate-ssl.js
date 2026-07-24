@@ -9,7 +9,7 @@ if (!fs.existsSync(sslDir)) {
 
 async function main() {
   console.log('Generando certificados SSL autofirmados...');
-  const attrs = [{ name: 'commonName', value: '192.168.18.21' }];
+  const attrs = [{ name: 'commonName', value: '192.168.1.19' }];
   try {
     const pems = await selfsigned.generate(attrs, { days: 365 });
     fs.writeFileSync(path.join(sslDir, 'key.pem'), pems.private);

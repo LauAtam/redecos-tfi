@@ -148,7 +148,12 @@ export class ProductModalComponent implements OnChanges {
   }
 
   async confirmAndPay() {
-    if (!this.product || !this.product.id || !this.nodeId) return;
+    if (!this.product || !this.product.id) return;
+
+    if (!this.nodeId) {
+      this.toastService.showError('Debes seleccionar un punto de retiro para unirte a un grupo de compra.');
+      return;
+    }
 
     if (this.useSavedCard() && !this.selectedCard()) {
       this.paymentError = 'Seleccioná una tarjeta guardada para continuar.';
@@ -173,29 +178,27 @@ export class ProductModalComponent implements OnChanges {
           throw new Error('No seleccionaste ninguna tarjeta guardada.');
         }
 
-        const mpInstance = (window as any).MercadoPago
-          ? new (window as any).MercadoPago(environment.mercadoPagoPublicKey)
-          : null;
-
-        if (!mpInstance) {
-          throw new Error('El SDK de Mercado Pago no está disponible. Volvé a intentar en unos segundos.');
-        }
-
-        const cvvVal = this.cvv().trim();
-        if (!/^\d{3,4}$/.test(cvvVal)) {
-          throw new Error('El código de seguridad (CVV) debe tener 3 o 4 dígitos.');
-        }
-
         paymentMethodId = savedCard.brand.toLowerCase();
+        const cvvVal = this.cvv().trim();
 
-        console.log('Tokenizando tarjeta guardada ID:', savedCard.card_id);
-        const tokenResponse = await mpInstance.createCardToken({
-          cardId: savedCard.card_id,
-          securityCode: cvvVal
+        console.log('Tokenizando tarjeta guardada ID:', savedCard.card_id, 'via REST API');
+
+        const tokenRequest = await fetch(`https://api.mercadopago.com/v1/card_tokens?public_key=${environment.mercadoPagoPublicKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            card_id: savedCard.card_id,
+            security_code: cvvVal,
+          }),
         });
 
-        if (!tokenResponse || !tokenResponse.id) {
-          throw new Error('No se pudo generar el token para la tarjeta guardada.');
+        const tokenResponse = await tokenRequest.json();
+
+        if (!tokenRequest.ok || !tokenResponse || !tokenResponse.id) {
+          console.error('Error de MP:', tokenResponse);
+          throw new Error('No se pudo validar el código de seguridad con Mercado Pago.');
         }
 
         paymentToken = tokenResponse.id;
@@ -231,6 +234,11 @@ export class ProductModalComponent implements OnChanges {
       this.purchaseSuccess.emit();
       this.closeDetailModal();
     }
+  }
+
+  isCvvValid(): boolean {
+    if (!this.useSavedCard()) return true;
+    return /^\d{3,4}$/.test(this.cvv().trim());
   }
 
   formatProductName(name: string | undefined): string {

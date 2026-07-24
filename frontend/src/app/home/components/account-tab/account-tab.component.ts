@@ -17,7 +17,8 @@ import {
   businessOutline,
   clipboardOutline,
   statsChartOutline,
-  walletOutline
+  walletOutline,
+  documentTextOutline
 } from 'ionicons/icons';
 import { Nodo, UserCard } from '../../../core/models/auth.models';
 import { AppFacadeService } from '../../../app-facade.service';
@@ -69,6 +70,7 @@ export class AccountTabComponent implements OnInit {
   // State
   savedCards = signal<UserCard[]>([]);
   isLoadingCards = signal<boolean>(false);
+  deletingCardId = signal<string | null>(null);
   isAddCardModalOpen = false;
   isStatsModalOpen = false;
 
@@ -94,7 +96,8 @@ export class AccountTabComponent implements OnInit {
       businessOutline,
       clipboardOutline,
       statsChartOutline,
-      walletOutline
+      walletOutline,
+      documentTextOutline
     });
   }
 
@@ -258,6 +261,9 @@ export class AccountTabComponent implements OnInit {
   }
 
   async deleteCard(cardId: string) {
+    if (this.deletingCardId() === cardId) return;
+    this.deletingCardId.set(cardId);
+    
     const { success, error } = await this.appFacadeService.deleteSavedCard(cardId);
     if (error) {
       this.toastService.showError(error.message);
@@ -265,6 +271,8 @@ export class AccountTabComponent implements OnInit {
       this.toastService.showSuccess('Tarjeta eliminada.');
       this.loadCards();
     }
+    
+    this.deletingCardId.set(null);
   }
 
   goToMisCompras() {
