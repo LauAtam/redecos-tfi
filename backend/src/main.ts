@@ -7,14 +7,18 @@ import * as path from 'path';
 async function bootstrap() {
   let httpsOptions: any = undefined;
   try {
-    const keyPath = path.join(process.cwd(), 'ssl', 'key.pem');
-    const certPath = path.join(process.cwd(), 'ssl', 'cert.pem');
-    if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
-      httpsOptions = {
-        key: fs.readFileSync(keyPath),
-        cert: fs.readFileSync(certPath),
-      };
-      console.log('🔒 HTTPS habilitado en el servidor de NestJS');
+    if (!process.env.RENDER) {
+      const keyPath = path.join(process.cwd(), 'ssl', 'key.pem');
+      const certPath = path.join(process.cwd(), 'ssl', 'cert.pem');
+      if (fs.existsSync(keyPath) && fs.existsSync(certPath)) {
+        httpsOptions = {
+          key: fs.readFileSync(keyPath),
+          cert: fs.readFileSync(certPath),
+        };
+        console.log('🔒 HTTPS habilitado en el servidor de NestJS (Local)');
+      }
+    } else {
+      console.log('☁️ Entorno Render detectado: Delegano SSL al proveedor (HTTP local)');
     }
   } catch (error) {
     console.warn('⚠️ No se pudieron cargar los certificados SSL, iniciando en HTTP', error);
