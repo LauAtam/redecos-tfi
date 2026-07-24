@@ -73,8 +73,7 @@ Thumbs.db
 .env.local
 
 # Environments
-/src/environments/environment.ts
-/src/environments/environment.prod.ts
+# (Removidos de ignore porque Vercel los necesita y solo tienen public keys)
 
 # Local AI runtime state
 .atl/
